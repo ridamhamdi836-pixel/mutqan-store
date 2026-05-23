@@ -47,10 +47,21 @@ def build_order_payload(order: Order, event_type: str = "order_created") -> dict
 async def send_to_google_sheets(db: Session, order: Order, event_type: str = "order_created") -> None:
     """Send order to Google Sheets webhook. Records delivery attempt in DB."""
     if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
-        logger.warning("google_sheets_webhook_not_configured")
+        logger.warning(
+            "google_sheets_webhook_not_configured",
+            order_number=order.public_order_number,
+            event_type=event_type,
+        )
         return
 
     payload = build_order_payload(order, event_type)
+
+    logger.info(
+        "google_sheets_webhook_sending",
+        order_number=order.public_order_number,
+        event_type=event_type,
+        url=settings.GOOGLE_SHEETS_WEBHOOK_URL,
+    )
 
     delivery = WebhookDelivery(
         order_id=order.id,
@@ -80,12 +91,21 @@ async def send_to_google_sheets(db: Session, order: Order, event_type: str = "or
 
             if resp.status_code < 300:
                 delivery.status = "sent"
-                logger.info("google_sheets_webhook_sent", order_number=order.public_order_number)
+                logger.info(
+                    "google_sheets_webhook_sent",
+                    order_number=order.public_order_number,
+                    status_code=resp.status_code,
+                )
             else:
                 delivery.status = "failed"
                 delivery.error_message = f"HTTP {resp.status_code}"
                 delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=1)
-                logger.warning("google_sheets_webhook_failed", order_number=order.public_order_number, status=resp.status_code)
+                logger.warning(
+                    "google_sheets_webhook_failed",
+                    order_number=order.public_order_number,
+                    status_code=resp.status_code,
+                    response_body=resp.text[:200],
+                )
 
     except Exception as e:
         delivery.status = "failed"
@@ -96,3 +116,45 @@ async def send_to_google_sheets(db: Session, order: Order, event_type: str = "or
         logger.error("google_sheets_webhook_error", error=str(e), order_number=order.public_order_number)
 
     db.commit()
++
++
++async def send_test_payload() -> dict:
++    """Send a simple test payload to the configured Google Sheets webhook."""
++    if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
++        logger.warning("google_sheets_webhook_not_configured_for_test")
++        raise ValueError("GOOGLE_SHEETS_WEBHOOK_URL is not configured")
++
++    payload = {
++        "date": datetime.now(timezone.utc).strftime("%d/%m/%Y"),
++        "orderid": "mutqan-test-" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),
++        "country": "KSA",
++        "name": "طلب اختبار",
++        "phone": "966501234567",
++        "product": "منتج تجريبي/منتج آخر",
++        "sku": "MTQ-TEST1/MTQ-TEST2",
++        "quantity": "1/2",
++        "total_price": 123,
++        "currency": "SAR",
++        "status": "",
++        "note": "Google Sheets webhook test payload"
++    }
++
++    async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
++        resp = await client.post(
++            settings.GOOGLE_SHEETS_WEBHOOK_URL,
++            json=payload,
++        )
++
++    logger.info(
++        "google_sheets_test_payload_sent",
++        url=settings.GOOGLE_SHEETS_WEBHOOK_URL,
++        status_code=resp.status_code,
++        orderid=payload["orderid"],
++    )
++
++    return {
++        "url": settings.GOOGLE_SHEETS_WEBHOOK_URL,
++        "status_code": resp.status_code,
++        "response_text": resp.text[:500],
++        "payload": payload,
++    }
