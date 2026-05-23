@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { buildCodNetworkRow, sendToCodNetwork } from "@/lib/codnetwork";
 
 export async function POST() {
-  const webhookUrl = process.env.CODNETWORK_WEBHOOK_URL;
+  const webhookUrl = process.env.CODNETWORK_WEBHOOK_URL || process.env.GOOGLE_SHEETS_WEBHOOK_URL;
 
   if (!webhookUrl) {
     return NextResponse.json(
-      { error: "CODNETWORK_WEBHOOK_URL not configured" },
+      { error: "CODNETWORK_WEBHOOK_URL or GOOGLE_SHEETS_WEBHOOK_URL not configured" },
       { status: 500 }
     );
   }

@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { normalizeSaudiPhone, validateSaudiPhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
-import { buildCodNetworkRow, sendToCodNetwork } from "@/lib/codnetwork";
 
 function generateOrderNumber(): string {
   const now = new Date();
@@ -177,31 +176,6 @@ export async function POST(request: NextRequest) {
       } catch (connErr) {
         console.error("[DB] Connection failed:", connErr);
       }
-    }
-
-    // CodNetwork Google Sheet integration
-    const codnetworkUrl = process.env.CODNETWORK_WEBHOOK_URL;
-    console.log(`[CodNetwork] Webhook URL configured: ${codnetworkUrl ? "YES" : "NO"}`);
-    if (codnetworkUrl) {
-      const row = buildCodNetworkRow(
-        orderNumber,
-        customer.full_name.trim(),
-        phoneE164,
-        items,
-        totalSar,
-        tracking,
-      );
-
-      console.log(`[CodNetwork] Sending order ${orderNumber}...`);
-      sendToCodNetwork(codnetworkUrl, row)
-        .then((result) => {
-          console.log(`[CodNetwork] Result for ${orderNumber}:`, JSON.stringify(result));
-        })
-        .catch((err) => {
-          console.error("[CodNetwork] Background send failed:", err);
-        });
-    } else {
-      console.warn("[CodNetwork] CODNETWORK_WEBHOOK_URL not set — skipping sheet");
     }
 
     const orderSlugs = items.map((i) => i.product_slug);

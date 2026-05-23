@@ -12,6 +12,7 @@ from app.models.product import Product, ProductBundle
 PRODUCTS = [
     {
         "slug": "powerful-cordless-vacuum",
+        "sku": "MTQ-VAC-001",
         "name_ar": "المكنسة اللاسلكية القوية",
         "name_en": "Powerful Cordless Vacuum",
         "short_description_ar": "تنظيف سريع وفعّال يمنح منزلك وسيارتك مظهرًا أنظف خلال دقائق.",
@@ -24,6 +25,7 @@ PRODUCTS = [
     },
     {
         "slug": "smart-stackable-cabinet",
+        "sku": "MTQ-CAB-002",
         "name_ar": "الخزانة التراكمية الذكية",
         "name_en": "Smart Stackable Cabinet",
         "short_description_ar": "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق.",
@@ -36,6 +38,7 @@ PRODUCTS = [
     },
     {
         "slug": "pull-out-cabinet-drawer",
+        "sku": "MTQ-DRW-003",
         "name_ar": "درج الخزانة المنزلق",
         "name_en": "Pull-out Cabinet Drawer",
         "short_description_ar": "حل ذكي لتنظيم الخزائن المزدحمة والوصول لأغراضك بسهولة.",
@@ -49,6 +52,7 @@ PRODUCTS = [
     },
     {
         "slug": "magic-under-sink-organizer",
+        "sku": "MTQ-ORG-004",
         "name_ar": "منظّم المغسلة السحري",
         "name_en": "Magic Under-Sink Organizer",
         "short_description_ar": "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة.",
@@ -62,6 +66,7 @@ PRODUCTS = [
     },
     {
         "slug": "pure-faucet-filter",
+        "sku": "MTQ-FLT-005",
         "name_ar": "فلتر الصنبور النقي",
         "name_en": "Pure Faucet Filter",
         "short_description_ar": "مياه أنقى وتجربة استخدام يومية أكثر راحة وأناقة للمطبخ العصري.",
@@ -75,6 +80,7 @@ PRODUCTS = [
     },
     {
         "slug": "smart-table-warmer",
+        "sku": "MTQ-WRM-006",
         "name_ar": "سخّان المائدة الذكي",
         "name_en": "Smart Table Warmer",
         "short_description_ar": "حل عملي فاخر يحافظ على حرارة الطعام طوال الجلسة بكل أناقة.",
@@ -87,6 +93,7 @@ PRODUCTS = [
     },
     {
         "slug": "thermal-lunch-box",
+        "sku": "MTQ-LNH-007",
         "name_ar": "حافظة الغداء الحرارية",
         "name_en": "Thermal Lunch Box",
         "short_description_ar": "تجربة عملية تمنحك وجبات دافئة وجاهزة أينما كنت بسهولة وراحة.",
@@ -111,6 +118,7 @@ def seed():
 
             product = Product(
                 slug=product_data["slug"],
+                sku=product_data.get("sku"),
                 name_ar=product_data["name_ar"],
                 name_en=product_data.get("name_en"),
                 short_description_ar=product_data["short_description_ar"],

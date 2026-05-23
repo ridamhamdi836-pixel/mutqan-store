@@ -58,6 +58,30 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(router, prefix=settings.API_PREFIX)
 
 
+@app.get("/api/test-sheet")
+async def test_sheet():
+    from app.integrations.google_sheets import send_test_payload
+
+    try:
+        result = await send_test_payload()
+        return {
+            "ok": True,
+            "result": result,
+        }
+    except Exception as exc:
+        logger.error("test_sheet_failed", error=str(exc))
+        return {
+            "ok": False,
+            "error": str(exc),
+        }
+
+
 @app.on_event("startup")
 async def startup_event():
     logger.info("startup", app=settings.APP_NAME, env=settings.APP_ENV)
+    
+    # Create all tables from ORM models
+    from app.db.base import Base
+    from app.db.session import engine
+    Base.metadata.create_all(bind=engine)
+    logger.info("database_tables_initialized")

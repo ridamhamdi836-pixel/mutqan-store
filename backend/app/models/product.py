@@ -10,6 +10,7 @@ class Product(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     slug = Column(String, nullable=False, unique=True)
+    sku = Column(String, nullable=True)
     name_ar = Column(String, nullable=False)
     name_en = Column(String)
     short_description_ar = Column(Text, nullable=False)

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
-import { buildCodNetworkRow, sendToCodNetwork } from "@/lib/codnetwork";
 
 export async function POST(request: NextRequest) {
   try {
@@ -80,29 +79,6 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const codnetworkUrl = process.env.CODNETWORK_WEBHOOK_URL;
-    if (codnetworkUrl && customerName && customerPhone) {
-      const upsellItems = items.map((item: { slug: string; name_ar?: string; price_sar?: number }) => ({
-        product_slug: item.slug,
-        quantity: 1,
-        item_type: "upsell" as const,
-        price_sar: item.price_sar || 0,
-        name_ar: item.name_ar,
-      }));
-
-      const row = buildCodNetworkRow(
-        `${order_number}-UPSELL`,
-        customerName,
-        customerPhone,
-        upsellItems,
-        totalAdded,
-      );
-      row.note = `اضافة بعد الطلب | الطلب الأصلي: ${order_number}`;
-
-      sendToCodNetwork(codnetworkUrl, row).catch((err) => {
-        console.error("[CodNetwork] Upsell send failed:", err);
-      });
-    }
 
     return NextResponse.json({
       success: true,

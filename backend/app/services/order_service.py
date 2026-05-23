@@ -27,8 +27,13 @@ STATUS_LABELS_AR = {
 
 
 def generate_order_number(db: Session) -> str:
+    """Generate order number with 'mutqan-' prefix and timestamp/count format.
+    
+    Format: mutqan-YYMMDD-XXXX where XXXX is zero-padded count for the day
+    Example: mutqan-260523-0001
+    """
     today = datetime.now(timezone.utc).strftime("%y%m%d")
-    prefix = f"MQN-{today}-"
+    prefix = f"mutqan-{today}-"
     count = db.query(Order).filter(Order.public_order_number.like(f"{prefix}%")).count()
     return f"{prefix}{str(count + 1).zfill(4)}"
 

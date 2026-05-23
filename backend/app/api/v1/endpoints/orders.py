@@ -31,8 +31,12 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     phone_e164 = result["customer_phone_e164"]
     upsell = result["upsell"]
 
-    # Fire integrations in background (non-blocking)
-    asyncio.create_task(_fire_integrations(db, order, phone_e164, client_ip, payload))
+    try:
+        await send_to_google_sheets(db, order, "order_created")
+    except Exception as e:
+        logger.error("sheets_integration_error", error=str(e), order_number=order.public_order_number)
+
+    asyncio.create_task(_fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload))
 
     upsell_out = None
     if upsell:
@@ -51,13 +55,8 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     }
 
 
-async def _fire_integrations(db, order, phone_e164, client_ip, payload):
-    """Fire all integrations asynchronously - failures must not affect order."""
-    try:
-        await send_to_google_sheets(db, order, "order_created")
-    except Exception as e:
-        logger.error("sheets_integration_error", error=str(e))
-
+async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload):
+    """Fire non-sheet integrations asynchronously - failures must not affect order."""
     try:
         tracking = payload.tracking
         items = order.items

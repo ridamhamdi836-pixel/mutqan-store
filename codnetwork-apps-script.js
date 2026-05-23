@@ -1,28 +1,23 @@
 /**
- * Mutqan → Google Sheets Webhook (new)
- *
- * Purpose:
- * - Receive order POSTs from your backend (set the deployed webapp URL in your backend variable `GOOGLE_SHEETS_WEBHOOK_URL`).
- * - Normalize payload to match the sheet columns and append a row.
- *
- * Important: Google Apps Script writes to Google Sheets, not to a local Excel file. To use your
- * `Mutqan Orders.xlsx` (local), upload it to Google Drive and open it with Google Sheets, then
- * copy the sheet ID from the URL and set `SHEET_ID` below.
+ * Mutqan → CodNetwork Google Sheet Webhook
  *
  * SETUP:
- * 1. Open https://script.google.com and create a new project.
- * 2. Replace the code with this file and save.
- * 3. Set `SHEET_ID` to your Google Sheet ID (from the URL: `/d/THIS_IS_THE_ID/`).
- * 4. Deploy → New deployment → select "Web app" (Execute as: Me, Who has access: Anyone).
- * 6. Copy the deployment URL and set it in your backend as `GOOGLE_SHEETS_WEBHOOK_URL` so orders are posted here.
+ * 1. Go to https://script.google.com/home
+ * 2. Click "New project"
+ * 3. Delete any existing code and paste this entire file
+ * 4. Click Save (Ctrl+S)
+ * 5. Click Deploy → New deployment
+ * 6. Click the gear icon (⚙️) → select "Web app"
+ * 7. Execute as: Me
+ * 8. Who has access: Anyone
+ * 9. Click Deploy and copy the URL
+ * 10. Set that URL as CODNETWORK_WEBHOOK_URL in EasyPanel
  *
  * COLUMNS (auto-created in Row 1):
  * Date | Order ID | Country | Name | Phone | Product | SKU | Quantity | Total Price | Currency | Status | Note
  */
 
-// Google Sheet ID from the provided link:
-// https://docs.google.com/spreadsheets/d/1eZgzPu1SSONTh7JbE8Dhduv-AsNJobb9k87lHJyYC0c/edit
-var SHEET_ID = "1eZgzPu1SSONTh7JbE8Dhduv-AsNJobb9k87lHJyYC0c";
+var SHEET_ID = "10k0-cYoHbgjwYAaZ23gwxoiwNYgbWA0izRh5u22wl2M";
 
 var HEADERS = [
   "Date",
@@ -41,7 +36,7 @@ var HEADERS = [
 
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents || '{}');
+    var data = JSON.parse(e.postData.contents);
 
     var ss = SpreadsheetApp.openById(SHEET_ID);
     var sheet = ss.getSheets()[0];
@@ -53,89 +48,27 @@ function doPost(e) {
       SpreadsheetApp.flush();
     }
 
-    // Normalize and build fields according to requested format
-    var orderId = data.orderid && data.orderid.toString().trim() ? data.orderid.toString().trim() : generateOrderId();
-
-    if (isDuplicate(sheet, orderId)) {
+    if (data.orderid && isDuplicate(sheet, data.orderid)) {
       return ContentService.createTextOutput(JSON.stringify({
         status: "duplicate",
         message: "Order already exists",
-        orderid: orderId
+        orderid: data.orderid
       })).setMimeType(ContentService.MimeType.JSON);
     }
 
-    var dateStr = data.date && data.date.toString().trim() ? data.date.toString().trim() : formatDateStr(new Date());
-
-    var country = "KSA";
-
-    var name = data.name || data.customer_name || data.customer || "";
-
-    var phoneRaw = data.phone || data.msisdn || data.customer_phone || "";
-    var phone = formatPhone(phoneRaw);
-
-    // Items handling: prefer `items` array, otherwise accept product/sku/quantity strings
-    var products = [];
-    var skus = [];
-    var quantities = [];
-
-    if (Array.isArray(data.items) && data.items.length > 0) {
-      data.items.forEach(function(it) {
-        var title = it.title || it.name || it.product || it.name_ar || "Unnamed";
-        products.push(title.toString());
-        var sku = it.sku && it.sku.toString().trim() ? it.sku.toString().trim() : generateSku();
-        skus.push(sku);
-        var qty = (it.quantity || it.qty || it.count || 1).toString();
-        quantities.push(qty);
-      });
-    } else if (data.product) {
-      // product can be a single string or already formatted with '/'
-      var prodStr = data.product.toString();
-      products = prodStr.split("/").map(function(p) { return p.trim(); });
-
-      if (data.sku) {
-        skus = data.sku.toString().split("/").map(function(s) { return s.trim(); });
-      } else {
-        skus = products.map(function() { return generateSku(); });
-      }
-
-      if (data.quantity) {
-        quantities = data.quantity.toString().split("/").map(function(q) { return q.trim(); });
-      } else {
-        quantities = products.map(function() { return "1"; });
-      }
-    } else {
-      // fallback single item
-      var singleProduct = data.title || data.name || data.product_name || "Unnamed";
-      products = [singleProduct.toString()];
-      skus = [data.sku && data.sku.toString().trim() ? data.sku.toString().trim() : generateSku()];
-      quantities = [data.quantity ? data.quantity.toString() : "1"];
-    }
-
-    var productField = products.join("/");
-    var skuField = skus.join("/");
-    var quantityField = quantities.join("/");
-
-    var totalPrice = (typeof data.total_price !== 'undefined' && data.total_price !== null) ? data.total_price : (computeTotalFromItems(data.items) || "");
-
-    var currency = "SAR";
-
-    var status = ""; // leave empty as requested
-
-    var note = data.note || data.source || data.raw || "";
-
     var row = [
-      dateStr,
-      orderId,
-      country,
-      name,
-      phone,
-      productField,
-      skuField,
-      quantityField,
-      totalPrice,
-      currency,
-      status,
-      note
+      data.date || "",
+      data.orderid || "",
+      data.country || "KSA",
+      data.name || "",
+      data.phone || "",
+      data.product || "",
+      data.sku || "",
+      data.quantity || "",
+      data.total_price || "",
+      data.currency || "SAR",
+      data.status || "",
+      data.note || ""
     ];
 
     sheet.appendRow(row);
@@ -143,7 +76,7 @@ function doPost(e) {
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
       message: "Order added",
-      orderid: orderId,
+      orderid: data.orderid,
       row: sheet.getLastRow()
     })).setMimeType(ContentService.MimeType.JSON);
 
@@ -179,65 +112,6 @@ function isDuplicate(sheet, orderid) {
   }
 
   return false;
-}
-
-// Helpers
-function generateOrderId() {
-  var now = new Date();
-  var ts = Utilities.formatDate(now, Session.getScriptTimeZone(), "yyyyMMddHHmmss");
-  var rnd = Math.floor(Math.random() * 9000) + 1000;
-  return "mutqan-" + ts + "-" + rnd;
-}
-
-function formatDateStr(d) {
-  try {
-    return Utilities.formatDate(new Date(d), Session.getScriptTimeZone(), "dd/MM/yyyy");
-  } catch (e) {
-    return Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy");
-  }
-}
-
-function formatPhone(raw) {
-  if (!raw) return "";
-  var s = raw.toString();
-  // remove non-digits
-  s = s.replace(/[^0-9]/g, "");
-  // remove leading 00
-  if (s.indexOf('00') === 0) {
-    s = s.replace(/^00/, '');
-  }
-  // if starts with 0 (local), strip and prefix 966
-  if (s.indexOf('0') === 0) {
-    s = s.replace(/^0+/, '');
-    s = '966' + s;
-  }
-  // if not starting with 966 and length is 9 assume local mobile
-  if (s.indexOf('966') !== 0) {
-    if (s.length === 9) s = '966' + s;
-  }
-  return s;
-}
-
-function generateSku() {
-  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  var out = 'MTQ-';
-  for (var i = 0; i < 6; i++) out += chars.charAt(Math.floor(Math.random() * chars.length));
-  return out;
-}
-
-function computeTotalFromItems(items) {
-  if (!Array.isArray(items)) return null;
-  try {
-    var total = 0;
-    items.forEach(function(it) {
-      var price = Number(it.price || it.unit_price || 0) || 0;
-      var qty = Number(it.quantity || it.qty || it.count || 1) || 1;
-      total += price * qty;
-    });
-    return total || null;
-  } catch (e) {
-    return null;
-  }
 }
 
 function testWebhook() {
