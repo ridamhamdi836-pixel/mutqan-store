@@ -1,19 +1,26 @@
 import httpx
 from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
+
 from app.models.order import Order
 from app.models.analytics import WebhookDelivery
 from app.core.config import settings
 from app.core.logging import logger
 
 
-def build_order_payload(order: Order, event_type: str = "order_created") -> dict:
+def build_order_payload(
+    order: Order,
+    event_type: str = "order_created"
+) -> dict:
     """Build payload for Google Sheets webhook."""
 
     customer = order.customer
     items = order.items
 
-    main_items = [i for i in items if i.item_type == "main"]
+    main_items = [
+        i for i in items
+        if i.item_type == "main"
+    ]
 
     order_date = (
         order.created_at.strftime("%d/%m/%Y")
@@ -34,7 +41,9 @@ def build_order_payload(order: Order, event_type: str = "order_created") -> dict
         if product and getattr(product, "sku", None):
             skus.append(product.sku)
         else:
-            skus.append(f"MTQ-{item.product_slug.upper()}")
+            skus.append(
+                f"MTQ-{item.product_slug.upper()}"
+            )
 
         quantities.append(str(item.quantity))
 
@@ -43,8 +52,6 @@ def build_order_payload(order: Order, event_type: str = "order_created") -> dict
     quantities_str = "/".join(quantities)
 
     return {
-
-        # Google Sheets fields
         "date": order_date,
         "orderid": order.public_order_number,
         "country": "KSA",
@@ -71,7 +78,6 @@ def build_order_payload(order: Order, event_type: str = "order_created") -> dict
         "status": "",
         "note": "",
 
-        # Debug info
         "event_type": event_type,
     }
 
@@ -91,12 +97,14 @@ async def send_to_google_sheets(
 
         return
 
-    payload = build_order_payload(order, event_type)
+    payload = build_order_payload(
+        order,
+        event_type
+    )
 
     logger.info(
         "google_sheets_webhook_sending",
         order_number=order.public_order_number,
-        url=settings.GOOGLE_SHEETS_WEBHOOK_URL,
         payload=payload,
     )
 
@@ -133,7 +141,10 @@ async def send_to_google_sheets(
 
         delivery.response_status = resp.status_code
         delivery.response_body = resp.text[:500]
-        delivery.last_attempt_at = datetime.now(timezone.utc)
+        delivery.last_attempt_at = datetime.now(
+            timezone.utc
+        )
+
         delivery.attempts = 1
 
         if resp.status_code < 300:
@@ -173,7 +184,9 @@ async def send_to_google_sheets(
 
         delivery.error_message = str(e)[:200]
 
-        delivery.last_attempt_at = datetime.now(timezone.utc)
+        delivery.last_attempt_at = datetime.now(
+            timezone.utc
+        )
 
         delivery.attempts = 1
 
@@ -217,15 +230,12 @@ async def send_test_payload() -> dict:
 
         "product": "منتج تجريبي",
         "sku": "MTQ-TEST",
-
         "quantity": "1",
 
         "total_price": 123,
-
         "currency": "SAR",
 
         "status": "",
-
         "note": "Google Sheets webhook test",
     }
 
