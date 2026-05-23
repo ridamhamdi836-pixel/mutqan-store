@@ -67,7 +67,7 @@ async def send_to_google_sheets(db: Session, order: Order, event_type: str = "or
         if settings.GOOGLE_SHEETS_WEBHOOK_SECRET:
             headers["X-Mutqan-Webhook-Secret"] = settings.GOOGLE_SHEETS_WEBHOOK_SECRET
 
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
             resp = await client.post(
                 settings.GOOGLE_SHEETS_WEBHOOK_URL,
                 json=payload,
