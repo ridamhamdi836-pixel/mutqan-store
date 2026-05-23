@@ -28,6 +28,7 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     result = create_order(db, payload, client_ip=client_ip)
 
     order = result["order"]
+    await send_to_google_sheets(order)
     phone_e164 = result["customer_phone_e164"]
     upsell = result["upsell"]
 
