@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SHEETS_BUILD } from "@/lib/google-sheets";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -7,6 +8,7 @@ export const runtime = "nodejs";
 export async function GET() {
   return NextResponse.json({
     ok: true,
-    build: "google-sheets-clean-v1",
+    build: "mutqan-store-v2",
+    sheets: SHEETS_BUILD,
   });
 }

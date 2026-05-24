@@ -3,6 +3,9 @@
  * Primary destination for every checkout order (frontend only).
  */
 
+import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
+import { getPool } from "@/lib/db";
+
 export const SHEETS_BUILD = "google-sheets-clean-v1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
@@ -37,26 +40,6 @@ export interface GoogleSheetsOrderInput {
   address?: string;
 }
 
-const PRODUCT_SKU: Record<string, string> = {
-  "powerful-cordless-vacuum": "MTQ-VAC-001",
-  "smart-stackable-cabinet": "MTQ-CAB-002",
-  "pull-out-cabinet-drawer": "MTQ-DRW-003",
-  "magic-under-sink-organizer": "MTQ-SNK-004",
-  "pure-faucet-filter": "MTQ-FLT-005",
-  "smart-table-warmer": "MTQ-WRM-006",
-  "thermal-lunch-box": "MTQ-LNB-007",
-};
-
-const PRODUCT_NAME_AR: Record<string, string> = {
-  "powerful-cordless-vacuum": "المكنسة اللاسلكية القوية",
-  "smart-stackable-cabinet": "الخزانة التراكمية الذكية",
-  "pull-out-cabinet-drawer": "درج الخزانة المنزلق",
-  "magic-under-sink-organizer": "منظّم المغسلة السحري",
-  "pure-faucet-filter": "فلتر الصنبور النقي",
-  "smart-table-warmer": "سخّان المائدة الذكي",
-  "thermal-lunch-box": "حافظة الغداء الحرارية",
-};
-
 /** mutqan-XXXXXXXX (8 alphanumeric) */
 export function generateOrderId(): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -83,11 +66,11 @@ function formatSaudiPhone(phoneE164: string): string {
 }
 
 function productName(slug: string, nameAr?: string): string {
-  return nameAr?.trim() || PRODUCT_NAME_AR[slug] || slug;
+  return nameAr?.trim() || getCatalogNameAr(slug);
 }
 
 function productSku(slug: string): string {
-  return PRODUCT_SKU[slug] || `MTQ-${slug.slice(0, 6).toUpperCase()}`;
+  return getCatalogSku(slug);
 }
 
 function productUrl(slug: string): string {
@@ -198,6 +181,59 @@ export async function sendOrderToGoogleSheets(
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("[GoogleSheets] POST failed", { orderid: order.orderid, error: message });
+    return { success: false, error: message };
+  }
+}
+
+/** Re-sync full order to Sheets (e.g. after post-purchase upsell). Updates row if orderid exists. */
+export async function syncOrderByNumberToGoogleSheets(
+  orderNumber: string,
+): Promise<SheetsSendResult> {
+  const pool = getPool();
+  if (!pool) {
+    console.warn("[GoogleSheets] sync skipped — no DATABASE_URL");
+    return { success: false, error: "db_not_configured" };
+  }
+
+  try {
+    const client = await pool.connect();
+    try {
+      const orderRes = await client.query(
+        `SELECT order_number, customer_name, customer_phone_e164, total_sar
+         FROM orders WHERE order_number = $1`,
+        [orderNumber],
+      );
+      if (orderRes.rows.length === 0) {
+        return { success: false, error: "order_not_found" };
+      }
+      const order = orderRes.rows[0];
+      const itemsRes = await client.query(
+        `SELECT product_slug, name_ar, quantity FROM order_items
+         WHERE order_id = (SELECT id FROM orders WHERE order_number = $1)
+         ORDER BY created_at`,
+        [orderNumber],
+      );
+
+      const sheetsOrder: GoogleSheetsOrderInput = {
+        orderid: order.order_number,
+        customerName: order.customer_name,
+        phoneE164: order.customer_phone_e164,
+        items: itemsRes.rows.map((row) => ({
+          product_slug: row.product_slug,
+          name_ar: row.name_ar,
+          quantity: row.quantity || 1,
+        })),
+        totalSar: Number(order.total_sar),
+        address: order.order_number,
+      };
+
+      return sendOrderToGoogleSheets(sheetsOrder);
+    } finally {
+      client.release();
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[GoogleSheets] sync failed", { orderNumber, error: message });
     return { success: false, error: message };
   }
 }

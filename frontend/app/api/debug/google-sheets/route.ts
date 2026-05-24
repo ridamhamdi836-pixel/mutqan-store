@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import {
   SHEETS_BUILD,
   buildPayload,
@@ -13,7 +13,15 @@ export const runtime = "nodejs";
 /**
  * GET https://mutqan.online/api/debug/google-sheets
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const secret = process.env.DEBUG_SECRET?.trim();
+  if (secret) {
+    const key = request.nextUrl.searchParams.get("key");
+    if (key !== secret) {
+      return NextResponse.json({ ok: false, error: "unauthorized" }, { status: 401 });
+    }
+  }
+
   console.log("[debug/google-sheets] GET", { build: SHEETS_BUILD });
 
   const webhookUrl = getWebhookUrl();

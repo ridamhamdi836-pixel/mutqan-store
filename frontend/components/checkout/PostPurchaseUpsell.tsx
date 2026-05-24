@@ -6,6 +6,7 @@ import { Check, ShoppingBag, Clock, Star, Flame, Truck, ShieldCheck, Gift } from
 import Image from "next/image";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { CATALOG } from "@/config/catalog";
 import { getProductImageSrc } from "@/lib/product-image";
 
 interface UpsellProduct {
@@ -24,71 +25,21 @@ interface PostPurchaseUpsellProps {
   onComplete: (addedItems: Array<{ slug: string; name_ar: string; price_sar: number }>) => void;
 }
 
-const ALL_UPSELL_PRODUCTS: UpsellProduct[] = [
-  {
-    slug: "powerful-cordless-vacuum",
-    name_ar: "المكنسة اللاسلكية القوية",
-    hook_ar: "اللي يرتّب بيته يحتاج ينظفه — هذي تكمّل الصورة",
-    image: "/images/products/powerful-cordless-vacuum.jpg",
-    original_price_sar: 229,
-    upsell_price_sar: 189,
-    savings_percent: 17,
-  },
-  {
-    slug: "smart-stackable-cabinet",
-    name_ar: "الخزانة التراكمية الذكية",
-    hook_ar: "كل زاوية فاضية في بيتك ممكن تتحول لمساحة تخزين أنيقة",
-    image: "/images/products/smart-stackable-cabinet.jpg",
-    original_price_sar: 349,
-    upsell_price_sar: 289,
-    savings_percent: 17,
-  },
-  {
-    slug: "pull-out-cabinet-drawer",
-    name_ar: "درج الخزانة المنزلق",
-    hook_ar: "الأشياء اللي في آخر الخزانة أخيرًا بتوصلها بسحبة وحدة",
-    image: "/images/products/pull-out-cabinet-drawer.jpg",
-    original_price_sar: 349,
-    upsell_price_sar: 279,
-    savings_percent: 20,
-  },
-  {
-    slug: "magic-under-sink-organizer",
-    name_ar: "منظّم المغسلة السحري",
-    hook_ar: "الفوضى تحت المغسلة انتهت — ترتيب ذكي بدقيقتين",
-    image: getProductImageSrc("magic-under-sink-organizer"),
-    original_price_sar: 229,
-    upsell_price_sar: 189,
-    savings_percent: 17,
-  },
-  {
-    slug: "pure-faucet-filter",
-    name_ar: "فلتر الصنبور النقي",
-    hook_ar: "مطبخك يستاهل مية أنقى — فرق تحسه من أول استخدام",
-    image: "/images/products/pure-faucet-filter.jpg",
-    original_price_sar: 199,
-    upsell_price_sar: 169,
-    savings_percent: 15,
-  },
-  {
-    slug: "smart-table-warmer",
-    name_ar: "سخّان المائدة الذكي",
-    hook_ar: "العزومة تكمل لما الأكل يبقى حار من أولها لآخرها",
-    image: "/images/products/smart-table-warmer.jpg",
-    original_price_sar: 249,
-    upsell_price_sar: 199,
-    savings_percent: 20,
-  },
-  {
-    slug: "thermal-lunch-box",
-    name_ar: "حافظة الغداء الحرارية",
-    hook_ar: "وجبة دافية في الدوام تغيّر يومك — جرّبها وشوف الفرق",
-    image: "/images/products/thermal-lunch-box.jpg",
-    original_price_sar: 229,
-    upsell_price_sar: 189,
-    savings_percent: 17,
-  },
-];
+const ALL_UPSELL_PRODUCTS: UpsellProduct[] = CATALOG.filter((p) => p.upsell).map((p) => {
+  const u = p.upsell!;
+  const savings = Math.round(
+    ((u.original_price_sar - u.upsell_price_sar) / u.original_price_sar) * 100,
+  );
+  return {
+    slug: p.slug,
+    name_ar: p.name_ar,
+    hook_ar: u.hook_ar,
+    image: getProductImageSrc(p.slug),
+    original_price_sar: u.original_price_sar,
+    upsell_price_sar: u.upsell_price_sar,
+    savings_percent: savings,
+  };
+});
 
 const TIMER_SECONDS = 180;
 

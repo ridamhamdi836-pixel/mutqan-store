@@ -13,18 +13,8 @@ import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import type { ProductBundle } from "@/types";
+import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc } from "@/lib/product-image";
-
-// Minimal cross-sell products data for related section
-const CROSS_SELL_PRODUCTS: Record<string, { id: string; slug: string; name_ar: string; name_en: string; short_description_ar: string; category_slug: string; bundles: ProductBundle[] }> = {
-  "pull-out-cabinet-drawer": { id: "p3", slug: "pull-out-cabinet-drawer", name_ar: "درج الخزانة المنزلق", name_en: "", short_description_ar: "حل ذكي لتنظيم الخزائن المزدحمة.", category_slug: "home-organization", bundles: [{ id: "d4", label_ar: "4 قطع - الأكثر اختيارًا", quantity: 4, price_sar: 599, compare_at_price_sar: 698, is_default: true, sort_order: 1 }] },
-  "magic-under-sink-organizer": { id: "p4", slug: "magic-under-sink-organizer", name_ar: "منظّم المغسلة السحري", name_en: "", short_description_ar: "ترتيب ذكي تحت المغسلة.", category_slug: "home-organization", bundles: [{ id: "s2", label_ar: "قطعتين - الأكثر اختيارًا", quantity: 2, price_sar: 379, compare_at_price_sar: 458, is_default: true, sort_order: 1 }] },
-  "pure-faucet-filter": { id: "p5", slug: "pure-faucet-filter", name_ar: "فلتر الصنبور النقي", name_en: "", short_description_ar: "تجربة ماء يومية أفضل.", category_slug: "modern-kitchen", bundles: [{ id: "f2", label_ar: "قطعتين - أفضل قيمة", quantity: 2, price_sar: 249, is_default: true, sort_order: 1 }] },
-  "smart-table-warmer": { id: "p6", slug: "smart-table-warmer", name_ar: "سخّان المائدة الذكي", name_en: "", short_description_ar: "طعام دافئ طوال الجلسة.", category_slug: "dining-hosting", bundles: [{ id: "w2", label_ar: "قطعتين - الأكثر اختيارًا", quantity: 2, price_sar: 449, is_default: true, sort_order: 1 }] },
-  "thermal-lunch-box": { id: "p7", slug: "thermal-lunch-box", name_ar: "حافظة الغداء الحرارية", name_en: "", short_description_ar: "وجبة دافئة أينما كنت.", category_slug: "dining-hosting", bundles: [{ id: "l2", label_ar: "قطعتين", quantity: 2, price_sar: 329, is_default: true, sort_order: 1 }] },
-  "smart-stackable-cabinet": { id: "p2", slug: "smart-stackable-cabinet", name_ar: "الخزانة التراكمية الذكية", name_en: "", short_description_ar: "مساحة تخزين إضافية وأنيقة.", category_slug: "home-organization", bundles: [{ id: "c2", label_ar: "قطعتين", quantity: 2, price_sar: 599, is_default: true, sort_order: 1 }] },
-  "powerful-cordless-vacuum": { id: "p1", slug: "powerful-cordless-vacuum", name_ar: "المكنسة اللاسلكية القوية", name_en: "", short_description_ar: "تنظيف سريع للمنزل والسيارة.", category_slug: "cleaning-care", bundles: [{ id: "v2", label_ar: "قطعتين - الأكثر اختيارًا", quantity: 2, price_sar: 399, is_default: true, sort_order: 1 }] },
-};
 
 interface ProductPageClientProps {
   product: {
@@ -118,8 +108,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   };
 
   const relatedProducts = config.crossSellSlugs
-    .map((slug) => CROSS_SELL_PRODUCTS[slug])
-    .filter(Boolean);
+    .map((slug) => {
+      const p = getProduct(slug);
+      return p ? toProduct(p) : null;
+    })
+    .filter((p): p is NonNullable<typeof p> => p !== null);
 
   return (
     <div className="bg-brand-background pb-20">
@@ -295,10 +288,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="w-full md:w-1/2 order-1">
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
                 <Image
-                  src={`https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80`}
+                  src={productImageSrc}
                   alt="مشكلة الفوضى اليومية"
                   fill
-                  className="object-cover"
+                  unoptimized
+                  className="object-cover opacity-80"
                 />
               </div>
             </div>
@@ -322,9 +316,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="w-full md:w-1/2 order-1 md:order-2">
               <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
                 <Image
-                  src={`https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80`}
+                  src={productImageSrc}
                   alt="الحل العملي من متقن"
                   fill
+                  unoptimized
                   className="object-cover"
                 />
               </div>
@@ -353,9 +348,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <div className="w-full md:w-1/2 order-1">
                 <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
                   <Image
-                    src={`https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80`}
+                    src={productImageSrc}
                     alt="مميزات إضافية"
                     fill
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
@@ -393,9 +389,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
               <div className="aspect-[4/3] relative bg-brand-beige">
                 <Image
-                  src={`https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80`}
+                  src={productImageSrc}
                   alt={config.beforeLabel}
                   fill
+                  unoptimized
                   className="object-cover opacity-90 grayscale-[20%]"
                 />
               </div>
@@ -407,9 +404,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] md:scale-105 z-10">
               <div className="aspect-[4/3] relative bg-brand-beige">
                 <Image
-                  src={`https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80`}
+                  src={productImageSrc}
                   alt={config.afterLabel}
                   fill
+                  unoptimized
                   className="object-cover"
                 />
                 <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">

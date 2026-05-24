@@ -67,17 +67,25 @@ function doPost(e) {
 
     ensureHeaders(sheet);
 
+    var row = buildRow(sheet, data);
+
     if (data.orderid && isDuplicate(sheet, data.orderid)) {
-      return jsonOut({ status: "duplicate", orderid: data.orderid });
+      var updated = updateRowByOrderId(sheet, data.orderid, row);
+      Logger.log("Row updated: " + data.orderid + " row=" + updated);
+      return jsonOut({
+        status: "success",
+        action: "updated",
+        orderid: data.orderid,
+        row: updated,
+      });
     }
 
-    var row = buildRow(sheet, data);
     sheet.appendRow(row);
-
     Logger.log("Row appended: " + data.orderid);
 
     return jsonOut({
       status: "success",
+      action: "appended",
       orderid: data.orderid || "",
       row: sheet.getLastRow(),
     });
@@ -121,6 +129,31 @@ function buildRow(sheet, data) {
     }
   }
   return row;
+}
+
+function updateRowByOrderId(sheet, orderid, row) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var addressCol = -1;
+  for (var i = 0; i < headers.length; i++) {
+    if (String(headers[i]).trim() === "address") {
+      addressCol = i + 1;
+      break;
+    }
+  }
+  if (addressCol < 1) return 0;
+
+  for (var r = lastRow; r >= 2; r--) {
+    var cell = sheet.getRange(r, addressCol).getValue();
+    if (cell && String(cell) === String(orderid)) {
+      sheet.getRange(r, 1, 1, row.length).setValues([row]);
+      return r;
+    }
+  }
+  sheet.appendRow(row);
+  return sheet.getLastRow();
 }
 
 function isDuplicate(sheet, orderid) {

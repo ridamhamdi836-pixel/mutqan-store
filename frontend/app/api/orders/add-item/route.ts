@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
+import { syncOrderByNumberToGoogleSheets } from "@/lib/google-sheets";
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,33 +10,29 @@ export async function POST(request: NextRequest) {
     if (!order_number || !items || !Array.isArray(items) || items.length === 0) {
       return NextResponse.json(
         { error: { code: "INVALID_REQUEST", message_ar: "بيانات غير صالحة." } },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const totalAdded = items.reduce(
       (sum: number, item: { price_sar?: number }) => sum + (item.price_sar || 0),
-      0
+      0,
     );
 
     const now = new Date().toISOString();
-    let customerName = "";
-    let customerPhone = "";
-
     const pool = getPool();
+
     if (pool) {
       try {
         const client = await pool.connect();
         try {
           const orderResult = await client.query(
-            "SELECT id, total_sar, upsell_total_sar, customer_name, customer_phone_e164 FROM orders WHERE order_number = $1",
-            [order_number]
+            "SELECT id, total_sar, upsell_total_sar FROM orders WHERE order_number = $1",
+            [order_number],
           );
 
           if (orderResult.rows.length > 0) {
             const order = orderResult.rows[0];
-            customerName = order.customer_name || "";
-            customerPhone = order.customer_phone_e164 || "";
 
             await client.query("BEGIN");
 
@@ -55,7 +52,7 @@ export async function POST(request: NextRequest) {
                   item.price_sar || 0,
                   "upsell",
                   now,
-                ]
+                ],
               );
             }
 
@@ -63,22 +60,25 @@ export async function POST(request: NextRequest) {
             const newTotal = (order.total_sar || 0) + totalAdded;
             await client.query(
               "UPDATE orders SET upsell_total_sar = $1, total_sar = $2, updated_at = $3 WHERE id = $4",
-              [newUpsellTotal, newTotal, now, order.id]
+              [newUpsellTotal, newTotal, now, order.id],
             );
 
             await client.query("COMMIT");
           }
         } catch (dbErr) {
           await client.query("ROLLBACK");
-          console.error("[DB] Upsell insert failed:", dbErr);
+          console.error("[add-item] DB failed:", dbErr);
         } finally {
           client.release();
         }
       } catch (connErr) {
-        console.error("[DB] Connection failed:", connErr);
+        console.error("[add-item] DB connection failed:", connErr);
       }
     }
 
+    syncOrderByNumberToGoogleSheets(order_number).catch((err) => {
+      console.error("[add-item] Google Sheets sync failed (non-blocking):", err);
+    });
 
     return NextResponse.json({
       success: true,
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
   } catch {
     return NextResponse.json(
       { error: { code: "SERVER_ERROR", message_ar: "حدث خطأ." } },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

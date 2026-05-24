@@ -6,6 +6,8 @@ import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { COLLECTIONS } from "@/config/collections";
+import { FEATURED_SLUGS, getProductsBySlugs, toProduct } from "@/config/catalog";
+import { getProductImageSrc } from "@/lib/product-image";
 import {
   ArrowLeft,
   Star,
@@ -33,12 +35,7 @@ export const metadata: Metadata = {
     "تسوقي منتجات متقن المختارة بعناية لتنظيم المنزل والمطبخ وتجربة يومية أكثر راحة. الدفع عند الاستلام والتوصيل السريع داخل السعودية بضمان ذهبي 30 يوم.",
 };
 
-const FEATURED_PRODUCTS = [
-  { id: "1", slug: "pull-out-cabinet-drawer", name_ar: "درج الخزانة المنزلق", name_en: "Pull-out Cabinet Drawer", short_description_ar: "حل ذكي لتنظيم الخزائن المزدحمة والوصول لأغراضك بسهولة.", positioning: "", category_slug: "home-organization", bundles: [{ id: "b1", label_ar: "قطعتين", quantity: 2, price_sar: 349, is_default: false, sort_order: 1 }, { id: "b2", label_ar: "4 قطع - الأكثر اختيارًا للمطبخ", quantity: 4, price_sar: 599, compare_at_price_sar: 698, savings_label_ar: "وفر 99 ريال", is_default: true, sort_order: 2 }, { id: "b3", label_ar: "6 قطع - أفضل قيمة", quantity: 6, price_sar: 799, is_default: false, sort_order: 3 }] },
-  { id: "2", slug: "smart-table-warmer", name_ar: "سخّان المائدة الذكي", name_en: "Smart Table Warmer", short_description_ar: "حل عملي فاخر يحافظ على حرارة الطعام طوال الجلسة بكل أناقة.", positioning: "", category_slug: "dining-hosting", bundles: [{ id: "b4", label_ar: "قطعة واحدة", quantity: 1, price_sar: 249, is_default: false, sort_order: 1 }, { id: "b5", label_ar: "قطعتين - مثالي للعائلة والضيوف | الأكثر اختيارًا", quantity: 2, price_sar: 449, compare_at_price_sar: 498, savings_label_ar: "وفر 49 ريال", is_default: true, sort_order: 2 }] },
-  { id: "3", slug: "magic-under-sink-organizer", name_ar: "منظّم المغسلة السحري", name_en: "Magic Under-Sink Organizer", short_description_ar: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا.", positioning: "", category_slug: "home-organization", bundles: [{ id: "b6", label_ar: "قطعة واحدة", quantity: 1, price_sar: 229, is_default: false, sort_order: 1 }, { id: "b7", label_ar: "قطعتين - الأكثر اختيارًا", quantity: 2, price_sar: 379, compare_at_price_sar: 458, savings_label_ar: "وفر 79 ريال", is_default: true, sort_order: 2 }] },
-  { id: "4", slug: "powerful-cordless-vacuum", name_ar: "المكنسة اللاسلكية القوية", name_en: "Powerful Cordless Vacuum", short_description_ar: "تنظيف سريع وفعّال يمنح منزلك وسيارتك مظهرًا أنظف خلال دقائق.", positioning: "", category_slug: "cleaning-care", bundles: [{ id: "b8", label_ar: "قطعة واحدة", quantity: 1, price_sar: 229, is_default: false, sort_order: 1 }, { id: "b9", label_ar: "قطعتين - الأكثر اختيارًا", quantity: 2, price_sar: 399, compare_at_price_sar: 458, is_default: true, sort_order: 2 }] },
-];
+const FEATURED_PRODUCTS = getProductsBySlugs([...FEATURED_SLUGS]).map(toProduct);
 
 const HOMEPAGE_REVIEWS = [
   { name: "نورة المطيري", city: "الرياض", rating: 5, text: "منتجات تبيض الوجه وتوصيل سريع جدًا. فريق متقن تواصل معي قبل الشحن مباشرة. تجربة ممتازة وخدمة عملاء راقية." },
@@ -117,9 +114,10 @@ export default function HomePage() {
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
               <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                 <Image
-                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&q=80"
-                  alt="منتجات متقن لتنظيم وراحة البيت الخليجي"
+                  src={getProductImageSrc("magic-under-sink-organizer")}
+                  alt="منظّم المغسلة السحري — منتجات متقن"
                   fill
+                  unoptimized
                   className="object-cover"
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
