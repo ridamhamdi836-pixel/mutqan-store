@@ -1,3 +1,4 @@
+import json
 import httpx
 import traceback
 from datetime import datetime, timezone, timedelta
@@ -9,341 +10,173 @@ from app.core.config import settings
 from app.core.logging import logger
 
 
-def build_order_payload(
-    order: Order,
-    event_type: str = "order_created"
-) -> dict:
-    """Build payload for Google Sheets webhook."""
-
+def build_order_payload(order: Order, event_type: str = "order_created") -> dict:
     customer = order.customer
     items = order.items
+    main_items = [i for i in items if i.item_type == "main"]
 
-    main_items = [
-        i for i in items
-        if i.item_type == "main"
-    ]
+    order_date = order.created_at.strftime("%d/%m/%Y") if order.created_at else ""
 
-    order_date = (
-        order.created_at.strftime("%d/%m/%Y")
-        if order.created_at
-        else ""
-    )
-
-    product_names = []
-    skus = []
-    quantities = []
-
+    product_names, skus, quantities = [], [], []
     for item in main_items:
-
         product_names.append(item.name_ar)
-
         product = item.product
-
         if product and getattr(product, "sku", None):
             skus.append(product.sku)
         else:
-            skus.append(
-                f"MTQ-{item.product_slug.upper()}"
-            )
-
+            skus.append(f"MTQ-{item.product_slug.upper()[:8]}")
         quantities.append(str(item.quantity))
-
-    products_str = "/".join(product_names)
-    skus_str = "/".join(skus)
-    quantities_str = "/".join(quantities)
 
     return {
         "date": order_date,
         "orderid": order.public_order_number,
         "country": "KSA",
-
-        "name": (
-            customer.full_name
-            if customer and customer.full_name
-            else ""
-        ),
-
-        "phone": (
-            customer.phone_e164.lstrip("+")
-            if customer and customer.phone_e164
-            else ""
-        ),
-
-        "product": products_str,
-        "sku": skus_str,
-        "quantity": quantities_str,
-
+        "name": customer.full_name if customer and customer.full_name else "",
+        "phone": customer.phone_e164.lstrip("+") if customer and customer.phone_e164 else "",
+        "product": "/".join(product_names),
+        "sku": "/".join(skus),
+        "quantity": "/".join(quantities),
         "total_price": order.total_sar,
         "currency": "SAR",
-
         "status": "",
-        "note": "",
-
-        "event_type": event_type,
+        "note": f"event:{event_type}",
     }
 
 
-async def send_to_google_sheets(
-    db: Session,
-    order: Order,
-    event_type: str = "order_created"
-) -> None:
+async def _post_to_google(url: str, payload: dict) -> httpx.Response:
+    """
+    Send payload to Google Apps Script.
 
-    # Verify configuration
-    if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
+    Google Apps Script rejects application/json on POST and returns 404.
+    Sending as text/plain with JSON body bypasses this issue.
+    follow_redirects=True ensures we follow any 302 Google may return.
+    """
+    body = json.dumps(payload, ensure_ascii=False)
 
-        logger.warning(
-            "google_sheets_webhook_not_configured",
-            order_number=order.public_order_number,
+    async with httpx.AsyncClient(timeout=25.0, follow_redirects=True) as client:
+        resp = await client.post(
+            url,
+            content=body,
+            headers={"Content-Type": "text/plain"},
         )
+    return resp
 
+
+async def send_to_google_sheets(db: Session, order: Order, event_type: str = "order_created") -> None:
+    if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
+        logger.warning("google_sheets_webhook_not_configured", order_number=order.public_order_number)
         return
 
-    # Log which URL will be used (do not log secrets)
-    try:
-        logger.info(
-            "google_sheets_using_webhook",
-            destination=settings.GOOGLE_SHEETS_WEBHOOK_URL,
-            order_number=order.public_order_number,
-        )
-    except Exception:
-        # ensure logging never breaks flow
-        logger.info("google_sheets_using_webhook_error_logging_skipped")
-
-    payload = build_order_payload(
-        order,
-        event_type
-    )
-
-    # Payload preview for debugging (truncated)
-    try:
-        preview = dict(payload)
-        # truncate long fields
-        for k, v in list(preview.items()):
-            if isinstance(v, str) and len(v) > 300:
-                preview[k] = v[:300] + "..."
-
-        logger.info(
-            "google_sheets_payload_built",
-            order_number=order.public_order_number,
-            payload_preview=preview,
-        )
-    except Exception:
-        logger.warning("google_sheets_payload_preview_failed", order_number=order.public_order_number)
+    webhook_url = settings.GOOGLE_SHEETS_WEBHOOK_URL.strip()
+    payload = build_order_payload(order, event_type)
 
     logger.info(
-        "google_sheets_webhook_sending",
+        "google_sheets_sending",
         order_number=order.public_order_number,
+        destination=webhook_url[:60],
         payload=payload,
     )
 
     delivery = WebhookDelivery(
         order_id=order.id,
-        destination=settings.GOOGLE_SHEETS_WEBHOOK_URL,
+        destination=webhook_url,
         event_type=event_type,
         payload=payload,
         status="pending",
     )
-
     db.add(delivery)
     db.flush()
 
     try:
-
-        headers = {}
-
-        if settings.GOOGLE_SHEETS_WEBHOOK_SECRET:
-            headers["X-Mutqan-Webhook-Secret"] = (
-                settings.GOOGLE_SHEETS_WEBHOOK_SECRET
-            )
-
-        logger.info(
-            "google_sheets_sending_request",
-            order_number=order.public_order_number,
-            destination=settings.GOOGLE_SHEETS_WEBHOOK_URL,
-            has_secret=bool(settings.GOOGLE_SHEETS_WEBHOOK_SECRET),
-        )
-
-        async with httpx.AsyncClient(
-            timeout=20.0,
-            follow_redirects=True
-        ) as client:
-
-            resp = await client.post(
-                settings.GOOGLE_SHEETS_WEBHOOK_URL,
-                json=payload,
-                headers=headers,
-            )
+        resp = await _post_to_google(webhook_url, payload)
 
         delivery.response_status = resp.status_code
         delivery.response_body = resp.text[:500]
-        delivery.last_attempt_at = datetime.now(
-            timezone.utc
-        )
-
+        delivery.last_attempt_at = datetime.now(timezone.utc)
         delivery.attempts = 1
 
         logger.info(
-            "google_sheets_response_received",
+            "google_sheets_response",
             order_number=order.public_order_number,
             status_code=resp.status_code,
-            response_preview=(resp.text[:300] if resp.text else ""),
+            body_preview=resp.text[:300],
         )
 
         if resp.status_code < 300:
-
             delivery.status = "sent"
-
-            logger.info(
-                "google_sheets_webhook_sent",
-                order_number=order.public_order_number,
-                status_code=resp.status_code,
-                response_body=resp.text[:200],
-            )
-
+            logger.info("google_sheets_webhook_sent", order_number=order.public_order_number)
         else:
-
             delivery.status = "failed"
-
-            delivery.error_message = (
-                f"HTTP {resp.status_code}"
-            )
-
-            delivery.next_retry_at = (
-                datetime.now(timezone.utc)
-                + timedelta(minutes=1)
-            )
-
+            delivery.error_message = f"HTTP {resp.status_code}: {resp.text[:200]}"
+            delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=5)
             logger.warning(
                 "google_sheets_webhook_failed",
                 order_number=order.public_order_number,
                 status_code=resp.status_code,
-                response_body=(resp.text[:200] if resp.text else ""),
+                body=resp.text[:300],
             )
 
     except httpx.TimeoutException as e:
-
         delivery.status = "failed"
         delivery.error_message = f"timeout: {str(e)}"[:200]
         delivery.last_attempt_at = datetime.now(timezone.utc)
         delivery.attempts = 1
-        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=1)
-
-        tb = traceback.format_exc()
-
-        logger.error(
-            "google_sheets_webhook_timeout",
-            error=str(e),
-            traceback=tb,
-            order_number=order.public_order_number,
-        )
+        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=5)
+        logger.error("google_sheets_timeout", error=str(e), order_number=order.public_order_number)
 
     except httpx.RequestError as e:
-
         delivery.status = "failed"
         delivery.error_message = f"request_error: {str(e)}"[:200]
         delivery.last_attempt_at = datetime.now(timezone.utc)
         delivery.attempts = 1
-        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=1)
-
-        tb = traceback.format_exc()
-
-        logger.error(
-            "google_sheets_webhook_request_error",
-            error=str(e),
-            traceback=tb,
-            order_number=order.public_order_number,
-        )
+        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=5)
+        logger.error("google_sheets_request_error", error=str(e), traceback=traceback.format_exc())
 
     except Exception as e:
-
         delivery.status = "failed"
-
         delivery.error_message = str(e)[:200]
-
-        delivery.last_attempt_at = datetime.now(
-            timezone.utc
-        )
-
+        delivery.last_attempt_at = datetime.now(timezone.utc)
         delivery.attempts = 1
-
-        delivery.next_retry_at = (
-            datetime.now(timezone.utc)
-            + timedelta(minutes=1)
-        )
-
-        tb = traceback.format_exc()
-
-        logger.error(
-            "google_sheets_webhook_error",
-            error=str(e),
-            traceback=tb,
-            order_number=order.public_order_number,
-        )
+        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=5)
+        logger.error("google_sheets_error", error=str(e), traceback=traceback.format_exc())
 
     db.commit()
 
 
 async def send_test_payload() -> dict:
-
     if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
+        raise ValueError("GOOGLE_SHEETS_WEBHOOK_URL is not configured")
 
-        raise ValueError(
-            "GOOGLE_SHEETS_WEBHOOK_URL is not configured"
-        )
+    webhook_url = settings.GOOGLE_SHEETS_WEBHOOK_URL.strip()
 
     payload = {
-        "date": datetime.now(
-            timezone.utc
-        ).strftime("%d/%m/%Y"),
-
-        "orderid": (
-            "mutqan-test-"
-            + datetime.now(
-                timezone.utc
-            ).strftime("%Y%m%d%H%M%S")
-        ),
-
+        "date": datetime.now(timezone.utc).strftime("%d/%m/%Y"),
+        "orderid": "TEST-" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S"),
         "country": "KSA",
         "name": "طلب اختبار",
         "phone": "966501234567",
-
         "product": "منتج تجريبي",
-        "sku": "MTQ-TEST",
+        "sku": "MTQ-TEST-001",
         "quantity": "1",
-
-        "total_price": 123,
+        "total_price": 249,
         "currency": "SAR",
-
         "status": "",
-        "note": "Google Sheets webhook test",
+        "note": "test from backend",
     }
 
-    async with httpx.AsyncClient(
-        timeout=20.0,
-        follow_redirects=True
-    ) as client:
+    logger.info("google_sheets_test_sending", destination=webhook_url[:60])
 
-        headers = {}
-        if settings.GOOGLE_SHEETS_WEBHOOK_SECRET:
-            headers["X-Mutqan-Webhook-Secret"] = settings.GOOGLE_SHEETS_WEBHOOK_SECRET
-
-        logger.info("google_sheets_test_payload_sending", destination=settings.GOOGLE_SHEETS_WEBHOOK_URL, has_secret=bool(headers))
-
-        resp = await client.post(
-            settings.GOOGLE_SHEETS_WEBHOOK_URL,
-            json=payload,
-            headers=headers,
-        )
+    resp = await _post_to_google(webhook_url, payload)
 
     logger.info(
-        "google_sheets_test_payload_sent",
+        "google_sheets_test_result",
         status_code=resp.status_code,
-        response_body=resp.text[:200],
+        body=resp.text[:300],
     )
 
     return {
         "status_code": resp.status_code,
         "response_text": resp.text[:500],
-        "payload": payload,
+        "payload_sent": payload,
+        "url_used": webhook_url[:60] + "...",
     }
