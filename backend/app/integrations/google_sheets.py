@@ -221,6 +221,40 @@ async def send_to_google_sheets(
                 response_body=(resp.text[:200] if resp.text else ""),
             )
 
+    except httpx.TimeoutException as e:
+
+        delivery.status = "failed"
+        delivery.error_message = f"timeout: {str(e)}"[:200]
+        delivery.last_attempt_at = datetime.now(timezone.utc)
+        delivery.attempts = 1
+        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=1)
+
+        tb = traceback.format_exc()
+
+        logger.error(
+            "google_sheets_webhook_timeout",
+            error=str(e),
+            traceback=tb,
+            order_number=order.public_order_number,
+        )
+
+    except httpx.RequestError as e:
+
+        delivery.status = "failed"
+        delivery.error_message = f"request_error: {str(e)}"[:200]
+        delivery.last_attempt_at = datetime.now(timezone.utc)
+        delivery.attempts = 1
+        delivery.next_retry_at = datetime.now(timezone.utc) + timedelta(minutes=1)
+
+        tb = traceback.format_exc()
+
+        logger.error(
+            "google_sheets_webhook_request_error",
+            error=str(e),
+            traceback=tb,
+            order_number=order.public_order_number,
+        )
+
     except Exception as e:
 
         delivery.status = "failed"
@@ -290,9 +324,16 @@ async def send_test_payload() -> dict:
         follow_redirects=True
     ) as client:
 
+        headers = {}
+        if settings.GOOGLE_SHEETS_WEBHOOK_SECRET:
+            headers["X-Mutqan-Webhook-Secret"] = settings.GOOGLE_SHEETS_WEBHOOK_SECRET
+
+        logger.info("google_sheets_test_payload_sending", destination=settings.GOOGLE_SHEETS_WEBHOOK_URL, has_secret=bool(headers))
+
         resp = await client.post(
             settings.GOOGLE_SHEETS_WEBHOOK_URL,
             json=payload,
+            headers=headers,
         )
 
     logger.info(

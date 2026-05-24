@@ -14,7 +14,7 @@ from app.services.order_service import (
     create_order, accept_upsell, decline_upsell,
     track_order, update_order_status,
 )
-from app.integrations.google_sheets import send_to_google_sheets
+from app.integrations.google_sheets import send_to_google_sheets, send_test_payload
 from app.integrations import meta_capi, tiktok_events, snapchat_capi
 from app.core.security import verify_admin_key
 from app.core.logging import logger
@@ -53,6 +53,19 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
         "customer": {"phone_e164": phone_e164},
         "upsell": upsell_out,
     }
+
+
+@router.post("/test-google-sheets")
+async def test_google_sheets_endpoint(db: Session = Depends(get_db)):
+    """Send a test payload to the configured Google Sheets webhook and return the response."""
+    try:
+        result = await send_test_payload()
+        logger.info("test_google_sheets_sent", result=result)
+        return result
+    except Exception as e:
+        tb = getattr(e, "__traceback__", None)
+        logger.error("test_google_sheets_error", error=str(e), traceback=str(tb))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload):
