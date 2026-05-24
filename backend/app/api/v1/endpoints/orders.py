@@ -55,16 +55,15 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     }
 
 
+@router.get("/test-google-sheets")
 @router.post("/test-google-sheets")
-async def test_google_sheets_endpoint(db: Session = Depends(get_db)):
-    """Send a test payload to the configured Google Sheets webhook and return the response."""
+async def test_google_sheets_endpoint():
+    """Send a test row to Google Sheets. GET works from the browser."""
     try:
         result = await send_test_payload()
-        logger.info("test_google_sheets_sent", result=result)
-        return result
+        return {"ok": True, **result}
     except Exception as e:
-        tb = getattr(e, "__traceback__", None)
-        logger.error("test_google_sheets_error", error=str(e), traceback=str(tb))
+        logger.error("test_google_sheets_error", error=str(e))
         raise HTTPException(status_code=500, detail=str(e))
 
 
