@@ -8,8 +8,8 @@ import { Suspense } from "react";
 
 function ThankYouContent() {
   const params = useSearchParams();
-  const orderNumber = params.get("order") || "MQN-XXXXXX-XXXX";
-  const total = params.get("total") || "0";
+  const orderNumber = params?.get("order") || "MQN-XXXXXX-XXXX";
+  const total = params?.get("total") || "0";
 
   const whatsappMessage = `مرحبًا، لدي استفسار عن طلبي من متقن رقم ${orderNumber}`;
 

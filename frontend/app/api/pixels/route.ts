@@ -6,6 +6,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+  return NextResponse.json({ ok: true, router: "app", path: "app/api/pixels/route.ts" });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

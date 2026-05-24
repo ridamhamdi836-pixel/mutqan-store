@@ -59,6 +59,22 @@ function isDuplicateOrder(phoneE164: string, totalSar: number): boolean {
   return false;
 }
 
+/** Backup probe if /api/debug/google-sheets is missing from deploy: GET /api/orders?debug=google-sheets */
+export async function GET(request: NextRequest) {
+  if (request.nextUrl.searchParams.get("debug") === "google-sheets") {
+    return NextResponse.json({
+      ok: true,
+      router: "app",
+      path: "app/api/orders/route.ts",
+      note: "backup probe — use /api/debug/google-sheets after fresh deploy",
+    });
+  }
+  return NextResponse.json(
+    { error: { code: "METHOD_NOT_ALLOWED", message_ar: "استخدم POST لإنشاء الطلب." } },
+    { status: 405 }
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
