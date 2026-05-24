@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { normalizeSaudiPhone, validateSaudiPhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
+import { buildGoogleSheetsPayload, sendOrderToGoogleSheets } from "@/lib/google-sheets";
 
 function generateOrderNumber(): string {
   const now = new Date();
@@ -177,6 +178,19 @@ export async function POST(request: NextRequest) {
         console.error("[DB] Connection failed:", connErr);
       }
     }
+
+    // Google Sheets — checkout uses THIS route (not FastAPI), so send here too
+    const sheetsPayload = buildGoogleSheetsPayload(
+      orderNumber,
+      customer.full_name.trim(),
+      phoneE164,
+      items,
+      totalSar,
+      tracking,
+    );
+    sendOrderToGoogleSheets(sheetsPayload).catch((err) => {
+      console.error("[GoogleSheets] Background send failed:", err);
+    });
 
     const orderSlugs = items.map((i) => i.product_slug);
 
