@@ -12,19 +12,18 @@ export const runtime = "nodejs";
 
 /**
  * GET https://mutqan.online/api/debug/google-sheets
- * Sends one test row to Google Sheets.
  */
 export async function GET() {
-  console.log("[debug/google-sheets] route hit", { build: SHEETS_BUILD });
+  console.log("[debug/google-sheets] GET", { build: SHEETS_BUILD });
 
   const webhookUrl = getWebhookUrl();
   if (!webhookUrl) {
-    console.error("[debug/google-sheets] GOOGLE_SHEETS_WEBHOOK_URL missing");
+    console.error("[debug/google-sheets] GOOGLE_SHEETS_WEBHOOK_URL not set");
     return NextResponse.json(
       {
         ok: false,
         build: SHEETS_BUILD,
-        error: "GOOGLE_SHEETS_WEBHOOK_URL not configured on frontend",
+        error: "GOOGLE_SHEETS_WEBHOOK_URL not configured",
       },
       { status: 500 },
     );
@@ -33,7 +32,10 @@ export async function GET() {
   const testOrder = buildTestOrder();
   const payload = buildPayload(testOrder);
 
-  console.log("[debug/google-sheets] sending test", { payload, webhookUrl: webhookUrl.slice(0, 72) });
+  console.log("[debug/google-sheets] sending", {
+    orderid: payload.orderid,
+    webhook: webhookUrl.slice(0, 72),
+  });
 
   const result = await sendOrderToGoogleSheets(testOrder);
 
@@ -43,23 +45,24 @@ export async function GET() {
       {
         ok: false,
         build: SHEETS_BUILD,
+        status_code: result.status ?? 0,
+        response_body: result.body ?? result.error ?? "unknown_error",
         payload_sent: payload,
-        webhook_url_preview: `${webhookUrl.slice(0, 60)}...`,
-        ...result,
       },
       { status: 502 },
     );
   }
 
-  console.log("[debug/google-sheets] success", result);
+  console.log("[debug/google-sheets] success", {
+    status_code: result.status,
+    response_body: result.body?.slice(0, 200),
+  });
 
   return NextResponse.json({
     ok: true,
     build: SHEETS_BUILD,
-    message: "Test row sent to Google Sheets",
+    status_code: result.status ?? 200,
+    response_body: result.body ?? "",
     orderid: payload.orderid,
-    payload_sent: payload,
-    sheets_response: result.body,
-    status_code: result.status,
   });
 }
