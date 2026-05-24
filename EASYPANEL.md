@@ -12,14 +12,34 @@
 > لا تستخدم `frontend` كـ Build Path — EasyPanel يرفضه أحياناً.  
 > يوجد `Dockerfile` في **جذر** المستودع يبني مجلد `frontend/` تلقائياً.
 
-### متغيرات البيئة (Environment)
+### متغيرات البيئة (Environment) — مطلوبة للطلبات في Google Sheet
 
 ```
 GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/XXXX/exec
 NEXT_PUBLIC_SITE_URL=https://mutqan.online
 DATABASE_URL=postgresql://...
-DEBUG_SECRET=optional-secret
 ```
+
+**مهم:** بعد تغيير Repository إلى `mutqan-store` أعد إدخال `GOOGLE_SHEETS_WEBHOOK_URL` يدوياً — المتغيرات القديمة لا تنتقل تلقائياً.
+
+### Google Apps Script (مرة واحدة)
+
+1. افتح `google-sheets-webhook.js` من المستودع
+2. في السطر `SHEET_ID` ضع معرف الشيت من الرابط:
+   `https://docs.google.com/spreadsheets/d/SHEET_ID_HERE/edit`
+3. Deploy → Web app → Execute as **Me** → Who has access **Anyone**
+4. انسخ رابط `/exec` إلى `GOOGLE_SHEETS_WEBHOOK_URL` في EasyPanel
+5. Redeploy frontend
+
+### تحقق من Sheets
+
+`https://mutqan.online/api/health-deploy`
+
+يجب:
+- `sheets_webhook.configured: true`
+- `sheets_live_test.ok: true`
+
+إذا `sheets_live_test.error` يحتوي `Set SHEET_ID` → عيّن SHEET_ID في Apps Script وأعد Deploy.
 
 ### بعد النشر — تحقق
 

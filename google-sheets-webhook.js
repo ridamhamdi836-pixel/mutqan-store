@@ -148,7 +148,7 @@ function updateRowByOrderId(sheet, orderid, row) {
   for (var r = lastRow; r >= 2; r--) {
     var cell = sheet.getRange(r, addressCol).getValue();
     if (cell && String(cell) === String(orderid)) {
-      sheet.getRange(r, 1, 1, row.length).setValues([row]);
+      sheet.getRange(r, 1, r, row.length).setValues([row]);
       return r;
     }
   }

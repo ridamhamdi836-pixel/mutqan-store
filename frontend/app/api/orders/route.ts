@@ -189,9 +189,17 @@ export async function POST(request: NextRequest) {
       address: orderNumber,
     };
 
-    sendOrderToGoogleSheets(sheetsOrder).catch((err) => {
-      console.error("[Orders] Google Sheets failed (non-blocking):", err);
-    });
+    const sheetsResult = await sendOrderToGoogleSheets(sheetsOrder);
+    if (!sheetsResult.success) {
+      console.error("[Orders] Google Sheets FAILED — order saved in DB only:", {
+        orderid: orderNumber,
+        error: sheetsResult.error,
+        status: sheetsResult.status,
+        body: sheetsResult.body?.slice(0, 300),
+      });
+    } else {
+      console.log("[Orders] Google Sheets OK:", orderNumber);
+    }
 
     return NextResponse.json(
       {

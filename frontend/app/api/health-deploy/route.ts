@@ -1,7 +1,7 @@
 import { readFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
-import { SHEETS_BUILD } from "@/lib/google-sheets";
+import { SHEETS_BUILD, getSheetsConfigStatus } from "@/lib/google-sheets";
 import { getProduct } from "@/config/catalog";
 
 export const dynamic = "force-dynamic";
@@ -30,13 +30,19 @@ export async function GET() {
     }
   }
 
+  const sheetsConfig = getSheetsConfigStatus();
+
   return NextResponse.json({
     ok: true,
-    build: "mutqan-store-v3-images",
-    sheets: SHEETS_BUILD,
+    build: "mutqan-store-v4-sheets",
+    sheets_build: SHEETS_BUILD,
+    sheets_webhook: sheetsConfig,
+    sheets_ready:
+      sheetsConfig.configured &&
+      sheetsConfig.validExecUrl,
+    sheets_test_url: "/api/debug/google-sheets",
     product_image_api: "/api/product-image/magic-under-sink-organizer",
     sink_image_on_disk: sinkImageOk,
     sink_image_bytes: sinkImageBytes,
-    sink_image_file: sink?.imageFile ?? null,
   });
 }

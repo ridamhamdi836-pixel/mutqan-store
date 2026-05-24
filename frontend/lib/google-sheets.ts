@@ -111,6 +111,39 @@ export function getWebhookUrl(): string | null {
   return url || null;
 }
 
+export function getSheetsConfigStatus(): {
+  configured: boolean;
+  validExecUrl: boolean;
+  preview: string | null;
+} {
+  const url = getWebhookUrl();
+  if (!url) {
+    return { configured: false, validExecUrl: false, preview: null };
+  }
+  return {
+    configured: true,
+    validExecUrl: url.endsWith("/exec"),
+    preview: `${url.slice(0, 55)}...`,
+  };
+}
+
+function parseAppsScriptResponse(text: string): { ok: boolean; message?: string } {
+  const trimmed = text.trim();
+  try {
+    const json = JSON.parse(trimmed) as { status?: string; message?: string };
+    if (json.status === "success") return { ok: true };
+    return {
+      ok: false,
+      message: json.message || `apps_script_status_${json.status || "unknown"}`,
+    };
+  } catch {
+    if (trimmed.includes("<!DOCTYPE") || trimmed.includes("<html")) {
+      return { ok: false, message: "html_response_check_webhook_url" };
+    }
+    return { ok: false, message: trimmed.slice(0, 200) || "empty_response" };
+  }
+}
+
 export type SheetsSendResult = {
   success: boolean;
   status?: number;
@@ -164,16 +197,21 @@ export async function sendOrderToGoogleSheets(
       body: text.slice(0, 400),
     });
 
-    const accepted =
-      response.ok &&
-      (text.includes('"status":"success"') || text.includes("success"));
+    const parsed = parseAppsScriptResponse(text);
+    const accepted = response.ok && parsed.ok;
 
     if (!accepted) {
+      console.error("[GoogleSheets] rejected", {
+        orderid: payload.orderid,
+        httpStatus: response.status,
+        message: parsed.message,
+        bodyPreview: text.slice(0, 300),
+      });
       return {
         success: false,
         status: response.status,
         body: text.slice(0, 500),
-        error: "apps_script_rejected",
+        error: parsed.message || "apps_script_rejected",
       };
     }
 
