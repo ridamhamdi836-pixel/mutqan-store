@@ -114,7 +114,7 @@ async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload
         logger.error("snapchat_integration_error", error=str(e))
 
 
-("/orders/{order_id}/upsell/accept", response_model=AcceptUpsellOut)
+@router.post("/orders/{order_id}/upsell/accept", response_model=AcceptUpsellOut)
 async def accept_upsell_endpoint(order_id: UUID, payload: AcceptUpsellIn, db: Session = Depends(get_db)):
     order = accept_upsell(db, order_id, payload.offer_id)
     try:
@@ -142,4 +142,4 @@ def track_order_endpoint(payload: TrackOrderIn, db: Session = Depends(get_db)):
 @router.patch("/orders/{order_id}/status", response_model=UpdateStatusOut, dependencies=[Depends(verify_admin_key)])
 def update_status_endpoint(order_id: UUID, payload: UpdateStatusIn, db: Session = Depends(get_db)):
     order = update_order_status(db, order_id, payload.status, payload.note)
-    return {"ok": True, "status": or@router.postder.status}
+    return {"ok": True, "status": order.status}

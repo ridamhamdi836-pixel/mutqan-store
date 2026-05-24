@@ -1,4 +1,5 @@
 import httpx
+import traceback
 from datetime import datetime, timezone, timedelta
 from sqlalchemy.orm import Session
 
@@ -88,6 +89,7 @@ async def send_to_google_sheets(
     event_type: str = "order_created"
 ) -> None:
 
+    # Verify configuration
     if not settings.GOOGLE_SHEETS_WEBHOOK_URL:
 
         logger.warning(
@@ -97,10 +99,37 @@ async def send_to_google_sheets(
 
         return
 
+    # Log which URL will be used (do not log secrets)
+    try:
+        logger.info(
+            "google_sheets_using_webhook",
+            destination=settings.GOOGLE_SHEETS_WEBHOOK_URL,
+            order_number=order.public_order_number,
+        )
+    except Exception:
+        # ensure logging never breaks flow
+        logger.info("google_sheets_using_webhook_error_logging_skipped")
+
     payload = build_order_payload(
         order,
         event_type
     )
+
+    # Payload preview for debugging (truncated)
+    try:
+        preview = dict(payload)
+        # truncate long fields
+        for k, v in list(preview.items()):
+            if isinstance(v, str) and len(v) > 300:
+                preview[k] = v[:300] + "..."
+
+        logger.info(
+            "google_sheets_payload_built",
+            order_number=order.public_order_number,
+            payload_preview=preview,
+        )
+    except Exception:
+        logger.warning("google_sheets_payload_preview_failed", order_number=order.public_order_number)
 
     logger.info(
         "google_sheets_webhook_sending",
@@ -128,6 +157,13 @@ async def send_to_google_sheets(
                 settings.GOOGLE_SHEETS_WEBHOOK_SECRET
             )
 
+        logger.info(
+            "google_sheets_sending_request",
+            order_number=order.public_order_number,
+            destination=settings.GOOGLE_SHEETS_WEBHOOK_URL,
+            has_secret=bool(settings.GOOGLE_SHEETS_WEBHOOK_SECRET),
+        )
+
         async with httpx.AsyncClient(
             timeout=20.0,
             follow_redirects=True
@@ -146,6 +182,13 @@ async def send_to_google_sheets(
         )
 
         delivery.attempts = 1
+
+        logger.info(
+            "google_sheets_response_received",
+            order_number=order.public_order_number,
+            status_code=resp.status_code,
+            response_preview=(resp.text[:300] if resp.text else ""),
+        )
 
         if resp.status_code < 300:
 
@@ -175,7 +218,7 @@ async def send_to_google_sheets(
                 "google_sheets_webhook_failed",
                 order_number=order.public_order_number,
                 status_code=resp.status_code,
-                response_body=resp.text[:200],
+                response_body=(resp.text[:200] if resp.text else ""),
             )
 
     except Exception as e:
@@ -195,9 +238,12 @@ async def send_to_google_sheets(
             + timedelta(minutes=1)
         )
 
+        tb = traceback.format_exc()
+
         logger.error(
             "google_sheets_webhook_error",
             error=str(e),
+            traceback=tb,
             order_number=order.public_order_number,
         )
 
