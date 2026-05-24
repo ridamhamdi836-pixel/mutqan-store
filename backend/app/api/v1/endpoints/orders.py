@@ -1,10 +1,10 @@
 import asyncio
-from fastapi import APIRouter, Depends, Request, HTTPException
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from uuid import UUID
 from app.db.session import get_db
 from app.schemas.order import (
-    CreateOrderIn, CreateOrderOut, OrderSummaryOut,
+    CreateOrderIn, CreateOrderOut,
     AcceptUpsellIn, AcceptUpsellOut,
     DeclineUpsellIn, DeclineUpsellOut,
     TrackOrderIn, TrackOrderOut,
@@ -14,7 +14,6 @@ from app.services.order_service import (
     create_order, accept_upsell, decline_upsell,
     track_order, update_order_status,
 )
-from app.integrations.google_sheets import send_to_google_sheets
 from app.integrations import meta_capi, tiktok_events, snapchat_capi
 from app.core.security import verify_admin_key
 from app.core.logging import logger
@@ -31,10 +30,7 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     phone_e164 = result["customer_phone_e164"]
     upsell = result["upsell"]
 
-    try:
-        await send_to_google_sheets(db, order, "order_created")
-    except Exception as e:
-        logger.error("sheets_integration_error", error=str(e), order_number=order.public_order_number)
+    # Google Sheets: handled by Next.js frontend (/api/orders) — not backend
 
     asyncio.create_task(_fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload))
 
@@ -55,25 +51,7 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
     }
 
 
-@router.get("/test-google-sheets")
-@router.post("/test-google-sheets")
-async def test_google_sheets_endpoint():
-    """Send a test row to Google Sheets. GET works from the browser."""
-    try:
-        from app.integrations.google_sheets import diagnose_google_sheets
-        report = await diagnose_google_sheets(send_test_row=True)
-        if not report.get("ok"):
-            raise HTTPException(status_code=500, detail=report)
-        return report
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error("test_google_sheets_error", error=str(e))
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload):
-    """Fire non-sheet integrations asynchronously - failures must not affect order."""
     try:
         tracking = payload.tracking
         items = order.items
@@ -134,20 +112,12 @@ async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload
 @router.post("/orders/{order_id}/upsell/accept", response_model=AcceptUpsellOut)
 async def accept_upsell_endpoint(order_id: UUID, payload: AcceptUpsellIn, db: Session = Depends(get_db)):
     order = accept_upsell(db, order_id, payload.offer_id)
-    try:
-        await send_to_google_sheets(db, order, "upsell_accepted")
-    except Exception as e:
-        logger.error("sheets_upsell_error", error=str(e))
     return {"order": order, "message_ar": "تمت إضافة العرض إلى طلبك."}
 
 
 @router.post("/orders/{order_id}/upsell/decline", response_model=DeclineUpsellOut)
 async def decline_upsell_endpoint(order_id: UUID, payload: DeclineUpsellIn, db: Session = Depends(get_db)):
     order = decline_upsell(db, order_id, payload.offer_id)
-    try:
-        await send_to_google_sheets(db, order, "order_created")
-    except Exception as e:
-        logger.error("sheets_decline_error", error=str(e))
     return {"order": order, "message_ar": "تم تأكيد طلبك بنجاح."}
 
 

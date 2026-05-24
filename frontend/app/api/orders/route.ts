@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { normalizeSaudiPhone, validateSaudiPhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
-import { buildGoogleSheetsPayload, sendOrderToGoogleSheets } from "@/lib/google-sheets";
-
-function generateOrderNumber(): string {
-  const now = new Date();
-  const dd = String(now.getDate()).padStart(2, "0");
-  const mm = String(now.getMonth() + 1).padStart(2, "0");
-  const yy = String(now.getFullYear()).slice(2);
-  const rand = Math.random().toString(36).substring(2, 7).toUpperCase();
-  return `mutqan-${dd}${mm}${yy}-${rand}`;
-}
+import {
+  generateOrderId,
+  sendOrderToGoogleSheets,
+  type GoogleSheetsOrderInput,
+} from "@/lib/google-sheets";
 
 interface OrderItemInput {
   product_slug: string;
@@ -29,12 +24,6 @@ interface TrackingInput {
   utm_term?: string;
   landing_page?: string;
   referrer?: string;
-  client_event_id?: string;
-  meta_fbp?: string;
-  meta_fbc?: string;
-  tiktok_click_id?: string;
-  snapchat_click_id?: string;
-  user_agent?: string;
 }
 
 const recentOrders = new Map<string, number>();
@@ -43,36 +32,16 @@ const DUPLICATE_WINDOW_MS = 30 * 60 * 1000;
 function cleanupRecentOrders() {
   const now = Date.now();
   for (const [key, timestamp] of recentOrders) {
-    if (now - timestamp > DUPLICATE_WINDOW_MS) {
-      recentOrders.delete(key);
-    }
+    if (now - timestamp > DUPLICATE_WINDOW_MS) recentOrders.delete(key);
   }
 }
 
 function isDuplicateOrder(phoneE164: string, totalSar: number): boolean {
   cleanupRecentOrders();
   const key = `${phoneE164}:${totalSar}`;
-  if (recentOrders.has(key)) {
-    return true;
-  }
+  if (recentOrders.has(key)) return true;
   recentOrders.set(key, Date.now());
   return false;
-}
-
-/** Backup probe if /api/debug/google-sheets is missing from deploy: GET /api/orders?debug=google-sheets */
-export async function GET(request: NextRequest) {
-  if (request.nextUrl.searchParams.get("debug") === "google-sheets") {
-    return NextResponse.json({
-      ok: true,
-      router: "app",
-      path: "app/api/orders/route.ts",
-      note: "backup probe — use /api/debug/google-sheets after fresh deploy",
-    });
-  }
-  return NextResponse.json(
-    { error: { code: "METHOD_NOT_ALLOWED", message_ar: "استخدم POST لإنشاء الطلب." } },
-    { status: 405 }
-  );
 }
 
 export async function POST(request: NextRequest) {
@@ -87,36 +56,48 @@ export async function POST(request: NextRequest) {
     if (!customer?.full_name?.trim() || customer.full_name.trim().length < 2) {
       return NextResponse.json(
         { error: { code: "INVALID_NAME", message_ar: "فضلاً أدخل الاسم الكامل.", field: "name" } },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (!validateSaudiPhone(customer.phone)) {
       return NextResponse.json(
-        { error: { code: "INVALID_SAUDI_PHONE", message_ar: "فضلاً أدخل رقم جوال سعودي صحيح يبدأ بـ 05.", field: "phone" } },
-        { status: 400 }
+        {
+          error: {
+            code: "INVALID_SAUDI_PHONE",
+            message_ar: "فضلاً أدخل رقم جوال سعودي صحيح يبدأ بـ 05.",
+            field: "phone",
+          },
+        },
+        { status: 400 },
       );
     }
 
-    if (!items || items.length === 0) {
+    if (!items?.length) {
       return NextResponse.json(
         { error: { code: "EMPTY_CART", message_ar: "السلة فارغة." } },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const phoneE164 = normalizeSaudiPhone(customer.phone);
     const phoneLocal = customer.phone.trim();
-    const orderNumber = generateOrderNumber();
+    const orderNumber = generateOrderId();
 
-    const totalSar = items.reduce((sum: number, item: OrderItemInput) => {
-      return sum + (item.price_sar || 0) * (item.quantity || 1);
-    }, 0);
+    const totalSar = items.reduce(
+      (sum, item) => sum + (item.price_sar || 0) * (item.quantity || 1),
+      0,
+    );
 
     if (isDuplicateOrder(phoneE164, totalSar)) {
       return NextResponse.json(
-        { error: { code: "DUPLICATE_ORDER", message_ar: "تم استلام طلبك بالفعل. يرجى الانتظار للتأكيد عبر واتساب." } },
-        { status: 409 }
+        {
+          error: {
+            code: "DUPLICATE_ORDER",
+            message_ar: "تم استلام طلبك بالفعل. يرجى الانتظار للتأكيد عبر واتساب.",
+          },
+        },
+        { status: 409 },
       );
     }
 
@@ -159,7 +140,7 @@ export async function POST(request: NextRequest) {
               tracking?.utm_content || null,
               tracking?.utm_term || null,
               now,
-            ]
+            ],
           );
 
           for (const item of items) {
@@ -179,57 +160,61 @@ export async function POST(request: NextRequest) {
                 (item.price_sar || 0) * (item.quantity || 1),
                 item.item_type || "main",
                 now,
-              ]
+              ],
             );
           }
 
           await client.query("COMMIT");
         } catch (dbErr) {
           await client.query("ROLLBACK");
-          console.error("[DB] Order insert failed:", dbErr);
+          console.error("[Orders] DB insert failed:", dbErr);
         } finally {
           client.release();
         }
       } catch (connErr) {
-        console.error("[DB] Connection failed:", connErr);
+        console.error("[Orders] DB connection failed:", connErr);
       }
     }
 
-    // Google Sheets — checkout uses THIS route (not FastAPI), so send here too
-    const sheetsPayload = buildGoogleSheetsPayload(
-      orderNumber,
-      customer.full_name.trim(),
+    const sheetsOrder: GoogleSheetsOrderInput = {
+      orderid: orderNumber,
+      customerName: customer.full_name.trim(),
       phoneE164,
-      items,
+      items: items.map((i) => ({
+        product_slug: i.product_slug,
+        name_ar: i.name_ar,
+        quantity: i.quantity || 1,
+      })),
       totalSar,
-      tracking,
-    );
-    sendOrderToGoogleSheets(sheetsPayload).catch((err) => {
-      console.error("[GoogleSheets] Background send failed:", err);
-    });
-
-    const orderSlugs = items.map((i) => i.product_slug);
-
-    const response = {
-      order: {
-        id: orderId,
-        public_order_number: orderNumber,
-        status: "placed",
-        subtotal_sar: totalSar,
-        discount_sar: 0,
-        shipping_sar: 0,
-        total_sar: totalSar,
-        currency: "SAR",
-      },
-      customer: { phone_e164: phoneE164 },
-      order_slugs: orderSlugs,
+      address: orderNumber,
     };
 
-    return NextResponse.json(response, { status: 201 });
-  } catch {
+    sendOrderToGoogleSheets(sheetsOrder).catch((err) => {
+      console.error("[Orders] Google Sheets failed (non-blocking):", err);
+    });
+
+    return NextResponse.json(
+      {
+        order: {
+          id: orderId,
+          public_order_number: orderNumber,
+          status: "placed",
+          subtotal_sar: totalSar,
+          discount_sar: 0,
+          shipping_sar: 0,
+          total_sar: totalSar,
+          currency: "SAR",
+        },
+        customer: { phone_e164: phoneE164 },
+        order_slugs: items.map((i) => i.product_slug),
+      },
+      { status: 201 },
+    );
+  } catch (err) {
+    console.error("[Orders] Unexpected error:", err);
     return NextResponse.json(
       { error: { code: "SERVER_ERROR", message_ar: "حدث خطأ في الخادم. فضلاً حاول مرة أخرى." } },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
