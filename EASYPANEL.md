@@ -29,7 +29,10 @@ DATABASE_URL=postgresql://...
    `https://docs.google.com/spreadsheets/d/SHEET_ID_HERE/edit`
 3. Deploy → Web app → Execute as **Me** → Who has access **Anyone**
 4. انسخ رابط `/exec` إلى `GOOGLE_SHEETS_WEBHOOK_URL` في EasyPanel
-5. Redeploy frontend
+5. **مهم:** بعد تغيير `SHEET_ID` → **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**  
+   (الحفظ فقط لا يحدّث الرابط `/exec` الحي!)
+6. افتح رابط `/exec` في المتصفح — يجب `"sheet_id_set":true`
+7. Redeploy frontend
 
 ### تحقق من Sheets
 

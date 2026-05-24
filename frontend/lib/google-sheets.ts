@@ -168,11 +168,25 @@ export async function pingWebhook(): Promise<SheetsSendResult> {
     clearTimeout(timer);
     const text = await response.text();
     const parsed = parseAppsScriptResponse(text);
+    const sheetIdOk =
+      text.includes('"sheet_id_set":true') ||
+      text.includes('"sheet_id_set": true') ||
+      (text.includes('"sheet_id"') &&
+        !text.includes("PASTE_YOUR_SHEET_ID") &&
+        !text.includes('"sheet_id_set":false'));
+
     return {
-      success: response.ok && (parsed.ok || text.includes('"status":"ok"')),
+      success:
+        response.ok &&
+        (parsed.ok || text.includes('"status":"ok"')) &&
+        sheetIdOk,
       status: response.status,
       body: text.slice(0, 500),
-      error: parsed.ok ? undefined : parsed.message,
+      error: sheetIdOk
+        ? parsed.ok
+          ? undefined
+          : parsed.message
+        : "apps_script_stale_deploy_set_sheet_id_or_new_version",
     };
   } catch (err) {
     return {
