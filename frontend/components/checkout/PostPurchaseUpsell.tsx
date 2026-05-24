@@ -55,7 +55,7 @@ const ALL_UPSELL_PRODUCTS: UpsellProduct[] = [
     slug: "magic-under-sink-organizer",
     name_ar: "منظّم المغسلة السحري",
     hook_ar: "الفوضى تحت المغسلة انتهت — ترتيب ذكي بدقيقتين",
-    image: "/images/products/magic-under-sink-organizer.jpg",
+    image: "/images/products/magic-under-sink-organizer.jpg?v=2",
     original_price_sar: 229,
     upsell_price_sar: 189,
     savings_percent: 17,

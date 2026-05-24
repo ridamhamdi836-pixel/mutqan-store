@@ -17,6 +17,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const reviewCount =
     1050 + (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
+  const productImageSrc = `/images/products/${product.slug}.jpg?v=2`;
 
   return (
     <Link
@@ -29,7 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
           src={
             imgError
               ? "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80"
-              : `/images/products/${product.slug}.jpg`
+              : productImageSrc
           }
           alt={product.name_ar}
           fill
