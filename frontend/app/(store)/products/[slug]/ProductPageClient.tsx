@@ -13,6 +13,7 @@ import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import type { ProductBundle } from "@/types";
+import { getProductImageSrc } from "@/lib/product-image";
 
 // Minimal cross-sell products data for related section
 const CROSS_SELL_PRODUCTS: Record<string, { id: string; slug: string; name_ar: string; name_en: string; short_description_ar: string; category_slug: string; bundles: ProductBundle[] }> = {
@@ -57,7 +58,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const [showSticky, setShowSticky] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
-  const productImageSrc = `/images/products/${product.slug}.jpg?v=2`;
+  const productImageSrc = getProductImageSrc(product.slug);
   
   // Generate deterministic random review count above 1000 based on product slug
   const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);

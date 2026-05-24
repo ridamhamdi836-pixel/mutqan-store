@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Star } from "lucide-react";
 import type { Product } from "@/types";
+import { getProductImageSrc } from "@/lib/product-image";
 
 interface ProductCardProps {
   product: Product;
@@ -17,7 +18,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const reviewCount =
     1050 + (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
-  const productImageSrc = `/images/products/${product.slug}.jpg?v=2`;
+  const productImageSrc = getProductImageSrc(product.slug);
 
   return (
     <Link

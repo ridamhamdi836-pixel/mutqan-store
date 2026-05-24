@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { cn } from "@/lib/utils";
+import { getProductImageSrc } from "@/lib/product-image";
 
 // Static product data for cross-sells
 const PRODUCT_DATA: Record<string, { nameAr: string; shortDesc: string; defaultBundleId: string; defaultBundleLabel: string; priceSar: number }> = {
@@ -90,7 +91,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     <div className="flex items-center gap-3 p-3 rounded-card border border-brand-border bg-brand-background">
       <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
         <Image
-          src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80` : `/images/products/${productSlug}.jpg`}
+          src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80` : getProductImageSrc(productSlug)}
           alt={product.nameAr}
           fill
           className="object-cover"

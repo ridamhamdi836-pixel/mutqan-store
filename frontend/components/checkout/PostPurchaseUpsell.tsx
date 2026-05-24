@@ -6,6 +6,7 @@ import { Check, ShoppingBag, Clock, Star, Flame, Truck, ShieldCheck, Gift } from
 import Image from "next/image";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { getProductImageSrc } from "@/lib/product-image";
 
 interface UpsellProduct {
   slug: string;
@@ -55,7 +56,7 @@ const ALL_UPSELL_PRODUCTS: UpsellProduct[] = [
     slug: "magic-under-sink-organizer",
     name_ar: "منظّم المغسلة السحري",
     hook_ar: "الفوضى تحت المغسلة انتهت — ترتيب ذكي بدقيقتين",
-    image: "/images/products/magic-under-sink-organizer.jpg?v=2",
+    image: getProductImageSrc("magic-under-sink-organizer"),
     original_price_sar: 229,
     upsell_price_sar: 189,
     savings_percent: 17,
