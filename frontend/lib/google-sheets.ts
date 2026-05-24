@@ -151,6 +151,37 @@ export type SheetsSendResult = {
   error?: string;
 };
 
+/** Quick GET check — Apps Script doGet should return JSON */
+export async function pingWebhook(): Promise<SheetsSendResult> {
+  const webhookUrl = getWebhookUrl();
+  if (!webhookUrl) {
+    return { success: false, error: "webhook_not_configured" };
+  }
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10_000);
+    const response = await fetch(webhookUrl, {
+      method: "GET",
+      redirect: "follow",
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    const text = await response.text();
+    const parsed = parseAppsScriptResponse(text);
+    return {
+      success: response.ok && (parsed.ok || text.includes('"status":"ok"')),
+      status: response.status,
+      body: text.slice(0, 500),
+      error: parsed.ok ? undefined : parsed.message,
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : String(err),
+    };
+  }
+}
+
 export async function sendOrderToGoogleSheets(
   order: GoogleSheetsOrderInput,
 ): Promise<SheetsSendResult> {
