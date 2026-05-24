@@ -8,6 +8,7 @@ import { apiClient } from "@/lib/api-client";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import type { UpsellOffer, OrderSummary } from "@/types";
 import { formatSARCompact } from "@/lib/currency";
+import { getProductImageSrc } from "@/lib/product-image";
 
 interface UpsellModalProps {
   isOpen: boolean;
@@ -138,9 +139,10 @@ export function UpsellModal({ isOpen, upsell, orderId, orderNumber, onComplete }
               <div className="card p-4 flex items-center gap-4 mb-5">
                 <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
                   <Image
-                    src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80` : `/images/products/${upsell.product_slug}.jpg`}
+                    src={getProductImageSrc(upsell.product_slug)}
                     alt={upsell.name_ar}
                     fill
+                    unoptimized
                     className="object-cover"
                     onError={() => { if (!imgError) setImgError(true); }}
                   />

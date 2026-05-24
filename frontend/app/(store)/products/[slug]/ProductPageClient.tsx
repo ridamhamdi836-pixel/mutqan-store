@@ -137,9 +137,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <div className="flex items-center gap-3 flex-1">
                 <div className="hidden md:block relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
                   <Image
-                    src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80` : productImageSrc}
+                    src={productImageSrc}
                     alt={product.name_ar}
                     fill
+                    unoptimized
                     className="object-cover"
                     onError={() => { if (!imgError) setImgError(true); }}
                   />
@@ -167,9 +168,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             {/* Image */}
             <div ref={imageRef} className="relative aspect-square rounded-2xl overflow-hidden bg-brand-beige shadow-md">
               <Image
-                src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80` : productImageSrc}
+                src={productImageSrc}
                 alt={config.heroImageAlt}
                 fill
+                unoptimized
                 className="object-cover hover:scale-105 transition-transform duration-500"
                 priority
                 onError={() => { if (!imgError) setImgError(true); }}

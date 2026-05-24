@@ -10,15 +10,17 @@ import { formatSARCompact } from "@/lib/currency";
 import { CrossSellCard } from "./CrossSellCard";
 import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { getProductImageSrc } from "@/lib/product-image";
 
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
     <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <Image
-        src={err ? "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80" : `/images/products/${slug}.jpg`}
+        src={getProductImageSrc(slug)}
         alt={name}
         fill
+        unoptimized
         className="object-cover"
         onError={() => { if (!err) setErr(true); }}
       />

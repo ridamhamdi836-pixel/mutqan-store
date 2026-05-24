@@ -91,9 +91,10 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     <div className="flex items-center gap-3 p-3 rounded-card border border-brand-border bg-brand-background">
       <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
         <Image
-          src={imgError ? `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80` : getProductImageSrc(productSlug)}
+          src={getProductImageSrc(productSlug)}
           alt={product.nameAr}
           fill
+          unoptimized
           className="object-cover"
           onError={() => { if (!imgError) setImgError(true); }}
         />

@@ -309,9 +309,10 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
                   {/* Image */}
                   <div className="relative w-[60px] h-[60px] rounded-lg overflow-hidden bg-brand-beige flex-shrink-0">
                     <Image
-                      src={hasImgError ? "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80" : product.image}
+                      src={product.image}
                       alt={product.name_ar}
                       fill
+                      unoptimized
                       className="object-cover"
                       onError={() => handleImgError(product.slug)}
                     />

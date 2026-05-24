@@ -11,6 +11,7 @@ import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analy
 import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
+import { getProductImageSrc } from "@/lib/product-image";
 
 interface CheckoutModalProps {
   onOrderSuccess: (response: CreateOrderResponse) => void;
@@ -21,9 +22,10 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
   return (
     <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <Image
-        src={err ? "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80" : `/images/products/${slug}.jpg`}
+        src={getProductImageSrc(slug)}
         alt={name}
         fill
+        unoptimized
         className="object-cover"
         onError={() => { if (!err) setErr(true); }}
       />

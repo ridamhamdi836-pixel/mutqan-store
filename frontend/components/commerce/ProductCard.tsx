@@ -27,19 +27,20 @@ export function ProductCard({ product }: ProductCardProps) {
     >
       {/* Product Image */}
       <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
-        <Image
-          src={
-            imgError
-              ? "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=80"
-              : productImageSrc
-          }
-          alt={product.name_ar}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-          onError={() => {
-            if (!imgError) setImgError(true);
-          }}
-        />
+        {!imgError ? (
+          <Image
+            src={productImageSrc}
+            alt={product.name_ar}
+            fill
+            unoptimized
+            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-xs text-gray-400 px-2 text-center">
+            {product.name_ar}
+          </div>
+        )}
 
         {defaultBundle?.is_default && (
           <div className="absolute top-3 start-3">

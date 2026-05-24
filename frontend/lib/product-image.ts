@@ -1,8 +1,9 @@
-const IMAGE_VERSION: Record<string, number> = {
-  "magic-under-sink-organizer": 3,
+/** Per-product image filename under /public/images/products/ */
+const PRODUCT_IMAGE_FILE: Record<string, string> = {
+  "magic-under-sink-organizer": "magic-under-sink-organizer.png",
 };
 
 export function getProductImageSrc(slug: string): string {
-  const version = IMAGE_VERSION[slug] ?? 2;
-  return `/images/products/${slug}.jpg?v=${version}`;
+  const file = PRODUCT_IMAGE_FILE[slug] ?? `${slug}.jpg`;
+  return `/images/products/${file}`;
 }
