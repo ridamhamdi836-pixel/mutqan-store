@@ -3,7 +3,7 @@ import { CATALOG_BY_SLUG } from "@/config/catalog";
 /** Bump when replacing product image (cache bust) */
 const IMAGE_VERSION: Record<string, number> = {
   "magic-under-sink-organizer": 5,
-  "smart-stackable-cabinet": 2,
+  "smart-stackable-cabinet": 3,
 };
 
 /**

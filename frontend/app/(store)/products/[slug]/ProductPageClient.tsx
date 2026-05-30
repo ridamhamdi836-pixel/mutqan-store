@@ -15,6 +15,10 @@ import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc } from "@/lib/product-image";
+import { cn } from "@/lib/utils";
+
+/** Tall product photos need contain + portrait frame to avoid cropping */
+const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
 interface ProductPageClientProps {
   product: {
@@ -49,7 +53,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
-  
+  const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug);
+
   // Generate deterministic random review count above 1000 based on product slug
   const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
@@ -159,13 +164,25 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-10 items-start">
             {/* Image */}
-            <div ref={imageRef} className="relative aspect-square rounded-2xl overflow-hidden bg-brand-beige shadow-md">
+            <div
+              ref={imageRef}
+              className={cn(
+                "relative rounded-2xl overflow-hidden shadow-md",
+                portraitHero
+                  ? "aspect-[2/3] w-full max-w-md mx-auto md:mx-0 bg-white"
+                  : "aspect-square bg-brand-beige",
+              )}
+            >
               <Image
                 src={productImageSrc}
                 alt={config.heroImageAlt}
                 fill
                 unoptimized
-                className="object-cover hover:scale-105 transition-transform duration-500"
+                className={cn(
+                  portraitHero
+                    ? "object-contain p-3 md:p-5"
+                    : "object-cover hover:scale-105 transition-transform duration-500",
+                )}
                 priority
                 onError={() => { if (!imgError) setImgError(true); }}
               />
