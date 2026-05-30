@@ -169,11 +169,13 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 priority
                 onError={() => { if (!imgError) setImgError(true); }}
               />
-              {/* Trust overlay on image */}
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 text-xs font-bold text-brand-espresso">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                <span>4.9/5 تقييم العملاء</span>
-              </div>
+              {/* Trust overlay — hidden when rating badge is part of the product photo */}
+              {product.slug !== "smart-stackable-cabinet" && (
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 text-xs font-bold text-brand-espresso">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span>4.9/5 تقييم العملاء</span>
+                </div>
+              )}
             </div>
 
             {/* Info */}

@@ -67,7 +67,7 @@ export const CATALOG: CatalogProduct[] = [
     short_description_ar: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق.",
     category_slug: "home-organization",
     sku: "MTQ-CAB-002",
-    imageFile: "smart-stackable-cabinet.jpg",
+    imageFile: "smart-stackable-cabinet.png",
     bundles: [
       bundle("cabinet-1", "قطعة واحدة - لمساحة واحدة", 1, 349, { sort_order: 1 }),
       bundle("cabinet-2", "قطعتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", 2, 599, {
