@@ -199,7 +199,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
               {/* Social proof */}
               <div className="px-5 py-2 border-b border-gray-100 flex items-center justify-between">
-                <span className="text-xs text-gray-500">+1,200 سعودية طلبت هذا الأسبوع</span>
+                <span className="text-xs text-gray-500">+1,200 عميل طلبوا هذا الأسبوع</span>
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-gray-700">4.9</span>
                   <div className="flex">
@@ -326,12 +326,12 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     </span>
                     <span className="flex items-center gap-1">
                       <Truck className="w-3 h-3" />
-                      ترفضين بدون تكلفة
+                      ارفض بدون تكلفة
                     </span>
                   </div>
 
                   <p className="text-[10px] text-center text-gray-300">
-                    بالمتابعة أنتِ توافقين على الشروط والأحكام و سياسة الخصوصية
+                    بالمتابعة أنت توافق على الشروط والأحكام وسياسة الخصوصية
                   </p>
                 </form>
               </div>

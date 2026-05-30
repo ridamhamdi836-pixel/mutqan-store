@@ -234,7 +234,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   onClick={handleAddToCart}
                   className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-3 bg-[#1B4DDB] hover:bg-[#1640B5] text-white shadow-lg shadow-[#1B4DDB]/25 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
                 >
-                  اطلبي الآن · {selectedBundle.price_sar} ر.س
+                  اطلب الآن · {selectedBundle.price_sar} ر.س
                 </button>
                 <p className="text-xs text-center text-brand-muted font-medium">
                   الدفع عند الاستلام · بدون دفع أونلاين
@@ -329,7 +329,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 {config.heroAngle}
               </h2>
               <p className="text-lg text-brand-muted leading-relaxed">
-                وفرنا لك في متقن هذا المنتج ليكون حلك السحري. لن تعاني بعد اليوم، ستحصلين على الراحة والترتيب الذي يستحقه بيتك.
+                وفرنا لك في متقن هذا المنتج ليكون حلك السحري. لن تعاني بعد اليوم، ستحصل على الراحة والترتيب الذي يستحقه بيتك.
               </p>
               <ul className="space-y-3 mt-4">
                 {config.benefits.slice(0, 3).map((benefit, i) => (
@@ -383,7 +383,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
-            <p className="text-lg text-brand-muted">انتقلي من الإزعاج والفوضى إلى الراحة التامة بخطوة واحدة بسيطة.</p>
+            <p className="text-lg text-brand-muted">انتقل من الإزعاج والفوضى إلى الراحة التامة بخطوة واحدة بسيطة.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
@@ -448,8 +448,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
         <div className="max-w-content mx-auto max-w-xl text-center relative z-10">
           <span className="inline-block bg-brand-bronze text-white text-xs font-bold px-3 py-1 rounded-full mb-4">الكمية محدودة جداً</span>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">اتخذي القرار لبيت أكثر راحة اليوم</h2>
-          <p className="text-brand-sand/90 text-lg mb-8">اطلبي الآن، الدفع عند الاستلام والتأكيد خلال ساعات. لا تدعي الفوضى تسرق راحتك بعد الآن.</p>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">اتخذ القرار لبيت أكثر راحة اليوم</h2>
+          <p className="text-brand-sand/90 text-lg mb-8">اطلب الآن، الدفع عند الاستلام والتأكيد خلال ساعات. لا تدع الفوضى تسرق راحتك بعد الآن.</p>
           <button
             onClick={handleAddToCart}
             className="bg-brand-bronze text-white font-extrabold rounded-pill px-8 py-5 text-xl w-full hover:bg-brand-sand hover:text-brand-espresso transition-all flex items-center justify-center gap-3 shadow-2xl hover:scale-105"
@@ -469,7 +469,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       <section className="section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضمي لآلاف العائلات السعيدة</h2>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضم لآلاف العائلات السعيدة</h2>
             <p className="text-lg text-brand-muted">أكثر من +50,000 عميل في السعودية يثقون في متقن يومياً.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -484,7 +484,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       <section className="section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-brand-espresso">تسوقي بأمان تام وموثوقية عالية</h2>
+            <h2 className="text-2xl font-bold text-brand-espresso">تسوق بأمان تام وموثوقية عالية</h2>
           </div>
           <TrustBadges />
         </div>
@@ -495,7 +495,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
         <div className="max-w-content mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-extrabold text-brand-espresso mb-4">عندك استفسار؟ إجاباتنا واضحة</h2>
-            <p className="text-brand-muted text-lg">كل ما تحتاجين معرفته لطلب مطمئن</p>
+            <p className="text-brand-muted text-lg">كل ما تحتاج معرفته لطلب مطمئن</p>
           </div>
           <FAQAccordion items={config.faqs} />
         </div>
@@ -505,7 +505,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       {relatedProducts.length > 0 && (
         <section className="section-pad page-x bg-white border-t border-brand-border/30">
           <div className="max-w-content mx-auto">
-            <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-10">عززي راحة بيتك مع هذه المنتجات</h2>
+            <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-10">عزّز راحة بيتك مع هذه المنتجات</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedProducts.slice(0, 3).map((p) => (
                 <ProductCard key={p.id} product={p} />

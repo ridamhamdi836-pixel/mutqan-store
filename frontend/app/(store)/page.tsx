@@ -32,7 +32,7 @@ import {
 export const metadata: Metadata = {
   title: "متقن | حلول عصرية لراحة البيت السعودي",
   description:
-    "تسوقي منتجات متقن المختارة بعناية لتنظيم المنزل والمطبخ وتجربة يومية أكثر راحة. الدفع عند الاستلام والتوصيل السريع داخل السعودية بضمان ذهبي 30 يوم.",
+    "تسوق منتجات متقن المختارة بعناية لتنظيم المنزل والمطبخ وتجربة يومية أكثر راحة. الدفع عند الاستلام والتوصيل السريع داخل السعودية بضمان ذهبي 30 يوم.",
 };
 
 const FEATURED_PRODUCTS = getProductsBySlugs([...FEATURED_SLUGS]).map(toProduct);
@@ -44,9 +44,9 @@ const HOMEPAGE_REVIEWS = [
 ];
 
 const HOMEPAGE_FAQ = [
-  { question: "كيف يتم الطلب؟", answer: "الطلب أسهل مما تتخيلين! اختاري المنتج، أدخلي اسمك ورقم جوالك فقط بدون تعقيد، وسيتواصل معك فريق متقن لتأكيد الطلب قبل الشحن." },
-  { question: "هل الدفع عند الاستلام متاح؟", answer: "نعم وبكل تأكيد! الدفع عند الاستلام هو طريقتنا الأساسية. لا تدفعي ولا ريال حتى تستلمي طلبك بيدك." },
-  { question: "ما هو الضمان الذهبي 30 يوم؟", answer: "نثق بجودة منتجاتنا، لذا نقدم لك ضمان استرجاع أو استبدال لمدة 30 يوماً إذا لم يعجبك المنتج. رضاكِ هو غايتنا." },
+  { question: "كيف يتم الطلب؟", answer: "الطلب أسهل مما تتخيل! اختر المنتج، أدخل اسمك ورقم جوالك فقط بدون تعقيد، وسيتواصل معك فريق متقن لتأكيد الطلب قبل الشحن." },
+  { question: "هل الدفع عند الاستلام متاح؟", answer: "نعم وبكل تأكيد! الدفع عند الاستلام هو طريقتنا الأساسية. لا تدفع ولا ريال حتى تستلم طلبك بيدك." },
+  { question: "ما هو الضمان الذهبي 30 يوم؟", answer: "نثق بجودة منتجاتنا، لذا نقدم لك ضمان استرجاع أو استبدال لمدة 30 يوماً إذا لم يعجبك المنتج. رضاك هو غايتنا." },
   { question: "كم مدة التوصيل؟", answer: "نسابق الزمن لخدمتك! عادة التوصيل من 2 إلى 5 أيام عمل لجميع مناطق ومدن المملكة العربية السعودية." },
 ];
 
@@ -79,15 +79,15 @@ export default function HomePage() {
 
               <p className="text-base md:text-xl text-brand-muted leading-relaxed mb-8 max-w-lg font-medium">
                 نعلم إن الفوضى تسرق وقتك وتخلي يومك أطول مما
-                يجب. في مُتقن، صممنا حلول ذكية تخلّيك تنجزين
-                أقل وتستمتعين أكثر.
+                يجب. في مُتقن، صممنا حلول ذكية تخلّيك تنجز
+                أقل وتستمتع أكثر.
               </p>
 
               <Link
                 href="/collections"
                 className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all mb-8"
               >
-                <span>تسوقي الآن · الدفع عند الاستلام</span>
+                <span>تسوق الآن · الدفع عند الاستلام</span>
                 <ArrowLeft className="w-5 h-5" />
               </Link>
 
@@ -200,7 +200,7 @@ export default function HomePage() {
             </h2>
             <p className="text-brand-muted text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               حلول عملية صُممت خصيصاً لتنهي أكثر المشاكل اليومية شيوعاً في
-              بيوتنا — جرّبيها وشوفي الفرق بنفسك.
+              بيوتنا — جرّبها وشوف الفرق بنفسك.
             </p>
           </div>
 
@@ -215,7 +215,7 @@ export default function HomePage() {
               href="/collections"
               className="btn-secondary inline-flex items-center gap-3 px-10 py-4.5 font-extrabold text-lg hover:bg-brand-espresso hover:text-white transition-all duration-300 border-2 shadow-sm hover:shadow-lg"
             >
-              <span>تصفحي جميع الحلول</span>
+              <span>تصفح جميع الحلول</span>
               <ArrowLeft className="w-5 h-5" />
             </Link>
           </div>
@@ -264,7 +264,7 @@ export default function HomePage() {
               {
                 icon: Users,
                 title: "معك خطوة بخطوة",
-                desc: "فريق سعودي يتواصل معك قبل الشحن، يتابع الطلب معك، ويتأكد إنك راضية تماماً.",
+                desc: "فريق سعودي يتواصل معك قبل الشحن، يتابع الطلب معك، ويتأكد إنك راضٍ تماماً.",
                 accent: "from-brand-bronze/20 to-brand-bronze/5",
               },
             ].map((item) => (
@@ -297,10 +297,10 @@ export default function HomePage() {
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <Gift className="w-4 h-4" />
-              <span>تصفحي حسب احتياجك</span>
+              <span>تصفح حسب احتياجك</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso mb-5 leading-snug">
-              تصفحي حسب ما يحتاجه بيتك
+              تصفح حسب ما يحتاجه بيتك
             </h2>
           </div>
 
@@ -323,7 +323,7 @@ export default function HomePage() {
                   {cat.nameAr}
                 </h3>
                 <div className="mt-2 text-[#1B4DDB] text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
-                  <span>تصفحي</span>
+                  <span>تصفح</span>
                   <ArrowLeft className="w-3 h-3" />
                 </div>
               </Link>
@@ -346,10 +346,10 @@ export default function HomePage() {
               <span>بدون مجازفة مالية</span>
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-white mb-5 leading-snug">
-              كيف تطلبين من متقن؟
+              كيف تطلب من مُتقن؟
             </h2>
             <p className="text-white/60 text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
-              4 خطوات بسيطة وعملية — لا تدفعين ولا ريال إلا وطلبك بيدك!
+              4 خطوات بسيطة وعملية — لا تدفع ولا ريال إلا وطلبك بيدك!
             </p>
           </div>
 
@@ -357,13 +357,13 @@ export default function HomePage() {
             {[
               {
                 num: "١",
-                step: "اختاري ما يناسبك",
-                desc: "تصفحي المنتجات واختاري الباقة الأنسب لبيتك وميزانيتك",
+                step: "اختر ما يناسبك",
+                desc: "تصفح المنتجات واختر الباقة الأنسب لبيتك وميزانيتك",
               },
               {
                 num: "٢",
                 step: "اسمك وجوالك فقط",
-                desc: "بدون بطاقة بنكية ولا حساب — اطلبي في ثوانٍ معدودة",
+                desc: "بدون بطاقة بنكية ولا حساب — اطلب في ثوانٍ معدودة",
               },
               {
                 num: "٣",
@@ -372,8 +372,8 @@ export default function HomePage() {
               },
               {
                 num: "٤",
-                step: "استلمي ثم ادفعي",
-                desc: "المندوب يسلمك الطلب ليدِك، وعندها فقط تدفعين",
+                step: "استلم ثم ادفع",
+                desc: "المندوب يسلمك الطلب ليدك، وعندها فقط تدفع",
               },
             ].map((item, index) => (
               <div key={item.num} className="text-center group relative">
@@ -398,7 +398,7 @@ export default function HomePage() {
               href="/collections"
               className="inline-flex items-center gap-3 bg-brand-bronze text-white font-extrabold rounded-pill px-10 py-4.5 text-lg shadow-xl shadow-brand-bronze/25 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
             >
-              <span>ابدئي تجربتك الآن</span>
+              <span>ابدأ تجربتك الآن</span>
               <ArrowLeft className="w-5 h-5" />
             </Link>
           </div>
@@ -432,7 +432,7 @@ export default function HomePage() {
 
           <div className="text-center mt-12">
             <p className="text-brand-muted font-bold text-base">
-              +50,000 عائلة سعودية اختارت مُتقن — انضمي لهم اليوم
+              +50,000 عائلة سعودية اختارت مُتقن — انضم لهم اليوم
             </p>
           </div>
         </div>
@@ -449,10 +449,10 @@ export default function HomePage() {
               <span>نجاوب بكل شفافية</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-5 leading-snug">
-              أسئلتكِ المتكررة
+              أسئلتك المتكررة
             </h2>
             <p className="text-brand-muted text-lg max-w-xl mx-auto leading-relaxed">
-              كل ما تحتاجين تعرفينه قبل أول طلب — بدون تعقيد.
+              كل ما تحتاج معرفته قبل أول طلب — بدون تعقيد.
             </p>
           </div>
           <FAQAccordion items={HOMEPAGE_FAQ} />
@@ -474,12 +474,12 @@ export default function HomePage() {
             </div>
 
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-brand-espresso mb-6 leading-snug">
-              لا تؤجلي راحة بيتك للغد!
+              لا تؤجل راحة بيتك للغد!
             </h2>
 
             <p className="text-brand-muted text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-[1.8]">
-              انضمي لعشرات الآلاف من العائلات السعودية التي حوّلت بيوتها
-              للأفضل مع مُتقن. اطلبي اليوم بدون أي مجازفة — الدفع عند
+              انضم لعشرات الآلاف من العائلات السعودية التي حوّلت بيوتها
+              للأفضل مع مُتقن. اطلب اليوم بدون أي مجازفة — الدفع عند
               الاستلام مع ضمان ذهبي 30 يوم.
             </p>
 
@@ -488,7 +488,7 @@ export default function HomePage() {
                 href="/collections"
                 className="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 text-lg font-extrabold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
               >
-                <span>تسوقي وابدئي الترتيب</span>
+                <span>تسوق وابدأ الترتيب</span>
                 <ArrowLeft className="w-5 h-5" />
               </Link>
             </div>

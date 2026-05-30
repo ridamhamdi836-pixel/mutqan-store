@@ -15,7 +15,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
   const lastBundle = sorted[sorted.length - 1];
 
   return (
-    <div className="space-y-4" role="group" aria-label="اختاري العرض">
+    <div className="space-y-4" role="group" aria-label="اختر العرض">
       {/* Urgency bar */}
       <div className="flex items-center justify-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-amber-700">
         <Clock className="w-4 h-4 flex-shrink-0" />
@@ -24,7 +24,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
 
       {/* Heading */}
       <div className="flex items-center justify-between">
-        <p className="font-bold text-base text-gray-900">اختاري العرض:</p>
+        <p className="font-bold text-base text-gray-900">اختر العرض:</p>
         {sorted.length > 1 && (
           <span className="text-xs font-bold text-[#1B4DDB] bg-[#1B4DDB]/10 px-3 py-1 rounded-full">
             نتيجة من أول قطعة
@@ -89,7 +89,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
                   </p>
                   {bundle.savings_label_ar && (
                     <p className="text-xs text-[#1B4DDB] font-bold mt-1">
-                      وفّري {bundle.savings_label_ar.replace('وفر ', '').replace('وفّري ', '')}
+                      وفّر {bundle.savings_label_ar.replace('وفر ', '').replace('وفّري ', '').replace('وفّر ', '')}
                     </p>
                   )}
                 </div>
