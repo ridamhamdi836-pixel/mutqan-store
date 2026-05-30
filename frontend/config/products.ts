@@ -5,6 +5,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   shortPromise: string;
   heroAngle: string;
   problemStatement: string;
+  /** Optional image used only in the pain/problem section on the product page */
+  painSectionImage?: string;
+  painSectionImageAlt?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -59,6 +62,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
+    painSectionImage: "/images/products/smart-stackable-cabinet-laundry-basket.png",
+    painSectionImageAlt: "الخزانة التراكمية الذكية بجانب سلة الغسيل — تنظيم منطقة الغسيل",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",

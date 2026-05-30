@@ -34,6 +34,8 @@ interface ProductPageClientProps {
     shortPromise: string;
     heroAngle: string;
     problemStatement: string;
+    painSectionImage?: string;
+    painSectionImageAlt?: string;
     benefits: string[];
     beforeLabel: string;
     afterLabel: string;
@@ -303,13 +305,17 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
             <div className="w-full md:w-1/2 order-1">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white">
                 <Image
-                  src={productImageSrc}
-                  alt="مشكلة الفوضى اليومية"
+                  src={config.painSectionImage ?? productImageSrc}
+                  alt={config.painSectionImageAlt ?? "مشكلة الفوضى اليومية"}
                   fill
                   unoptimized
-                  className="object-cover opacity-80"
+                  className={cn(
+                    config.painSectionImage
+                      ? "object-contain p-2 md:p-3"
+                      : "object-cover opacity-80",
+                  )}
                 />
               </div>
             </div>
