@@ -7,7 +7,6 @@ import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { COLLECTIONS } from "@/config/collections";
 import { FEATURED_SLUGS, getProductsBySlugs, toProduct } from "@/config/catalog";
-import { getProductImageSrc } from "@/lib/product-image";
 import {
   ArrowLeft,
   Star,
@@ -114,11 +113,11 @@ export default function HomePage() {
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
               <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                 <Image
-                  src={getProductImageSrc("magic-under-sink-organizer")}
-                  alt="منظّم المغسلة السحري — منتجات متقن"
+                  src="/images/hero/saudi-family.png"
+                  alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
                   fill
                   unoptimized
-                  className="object-cover"
+                  className="object-cover object-center"
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
