@@ -24,6 +24,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the before/after "after" card on the product page */
   afterSectionImage?: string;
   afterSectionImageAlt?: string;
+  afterSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -185,6 +186,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     ],
     beforeLabel: "قبل: أشياء مخبأة وصعبة الوصول",
     afterLabel: "بعد متقن: كل شيء بمتناول يدك",
+    afterSectionImage: "/images/products/pull-out-cabinet-drawer-after.png",
+    afterSectionImageAlt: "امرأة تستخدم الدرج المنزلق — كل شيء بمتناول اليد",
+    afterSectionAspect: "1024/768",
     howToUse: [
       "قِس عرض الخزانة قبل الطلب",
       "ضع الدرج على القاعدة المخصصة",

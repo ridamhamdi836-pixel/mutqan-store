@@ -48,6 +48,7 @@ interface ProductPageClientProps {
     lifestyleSectionAspect?: string;
     afterSectionImage?: string;
     afterSectionImageAlt?: string;
+    afterSectionAspect?: string;
     beforeSectionImage?: string;
     beforeSectionImageAlt?: string;
     benefits: string[];
@@ -503,9 +504,15 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] md:scale-105 z-10">
               <div
                 className={cn(
-                  "relative bg-brand-beige",
-                  config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]",
+                  "relative bg-brand-beige w-full",
+                  !config.afterSectionAspect &&
+                    (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
                 )}
+                style={
+                  config.afterSectionImage && config.afterSectionAspect
+                    ? { aspectRatio: config.afterSectionAspect }
+                    : undefined
+                }
               >
                 <Image
                   src={config.afterSectionImage ?? productImageSrc}
