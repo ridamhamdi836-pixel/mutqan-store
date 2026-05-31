@@ -347,12 +347,18 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 2: The Solution (Image Right, Text Left) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
             <div className="w-full md:w-1/2 order-1 md:order-2">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige">
+              <div
+                className={cn(
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border",
+                  config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige",
+                )}
+              >
                 <Image
                   src={config.solutionSectionImage ?? productImageSrc}
                   alt={config.solutionSectionImageAlt ?? "الحل العملي من متقن"}
                   fill
                   unoptimized
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className={cn(
                     config.solutionSectionImage
                       ? "object-cover object-center"
