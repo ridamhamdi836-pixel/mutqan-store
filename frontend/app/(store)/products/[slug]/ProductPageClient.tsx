@@ -42,6 +42,8 @@ interface ProductPageClientProps {
     solutionSectionImageAlt?: string;
     lifestyleSectionImage?: string;
     lifestyleSectionImageAlt?: string;
+    afterSectionImage?: string;
+    afterSectionImageAlt?: string;
     benefits: string[];
     beforeLabel: string;
     afterLabel: string;
@@ -179,8 +181,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
                   ? cn(
-                      "aspect-[2/3] w-full max-w-md mx-auto md:mx-0",
-                      config.heroSectionImage ? "bg-brand-beige" : "bg-white",
+                      "aspect-[2/3] w-full mx-auto md:mx-0",
+                      config.heroSectionImage ? "" : "bg-white",
                     )
                   : "aspect-square bg-brand-beige",
               )}
@@ -192,7 +194,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 unoptimized
                 className={cn(
                   config.heroSectionImage
-                    ? "object-cover object-center"
+                    ? "object-cover object-center scale-[1.12]"
                     : portraitHero
                       ? "object-contain p-3 md:p-5"
                       : "object-cover hover:scale-105 transition-transform duration-500",
@@ -457,13 +459,18 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               </div>
             </div>
             <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] md:scale-105 z-10">
-              <div className="aspect-[4/3] relative bg-brand-beige">
+              <div
+                className={cn(
+                  "relative bg-brand-beige",
+                  config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]",
+                )}
+              >
                 <Image
-                  src={productImageSrc}
-                  alt={config.afterLabel}
+                  src={config.afterSectionImage ?? productImageSrc}
+                  alt={config.afterSectionImageAlt ?? config.afterLabel}
                   fill
                   unoptimized
-                  className="object-cover"
+                  className={config.afterSectionImage ? "object-cover object-center" : "object-cover"}
                 />
                 <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                   <Star className="w-3.5 h-3.5 fill-current" /> النتيجة المذهلة

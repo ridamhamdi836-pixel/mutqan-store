@@ -17,6 +17,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the lifestyle/benefits section on the product page */
   lifestyleSectionImage?: string;
   lifestyleSectionImageAlt?: string;
+  /** Optional image used only in the before/after "after" card on the product page */
+  afterSectionImage?: string;
+  afterSectionImageAlt?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -68,7 +71,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "smart-stackable-cabinet": {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
-    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png",
+    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png?v=2",
     heroSectionImageAlt: "رجل وامرأة مع الخزانة التراكمية الذكية — حل تنظيم يناسب كل البيت",
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
@@ -79,6 +82,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     solutionSectionImageAlt: "رجل يركّب الخزانة التراكمية الذكية بسهولة في البيت",
     lifestyleSectionImage: "/images/products/smart-stackable-cabinet-woman.png",
     lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
+    afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
+    afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",
