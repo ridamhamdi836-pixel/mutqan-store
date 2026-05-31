@@ -5,6 +5,8 @@ export interface CatalogProduct extends Product {
   name_en: string;
   sku: string;
   imageFile: string;
+  /** Optional image for product cards in store listings only */
+  storeCardImageFile?: string;
   upsell?: {
     hook_ar: string;
     original_price_sar: number;
@@ -68,6 +70,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "home-organization",
     sku: "MTQ-CAB-002",
     imageFile: "smart-stackable-cabinet.png",
+    storeCardImageFile: "smart-stackable-cabinet-wall.png",
     bundles: [
       bundle("cabinet-1", "قطعة واحدة - لمساحة واحدة", 1, 349, { sort_order: 1 }),
       bundle("cabinet-2", "قطعتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", 2, 599, {

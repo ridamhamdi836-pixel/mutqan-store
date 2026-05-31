@@ -14,27 +14,33 @@ const MIME: Record<string, string> = {
 };
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
+  const variant = new URL(request.url).searchParams.get("variant");
   const product = getProduct(slug);
 
   if (!product?.imageFile) {
     return new NextResponse("Product not found", { status: 404 });
   }
 
+  const imageFile =
+    variant === "card" && product.storeCardImageFile
+      ? product.storeCardImageFile
+      : product.imageFile;
+
   const filePath = path.join(
     process.cwd(),
     "public",
     "images",
     "products",
-    product.imageFile,
+    imageFile,
   );
 
   try {
     const buffer = await readFile(filePath);
-    const ext = path.extname(product.imageFile).toLowerCase();
+    const ext = path.extname(imageFile).toLowerCase();
 
     return new NextResponse(buffer, {
       status: 200,

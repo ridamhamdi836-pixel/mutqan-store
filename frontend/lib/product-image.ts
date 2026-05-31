@@ -4,16 +4,31 @@ import { CATALOG_BY_SLUG } from "@/config/catalog";
 const IMAGE_VERSION: Record<string, number> = {
   "magic-under-sink-organizer": 5,
   "smart-stackable-cabinet": 3,
+  "smart-stackable-cabinet:card": 1,
 };
+
+function imageQuery(slug: string, variant?: "card"): string {
+  const key = variant ? `${slug}:${variant}` : slug;
+  const version = IMAGE_VERSION[key] ?? IMAGE_VERSION[slug];
+  if (!version) return variant ? `?variant=${variant}` : "";
+  return variant ? `?variant=${variant}&v=${version}` : `?v=${version}`;
+}
 
 /**
  * Served via /api/product-image/[slug] so images work in standalone Docker
  * (public/ static files are often missing on Easypanel misconfigured deploys).
  */
 export function getProductImageSrc(slug: string): string {
-  const version = IMAGE_VERSION[slug];
-  const q = version ? `?v=${version}` : "";
-  return `/api/product-image/${slug}${q}`;
+  return `/api/product-image/${slug}${imageQuery(slug)}`;
+}
+
+/** Store listing cards — may use a different photo than the product page */
+export function getProductCardImageSrc(slug: string): string {
+  const product = CATALOG_BY_SLUG[slug];
+  if (product?.storeCardImageFile) {
+    return `/api/product-image/${slug}${imageQuery(slug, "card")}`;
+  }
+  return getProductImageSrc(slug);
 }
 
 export function getProductOgImageUrl(slug: string, siteUrl?: string): string {
