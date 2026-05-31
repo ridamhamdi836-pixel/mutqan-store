@@ -174,7 +174,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               className={cn(
                 "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
-                  ? "aspect-[2/3] w-full max-w-md mx-auto md:mx-0 bg-white"
+                  ? cn(
+                      "aspect-[2/3] w-full max-w-md mx-auto md:mx-0",
+                      config.heroSectionImage ? "bg-brand-beige" : "bg-white",
+                    )
                   : "aspect-square bg-brand-beige",
               )}
             >
@@ -184,18 +187,22 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 fill
                 unoptimized
                 className={cn(
-                  portraitHero
-                    ? "object-contain p-2 md:p-4"
-                    : "object-cover hover:scale-105 transition-transform duration-500",
+                  config.heroSectionImage
+                    ? "object-cover object-center"
+                    : portraitHero
+                      ? "object-contain p-3 md:p-5"
+                      : "object-cover hover:scale-105 transition-transform duration-500",
                 )}
                 priority
                 onError={() => { if (!imgError) setImgError(true); }}
               />
               {/* Trust overlay on image */}
-              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 text-xs font-bold text-brand-espresso">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                <span>4.9/5 تقييم العملاء</span>
-              </div>
+              {!config.heroSectionImage && (
+                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm flex items-center gap-1.5 text-xs font-bold text-brand-espresso">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span>4.9/5 تقييم العملاء</span>
+                </div>
+              )}
             </div>
 
             {/* Info */}
