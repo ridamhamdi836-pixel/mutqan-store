@@ -1,0 +1,15 @@
+---
+description: Push mutqan store changes to GitHub automatically after each task
+alwaysApply: true
+---
+
+# Auto-push to GitHub
+
+After completing any code or asset change in this project:
+
+1. Commit with a clear message following existing commit style.
+2. Push to `origin main` immediately.
+3. Do **not** ask the user whether to push — do it by default.
+4. Only skip pushing if the user explicitly says not to push, or if there are no changes to commit.
+
+Briefly mention the commit hash and that the push succeeded in the response.
