@@ -129,8 +129,8 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "magic-under-sink-organizer.png",
     storeCardImageFile: "magic-under-sink-organizer-card.png",
     bundles: [
-      bundle("sink-1", "قطعة واحدة - لمساحة واحدة", 1, 229, { sort_order: 1 }),
-      bundle("sink-2", "قطعتين - للمطبخ والحمام | الأكثر اختيارًا", 2, 379, {
+      bundle("sink-1", "قطعة واحدة - لمساحة واحدة", 1, 279, { sort_order: 1 }),
+      bundle("sink-2", "قطعتين - للمطبخ والحمام | الأكثر اختيارًا", 2, 399, {
         compare_at_price_sar: 458,
         savings_label_ar: "وفر 79 ريال",
         is_default: true,
