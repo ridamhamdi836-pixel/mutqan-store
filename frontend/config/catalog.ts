@@ -96,6 +96,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "home-organization",
     sku: "MTQ-DRW-003",
     imageFile: "pull-out-cabinet-drawer.jpg",
+    storeCardImageFile: "pull-out-cabinet-drawer-card.png",
     bundles: [
       bundle("drawer-2", "قطعتين - بداية الترتيب", 2, 349, { sort_order: 1 }),
       bundle("drawer-4", "4 قطع - الأكثر اختيارًا للمطبخ", 4, 599, {
