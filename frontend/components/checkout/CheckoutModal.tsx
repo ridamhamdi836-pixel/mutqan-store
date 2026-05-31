@@ -5,7 +5,7 @@ import { X, Loader2, ShieldCheck, Clock, Phone, CreditCard, CheckCircle, Star, T
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useCart } from "@/providers/cart-provider";
-import { validateSaudiPhone } from "@/lib/phone";
+import { validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
 import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analytics";
 import { formatSARCompact } from "@/lib/currency";
@@ -76,8 +76,8 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
       setNameError("فضلاً أدخل الاسم الكامل.");
       valid = false;
     }
-    if (!validateSaudiPhone(phone)) {
-      setPhoneError("فضلاً أدخل رقم جوال سعودي صحيح يبدأ بـ 05.");
+    if (!validatePhone(phone)) {
+      setPhoneError("فضلاً أدخل رقم جوال صحيح.");
       firePixelEvent({ eventId: generateEventId("phone_validation_failed"), eventName: "phone_validation_failed" });
       valid = false;
     }
@@ -147,7 +147,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
       onOrderSuccess(response);
     } catch (err: unknown) {
       const error = err as Error & { code?: string; field?: string };
-      if (error.code === "INVALID_SAUDI_PHONE" || error.field === "phone") {
+      if (error.code === "INVALID_PHONE" || error.code === "INVALID_SAUDI_PHONE" || error.field === "phone") {
         setPhoneError(error.message || "رقم الجوال غير صحيح.");
       } else if (error.message === "Failed to fetch" || error.message?.includes("fetch")) {
         setApiError("تعذر الاتصال بالخادم. فضلاً تحقق من اتصالك بالإنترنت وحاول مرة أخرى.");
@@ -264,7 +264,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                   {/* Phone field */}
                   <div>
                     <label htmlFor="checkout-phone" className="block text-sm font-bold text-gray-900 mb-2">
-                      رقم الجوال السعودي
+                      رقم الجوال
                     </label>
                     <input
                       id="checkout-phone"
@@ -274,7 +274,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                       dir="ltr"
                       value={phone}
                       onChange={(e) => { setPhone(e.target.value); setPhoneError(""); }}
-                      placeholder="05XXXXXXXX"
+                      placeholder="05XXXXXXXX أو 01XXXXXXX"
                       aria-invalid={!!phoneError}
                       className={cn(
                         "w-full h-12 rounded-xl border bg-white px-4 text-gray-900 text-right placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
@@ -284,7 +284,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     {phoneError ? (
                       <p role="alert" className="text-xs text-red-500 mt-1.5 font-medium">{phoneError}</p>
                     ) : (
-                      <p className="text-xs text-gray-400 mt-1.5">يرجى إدخال رقم جوال سعودي صحيح لتأكيد التوصيل</p>
+                      <p className="text-xs text-gray-400 mt-1.5">أدخل رقم جوال أو هاتف صحيح للتواصل وتأكيد الطلب</p>
                     )}
                   </div>
 

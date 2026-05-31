@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { normalizeSaudiPhone, validateSaudiPhone } from "@/lib/phone";
+import { normalizePhone, validatePhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
 import {
   generateOrderId,
@@ -60,12 +60,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!validateSaudiPhone(customer.phone)) {
+    if (!validatePhone(customer.phone)) {
       return NextResponse.json(
         {
           error: {
-            code: "INVALID_SAUDI_PHONE",
-            message_ar: "فضلاً أدخل رقم جوال سعودي صحيح يبدأ بـ 05.",
+            code: "INVALID_PHONE",
+            message_ar: "فضلاً أدخل رقم جوال صحيح.",
             field: "phone",
           },
         },
@@ -80,8 +80,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const phoneE164 = normalizeSaudiPhone(customer.phone);
-    const phoneLocal = customer.phone.trim();
+    const { e164: phoneE164, local: phoneLocal } = normalizePhone(customer.phone);
     const orderNumber = generateOrderId();
 
     const totalSar = items.reduce(

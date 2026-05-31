@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Loader2, Package, CheckCircle2, Truck, MapPin } from "lucide-react";
 import { apiClient } from "@/lib/api-client";
-import { validateSaudiPhone } from "@/lib/phone";
+import { validatePhone } from "@/lib/phone";
 import { WhatsAppButton } from "@/components/trust/WhatsAppButton";
 import { cn } from "@/lib/utils";
 
@@ -34,8 +34,8 @@ export default function TrackOrderPage() {
       setError("فضلاً أدخل رقم الطلب.");
       return;
     }
-    if (!validateSaudiPhone(phone)) {
-      setPhoneError("فضلاً أدخل رقم جوال سعودي صحيح يبدأ بـ 05.");
+    if (!validatePhone(phone)) {
+      setPhoneError("فضلاً أدخل رقم جوال صحيح.");
       return;
     }
 
