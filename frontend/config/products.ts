@@ -67,8 +67,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
-    painSectionImage: "/images/products/smart-stackable-cabinet-laundry-basket.png",
-    painSectionImageAlt: "الخزانة التراكمية الذكية بجانب سلة الغسيل — تنظيم منطقة الغسيل",
+    painSectionImage: "/images/products/smart-stackable-cabinet-chaos.png",
+    painSectionImageAlt: "زوجان متعبان من فوضى البيت — المشكلة التي تحلها الخزانة التراكمية",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",

@@ -313,7 +313,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
             <div className="w-full md:w-1/2 order-1">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige">
                 <Image
                   src={config.painSectionImage ?? productImageSrc}
                   alt={config.painSectionImageAlt ?? "مشكلة الفوضى اليومية"}
@@ -321,7 +321,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   unoptimized
                   className={cn(
                     config.painSectionImage
-                      ? "object-contain p-2 md:p-3"
+                      ? "object-cover object-center"
                       : "object-cover opacity-80",
                   )}
                 />
