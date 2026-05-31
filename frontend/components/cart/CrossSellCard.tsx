@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct } from "@/config/catalog";
-import { getProductImageSrc } from "@/lib/product-image";
+import { getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 
 interface CrossSellCardProps {
@@ -40,7 +40,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     <div className="flex items-center gap-3 p-3 rounded-card border border-brand-border bg-brand-background">
       <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
         <Image
-          src={getProductImageSrc(productSlug)}
+          src={getProductMainImageSrc(productSlug)}
           alt={catalog.name_ar}
           fill
           unoptimized

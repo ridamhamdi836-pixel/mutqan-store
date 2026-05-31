@@ -3,15 +3,12 @@
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle2, MessageCircle, Package, Truck } from "lucide-react";
-import { WhatsAppButton } from "@/components/trust/WhatsAppButton";
 import { Suspense } from "react";
 
 function ThankYouContent() {
   const params = useSearchParams();
   const orderNumber = params?.get("order") || "MQN-XXXXXX-XXXX";
   const total = params?.get("total") || "0";
-
-  const whatsappMessage = `مرحبًا، لدي استفسار عن طلبي من متقن رقم ${orderNumber}`;
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-16 page-x">
@@ -65,14 +62,6 @@ function ThankYouContent() {
               <p className="text-sm text-brand-muted leading-relaxed mt-1">{item.label}</p>
             </div>
           ))}
-        </div>
-
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          <WhatsAppButton message={whatsappMessage} label="تواصل معنا عبر واتساب" className="flex-1 justify-center" />
-          <Link href="/track-order" className="btn-secondary flex-1 text-center">
-            تتبع الطلب
-          </Link>
         </div>
 
         <Link href="/collections" className="block text-sm text-brand-bronze hover:text-brand-espresso font-medium transition-colors">

@@ -14,7 +14,7 @@ import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
-import { getProductImageSrc } from "@/lib/product-image";
+import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 
 /** Tall product photos need contain + portrait frame to avoid cropping */
@@ -71,6 +71,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
+  const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
   const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
 
@@ -152,9 +153,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           >
             <div className="max-w-content mx-auto flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1">
-                <div className="hidden md:block relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
                   <Image
-                    src={productImageSrc}
+                    src={mainImageSrc}
                     alt={product.name_ar}
                     fill
                     unoptimized

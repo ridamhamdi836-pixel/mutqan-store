@@ -2,6 +2,7 @@ import { readFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
 import { getProduct } from "@/config/catalog";
+import { PRODUCTS_CONFIG } from "@/config/products";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -25,10 +26,15 @@ export async function GET(
     return new NextResponse("Product not found", { status: 404 });
   }
 
-  const imageFile =
-    variant === "card" && product.storeCardImageFile
-      ? product.storeCardImageFile
-      : product.imageFile;
+  let imageFile = product.imageFile;
+  if (variant === "card" && product.storeCardImageFile) {
+    imageFile = product.storeCardImageFile;
+  } else if (variant === "main") {
+    const heroPath = PRODUCTS_CONFIG[slug]?.heroSectionImage;
+    if (heroPath) {
+      imageFile = heroPath.split("?")[0].split("/").pop() || imageFile;
+    }
+  }
 
   const filePath = path.join(
     process.cwd(),

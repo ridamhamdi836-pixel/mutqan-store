@@ -10,14 +10,14 @@ import { formatSARCompact } from "@/lib/currency";
 import { CrossSellCard } from "./CrossSellCard";
 import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
-import { getProductImageSrc } from "@/lib/product-image";
+import { getProductMainImageSrc } from "@/lib/product-image";
 
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
     <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <Image
-        src={getProductImageSrc(slug)}
+        src={getProductMainImageSrc(slug)}
         alt={name}
         fill
         unoptimized

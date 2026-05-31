@@ -11,7 +11,7 @@ import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analy
 import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
-import { getProductImageSrc } from "@/lib/product-image";
+import { getProductMainImageSrc } from "@/lib/product-image";
 
 interface CheckoutModalProps {
   onOrderSuccess: (response: CreateOrderResponse) => void;
@@ -22,7 +22,7 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
   return (
     <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <Image
-        src={getProductImageSrc(slug)}
+        src={getProductMainImageSrc(slug)}
         alt={name}
         fill
         unoptimized
