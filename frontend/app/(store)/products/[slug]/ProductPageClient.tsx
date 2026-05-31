@@ -38,6 +38,8 @@ interface ProductPageClientProps {
     heroSectionImageAlt?: string;
     painSectionImage?: string;
     painSectionImageAlt?: string;
+    solutionSectionImage?: string;
+    solutionSectionImageAlt?: string;
     benefits: string[];
     beforeLabel: string;
     afterLabel: string;
@@ -345,13 +347,17 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 2: The Solution (Image Right, Text Left) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
             <div className="w-full md:w-1/2 order-1 md:order-2">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige">
                 <Image
-                  src={productImageSrc}
-                  alt="الحل العملي من متقن"
+                  src={config.solutionSectionImage ?? productImageSrc}
+                  alt={config.solutionSectionImageAlt ?? "الحل العملي من متقن"}
                   fill
                   unoptimized
-                  className="object-cover"
+                  className={cn(
+                    config.solutionSectionImage
+                      ? "object-cover object-center"
+                      : "object-cover",
+                  )}
                 />
               </div>
             </div>

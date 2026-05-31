@@ -11,6 +11,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the pain/problem section on the product page */
   painSectionImage?: string;
   painSectionImageAlt?: string;
+  /** Optional image used only in the solution section on the product page */
+  solutionSectionImage?: string;
+  solutionSectionImageAlt?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -69,6 +72,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
     painSectionImage: "/images/products/smart-stackable-cabinet-chaos.png",
     painSectionImageAlt: "زوجان متعبان من فوضى البيت — المشكلة التي تحلها الخزانة التراكمية",
+    solutionSectionImage: "/images/products/smart-stackable-cabinet-assembly.png",
+    solutionSectionImageAlt: "رجل يركّب الخزانة التراكمية الذكية بسهولة في البيت",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",
