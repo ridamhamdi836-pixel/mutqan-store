@@ -51,7 +51,7 @@ interface ProductPageClientProps {
     afterLabel: string;
     howToUse: string[];
     crossSellSlugs: string[];
-    reviews: Array<{ name: string; city: string; rating: number; text: string }>;
+    reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string }>;
     faqs: Array<{ question: string; answer: string }>;
   };
 }
