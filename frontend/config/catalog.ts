@@ -127,6 +127,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "home-organization",
     sku: "MTQ-SNK-004",
     imageFile: "magic-under-sink-organizer.png",
+    storeCardImageFile: "magic-under-sink-organizer-card.png",
     bundles: [
       bundle("sink-1", "قطعة واحدة - لمساحة واحدة", 1, 229, { sort_order: 1 }),
       bundle("sink-2", "قطعتين - للمطبخ والحمام | الأكثر اختيارًا", 2, 379, {
