@@ -139,7 +139,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
   return (
-    <div className="bg-brand-background pb-20">
+    <div className="bg-brand-background pb-6">
       {/* Sticky CTA - scrolls to bundle section */}
       <AnimatePresence>
         {showSticky && (
@@ -609,7 +609,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 page-x bg-brand-surface">
+      <section className="py-10 md:py-12 page-x bg-brand-surface">
         <div className="max-w-content mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-extrabold text-brand-espresso mb-4">عندك استفسار؟ إجاباتنا واضحة</h2>
@@ -621,9 +621,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="section-pad page-x bg-white border-t border-brand-border/30">
+        <section className="pt-10 pb-6 md:pt-12 md:pb-8 page-x bg-white border-t border-brand-border/30">
           <div className="max-w-content mx-auto">
-            <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-10">عزّز راحة بيتك مع هذه المنتجات</h2>
+            <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-6">عزّز راحة بيتك مع هذه المنتجات</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedProducts.slice(0, 3).map((p) => (
                 <ProductCard key={p.id} product={p} />
@@ -633,8 +633,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
         </section>
       )}
 
-      {/* Final Sticky Mobile Ghost / Last space */}
-      <div className="h-28 md:h-10 bg-white"></div>
+      {/* Space for sticky mobile CTA */}
+      <div className="h-16 md:h-4" />
     </div>
   );
 }
