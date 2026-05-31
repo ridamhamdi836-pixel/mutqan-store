@@ -28,7 +28,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   afterLabel: string;
   howToUse: string[];
   crossSellSlugs: string[];
-  reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string }>;
+  reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string; photoAspect?: string }>;
   faqs: Array<{ question: string; answer: string }>;
   seoTitle: string;
   seoDescription: string;
@@ -113,6 +113,7 @@ export const PRODUCTS_CONFIG: Record<string, {
         text: "حطيتها في زاوية غرفة النوم وما شاء الله غيرت شكل الأوضة بالكامل. تركيب سهل وتصميم راقي.",
         photo: "/images/reviews/smart-stackable-cabinet/review-living-room.png",
         photoAlt: "صورة من هنوف — الخزانة في غرفة المعيشة بعد التركيب",
+        photoAspect: "576/983",
       },
       {
         name: "ريم الزهراني",
@@ -121,6 +122,7 @@ export const PRODUCTS_CONFIG: Record<string, {
         text: "أخذت قطعتين للحمام وغرفة الملابس. تنظيم مثالي وبسعر ممتاز.",
         photo: "/images/reviews/smart-stackable-cabinet/review-hallway.png",
         photoAlt: "صورة من ريم — الخزانة في الممر بعد الاستلام",
+        photoAspect: "401/663",
       },
       { name: "دلال الحربي", city: "الدمام", rating: 5, text: "شكلها فخم ومرتبة. استغليت مساحة ما كنت أستخدمها أبداً. أنصح فيها بشدة." },
       {
@@ -130,6 +132,7 @@ export const PRODUCTS_CONFIG: Record<string, {
         text: "حطيت واحدة في المطبخ والثانية في الحمام. ترتيب ممتاز وتوفير مساحة.",
         photo: "/images/reviews/smart-stackable-cabinet/review-kitchen-use.png",
         photoAlt: "صورة من مها — استخدام الخزانة في المطبخ",
+        photoAspect: "406/664",
       },
       {
         name: "سلمى الخالدي",
@@ -138,6 +141,7 @@ export const PRODUCTS_CONFIG: Record<string, {
         text: "جودة ممتازة والتركيب سهل بدون أدوات. تصميم عملي يناسب أي مكان.",
         photo: "/images/reviews/smart-stackable-cabinet/review-unboxing.png",
         photoAlt: "صورة من سلمى — الخزانة بعد التركيب في البيت",
+        photoAspect: "400/672",
       },
       { name: "عهود البلوي", city: "المدينة", rating: 5, text: "أفضل حل للتخزين جربته. صار البيت أنظم وأريح بكثير." },
     ],

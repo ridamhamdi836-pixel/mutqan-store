@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Star } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ReviewCardProps {
   name: string;
@@ -8,13 +9,17 @@ interface ReviewCardProps {
   text: string;
   photo?: string;
   photoAlt?: string;
+  photoAspect?: string;
 }
 
-export function ReviewCard({ name, city, rating, text, photo, photoAlt }: ReviewCardProps) {
+export function ReviewCard({ name, city, rating, text, photo, photoAlt, photoAspect }: ReviewCardProps) {
   return (
-    <div className="card overflow-hidden flex flex-col">
+    <div className={cn("card overflow-hidden flex flex-col w-full", !photo && "self-start")}>
       {photo && (
-        <div className="relative aspect-[4/3] bg-brand-beige">
+        <div
+          className="relative w-full bg-brand-beige"
+          style={{ aspectRatio: photoAspect ?? "3/4" }}
+        >
           <Image
             src={photo}
             alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
@@ -24,7 +29,7 @@ export function ReviewCard({ name, city, rating, text, photo, photoAlt }: Review
           />
         </div>
       )}
-      <div className="p-5 flex flex-col gap-3 flex-1">
+      <div className={cn("flex flex-col gap-2", photo ? "p-5" : "px-5 pt-4 pb-3")}>
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }).map((_, i) => (
             <Star
@@ -34,7 +39,7 @@ export function ReviewCard({ name, city, rating, text, photo, photoAlt }: Review
           ))}
         </div>
         <p className="text-sm text-brand-text leading-relaxed">&ldquo;{text}&rdquo;</p>
-        <div className="flex items-center gap-1.5 text-xs text-brand-muted font-medium mt-auto">
+        <div className="flex items-center gap-1.5 text-xs text-brand-muted font-medium">
           <span className="font-semibold text-brand-espresso">{name}</span>
           <span>·</span>
           <span>{city}</span>

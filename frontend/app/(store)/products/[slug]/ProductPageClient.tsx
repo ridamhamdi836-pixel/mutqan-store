@@ -51,7 +51,7 @@ interface ProductPageClientProps {
     afterLabel: string;
     howToUse: string[];
     crossSellSlugs: string[];
-    reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string }>;
+    reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string; photoAspect?: string }>;
     faqs: Array<{ question: string; answer: string }>;
   };
 }
@@ -547,7 +547,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضم لآلاف العائلات السعيدة</h2>
             <p className="text-lg text-brand-muted">أكثر من +50,000 عميل في السعودية يثقون في متقن يومياً.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
             {config.reviews.map((review, i) => (
               <ReviewCard key={i} {...review} />
             ))}
