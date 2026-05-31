@@ -20,6 +20,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the before/after "after" card on the product page */
   afterSectionImage?: string;
   afterSectionImageAlt?: string;
+  /** Optional image used only in the before/after "before" card on the product page */
+  beforeSectionImage?: string;
+  beforeSectionImageAlt?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -84,6 +87,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
     afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
     afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
+    beforeSectionImage: "/images/products/smart-stackable-cabinet-laundry-mess.png",
+    beforeSectionImageAlt: "زاوية مغسلة مزدحمة وغير منظمة — قبل استخدام الخزانة التراكمية",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",

@@ -44,6 +44,8 @@ interface ProductPageClientProps {
     lifestyleSectionImageAlt?: string;
     afterSectionImage?: string;
     afterSectionImageAlt?: string;
+    beforeSectionImage?: string;
+    beforeSectionImageAlt?: string;
     benefits: string[];
     beforeLabel: string;
     afterLabel: string;
@@ -446,13 +448,22 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
-              <div className="aspect-[4/3] relative bg-brand-beige">
+              <div
+                className={cn(
+                  "relative bg-brand-beige",
+                  config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]",
+                )}
+              >
                 <Image
-                  src={productImageSrc}
-                  alt={config.beforeLabel}
+                  src={config.beforeSectionImage ?? productImageSrc}
+                  alt={config.beforeSectionImageAlt ?? config.beforeLabel}
                   fill
                   unoptimized
-                  className="object-cover opacity-90 grayscale-[20%]"
+                  className={cn(
+                    config.beforeSectionImage
+                      ? "object-cover object-center opacity-90 grayscale-[20%]"
+                      : "object-cover opacity-90 grayscale-[20%]",
+                  )}
                 />
               </div>
               <div className="p-5 flex flex-col items-center gap-3 bg-white text-center">
