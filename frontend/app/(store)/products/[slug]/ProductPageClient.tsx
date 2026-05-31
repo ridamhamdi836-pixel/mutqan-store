@@ -34,6 +34,8 @@ interface ProductPageClientProps {
     shortPromise: string;
     heroAngle: string;
     problemStatement: string;
+    heroSectionImage?: string;
+    heroSectionImageAlt?: string;
     painSectionImage?: string;
     painSectionImageAlt?: string;
     benefits: string[];
@@ -55,7 +57,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
-  const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug);
+  const heroImageSrc = config.heroSectionImage ?? productImageSrc;
+  const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
 
   // Generate deterministic random review count above 1000 based on product slug
   const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
@@ -176,13 +179,13 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               )}
             >
               <Image
-                src={productImageSrc}
-                alt={config.heroImageAlt}
+                src={heroImageSrc}
+                alt={config.heroSectionImageAlt ?? config.heroImageAlt}
                 fill
                 unoptimized
                 className={cn(
                   portraitHero
-                    ? "object-contain p-3 md:p-5"
+                    ? "object-contain p-2 md:p-4"
                     : "object-cover hover:scale-105 transition-transform duration-500",
                 )}
                 priority

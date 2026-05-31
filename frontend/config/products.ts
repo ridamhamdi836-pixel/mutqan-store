@@ -5,6 +5,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   shortPromise: string;
   heroAngle: string;
   problemStatement: string;
+  /** Optional image used only in the product page hero (not catalog/cards) */
+  heroSectionImage?: string;
+  heroSectionImageAlt?: string;
   /** Optional image used only in the pain/problem section on the product page */
   painSectionImage?: string;
   painSectionImageAlt?: string;
@@ -59,6 +62,8 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "smart-stackable-cabinet": {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
+    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png",
+    heroSectionImageAlt: "رجل وامرأة مع الخزانة التراكمية الذكية — حل تنظيم يناسب كل البيت",
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
