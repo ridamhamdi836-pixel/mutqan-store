@@ -181,8 +181,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
                   ? cn(
-                      "aspect-[2/3] w-full mx-auto md:mx-0",
-                      config.heroSectionImage ? "" : "bg-white",
+                      "w-full mx-auto md:mx-0",
+                      config.heroSectionImage
+                        ? "aspect-[884/1015]"
+                        : cn("aspect-[2/3]", "bg-white"),
                     )
                   : "aspect-square bg-brand-beige",
               )}
@@ -194,7 +196,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 unoptimized
                 className={cn(
                   config.heroSectionImage
-                    ? "object-cover object-center scale-[1.12]"
+                    ? "object-cover object-center"
                     : portraitHero
                       ? "object-contain p-3 md:p-5"
                       : "object-cover hover:scale-105 transition-transform duration-500",

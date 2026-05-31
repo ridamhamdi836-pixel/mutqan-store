@@ -71,7 +71,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "smart-stackable-cabinet": {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
-    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png?v=2",
+    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png?v=3",
     heroSectionImageAlt: "رجل وامرأة مع الخزانة التراكمية الذكية — حل تنظيم يناسب كل البيت",
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
