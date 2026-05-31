@@ -365,6 +365,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     ],
     beforeLabel: "قبل: طعام بارد في منتصف الجلسة",
     afterLabel: "بعد متقن: طعام دافئ طوال الجلسة",
+    afterSectionImage: "/images/products/smart-table-warmer-after.png",
+    afterSectionImageAlt: "سخّان المائدة الذكي — أطباق دافئة مع بخار في المطبخ",
+    afterSectionAspect: "819/1024",
     howToUse: [
       "ضع الطبق على السخّان",
       "اشغّل السخّان وانتظر لحظة",
