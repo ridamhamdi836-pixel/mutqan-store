@@ -45,6 +45,7 @@ interface ProductPageClientProps {
     solutionSectionAspect?: string;
     lifestyleSectionImage?: string;
     lifestyleSectionImageAlt?: string;
+    lifestyleSectionAspect?: string;
     afterSectionImage?: string;
     afterSectionImageAlt?: string;
     beforeSectionImage?: string;
@@ -421,9 +422,15 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <div className="w-full md:w-1/2 order-1">
                 <div
                   className={cn(
-                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border",
-                    config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige",
+                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                    !config.lifestyleSectionAspect &&
+                      (config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige"),
                   )}
+                  style={
+                    config.lifestyleSectionImage && config.lifestyleSectionAspect
+                      ? { aspectRatio: config.lifestyleSectionAspect }
+                      : undefined
+                  }
                 >
                   <Image
                     src={config.lifestyleSectionImage ?? productImageSrc}

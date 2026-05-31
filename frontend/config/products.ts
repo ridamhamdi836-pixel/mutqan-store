@@ -20,6 +20,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the lifestyle/benefits section on the product page */
   lifestyleSectionImage?: string;
   lifestyleSectionImageAlt?: string;
+  lifestyleSectionAspect?: string;
   /** Optional image used only in the before/after "after" card on the product page */
   afterSectionImage?: string;
   afterSectionImageAlt?: string;
@@ -172,6 +173,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     solutionSectionImage: "/images/products/pull-out-cabinet-drawer-solution.png",
     solutionSectionImageAlt: "امرأة تستخدم الدرج المنزلق — بهارات وأواني منظمة بسهولة",
     solutionSectionAspect: "1024/976",
+    lifestyleSectionImage: "/images/products/pull-out-cabinet-drawer-lifestyle.png",
+    lifestyleSectionImageAlt: "امرأة تطبخ وتستخدم الدرج المنزلق — تنظيم المطبخ بسهولة",
+    lifestyleSectionAspect: "1024/681",
     benefits: [
       "وصول سهل لأعمق نقطة في الخزانة",
       "انزلاق سلس وصامت",
