@@ -267,6 +267,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "magic-under-sink-organizer": {
     heroImageAlt: "منظّم المغسلة السحري — تنظيم أنيق تحت المغسلة",
+    heroSectionImage: "/images/products/magic-under-sink-organizer-hero.png",
+    heroSectionImageAlt: "امرأة ترتّب منظّم المغسلة السحري تحت الحوض — تخزين ذكي ومرتب",
+    heroSectionAspect: "819/1024",
     shortPromise: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة",
     heroAngle: "المساحة المخفية تحت المغسلة يمكن أن تكون أكثر مساحاتك ترتيبًا",
     problemStatement: "زجاجات التنظيف مكوّمة، والمواسير تحتل نصف المساحة. المنظّم السحري يحوّل هذه الفوضى إلى تخزين ذكي ومرتب.",
