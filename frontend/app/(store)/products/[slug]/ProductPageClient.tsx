@@ -65,6 +65,7 @@ interface ProductPageClientProps {
 export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const { addItem, openCart } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
+  const minBundle = [...product.bundles].sort((a, b) => a.price_sar - b.price_sar)[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
@@ -165,7 +166,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 </div>
                 <div>
                   <p className="font-bold text-sm text-brand-espresso">{product.name_ar}</p>
-                  <p className="text-xs text-brand-muted">ابتداءً من {selectedBundle.price_sar} ر.س</p>
+                  <p className="text-xs text-brand-muted">ابتداءً من {minBundle.price_sar} ر.س</p>
                 </div>
               </div>
               <button
