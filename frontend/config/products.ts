@@ -28,6 +28,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
+  beforeSectionAspect?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -185,6 +186,9 @@ export const PRODUCTS_CONFIG: Record<string, {
       "متوفر بباقات تناسب المطبخ والحمام",
     ],
     beforeLabel: "قبل: أشياء مخبأة وصعبة الوصول",
+    beforeSectionImage: "/images/products/pull-out-cabinet-drawer-before.png",
+    beforeSectionImageAlt: "خزانة مطبخ مزدحمة — أواني ومرطبانات صعبة الوصول",
+    beforeSectionAspect: "1024/771",
     afterLabel: "بعد متقن: كل شيء بمتناول يدك",
     afterSectionImage: "/images/products/pull-out-cabinet-drawer-after.png",
     afterSectionImageAlt: "امرأة تستخدم الدرج المنزلق — كل شيء بمتناول اليد",
