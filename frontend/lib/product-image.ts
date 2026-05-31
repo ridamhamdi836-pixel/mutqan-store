@@ -6,6 +6,7 @@ const IMAGE_VERSION: Record<string, number> = {
   "smart-stackable-cabinet": 3,
   "smart-stackable-cabinet:card": 1,
   "pull-out-cabinet-drawer:card": 1,
+  "smart-table-warmer:card": 1,
 };
 
 function imageQuery(slug: string, variant?: "card"): string {

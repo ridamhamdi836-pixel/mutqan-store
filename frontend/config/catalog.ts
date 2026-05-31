@@ -187,6 +187,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "dining-hosting",
     sku: "MTQ-WRM-006",
     imageFile: "smart-table-warmer.jpg",
+    storeCardImageFile: "smart-table-warmer-card.png",
     bundles: [
       bundle("warmer-1", "قطعة واحدة - للجلسات اليومية", 1, 249, { sort_order: 1 }),
       bundle("warmer-2", "قطعتين - مثالي للعائلة والضيوف | الأكثر اختيارًا", 2, 449, {
