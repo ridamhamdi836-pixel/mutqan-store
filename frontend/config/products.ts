@@ -347,6 +347,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "حل عملي فاخر يحافظ على حرارة الطعام طوال الجلسة بكل أناقة",
     heroAngle: "جلسة عائلية أدفأ مع طعام يحافظ على حرارته طوال الوقت",
     problemStatement: "الطعام يبرد خلال جلسات العائلة والضيوف الطويلة. سخّان المائدة يجعل كل وجبة مستعدة في أي وقت.",
+    painSectionImage: "/images/products/smart-table-warmer-pain.png",
+    painSectionImageAlt: "عائلة حول مائدة — الطعام بارد والمجهود يضيع",
+    painSectionAspect: "822/1024",
     benefits: [
       "يحافظ على حرارة الطعام طوال الجلسة",
       "تصميم أنيق يناسب المائدة والضيافة",
