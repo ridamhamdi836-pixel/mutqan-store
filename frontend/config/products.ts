@@ -12,6 +12,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the pain/problem section on the product page */
   painSectionImage?: string;
   painSectionImageAlt?: string;
+  painSectionAspect?: string;
   /** Optional image used only in the solution section on the product page */
   solutionSectionImage?: string;
   solutionSectionImageAlt?: string;
@@ -164,6 +165,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "حل ذكي لتنظيم الخزائن المزدحمة والوصول لأغراضك بسهولة",
     heroAngle: "اجعل المساحة المخفية خلف الخزانة سهلة الوصول في ثانية واحدة",
     problemStatement: "الأغراض في آخر الخزانة تُنسى ولا تُستخدم. الدرج المنزلق يجلب كل شيء إلى متناول يدك في لحظة.",
+    painSectionImage: "/images/products/pull-out-cabinet-drawer-chaos.png",
+    painSectionImageAlt: "امرأة أمام خزانة مطبخ مزدحمة — صعوبة الوصول للأواني في الخلف",
+    painSectionAspect: "1024/681",
     benefits: [
       "وصول سهل لأعمق نقطة في الخزانة",
       "انزلاق سلس وصامت",

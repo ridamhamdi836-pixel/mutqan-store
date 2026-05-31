@@ -39,6 +39,7 @@ interface ProductPageClientProps {
     heroSectionAspect?: string;
     painSectionImage?: string;
     painSectionImageAlt?: string;
+    painSectionAspect?: string;
     solutionSectionImage?: string;
     solutionSectionImageAlt?: string;
     lifestyleSectionImage?: string;
@@ -327,7 +328,17 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
             <div className="w-full md:w-1/2 order-1">
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige">
+              <div
+                className={cn(
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige w-full",
+                  !config.painSectionAspect && "aspect-[4/3]",
+                )}
+                style={
+                  config.painSectionImage && config.painSectionAspect
+                    ? { aspectRatio: config.painSectionAspect }
+                    : undefined
+                }
+              >
                 <Image
                   src={config.painSectionImage ?? productImageSrc}
                   alt={config.painSectionImageAlt ?? "مشكلة الفوضى اليومية"}
