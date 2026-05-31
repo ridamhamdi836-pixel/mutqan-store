@@ -350,6 +350,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     painSectionImage: "/images/products/smart-table-warmer-pain.png",
     painSectionImageAlt: "عائلة حول مائدة — الطعام بارد والمجهود يضيع",
     painSectionAspect: "822/1024",
+    solutionSectionImage: "/images/products/smart-table-warmer-solution.png",
+    solutionSectionImageAlt: "سخّان المائدة الذكي على مائدة — أطباق دافئة مع بخار",
+    solutionSectionAspect: "1024/726",
     benefits: [
       "يحافظ على حرارة الطعام طوال الجلسة",
       "تصميم أنيق يناسب المائدة والضيافة",
