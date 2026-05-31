@@ -8,6 +8,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the product page hero (not catalog/cards) */
   heroSectionImage?: string;
   heroSectionImageAlt?: string;
+  heroSectionAspect?: string;
   /** Optional image used only in the pain/problem section on the product page */
   painSectionImage?: string;
   painSectionImageAlt?: string;
@@ -76,6 +77,7 @@ export const PRODUCTS_CONFIG: Record<string, {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
     heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png?v=3",
     heroSectionImageAlt: "رجل وامرأة مع الخزانة التراكمية الذكية — حل تنظيم يناسب كل البيت",
+    heroSectionAspect: "884/1015",
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
@@ -155,7 +157,10 @@ export const PRODUCTS_CONFIG: Record<string, {
     seoDescription: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا. اطلب الآن مع الدفع عند الاستلام والتوصيل داخل السعودية.",
   },
   "pull-out-cabinet-drawer": {
-    heroImageAlt: "درج الخزانة المنزلق قبل وبعد ترتيب أدوات المطبخ",
+    heroImageAlt: "درج الخزانة المنزلق — تنظيم أدوات المطبخ بسهولة",
+    heroSectionImage: "/images/products/pull-out-cabinet-drawer-hero.png",
+    heroSectionImageAlt: "درج الخزانة المنزلق مفتوح — بهارات وأواني منظمة بسهولة",
+    heroSectionAspect: "930/1024",
     shortPromise: "حل ذكي لتنظيم الخزائن المزدحمة والوصول لأغراضك بسهولة",
     heroAngle: "اجعل المساحة المخفية خلف الخزانة سهلة الوصول في ثانية واحدة",
     problemStatement: "الأغراض في آخر الخزانة تُنسى ولا تُستخدم. الدرج المنزلق يجلب كل شيء إلى متناول يدك في لحظة.",

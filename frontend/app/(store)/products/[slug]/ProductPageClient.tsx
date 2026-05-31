@@ -36,6 +36,7 @@ interface ProductPageClientProps {
     problemStatement: string;
     heroSectionImage?: string;
     heroSectionImageAlt?: string;
+    heroSectionAspect?: string;
     painSectionImage?: string;
     painSectionImageAlt?: string;
     solutionSectionImage?: string;
@@ -184,12 +185,15 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 portraitHero
                   ? cn(
                       "w-full mx-auto md:mx-0",
-                      config.heroSectionImage
-                        ? "aspect-[884/1015]"
-                        : cn("aspect-[2/3]", "bg-white"),
+                      config.heroSectionImage ? "" : cn("aspect-[2/3]", "bg-white"),
                     )
                   : "aspect-square bg-brand-beige",
               )}
+              style={
+                config.heroSectionImage
+                  ? { aspectRatio: config.heroSectionAspect ?? "3/4" }
+                  : undefined
+              }
             >
               <Image
                 src={heroImageSrc}
