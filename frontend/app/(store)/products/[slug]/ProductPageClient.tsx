@@ -446,7 +446,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
             <p className="text-lg text-brand-muted">انتقل من الإزعاج والفوضى إلى الراحة التامة بخطوة واحدة بسيطة.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 items-start">
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
               <div
                 className={cn(
@@ -466,7 +466,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   )}
                 />
               </div>
-              <div className="p-5 flex flex-col items-center gap-3 bg-white text-center">
+              <div className="px-5 pt-4 pb-3 flex flex-col items-center gap-2 bg-white text-center">
                 <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">قبل الاستخدام</span>
                 <p className="text-base font-bold text-brand-muted">{config.beforeLabel}</p>
               </div>
@@ -489,7 +489,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   <Star className="w-3.5 h-3.5 fill-current" /> النتيجة المذهلة
                 </div>
               </div>
-              <div className="p-5 flex flex-col items-center gap-3 bg-brand-surface text-center">
+              <div className="px-5 pt-4 pb-3 flex flex-col items-center gap-2 bg-brand-surface text-center">
                 <span className="bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold">بعد استخدام متقن</span>
                 <p className="text-lg font-extrabold text-brand-espresso">{config.afterLabel}</p>
               </div>
