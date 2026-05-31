@@ -40,6 +40,8 @@ interface ProductPageClientProps {
     painSectionImageAlt?: string;
     solutionSectionImage?: string;
     solutionSectionImageAlt?: string;
+    lifestyleSectionImage?: string;
+    lifestyleSectionImageAlt?: string;
     benefits: string[];
     beforeLabel: string;
     afterLabel: string;
@@ -389,13 +391,23 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {config.benefits.length > 3 && (
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
               <div className="w-full md:w-1/2 order-1">
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-lg border border-brand-border">
+                <div
+                  className={cn(
+                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border",
+                    config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige",
+                  )}
+                >
                   <Image
-                    src={productImageSrc}
-                    alt="مميزات إضافية"
+                    src={config.lifestyleSectionImage ?? productImageSrc}
+                    alt={config.lifestyleSectionImageAlt ?? "مميزات إضافية"}
                     fill
                     unoptimized
-                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className={cn(
+                      config.lifestyleSectionImage
+                        ? "object-cover object-center"
+                        : "object-cover",
+                    )}
                   />
                 </div>
               </div>

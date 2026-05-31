@@ -14,6 +14,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the solution section on the product page */
   solutionSectionImage?: string;
   solutionSectionImageAlt?: string;
+  /** Optional image used only in the lifestyle/benefits section on the product page */
+  lifestyleSectionImage?: string;
+  lifestyleSectionImageAlt?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -74,6 +77,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     painSectionImageAlt: "زوجان متعبان من فوضى البيت — المشكلة التي تحلها الخزانة التراكمية",
     solutionSectionImage: "/images/products/smart-stackable-cabinet-assembly.png",
     solutionSectionImageAlt: "رجل يركّب الخزانة التراكمية الذكية بسهولة في البيت",
+    lifestyleSectionImage: "/images/products/smart-stackable-cabinet-woman.png",
+    lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",
