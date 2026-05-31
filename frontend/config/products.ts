@@ -353,6 +353,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     solutionSectionImage: "/images/products/smart-table-warmer-solution.png",
     solutionSectionImageAlt: "سخّان المائدة الذكي على مائدة — أطباق دافئة مع بخار",
     solutionSectionAspect: "1024/726",
+    lifestyleSectionImage: "/images/products/smart-table-warmer-lifestyle.png",
+    lifestyleSectionImageAlt: "سخّان المائدة الذكي في المطبخ — سهل التخزين والحمل",
+    lifestyleSectionAspect: "819/1024",
     benefits: [
       "يحافظ على حرارة الطعام طوال الجلسة",
       "تصميم أنيق يناسب المائدة والضيافة",
