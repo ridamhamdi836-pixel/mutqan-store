@@ -341,6 +341,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "smart-table-warmer": {
     heroImageAlt: "سخّان المائدة الذكي على طاولة عائلية",
+    heroSectionImage: "/images/products/smart-table-warmer-hero.png",
+    heroSectionImageAlt: "عائلة سعودية حول مائدة مع سخّان المائدة الذكي — طعام دافئ طوال الجلسة",
+    heroSectionAspect: "1024/918",
     shortPromise: "حل عملي فاخر يحافظ على حرارة الطعام طوال الجلسة بكل أناقة",
     heroAngle: "جلسة عائلية أدفأ مع طعام يحافظ على حرارته طوال الوقت",
     problemStatement: "الطعام يبرد خلال جلسات العائلة والضيوف الطويلة. سخّان المائدة يجعل كل وجبة مستعدة في أي وقت.",
