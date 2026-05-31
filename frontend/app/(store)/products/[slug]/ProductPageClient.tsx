@@ -42,6 +42,7 @@ interface ProductPageClientProps {
     painSectionAspect?: string;
     solutionSectionImage?: string;
     solutionSectionImageAlt?: string;
+    solutionSectionAspect?: string;
     lifestyleSectionImage?: string;
     lifestyleSectionImageAlt?: string;
     afterSectionImage?: string;
@@ -372,9 +373,15 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="w-full md:w-1/2 order-1 md:order-2">
               <div
                 className={cn(
-                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border",
-                  config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige",
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                  !config.solutionSectionAspect &&
+                    (config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige"),
                 )}
+                style={
+                  config.solutionSectionImage && config.solutionSectionAspect
+                    ? { aspectRatio: config.solutionSectionAspect }
+                    : undefined
+                }
               >
                 <Image
                   src={config.solutionSectionImage ?? productImageSrc}

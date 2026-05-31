@@ -16,6 +16,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   /** Optional image used only in the solution section on the product page */
   solutionSectionImage?: string;
   solutionSectionImageAlt?: string;
+  solutionSectionAspect?: string;
   /** Optional image used only in the lifestyle/benefits section on the product page */
   lifestyleSectionImage?: string;
   lifestyleSectionImageAlt?: string;
@@ -168,6 +169,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     painSectionImage: "/images/products/pull-out-cabinet-drawer-chaos.png",
     painSectionImageAlt: "امرأة أمام خزانة مطبخ مزدحمة — صعوبة الوصول للأواني في الخلف",
     painSectionAspect: "1024/681",
+    solutionSectionImage: "/images/products/pull-out-cabinet-drawer-solution.png",
+    solutionSectionImageAlt: "امرأة تستخدم الدرج المنزلق — بهارات وأواني منظمة بسهولة",
+    solutionSectionAspect: "1024/976",
     benefits: [
       "وصول سهل لأعمق نقطة في الخزانة",
       "انزلاق سلس وصامت",
