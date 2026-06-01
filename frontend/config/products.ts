@@ -595,7 +595,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   "thermal-lunch-box": {
     heroImageAlt: "حافظة الغداء الحرارية مع وجبة دافئة",
     heroSectionImage: "/images/products/thermal-lunch-box-hero.png",
-    heroSectionImageAlt: "رجل سعودي في المكتب يتناول وجبة دافئة من حافظة الغداء الحرارية",
+    heroSectionImageAlt: "رجل سعودي على الشرفة — وجبة في مكان مفتوح مع إطلالة على المدينة",
     heroSectionAspect: "819/1024",
     painSectionImage: "/images/products/thermal-lunch-box-pain.png",
     painSectionImageAlt: "رجل في المكتب أمام وجبة باردة في علبة بلاستيك — إحباط من الأكل في الدوام",
