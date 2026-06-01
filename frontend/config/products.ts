@@ -428,6 +428,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "pure-faucet-filter": {
     heroImageAlt: "فلتر الصنبور النقي مركب على صنبور المطبخ",
+    heroSectionImage: "/images/products/pure-faucet-filter-hero.png",
+    heroSectionImageAlt: "امرأة تغسل الخس بماء الفلتر من الصنبور — مياه أنقى للمطبخ",
+    heroSectionAspect: "819/1024",
     shortPromise: "مياه أنقى وتجربة استخدام يومية أكثر راحة وأناقة للمطبخ العصري",
     heroAngle: "تجربة استخدام ماء الصنبور اليومية أكثر راحة وأناقة",
     problemStatement: "طعم ماء الصنبور ومظهره يؤثران على التجربة اليومية في المطبخ. الفلتر يساعد على تحسين تجربة استخدام الماء اليومية.",
