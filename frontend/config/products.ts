@@ -622,7 +622,7 @@ export const PRODUCTS_CONFIG: Record<string, {
     beforeSectionAspect: "1024/682",
     afterLabel: "بعد متقن: وجبة دافئة أينما كنت",
     afterSectionImage: "/images/products/thermal-lunch-box-after.png",
-    afterSectionImageAlt: "رجل سعودي في المكتب مع حافظة الغداء الحرارية — وجبة دافئة في الدوام",
+    afterSectionImageAlt: "رجل سعودي في المكتب مع ساعة على الحائط — وجبة دافئة من حافظة الغداء الحرارية",
     afterSectionAspect: "1024/682",
     howToUse: [
       "ضع الوجبة الساخنة في الحافظة",
