@@ -45,6 +45,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "cleaning-care",
     sku: "MTQ-VAC-001",
     imageFile: "powerful-cordless-vacuum.jpg",
+    storeCardImageFile: "powerful-cordless-vacuum-card.png",
     bundles: [
       bundle("vacuum-1", "قطعة واحدة - للمنزل", 1, 229, { sort_order: 1 }),
       bundle("vacuum-2", "قطعتين - للمنزل والسيارة | الأكثر اختيارًا", 2, 399, {

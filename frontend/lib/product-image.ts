@@ -7,6 +7,7 @@ const IMAGE_VERSION: Record<string, number> = {
   "magic-under-sink-organizer:main": 3,
   "magic-under-sink-organizer:card": 1,
   "powerful-cordless-vacuum:main": 1,
+  "powerful-cordless-vacuum:card": 1,
   "smart-stackable-cabinet": 3,
   "smart-stackable-cabinet:card": 1,
   "smart-stackable-cabinet:main": 3,
