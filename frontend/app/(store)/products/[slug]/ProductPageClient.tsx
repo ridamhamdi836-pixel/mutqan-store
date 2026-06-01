@@ -181,7 +181,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </AnimatePresence>
 
       {/* Product Hero */}
-      <section className="section-pad page-x pb-6">
+      <section className="page-x pt-4 md:pt-6 pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-10 items-start">
             {/* Image */}
@@ -473,7 +473,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* Before/After with emotional touch */}
-      <section className="section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
@@ -544,7 +544,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* How to Use */}
-      <section className="section-pad page-x">
+      <section className="page-x pt-6 md:pt-8 pb-8 md:pb-10">
         <div className="max-w-content mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">بساطة الاستخدام هي سرنا</h2>
@@ -586,7 +586,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* Reviews */}
-      <section className="section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضم لآلاف العائلات السعيدة</h2>
@@ -601,9 +601,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* COD Reassurance */}
-      <section className="section-pad page-x bg-white">
+      <section className="page-x bg-white pt-6 md:pt-8 pb-8 md:pb-10">
         <div className="max-w-content mx-auto">
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-brand-espresso">تسوق بأمان تام وموثوقية عالية</h2>
           </div>
           <TrustBadges />

@@ -116,6 +116,11 @@ h1, h2, h3, h4, h5, h6 {
     @apply py-14 md:py-20 lg:py-28;
   }
 
+  /* Tighter vertical rhythm on product pages */
+  .product-section-pad {
+    @apply py-8 md:py-10 lg:py-12;
+  }
+
   .page-x {
     @apply px-4 md:px-6 lg:px-10;
   }
