@@ -20,6 +20,20 @@ import { cn } from "@/lib/utils";
 /** Tall product photos need contain + portrait frame to avoid cropping */
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
+/** Portrait sections: same framing on desktop as mobile (contain + narrow frame) */
+const MOBILE_FRAME_IMAGE_SLUGS = new Set(["thermal-lunch-box"]);
+
+function sectionImageFit(slug: string, hasCustomImage: boolean, extra?: string) {
+  if (!hasCustomImage) return cn("object-cover", extra);
+  if (MOBILE_FRAME_IMAGE_SLUGS.has(slug)) {
+    return cn("object-contain object-center", extra);
+  }
+  return cn("object-cover object-center", extra);
+}
+
+const mobileFrameWrap = (slug: string) =>
+  MOBILE_FRAME_IMAGE_SLUGS.has(slug) ? "w-full max-w-[min(100%,22rem)] sm:max-w-md mx-auto" : "w-full";
+
 interface ProductPageClientProps {
   product: {
     id: string;
@@ -75,6 +89,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
   const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
+  const mobileFrameImages = MOBILE_FRAME_IMAGE_SLUGS.has(product.slug);
 
   // Generate deterministic random review count above 1000 based on product slug
   const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
@@ -191,8 +206,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
                   ? cn(
-                      "w-full mx-auto md:mx-0",
-                      config.heroSectionImage ? "" : cn("aspect-[2/3]", "bg-white"),
+                      mobileFrameImages ? mobileFrameWrap(product.slug) : "w-full mx-auto md:mx-0",
+                      config.heroSectionImage ? "bg-white" : cn("aspect-[2/3]", "bg-white"),
                     )
                   : "aspect-square bg-brand-beige",
               )}
@@ -209,9 +224,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 unoptimized
                 className={cn(
                   config.heroSectionImage
-                    ? "object-cover object-center"
+                    ? sectionImageFit(product.slug, true)
                     : portraitHero
-                      ? "object-contain p-3 md:p-5"
+                      ? "object-contain p-3"
                       : "object-cover hover:scale-105 transition-transform duration-500",
                 )}
                 priority
@@ -333,10 +348,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className="w-full md:w-1/2 order-1">
+            <div className={cn("w-full md:w-1/2 order-1", mobileFrameImages && "flex justify-center")}>
               <div
                 className={cn(
-                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige w-full",
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige",
+                  mobileFrameWrap(product.slug),
                   !config.painSectionAspect && "aspect-[4/3]",
                 )}
                 style={
@@ -351,9 +367,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   fill
                   unoptimized
                   className={cn(
-                    config.painSectionImage
-                      ? "object-cover object-center"
-                      : "object-cover opacity-80",
+                    sectionImageFit(product.slug, !!config.painSectionImage),
+                    !config.painSectionImage && "opacity-80",
                   )}
                 />
               </div>
@@ -375,10 +390,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
           {/* Section 2: The Solution (Image Right, Text Left) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className="w-full md:w-1/2 order-1 md:order-2">
+            <div className={cn("w-full md:w-1/2 order-1 md:order-2", mobileFrameImages && "flex justify-center")}>
               <div
                 className={cn(
-                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white",
+                  mobileFrameWrap(product.slug),
                   !config.solutionSectionAspect &&
                     (config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige"),
                 )}
@@ -394,11 +410,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   fill
                   unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className={cn(
-                    config.solutionSectionImage
-                      ? "object-cover object-center"
-                      : "object-cover",
-                  )}
+                  className={sectionImageFit(product.slug, !!config.solutionSectionImage)}
                 />
               </div>
             </div>
@@ -423,10 +435,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 3: More Benefits (Image Left, Text Right) */}
           {config.benefits.length > 3 && (
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-              <div className="w-full md:w-1/2 order-1">
+              <div className={cn("w-full md:w-1/2 order-1", mobileFrameImages && "flex justify-center")}>
                 <div
                   className={cn(
-                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white",
+                    mobileFrameWrap(product.slug),
                     !config.lifestyleSectionAspect &&
                       (config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige"),
                   )}
@@ -442,11 +455,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     fill
                     unoptimized
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className={cn(
-                      config.lifestyleSectionImage
-                        ? "object-cover object-center"
-                        : "object-cover",
-                    )}
+                    className={sectionImageFit(product.slug, !!config.lifestyleSectionImage)}
                   />
                 </div>
               </div>
@@ -483,7 +492,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
               <div
                 className={cn(
-                  "relative bg-brand-beige w-full",
+                  "relative bg-brand-beige",
+                  mobileFrameImages ? cn(mobileFrameWrap(product.slug), "mx-auto") : "w-full",
                   !config.beforeSectionAspect &&
                     (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
                 )}
@@ -498,10 +508,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   alt={config.beforeSectionImageAlt ?? config.beforeLabel}
                   fill
                   unoptimized
-                  className={cn(
-                    config.beforeSectionImage
-                      ? "object-cover object-center opacity-90 grayscale-[20%]"
-                      : "object-cover opacity-90 grayscale-[20%]",
+                  className={sectionImageFit(
+                    product.slug,
+                    !!config.beforeSectionImage,
+                    "opacity-90 grayscale-[20%]",
                   )}
                 />
               </div>
@@ -510,10 +520,16 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 <p className="text-base font-bold text-brand-muted">{config.beforeLabel}</p>
               </div>
             </div>
-            <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] md:scale-105 z-10">
+            <div
+              className={cn(
+                "card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] z-10",
+                !mobileFrameImages && "md:scale-105",
+              )}
+            >
               <div
                 className={cn(
-                  "relative bg-brand-beige w-full",
+                  "relative bg-brand-beige",
+                  mobileFrameImages ? cn(mobileFrameWrap(product.slug), "mx-auto") : "w-full",
                   !config.afterSectionAspect &&
                     (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
                 )}
@@ -528,7 +544,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   alt={config.afterSectionImageAlt ?? config.afterLabel}
                   fill
                   unoptimized
-                  className={config.afterSectionImage ? "object-cover object-center" : "object-cover"}
+                  className={sectionImageFit(product.slug, !!config.afterSectionImage)}
                 />
                 <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                   <Star className="w-3.5 h-3.5 fill-current" /> النتيجة المذهلة
