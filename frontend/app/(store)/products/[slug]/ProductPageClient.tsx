@@ -20,19 +20,25 @@ import { cn } from "@/lib/utils";
 /** Tall product photos need contain + portrait frame to avoid cropping */
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
-/** Portrait sections: same framing on desktop as mobile (contain + narrow frame) */
-const MOBILE_FRAME_IMAGE_SLUGS = new Set(["thermal-lunch-box"]);
-
-function sectionImageFit(slug: string, hasCustomImage: boolean, extra?: string) {
-  if (!hasCustomImage) return cn("object-cover", extra);
-  if (MOBILE_FRAME_IMAGE_SLUGS.has(slug)) {
-    return cn("object-contain object-center", extra);
-  }
-  return cn("object-cover object-center", extra);
+function isPortraitAspect(aspect?: string): boolean {
+  if (!aspect) return false;
+  const [w, h] = aspect.split("/").map(Number);
+  return w > 0 && h > 0 && w < h;
 }
 
-const mobileFrameWrap = (slug: string) =>
-  MOBILE_FRAME_IMAGE_SLUGS.has(slug) ? "w-full max-w-[min(100%,22rem)] sm:max-w-md mx-auto" : "w-full";
+function beforeAfterImageClass(aspect?: string, muted?: boolean): string {
+  return cn(
+    isPortraitAspect(aspect) ? "object-contain object-center" : "object-cover object-center",
+    muted && "opacity-90 grayscale-[20%]",
+  );
+}
+
+function beforeAfterFrameClass(aspect?: string): string {
+  return cn(
+    "relative bg-brand-beige w-full",
+    isPortraitAspect(aspect) && "mx-auto max-w-[22rem]",
+  );
+}
 
 interface ProductPageClientProps {
   product: {
@@ -89,7 +95,6 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
   const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
-  const mobileFrameImages = MOBILE_FRAME_IMAGE_SLUGS.has(product.slug);
 
   // Generate deterministic random review count above 1000 based on product slug
   const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
@@ -206,8 +211,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
                   ? cn(
-                      mobileFrameImages ? mobileFrameWrap(product.slug) : "w-full mx-auto md:mx-0",
-                      config.heroSectionImage ? "bg-white" : cn("aspect-[2/3]", "bg-white"),
+                      "w-full mx-auto md:mx-0",
+                      config.heroSectionImage ? "" : cn("aspect-[2/3]", "bg-white"),
                     )
                   : "aspect-square bg-brand-beige",
               )}
@@ -224,9 +229,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 unoptimized
                 className={cn(
                   config.heroSectionImage
-                    ? sectionImageFit(product.slug, true)
+                    ? "object-cover object-center"
                     : portraitHero
-                      ? "object-contain p-3"
+                      ? "object-contain p-3 md:p-5"
                       : "object-cover hover:scale-105 transition-transform duration-500",
                 )}
                 priority
@@ -348,11 +353,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className={cn("w-full md:w-1/2 order-1", mobileFrameImages && "flex justify-center")}>
+            <div className="w-full md:w-1/2 order-1">
               <div
                 className={cn(
-                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige",
-                  mobileFrameWrap(product.slug),
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige w-full",
                   !config.painSectionAspect && "aspect-[4/3]",
                 )}
                 style={
@@ -367,8 +371,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   fill
                   unoptimized
                   className={cn(
-                    sectionImageFit(product.slug, !!config.painSectionImage),
-                    !config.painSectionImage && "opacity-80",
+                    config.painSectionImage
+                      ? "object-cover object-center"
+                      : "object-cover opacity-80",
                   )}
                 />
               </div>
@@ -390,11 +395,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
           {/* Section 2: The Solution (Image Right, Text Left) */}
           <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className={cn("w-full md:w-1/2 order-1 md:order-2", mobileFrameImages && "flex justify-center")}>
+            <div className="w-full md:w-1/2 order-1 md:order-2">
               <div
                 className={cn(
-                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white",
-                  mobileFrameWrap(product.slug),
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
                   !config.solutionSectionAspect &&
                     (config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige"),
                 )}
@@ -410,7 +414,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   fill
                   unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  className={sectionImageFit(product.slug, !!config.solutionSectionImage)}
+                  className={cn(
+                    config.solutionSectionImage
+                      ? "object-cover object-center"
+                      : "object-cover",
+                  )}
                 />
               </div>
             </div>
@@ -435,11 +443,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           {/* Section 3: More Benefits (Image Left, Text Right) */}
           {config.benefits.length > 3 && (
             <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-              <div className={cn("w-full md:w-1/2 order-1", mobileFrameImages && "flex justify-center")}>
+              <div className="w-full md:w-1/2 order-1">
                 <div
                   className={cn(
-                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-white",
-                    mobileFrameWrap(product.slug),
+                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
                     !config.lifestyleSectionAspect &&
                       (config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige"),
                   )}
@@ -455,7 +462,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     fill
                     unoptimized
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className={sectionImageFit(product.slug, !!config.lifestyleSectionImage)}
+                    className={cn(
+                      config.lifestyleSectionImage
+                        ? "object-cover object-center"
+                        : "object-cover",
+                    )}
                   />
                 </div>
               </div>
@@ -488,12 +499,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
             <p className="text-lg text-brand-muted">انتقل من الإزعاج والفوضى إلى الراحة التامة بخطوة واحدة بسيطة.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 items-start">
+          <div className="grid md:grid-cols-2 gap-8 items-start max-w-4xl mx-auto">
             <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
               <div
                 className={cn(
-                  "relative bg-brand-beige",
-                  mobileFrameImages ? cn(mobileFrameWrap(product.slug), "mx-auto") : "w-full",
+                  beforeAfterFrameClass(config.beforeSectionAspect),
                   !config.beforeSectionAspect &&
                     (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
                 )}
@@ -508,11 +518,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   alt={config.beforeSectionImageAlt ?? config.beforeLabel}
                   fill
                   unoptimized
-                  className={sectionImageFit(
-                    product.slug,
-                    !!config.beforeSectionImage,
-                    "opacity-90 grayscale-[20%]",
-                  )}
+                  className={beforeAfterImageClass(config.beforeSectionAspect, !!config.beforeSectionImage)}
                 />
               </div>
               <div className="px-5 pt-4 pb-3 flex flex-col items-center gap-2 bg-white text-center">
@@ -520,16 +526,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 <p className="text-base font-bold text-brand-muted">{config.beforeLabel}</p>
               </div>
             </div>
-            <div
-              className={cn(
-                "card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow scale-[1.02] z-10",
-                !mobileFrameImages && "md:scale-105",
-              )}
-            >
+            <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow md:scale-[1.02] z-10">
               <div
                 className={cn(
-                  "relative bg-brand-beige",
-                  mobileFrameImages ? cn(mobileFrameWrap(product.slug), "mx-auto") : "w-full",
+                  beforeAfterFrameClass(config.afterSectionAspect),
                   !config.afterSectionAspect &&
                     (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
                 )}
@@ -544,7 +544,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   alt={config.afterSectionImageAlt ?? config.afterLabel}
                   fill
                   unoptimized
-                  className={sectionImageFit(product.slug, !!config.afterSectionImage)}
+                  className={beforeAfterImageClass(config.afterSectionAspect, false)}
                 />
                 <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
                   <Star className="w-3.5 h-3.5 fill-current" /> النتيجة المذهلة

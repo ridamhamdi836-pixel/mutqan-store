@@ -617,11 +617,11 @@ export const PRODUCTS_CONFIG: Record<string, {
       "تصميم أنيق وعملي",
     ],
     beforeLabel: "قبل: وجبة باردة في العمل",
-    beforeSectionImage: "/images/products/thermal-lunch-box-before.png",
+    beforeSectionImage: "/images/products/thermal-lunch-box-before.png?v=3",
     beforeSectionImageAlt: "رجل سعودي على الشرفة يمسك رأسه أمام وجبة باردة — قبل استخدام الحافظة",
     beforeSectionAspect: "819/1024",
     afterLabel: "بعد متقن: وجبة دافئة أينما كنت",
-    afterSectionImage: "/images/products/thermal-lunch-box-after.png",
+    afterSectionImage: "/images/products/thermal-lunch-box-after.png?v=3",
     afterSectionImageAlt: "رجل سعودي على الشرفة يتناول وجبة دافئة من حافظة الغداء الحرارية",
     afterSectionAspect: "819/1024",
     howToUse: [
