@@ -47,13 +47,12 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "powerful-cordless-vacuum.jpg",
     storeCardImageFile: "powerful-cordless-vacuum-card.png",
     bundles: [
-      bundle("vacuum-1", "قطعة واحدة - للمنزل", 1, 229, { sort_order: 1 }),
-      bundle("vacuum-2", "قطعتين - للمنزل والسيارة | الأكثر اختيارًا", 2, 399, {
-        compare_at_price_sar: 458,
-        savings_label_ar: "وفر 59 ريال",
+      bundle("vacuum-1", "قطعة واحدة - للمنزل", 1, 269, { sort_order: 1 }),
+      bundle("vacuum-2", "قطعتين - للمنزل والسيارة | الأكثر اختيارًا", 2, 349, {
         is_default: true,
         sort_order: 2,
       }),
+      bundle("vacuum-3", "3 قطع", 3, 479, { sort_order: 3 }),
     ],
     upsell: {
       hook_ar: "اللي يرتّب بيته يحتاج ينظفه — هذي تكمّل الصورة",
