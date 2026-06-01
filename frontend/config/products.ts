@@ -605,7 +605,13 @@ export const PRODUCTS_CONFIG: Record<string, {
       "تصميم أنيق وعملي",
     ],
     beforeLabel: "قبل: وجبة باردة في العمل",
+    beforeSectionImage: "/images/products/thermal-lunch-box-before.png",
+    beforeSectionImageAlt: "مطبخ — تحضير طعام بدون حافظة حرارية",
+    beforeSectionAspect: "1024/449",
     afterLabel: "بعد متقن: وجبة دافئة أينما كنت",
+    afterSectionImage: "/images/products/thermal-lunch-box-after.png",
+    afterSectionImageAlt: "حافظة الغداء الحرارية — وجبة دافئة مع بخار في المكتب",
+    afterSectionAspect: "819/1024",
     howToUse: [
       "ضع الوجبة الساخنة في الحافظة",
       "أغلقها جيدًا للحفاظ على الحرارة",
