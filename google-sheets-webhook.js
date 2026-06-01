@@ -70,6 +70,7 @@ function doPost(e) {
 
     if (data.orderid && isDuplicate(sheet, data.orderid)) {
       var updatedRow = updateRowByOrderId(sheet, data.orderid, row);
+      formatQuantityCellAsText(sheet, updatedRow);
       return jsonOut({
         status: "success",
         action: "updated",
@@ -79,6 +80,7 @@ function doPost(e) {
     }
 
     sheet.appendRow(row);
+    formatQuantityCellAsText(sheet, sheet.getLastRow());
     SpreadsheetApp.flush();
 
     return jsonOut({
@@ -112,6 +114,14 @@ function ensureHeaders(sheet) {
     sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
     SpreadsheetApp.flush();
+  }
+}
+
+/** Prevent Sheets from auto-formatting quantity as a date (e.g. old 1/1/1 payloads) */
+function formatQuantityCellAsText(sheet, rowNum) {
+  var qtyCol = HEADERS.indexOf("quantity") + 1;
+  if (qtyCol > 0 && rowNum >= 2) {
+    sheet.getRange(rowNum, qtyCol).setNumberFormat("@");
   }
 }
 

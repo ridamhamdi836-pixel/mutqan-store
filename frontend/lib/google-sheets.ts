@@ -6,7 +6,7 @@
 import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
-export const SHEETS_BUILD = "google-sheets-clean-v1";
+export const SHEETS_BUILD = "google-sheets-readable-qty-v2";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 const WEBHOOK_TIMEOUT_MS = 25_000;
@@ -77,16 +77,27 @@ function productUrl(slug: string): string {
   return `${SITE_URL}/products/${slug}`;
 }
 
+/** Readable line for Sheets quantity column — avoids 1/1/1 being parsed as a date */
+export function formatOrderItemsSummary(
+  items: GoogleSheetsOrderInput["items"],
+): string {
+  return items
+    .map((item) => {
+      const name = productName(item.product_slug, item.name_ar);
+      const qty = item.quantity || 1;
+      return `${name} ${qty}`;
+    })
+    .join(" ");
+}
+
 export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload {
   const products: string[] = [];
   const skus: string[] = [];
-  const quantities: string[] = [];
   const urls: string[] = [];
 
   for (const item of order.items) {
     products.push(productName(item.product_slug, item.name_ar));
     skus.push(productSku(item.product_slug));
-    quantities.push(String(item.quantity || 1));
     urls.push(productUrl(item.product_slug));
   }
 
@@ -100,7 +111,7 @@ export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload
     url: urls.join("/"),
     sku: skus.join("/"),
     product: products.join("/"),
-    quantity: quantities.join("/"),
+    quantity: formatOrderItemsSummary(order.items),
     price: order.totalSar,
     currency: "SAR",
   };
