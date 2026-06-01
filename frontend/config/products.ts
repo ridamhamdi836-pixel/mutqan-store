@@ -618,7 +618,7 @@ export const PRODUCTS_CONFIG: Record<string, {
     ],
     beforeLabel: "قبل: وجبة باردة في العمل",
     beforeSectionImage: "/images/products/thermal-lunch-box-before.png",
-    beforeSectionImageAlt: "رجل سعودي على الشرفة أمام وجبة باردة — قبل استخدام الحافظة",
+    beforeSectionImageAlt: "رجل سعودي على الشرفة يمسك رأسه أمام وجبة باردة — قبل استخدام الحافظة",
     beforeSectionAspect: "819/1024",
     afterLabel: "بعد متقن: وجبة دافئة أينما كنت",
     afterSectionImage: "/images/products/thermal-lunch-box-after.png",
