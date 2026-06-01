@@ -40,7 +40,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   seoDescription: string;
 }> = {
   "powerful-cordless-vacuum": {
-    heroImageAlt: "المكنسة اللاسلكية القوية أثناء تنظيف مقعد السيارة",
+    heroImageAlt: "المكنسة اللاسلكية القوية أثناء التنظيف في المنزل",
+    heroSectionImage: "/images/products/powerful-cordless-vacuum-hero.png",
+    heroSectionImageAlt: "امرأة تستخدم المكنسة اللاسلكية القوية في غرفة المعيشة — تنظيف سريع وفعّال",
+    heroSectionAspect: "819/1024",
     shortPromise: "تنظيف سريع وفعّال يمنح منزلك وسيارتك مظهرًا أنظف خلال دقائق",
     heroAngle: "أداة تنظيف يومية سريعة للفوضى الصغيرة في المنزل والسيارة",
     problemStatement: "الغبار والفتات في ركنة الكنب، مقاعد السيارة، وسطح المطبخ لا يستحق إخراج المكنسة الكبيرة. المكنسة اللاسلكية القوية من متقن هي الحل اليومي العملي.",
