@@ -216,6 +216,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "dining-hosting",
     sku: "MTQ-LNB-007",
     imageFile: "thermal-lunch-box.jpg",
+    storeCardImageFile: "thermal-lunch-box-card.png",
     bundles: [
       bundle("lunch-1", "قطعة واحدة - للاستخدام اليومي", 1, 229, { sort_order: 1 }),
       bundle("lunch-2", "قطعتين - أفضل قيمة للعائلة | وفر 129 ريال", 2, 329, {
