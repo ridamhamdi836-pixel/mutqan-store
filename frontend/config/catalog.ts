@@ -98,11 +98,21 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "pull-out-cabinet-drawer.jpg",
     storeCardImageFile: "pull-out-cabinet-drawer-card.png",
     bundles: [
-      bundle("drawer-1", "قطعة واحدة", 1, 269, { sort_order: 1 }),
-      bundle("drawer-2", "قطعتين - بداية الترتيب", 2, 349, { sort_order: 2 }),
-      bundle("drawer-3", "3 قطع", 3, 479, { sort_order: 3 }),
-      bundle("drawer-4", "4 قطع - الأكثر اختيارًا للمطبخ", 4, 549, {
+      bundle("drawer-1", "قطعة واحدة لبداية التنظيم", 1, 269, { sort_order: 1 }),
+      bundle("drawer-2", "قطعتين لدرجين في المطبخ", 2, 349, {
+        compare_at_price_sar: 538,
+        savings_label_ar: "وفر 189 ريال",
         is_default: true,
+        sort_order: 2,
+      }),
+      bundle("drawer-3", "3 قطع لترتيب خزائن إضافية", 3, 479, {
+        compare_at_price_sar: 807,
+        savings_label_ar: "وفر 328 ريال",
+        sort_order: 3,
+      }),
+      bundle("drawer-4", "4 قطع لأفضل قيمة للبيت", 4, 549, {
+        compare_at_price_sar: 1076,
+        savings_label_ar: "وفر 527 ريال",
         sort_order: 4,
       }),
     ],
