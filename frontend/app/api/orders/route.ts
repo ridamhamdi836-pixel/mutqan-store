@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
-import {
-  generateOrderId,
-  sendOrderToGoogleSheets,
-  type GoogleSheetsOrderInput,
-} from "@/lib/google-sheets";
+import { sendOrderToGoogleSheets, type GoogleSheetsOrderInput } from "@/lib/google-sheets";
+import { allocateOrderNumber, allocateOrderNumberStandalone } from "@/lib/order-number";
 
 interface OrderItemInput {
   product_slug: string;
@@ -81,7 +78,6 @@ export async function POST(request: NextRequest) {
     }
 
     const { e164: phoneE164, local: phoneLocal } = normalizePhone(customer.phone);
-    const orderNumber = generateOrderId();
 
     const totalSar = items.reduce(
       (sum, item) => sum + (item.price_sar || 0) * (item.quantity || 1),
@@ -104,11 +100,14 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
 
     const pool = getPool();
+    let orderNumber: string;
+
     if (pool) {
       try {
         const client = await pool.connect();
         try {
           await client.query("BEGIN");
+          orderNumber = await allocateOrderNumber(client);
 
           await client.query(
             `INSERT INTO orders (
@@ -167,11 +166,43 @@ export async function POST(request: NextRequest) {
         } catch (dbErr) {
           await client.query("ROLLBACK");
           console.error("[Orders] DB insert failed:", dbErr);
+          return NextResponse.json(
+            {
+              error: {
+                code: "SERVER_ERROR",
+                message_ar: "تعذر تسجيل الطلب. فضلاً حاول مرة أخرى.",
+              },
+            },
+            { status: 503 },
+          );
         } finally {
           client.release();
         }
       } catch (connErr) {
         console.error("[Orders] DB connection failed:", connErr);
+        return NextResponse.json(
+          {
+            error: {
+              code: "SERVER_ERROR",
+              message_ar: "تعذر تسجيل الطلب. فضلاً حاول مرة أخرى.",
+            },
+          },
+          { status: 503 },
+        );
+      }
+    } else {
+      try {
+        orderNumber = await allocateOrderNumberStandalone();
+      } catch {
+        return NextResponse.json(
+          {
+            error: {
+              code: "SERVER_ERROR",
+              message_ar: "تعذر تسجيل الطلب. فضلاً حاول مرة أخرى.",
+            },
+          },
+          { status: 503 },
+        );
       }
     }
 

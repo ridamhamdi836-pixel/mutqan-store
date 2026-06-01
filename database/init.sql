@@ -3,6 +3,9 @@
 
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
+-- Sequential public order numbers: mutqan-0001, mutqan-0002, …
+CREATE SEQUENCE IF NOT EXISTS order_number_seq AS BIGINT START WITH 1;
+
 -- Orders table (matches frontend Next.js API)
 CREATE TABLE IF NOT EXISTS orders (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

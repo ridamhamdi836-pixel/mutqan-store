@@ -6,7 +6,7 @@
 import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
-export const SHEETS_BUILD = "google-sheets-readable-qty-v2";
+export const SHEETS_BUILD = "google-sheets-seq-order-v1";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 const WEBHOOK_TIMEOUT_MS = 25_000;
@@ -40,14 +40,9 @@ export interface GoogleSheetsOrderInput {
   address?: string;
 }
 
-/** mutqan-XXXXXXXX (8 alphanumeric) */
+/** @deprecated Use allocateOrderNumber — kept for debug test label only */
 export function generateOrderId(): string {
-  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  let suffix = "";
-  for (let i = 0; i < 8; i++) {
-    suffix += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return `mutqan-${suffix}`;
+  return "mutqan-TEST0001";
 }
 
 function formatDateSaudi(): string {

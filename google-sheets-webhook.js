@@ -37,6 +37,8 @@ var FIELD_BY_HEADER = {
   name: "name",
   phone: "phone",
   address: "address",
+  "Order Number": "orderid",
+  orderid: "orderid",
   url: "url",
   sku: "sku",
   Product: "product",
@@ -71,6 +73,7 @@ function doPost(e) {
     if (data.orderid && isDuplicate(sheet, data.orderid)) {
       var updatedRow = updateRowByOrderId(sheet, data.orderid, row);
       formatQuantityCellAsText(sheet, updatedRow);
+    formatOrderNumberCellAsText(sheet, updatedRow);
       return jsonOut({
         status: "success",
         action: "updated",
@@ -81,6 +84,7 @@ function doPost(e) {
 
     sheet.appendRow(row);
     formatQuantityCellAsText(sheet, sheet.getLastRow());
+    formatOrderNumberCellAsText(sheet, sheet.getLastRow());
     SpreadsheetApp.flush();
 
     return jsonOut({
@@ -125,6 +129,14 @@ function formatQuantityCellAsText(sheet, rowNum) {
   }
 }
 
+/** Keep mutqan-0001 readable (not parsed as date) */
+function formatOrderNumberCellAsText(sheet, rowNum) {
+  var col = getOrderIdColumn(sheet);
+  if (col > 0 && rowNum >= 2) {
+    sheet.getRange(rowNum, col).setNumberFormat("@");
+  }
+}
+
 function buildRow(sheet, data) {
   var headers = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
   var row = [];
@@ -149,14 +161,14 @@ function updateRowByOrderId(sheet, orderid, row) {
     return sheet.getLastRow();
   }
 
-  var addressCol = getAddressColumn(sheet);
-  if (addressCol < 1) {
+  var orderCol = getOrderIdColumn(sheet);
+  if (orderCol < 1) {
     sheet.appendRow(row);
     return sheet.getLastRow();
   }
 
   for (var r = lastRow; r >= 2; r--) {
-    var cell = sheet.getRange(r, addressCol).getValue();
+    var cell = sheet.getRange(r, orderCol).getValue();
     if (cell && String(cell) === String(orderid)) {
       sheet.getRange(r, 1, r, row.length).setValues([row]);
       return r;
@@ -171,12 +183,12 @@ function isDuplicate(sheet, orderid) {
   var lastRow = sheet.getLastRow();
   if (lastRow < 2) return false;
 
-  var addressCol = getAddressColumn(sheet);
-  if (addressCol < 1) return false;
+  var orderCol = getOrderIdColumn(sheet);
+  if (orderCol < 1) return false;
 
   var start = Math.max(2, lastRow - 299);
   var numRows = lastRow - start + 1;
-  var values = sheet.getRange(start, addressCol, numRows, 1).getValues();
+  var values = sheet.getRange(start, orderCol, numRows, 1).getValues();
 
   for (var j = 0; j < values.length; j++) {
     if (values[j][0] && String(values[j][0]) === String(orderid)) {
@@ -186,10 +198,11 @@ function isDuplicate(sheet, orderid) {
   return false;
 }
 
-function getAddressColumn(sheet) {
+function getOrderIdColumn(sheet) {
   var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   for (var i = 0; i < headers.length; i++) {
-    if (String(headers[i]).trim() === "address") {
+    var h = String(headers[i]).trim();
+    if (h === "Order Number" || h === "orderid" || h === "address") {
       return i + 1;
     }
   }
