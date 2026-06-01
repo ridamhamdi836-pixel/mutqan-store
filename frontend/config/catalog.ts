@@ -159,6 +159,7 @@ export const CATALOG: CatalogProduct[] = [
     category_slug: "modern-kitchen",
     sku: "MTQ-FLT-005",
     imageFile: "pure-faucet-filter.jpg",
+    storeCardImageFile: "pure-faucet-filter-card.png",
     bundles: [
       bundle("filter-1", "قطعة واحدة - للمطبخ", 1, 199, { sort_order: 1 }),
       bundle("filter-2", "قطعتين - أفضل قيمة | وفر أكثر", 2, 249, {

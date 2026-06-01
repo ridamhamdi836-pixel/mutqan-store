@@ -16,6 +16,7 @@ const IMAGE_VERSION: Record<string, number> = {
   "smart-table-warmer:card": 1,
   "smart-table-warmer:main": 1,
   "pure-faucet-filter:main": 1,
+  "pure-faucet-filter:card": 1,
 };
 
 type ImageVariant = "card" | "main";
