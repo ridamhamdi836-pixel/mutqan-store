@@ -229,7 +229,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 unoptimized
                 className={cn(
                   config.heroSectionImage
-                    ? "object-cover object-center"
+                    ? isPortraitAspect(config.heroSectionAspect)
+                      ? "object-contain object-center"
+                      : "object-cover object-center"
                     : portraitHero
                       ? "object-contain p-3 md:p-5"
                       : "object-cover hover:scale-105 transition-transform duration-500",
