@@ -597,6 +597,9 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "تجربة عملية تمنحك وجبات دافئة وجاهزة أينما كنت بسهولة وراحة",
     heroAngle: "وجبة دافئة معك أينما ذهبت في يومك",
     problemStatement: "الوجبة الباردة في العمل أو الدراسة تؤثر على يومك. الحافظة الحرارية تجعل وجبتك دافئة وجاهزة في أي وقت.",
+    painSectionImage: "/images/products/thermal-lunch-box-before.png",
+    painSectionImageAlt: "مطبخ — تحضير طعام بدون حافظة حرارية",
+    painSectionAspect: "1024/388",
     benefits: [
       "تحافظ على حرارة الوجبة لساعات",
       "خفيفة وسهلة الحمل",
@@ -607,10 +610,10 @@ export const PRODUCTS_CONFIG: Record<string, {
     beforeLabel: "قبل: وجبة باردة في العمل",
     beforeSectionImage: "/images/products/thermal-lunch-box-before.png",
     beforeSectionImageAlt: "مطبخ — تحضير طعام بدون حافظة حرارية",
-    beforeSectionAspect: "1024/449",
+    beforeSectionAspect: "1024/388",
     afterLabel: "بعد متقن: وجبة دافئة أينما كنت",
     afterSectionImage: "/images/products/thermal-lunch-box-after.png",
-    afterSectionImageAlt: "حافظة الغداء الحرارية — وجبة دافئة مع بخار في المكتب",
+    afterSectionImageAlt: "رجل في المكتب — وجبة باردة في العمل",
     afterSectionAspect: "819/1024",
     howToUse: [
       "ضع الوجبة الساخنة في الحافظة",
