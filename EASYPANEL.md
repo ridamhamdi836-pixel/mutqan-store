@@ -18,7 +18,16 @@
 GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/XXXX/exec
 NEXT_PUBLIC_SITE_URL=https://mutqan.online
 DATABASE_URL=postgresql://...
+
+# Admin /admin — required on FRONTEND (not backend-only)
+ADMIN_SESSION_SECRET=long-random-string
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your-password
+# OR credentials on backend + same secret on frontend:
+# NEXT_PUBLIC_API_URL=https://api.mutqan.online
 ```
+
+Check: `https://mutqan.online/api/health-deploy` → `admin.ready` should be `true`.
 
 **مهم:** بعد تغيير Repository إلى `mutqan-store` أعد إدخال `GOOGLE_SHEETS_WEBHOOK_URL` يدوياً — المتغيرات القديمة لا تنتقل تلقائياً.
 

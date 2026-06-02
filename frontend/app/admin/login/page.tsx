@@ -23,7 +23,10 @@ function AdminLoginForm() {
       });
       if (!res.ok) {
         const data = await res.json();
-        setError(data.error || "Login failed");
+        const msg = data.hint
+          ? `${data.error || "Login failed"}. ${data.hint}`
+          : data.error || "Login failed";
+        setError(msg);
         setLoading(false);
         return;
       }

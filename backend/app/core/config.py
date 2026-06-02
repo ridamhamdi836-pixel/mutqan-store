@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # Used by Next.js admin UI on the frontend service (documented here for one .env template)
     ADMIN_USERNAME: str = ""
     ADMIN_PASSWORD: str = ""
-    ADMIN_SESSION_SECRET: str = ""
+    ADMIN_SESSION_SECRET: str = ""  # Same value as frontend — signs admin session cookie
 
     MAXMIND_ACCOUNT_ID: str = ""
     MAXMIND_LICENSE_KEY: str = ""

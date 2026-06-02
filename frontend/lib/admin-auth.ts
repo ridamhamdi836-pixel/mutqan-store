@@ -6,7 +6,21 @@ const COOKIE_NAME = "mutqan_admin_session";
 const MAX_AGE_SEC = 60 * 60 * 24 * 7;
 
 function getSecret(): string {
-  return process.env.ADMIN_SESSION_SECRET || process.env.SECRET_KEY || "";
+  return (
+    process.env.ADMIN_SESSION_SECRET?.trim() ||
+    process.env.SECRET_KEY?.trim() ||
+    ""
+  );
+}
+
+export function getBackendAdminBaseUrl(): string | null {
+  const url =
+    process.env.ADMIN_BACKEND_URL?.trim() ||
+    process.env.BACKEND_INTERNAL_URL?.trim() ||
+    process.env.NEXT_PUBLIC_API_URL?.trim() ||
+    null;
+  if (!url) return null;
+  return url.replace(/\/$/, "");
 }
 
 export function getAdminCredentials(): { username: string; password: string } | null {
@@ -16,12 +30,84 @@ export function getAdminCredentials(): { username: string; password: string } | 
   return { username, password };
 }
 
+export type AdminConfigStatus = {
+  ready: boolean;
+  hasSessionSecret: boolean;
+  hasLocalCredentials: boolean;
+  hasBackendUrl: boolean;
+  hint: string;
+};
+
+export function getAdminConfigStatus(): AdminConfigStatus {
+  const hasSessionSecret = Boolean(getSecret());
+  const hasLocalCredentials = Boolean(getAdminCredentials());
+  const hasBackendUrl = Boolean(getBackendAdminBaseUrl());
+  const ready = hasSessionSecret && (hasLocalCredentials || hasBackendUrl);
+
+  let hint = "";
+  if (!hasSessionSecret) {
+    hint =
+      "Set ADMIN_SESSION_SECRET (or SECRET_KEY) on the frontend service — must match backend if using backend login.";
+  } else if (!hasLocalCredentials && !hasBackendUrl) {
+    hint =
+      "Set ADMIN_USERNAME and ADMIN_PASSWORD on the frontend service, or set NEXT_PUBLIC_API_URL / ADMIN_BACKEND_URL and configure credentials on the backend.";
+  } else if (!hasLocalCredentials && hasBackendUrl) {
+    hint = "Login will verify against the backend API. Ensure the same ADMIN_SESSION_SECRET is on frontend and backend.";
+  }
+
+  return {
+    ready,
+    hasSessionSecret,
+    hasLocalCredentials,
+    hasBackendUrl,
+    hint,
+  };
+}
+
 export function verifyAdminLogin(username: string, password: string): boolean {
   const creds = getAdminCredentials();
   if (!creds) return false;
   const uOk = timingSafeEqualStr(username, creds.username);
   const pOk = timingSafeEqualStr(password, creds.password);
   return uOk && pOk;
+}
+
+export async function verifyAdminLoginViaBackend(
+  username: string,
+  password: string,
+): Promise<{ ok: true; token: string; username: string } | { ok: false; error: string; status: number }> {
+  const base = getBackendAdminBaseUrl();
+  if (!base) {
+    return { ok: false, error: "Backend URL not configured", status: 503 };
+  }
+
+  try {
+    const res = await fetch(`${base}/api/v1/admin/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+      cache: "no-store",
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return {
+        ok: false,
+        error: (data as { detail?: string }).detail || "Backend login failed",
+        status: res.status,
+      };
+    }
+    const token = (data as { token?: string }).token;
+    if (!token) {
+      return { ok: false, error: "Backend did not return a session token", status: 502 };
+    }
+    return {
+      ok: true,
+      token,
+      username: (data as { username?: string }).username || username,
+    };
+  } catch {
+    return { ok: false, error: "Cannot reach backend API for admin login", status: 503 };
+  }
 }
 
 function timingSafeEqualStr(a: string, b: string): boolean {
@@ -101,5 +187,5 @@ export function getAdminFromRequest(request: NextRequest): { username: string } 
 }
 
 export function requireAdminConfigured(): boolean {
-  return Boolean(getAdminCredentials() && getSecret());
+  return getAdminConfigStatus().ready;
 }

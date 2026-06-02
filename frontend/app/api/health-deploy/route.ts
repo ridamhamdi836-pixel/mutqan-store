@@ -1,6 +1,7 @@
 import { readFile } from "fs/promises";
 import path from "path";
 import { NextResponse } from "next/server";
+import { getAdminConfigStatus } from "@/lib/admin-auth";
 import { SHEETS_BUILD, getSheetsConfigStatus } from "@/lib/google-sheets";
 import { getProduct } from "@/config/catalog";
 
@@ -31,10 +32,12 @@ export async function GET() {
   }
 
   const sheetsConfig = getSheetsConfigStatus();
+  const adminConfig = getAdminConfigStatus();
 
   return NextResponse.json({
     ok: true,
-    build: "mutqan-store-v4-sheets",
+    build: "mutqan-store-v5-admin",
+    admin: adminConfig,
     sheets_build: SHEETS_BUILD,
     sheets_webhook: sheetsConfig,
     sheets_ready:

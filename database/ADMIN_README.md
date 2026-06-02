@@ -6,18 +6,34 @@
 psql "$DATABASE_URL" -f database/migration_admin_analytics.sql
 ```
 
-## 2. Environment (Easypanel → **frontend** service)
+## 2. Environment
+
+### Option A — all on **frontend** (Easypanel frontend service)
 
 ```env
 ADMIN_USERNAME=your_admin_user
 ADMIN_PASSWORD=your_strong_password
 ADMIN_SESSION_SECRET=openssl rand -hex 32
-
-MAXMIND_ACCOUNT_ID=123456
-MAXMIND_LICENSE_KEY=your_license_key
-
 DATABASE_URL=postgresql://...
 ```
+
+### Option B — credentials on **backend**, session on both
+
+**Backend:**
+```env
+ADMIN_USERNAME=your_admin_user
+ADMIN_PASSWORD=your_strong_password
+ADMIN_SESSION_SECRET=same-secret-as-frontend
+```
+
+**Frontend** (required):
+```env
+ADMIN_SESSION_SECRET=same-secret-as-frontend
+NEXT_PUBLIC_API_URL=https://api.mutqan.online
+DATABASE_URL=postgresql://...
+```
+
+`ADMIN_SESSION_SECRET` must be **identical** on frontend and backend when using Option B.
 
 ## 3. Open dashboard
 
