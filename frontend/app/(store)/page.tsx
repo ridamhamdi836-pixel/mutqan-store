@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
@@ -112,11 +112,10 @@ export default function HomePage() {
             {/* Image Column */}
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
               <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
-                <Image
+                <StoreImage
                   src="/images/hero/saudi-family.png"
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
                   fill
-                  unoptimized
                   className="object-cover object-center"
                   priority
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -129,7 +128,7 @@ export default function HomePage() {
                 <div className="flex -space-x-2 rtl:space-x-reverse">
                   {[1, 2, 3, 4].map((id) => (
                     <div key={id} className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden relative">
-                      <Image src={`/images/customers/customer-${id}.png`} alt="عميل سعيد" fill className="object-cover" />
+                      <StoreImage src={`/images/customers/customer-${id}.png`} alt="عميل سعيد" fill sizes="36px" className="object-cover" />
                     </div>
                   ))}
                 </div>

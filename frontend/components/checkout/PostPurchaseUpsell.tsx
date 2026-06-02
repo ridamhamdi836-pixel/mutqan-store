@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ShoppingBag, Clock, Star, Flame, Truck, ShieldCheck, Gift } from "lucide-react";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { CATALOG } from "@/config/catalog";
@@ -259,11 +259,11 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
 
                   {/* Image */}
                   <div className="relative w-[60px] h-[60px] rounded-lg overflow-hidden bg-brand-beige flex-shrink-0">
-                    <Image
+                    <StoreImage
                       src={product.image}
                       alt={product.name_ar}
                       fill
-                      unoptimized
+                      sizes="60px"
                       className="object-cover"
                       onError={() => handleImgError(product.slug)}
                     />

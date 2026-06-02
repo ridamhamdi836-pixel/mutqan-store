@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct } from "@/config/catalog";
@@ -39,11 +39,11 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
   return (
     <div className="flex items-center gap-3 p-3 rounded-card border border-brand-border bg-brand-background">
       <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
-        <Image
+        <StoreImage
           src={getProductMainImageSrc(productSlug)}
           alt={catalog.name_ar}
           fill
-          unoptimized
+          sizes="56px"
           className="object-cover"
           onError={() => {
             if (!imgError) setImgError(true);

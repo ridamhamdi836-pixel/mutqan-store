@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { BRAND, WHATSAPP_URL } from "@/config/brand";
 import { Shield, Truck, Banknote } from "lucide-react";
+import { StoreImage } from "@/components/ui/StoreImage";
 
 export function Footer() {
   return (
@@ -43,11 +44,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl font-extrabold text-white">مُتقن</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-brand-bronze" />
-              <span className="text-sm font-semibold text-brand-sand/80 tracking-wider">Mutqan</span>
-            </div>
+            <Link href="/" className="inline-block mb-4 rounded-lg bg-white/95 p-1.5">
+              <div className="relative h-14 w-[64px]">
+                <StoreImage
+                  src={BRAND.logoSrc}
+                  alt={`شعار ${BRAND.nameAr}`}
+                  fill
+                  sizes="64px"
+                  className="object-contain object-center"
+                />
+              </div>
+            </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
               تفاصيل عملية ومُتقنة تجعل البيت أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية لبيوت الخليج.
             </p>

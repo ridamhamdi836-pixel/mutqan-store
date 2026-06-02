@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X, ShoppingBag, Trash2, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { useCart } from "@/providers/cart-provider";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { formatSARCompact } from "@/lib/currency";
@@ -16,11 +16,11 @@ function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
     <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-      <Image
+      <StoreImage
         src={getProductMainImageSrc(slug)}
         alt={name}
         fill
-        unoptimized
+        sizes="64px"
         className="object-cover"
         onError={() => { if (!err) setErr(true); }}
       />

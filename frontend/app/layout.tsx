@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
+  icons: {
+    icon: "/images/brand/mutqan-logo.png",
+    apple: "/images/brand/mutqan-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

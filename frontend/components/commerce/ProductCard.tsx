@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import type { Product } from "@/types";
 import { getProductCardImageSrc } from "@/lib/product-image";
@@ -28,11 +28,11 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* Product Image */}
       <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
         {!imgError ? (
-          <Image
+          <StoreImage
             src={productImageSrc}
             alt={product.name_ar}
             fill
-            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             onError={() => setImgError(true)}
           />

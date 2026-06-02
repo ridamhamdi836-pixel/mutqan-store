@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingBag, Menu, X, Phone } from "lucide-react";
+import { ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/providers/cart-provider";
-import { BRAND, WHATSAPP_URL } from "@/config/brand";
+import { BRAND } from "@/config/brand";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { COLLECTIONS } from "@/config/collections";
 import { cn } from "@/lib/utils";
 
@@ -17,17 +18,20 @@ export function Header() {
       <div className="max-w-content mx-auto page-x">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex flex-col leading-tight">
-              <div className="flex items-center gap-1">
-                <span className="text-2xl font-extrabold text-brand-espresso tracking-tight group-hover:text-brand-bronze transition-colors">
-                  مُتقن
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-bronze inline-block mb-3" />
-              </div>
-              <span className="text-[10px] font-semibold text-brand-muted tracking-widest uppercase -mt-1">
-                Mutqan
-              </span>
+          <Link
+            href="/"
+            className="flex items-center shrink-0 group"
+            aria-label={`${BRAND.nameAr} — الرئيسية`}
+          >
+            <div className="relative h-12 md:h-[52px] w-[60px] md:w-[68px]">
+              <StoreImage
+                src={BRAND.logoSrc}
+                alt={`شعار ${BRAND.nameAr}`}
+                fill
+                sizes="68px"
+                className="object-contain object-center group-hover:opacity-90 transition-opacity"
+                priority
+              />
             </div>
           </Link>
 

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { X, Loader2, ShieldCheck, Clock, Phone, CreditCard, CheckCircle, Star, Truck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { useCart } from "@/providers/cart-provider";
 import { validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
@@ -12,6 +12,7 @@ import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { getProductMainImageSrc } from "@/lib/product-image";
+import { trackStoreEvent } from "@/lib/store-analytics-client";
 
 interface CheckoutModalProps {
   onOrderSuccess: (response: CreateOrderResponse) => void;
@@ -21,11 +22,11 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
     <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-      <Image
+      <StoreImage
         src={getProductMainImageSrc(slug)}
         alt={name}
         fill
-        unoptimized
+        sizes="56px"
         className="object-cover"
         onError={() => { if (!err) setErr(true); }}
       />
@@ -51,6 +52,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
   useEffect(() => {
     if (isCheckoutOpen) {
+      trackStoreEvent({ event_type: "initiate_checkout" });
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";

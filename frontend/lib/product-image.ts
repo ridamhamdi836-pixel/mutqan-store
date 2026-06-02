@@ -38,19 +38,23 @@ function imageQuery(slug: string, variant?: ImageVariant): string {
   return variant ? `?variant=${variant}&v=${version}` : `?v=${version}`;
 }
 
-/**
- * Served via /api/product-image/[slug] so images work in standalone Docker
- * (public/ static files are often missing on Easypanel misconfigured deploys).
- */
+function staticProductImage(filename: string): string {
+  return `/images/products/${filename}`;
+}
+
+/** Prefer static /images/ so Next.js can serve WebP/AVIF at responsive widths */
 export function getProductImageSrc(slug: string): string {
+  const product = CATALOG_BY_SLUG[slug];
+  if (product?.imageFile) {
+    return staticProductImage(product.imageFile);
+  }
   return `/api/product-image/${slug}${imageQuery(slug)}`;
 }
 
 /** Cart, checkout, and sticky bar — product page hero when configured */
 export function getProductMainImageSrc(slug: string): string {
-  if (heroImageFile(slug)) {
-    return `/api/product-image/${slug}${imageQuery(slug, "main")}`;
-  }
+  const hero = heroImageFile(slug);
+  if (hero) return staticProductImage(hero);
   return getProductImageSrc(slug);
 }
 
@@ -58,7 +62,7 @@ export function getProductMainImageSrc(slug: string): string {
 export function getProductCardImageSrc(slug: string): string {
   const product = CATALOG_BY_SLUG[slug];
   if (product?.storeCardImageFile) {
-    return `/api/product-image/${slug}${imageQuery(slug, "card")}`;
+    return staticProductImage(product.storeCardImageFile);
   }
   return getProductImageSrc(slug);
 }

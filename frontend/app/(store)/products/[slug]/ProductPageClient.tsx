@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import Link from "next/link";
 import { Star, ShoppingBag, CheckCircle2, Truck, CreditCard, ShieldCheck, ThumbsUp, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
@@ -12,6 +12,7 @@ import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { trackStoreEvent } from "@/lib/store-analytics-client";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
@@ -139,6 +140,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       itemType: "main",
     });
 
+    trackStoreEvent({
+      event_type: "add_to_cart",
+      product_slug: product.slug,
+    });
+
     firePixelEvent({
       eventId: generateEventId("add_to_cart"),
       eventName: "AddToCart",
@@ -175,11 +181,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
             <div className="max-w-content mx-auto flex items-center justify-between gap-4">
               <div className="flex items-center gap-3 flex-1">
                 <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
-                  <Image
+                  <StoreImage
                     src={mainImageSrc}
                     alt={product.name_ar}
                     fill
-                    unoptimized
+                    sizes="40px"
                     className="object-cover"
                     onError={() => { if (!imgError) setImgError(true); }}
                   />
@@ -222,11 +228,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   : undefined
               }
             >
-              <Image
+              <StoreImage
                 src={heroImageSrc}
                 alt={config.heroSectionImageAlt ?? config.heroImageAlt}
                 fill
-                unoptimized
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className={cn(
                   config.heroSectionImage
                     ? isPortraitAspect(config.heroSectionAspect)
@@ -362,11 +368,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     : undefined
                 }
               >
-                <Image
+                <StoreImage
                   src={config.painSectionImage ?? productImageSrc}
                   alt={config.painSectionImageAlt ?? "مشكلة الفوضى اليومية"}
                   fill
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className={cn(
                     config.painSectionImage
                       ? "object-cover object-center"
@@ -405,11 +411,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     : undefined
                 }
               >
-                <Image
+                <StoreImage
                   src={config.solutionSectionImage ?? productImageSrc}
                   alt={config.solutionSectionImageAlt ?? "الحل العملي من متقن"}
                   fill
-                  unoptimized
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className={cn(
                     config.solutionSectionImage
@@ -453,11 +458,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                       : undefined
                   }
                 >
-                  <Image
+                  <StoreImage
                     src={config.lifestyleSectionImage ?? productImageSrc}
                     alt={config.lifestyleSectionImageAlt ?? "مميزات إضافية"}
                     fill
-                    unoptimized
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className={cn(
                       config.lifestyleSectionImage
@@ -510,11 +514,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     : undefined
                 }
               >
-                <Image
+                <StoreImage
                   src={config.beforeSectionImage ?? productImageSrc}
                   alt={config.beforeSectionImageAlt ?? config.beforeLabel}
                   fill
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 45vw"
                   className={beforeAfterImageClass(config.beforeSectionAspect, !!config.beforeSectionImage)}
                 />
               </div>
@@ -536,11 +540,11 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                     : undefined
                 }
               >
-                <Image
+                <StoreImage
                   src={config.afterSectionImage ?? productImageSrc}
                   alt={config.afterSectionImageAlt ?? config.afterLabel}
                   fill
-                  unoptimized
+                  sizes="(max-width: 768px) 100vw, 45vw"
                   className={beforeAfterImageClass(config.afterSectionAspect, false)}
                 />
                 <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">

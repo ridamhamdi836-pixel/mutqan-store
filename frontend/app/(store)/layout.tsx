@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+import { StoreAnalyticsTracker } from "@/components/analytics/StoreAnalyticsTracker";
 import { Header } from "@/components/layout/Header";
 import { TrustBar } from "@/components/layout/TrustBar";
 import { Footer } from "@/components/layout/Footer";
@@ -24,6 +25,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen flex flex-col">
+      <StoreAnalyticsTracker />
       <TrustBar />
       <Header />
       <main className="flex-1">{children}</main>

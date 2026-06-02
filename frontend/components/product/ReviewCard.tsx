@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,11 +20,11 @@ export function ReviewCard({ name, city, rating, text, photo, photoAlt, photoAsp
           className="relative w-full bg-brand-beige"
           style={{ aspectRatio: photoAspect ?? "3/4" }}
         >
-          <Image
+          <StoreImage
             src={photo}
             alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
             fill
-            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover object-center"
           />
         </div>

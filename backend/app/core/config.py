@@ -15,6 +15,14 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "dev-secret-key"
     ADMIN_API_KEY: str = "dev-admin-key"
 
+    # Used by Next.js admin UI on the frontend service (documented here for one .env template)
+    ADMIN_USERNAME: str = ""
+    ADMIN_PASSWORD: str = ""
+    ADMIN_SESSION_SECRET: str = ""
+
+    MAXMIND_ACCOUNT_ID: str = ""
+    MAXMIND_LICENSE_KEY: str = ""
+
     GOOGLE_SHEETS_WEBHOOK_URL: str = ""
     GOOGLE_SHEETS_WEBHOOK_SECRET: str = ""
 
