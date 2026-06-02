@@ -36,7 +36,7 @@ export async function GET() {
 
   return NextResponse.json({
     ok: true,
-    build: "mutqan-store-v6-admin-session",
+    build: "mutqan-store-v7-sheets-order-number",
     admin: adminConfig,
     sheets_build: SHEETS_BUILD,
     sheets_webhook: sheetsConfig,
