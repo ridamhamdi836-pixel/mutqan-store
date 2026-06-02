@@ -6,7 +6,7 @@
 import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
-export const SHEETS_BUILD = "google-sheets-seq-order-v1";
+export const SHEETS_BUILD = "google-sheets-order-number-col-v2";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 const WEBHOOK_TIMEOUT_MS = 25_000;
@@ -15,6 +15,7 @@ const WEBHOOK_TIMEOUT_MS = 25_000;
 export interface GoogleSheetsPayload {
   date: string;
   orderid: string;
+  order_number: string;
   country: string;
   name: string;
   phone: string;
@@ -96,13 +97,16 @@ export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload
     urls.push(productUrl(item.product_slug));
   }
 
+  const orderId = order.orderid.trim();
+
   return {
     date: formatDateSaudi(),
-    orderid: order.orderid,
+    orderid: orderId,
+    order_number: orderId,
     country: "KSA",
     name: order.customerName.trim(),
     phone: formatSaudiPhone(order.phoneE164),
-    address: order.address?.trim() || order.orderid,
+    address: order.address?.trim() || "",
     url: urls.join("/"),
     sku: skus.join("/"),
     product: products.join("/"),
@@ -313,7 +317,7 @@ export async function syncOrderByNumberToGoogleSheets(
           quantity: row.quantity || 1,
         })),
         totalSar: Number(order.total_sar),
-        address: order.order_number,
+        address: "",
       };
 
       return sendOrderToGoogleSheets(sheetsOrder);

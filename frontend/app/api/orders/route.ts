@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
         quantity: i.quantity || 1,
       })),
       totalSar,
-      address: orderNumber,
+      address: "",
     };
 
     const sheetsResult = await sendOrderToGoogleSheets(sheetsOrder);

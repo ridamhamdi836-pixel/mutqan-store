@@ -2,7 +2,7 @@
  * Mutqan — Google Sheets Webhook (CLEAN v1)
  *
  * Sheet columns (row 1):
- * Order Date | country | name | phone | address | url | sku | Product | quantity | price | currency
+ * Order Date | country | name | phone | Order Number | address | url | sku | Product | quantity | price | currency
  *
  * SETUP:
  * 1. Set SHEET_ID below (from sheet URL)
@@ -22,6 +22,7 @@ var HEADERS = [
   "country",
   "name",
   "phone",
+  "Order Number",
   "address",
   "url",
   "sku",
@@ -36,9 +37,10 @@ var FIELD_BY_HEADER = {
   country: "country",
   name: "name",
   phone: "phone",
-  address: "address",
   "Order Number": "orderid",
   orderid: "orderid",
+  order_number: "orderid",
+  address: "address",
   url: "url",
   sku: "sku",
   Product: "product",
@@ -73,7 +75,7 @@ function doPost(e) {
     if (data.orderid && isDuplicate(sheet, data.orderid)) {
       var updatedRow = updateRowByOrderId(sheet, data.orderid, row);
       formatQuantityCellAsText(sheet, updatedRow);
-    formatOrderNumberCellAsText(sheet, updatedRow);
+      formatOrderNumberCellAsText(sheet, updatedRow);
       return jsonOut({
         status: "success",
         action: "updated",
@@ -111,14 +113,45 @@ function doGet() {
 }
 
 function ensureHeaders(sheet) {
-  var current = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  var lastCol = Math.max(sheet.getLastColumn(), 1);
+  var current = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
   var empty = !current[0] || String(current[0]).trim() === "";
 
   if (empty) {
     sheet.getRange(1, 1, 1, HEADERS.length).setValues([HEADERS]);
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight("bold");
     SpreadsheetApp.flush();
+    return;
   }
+
+  ensureOrderNumberHeader(sheet);
+}
+
+/** Add Order Number column on existing sheets that only have the old header row */
+function ensureOrderNumberHeader(sheet) {
+  var lastCol = sheet.getLastColumn();
+  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+
+  for (var i = 0; i < headers.length; i++) {
+    var h = String(headers[i]).trim();
+    if (h === "Order Number" || h === "orderid" || h === "order_number") {
+      return;
+    }
+  }
+
+  var phoneCol = -1;
+  for (var j = 0; j < headers.length; j++) {
+    if (String(headers[j]).trim() === "phone") {
+      phoneCol = j + 1;
+      break;
+    }
+  }
+
+  var insertAt = phoneCol > 0 ? phoneCol + 1 : 5;
+  sheet.insertColumnAfter(insertAt - 1);
+  sheet.getRange(1, insertAt).setValue("Order Number");
+  sheet.getRange(1, insertAt).setFontWeight("bold");
+  SpreadsheetApp.flush();
 }
 
 /** Prevent Sheets from auto-formatting quantity as a date (e.g. old 1/1/1 payloads) */
@@ -131,24 +164,46 @@ function formatQuantityCellAsText(sheet, rowNum) {
 
 /** Keep mutqan-0001 readable (not parsed as date) */
 function formatOrderNumberCellAsText(sheet, rowNum) {
-  var col = getOrderIdColumn(sheet);
+  var col = getOrderNumberColumn(sheet);
   if (col > 0 && rowNum >= 2) {
     sheet.getRange(rowNum, col).setNumberFormat("@");
   }
 }
 
+function getOrderNumberColumn(sheet) {
+  var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  for (var i = 0; i < headers.length; i++) {
+    var h = String(headers[i]).trim();
+    if (h === "Order Number" || h === "orderid" || h === "order_number") {
+      return i + 1;
+    }
+  }
+  return -1;
+}
+
 function buildRow(sheet, data) {
-  var headers = sheet.getRange(1, 1, 1, HEADERS.length).getValues()[0];
+  var lastCol = Math.max(sheet.getLastColumn(), HEADERS.length);
+  var headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
   var row = [];
+  var orderId = data.orderid || data.order_number || "";
 
   for (var i = 0; i < headers.length; i++) {
     var header = String(headers[i]).trim();
     var field = FIELD_BY_HEADER[header];
-    if (field && data[field] !== undefined && data[field] !== null) {
-      row.push(data[field]);
-    } else {
+    if (!field) {
       row.push("");
+      continue;
     }
+    var value = data[field];
+    if (value === undefined || value === null) {
+      if (field === "orderid" && orderId) {
+        value = orderId;
+      } else {
+        row.push("");
+        continue;
+      }
+    }
+    row.push(value);
   }
 
   return row;
@@ -202,8 +257,13 @@ function getOrderIdColumn(sheet) {
   var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   for (var i = 0; i < headers.length; i++) {
     var h = String(headers[i]).trim();
-    if (h === "Order Number" || h === "orderid" || h === "address") {
+    if (h === "Order Number" || h === "orderid" || h === "order_number") {
       return i + 1;
+    }
+  }
+  for (var j = 0; j < headers.length; j++) {
+    if (String(headers[j]).trim() === "address") {
+      return j + 1;
     }
   }
   return -1;
@@ -221,11 +281,12 @@ function testLocally() {
     postData: {
       contents: JSON.stringify({
         date: "01/05/2026",
-        orderid: "mutqan-TEST1234",
+        orderid: "mutqan-0001",
+        order_number: "mutqan-0001",
         country: "KSA",
         name: "عميل تجريبي",
         phone: "96650475233",
-        address: "mutqan-TEST1234",
+        address: "",
         url: "https://mutqan.online/products/smart-table-warmer",
         sku: "MTQ-WRM-006",
         product: "منتج تجريبي",
