@@ -1,26 +1,29 @@
 import { cookies } from "next/headers";
 import { createHmac, timingSafeEqual } from "crypto";
 import type { NextRequest } from "next/server";
+import { resolveAdminSessionSecret, sessionSecretSource } from "@/lib/admin-session-secret";
 
 const COOKIE_NAME = "mutqan_admin_session";
 const MAX_AGE_SEC = 60 * 60 * 24 * 7;
 
 function getSecret(): string {
-  return (
-    process.env.ADMIN_SESSION_SECRET?.trim() ||
-    process.env.SECRET_KEY?.trim() ||
-    ""
-  );
+  return resolveAdminSessionSecret();
 }
 
 export function getBackendAdminBaseUrl(): string | null {
-  const url =
+  const explicit =
     process.env.ADMIN_BACKEND_URL?.trim() ||
     process.env.BACKEND_INTERNAL_URL?.trim() ||
-    process.env.NEXT_PUBLIC_API_URL?.trim() ||
-    null;
-  if (!url) return null;
-  return url.replace(/\/$/, "");
+    process.env.NEXT_PUBLIC_API_URL?.trim();
+
+  if (explicit) return explicit.replace(/\/$/, "");
+
+  const site = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (site?.includes("mutqan.online")) {
+    return "https://api.mutqan.online";
+  }
+
+  return null;
 }
 
 export function getAdminCredentials(): { username: string; password: string } | null {
@@ -33,6 +36,7 @@ export function getAdminCredentials(): { username: string; password: string } | 
 export type AdminConfigStatus = {
   ready: boolean;
   hasSessionSecret: boolean;
+  sessionSecretSource: "explicit" | "database_url" | "none";
   hasLocalCredentials: boolean;
   hasBackendUrl: boolean;
   hint: string;
@@ -40,6 +44,7 @@ export type AdminConfigStatus = {
 
 export function getAdminConfigStatus(): AdminConfigStatus {
   const hasSessionSecret = Boolean(getSecret());
+  const secretSrc = sessionSecretSource();
   const hasLocalCredentials = Boolean(getAdminCredentials());
   const hasBackendUrl = Boolean(getBackendAdminBaseUrl());
   const ready = hasSessionSecret && (hasLocalCredentials || hasBackendUrl);
@@ -47,17 +52,19 @@ export function getAdminConfigStatus(): AdminConfigStatus {
   let hint = "";
   if (!hasSessionSecret) {
     hint =
-      "Set ADMIN_SESSION_SECRET (or SECRET_KEY) on the frontend service — must match backend if using backend login.";
+      "Set DATABASE_URL on the frontend service (session key is derived from it), or set ADMIN_SESSION_SECRET explicitly.";
   } else if (!hasLocalCredentials && !hasBackendUrl) {
     hint =
-      "Set ADMIN_USERNAME and ADMIN_PASSWORD on the frontend service, or set NEXT_PUBLIC_API_URL / ADMIN_BACKEND_URL and configure credentials on the backend.";
+      "Set ADMIN_USERNAME and ADMIN_PASSWORD on the frontend, or on the backend with the same DATABASE_URL.";
   } else if (!hasLocalCredentials && hasBackendUrl) {
-    hint = "Login will verify against the backend API. Ensure the same ADMIN_SESSION_SECRET is on frontend and backend.";
+    hint =
+      "Credentials are checked on the backend. Use the same DATABASE_URL on frontend and backend (or set ADMIN_SESSION_SECRET on both).";
   }
 
   return {
     ready,
     hasSessionSecret,
+    sessionSecretSource: secretSrc,
     hasLocalCredentials,
     hasBackendUrl,
     hint,

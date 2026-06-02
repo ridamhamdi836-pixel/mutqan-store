@@ -8,10 +8,25 @@ from typing import Optional
 from app.core.config import settings
 
 MAX_AGE_SEC = 60 * 60 * 24 * 7
+SESSION_SALT = b"mutqan-admin-session-v1"
+
+
+def _normalize_database_url(url: str) -> str:
+    return url.strip().replace("postgresql+psycopg://", "postgresql://")
 
 
 def _session_secret() -> str:
-    return (settings.ADMIN_SESSION_SECRET or settings.SECRET_KEY or "").strip()
+    explicit = (settings.ADMIN_SESSION_SECRET or settings.SECRET_KEY or "").strip()
+    if explicit:
+        return explicit
+    db = (settings.DATABASE_URL or "").strip()
+    if db:
+        return hmac.new(
+            SESSION_SALT,
+            _normalize_database_url(db).encode(),
+            hashlib.sha256,
+        ).hexdigest()
+    return ""
 
 
 def admin_credentials_configured() -> bool:
