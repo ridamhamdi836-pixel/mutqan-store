@@ -222,8 +222,8 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "thermal-lunch-box.jpg",
     storeCardImageFile: "thermal-lunch-box-card.png",
     bundles: [
-      bundle("lunch-1", "قطعة واحدة - للاستخدام اليومي", 1, 229, { sort_order: 1 }),
-      bundle("lunch-2", "قطعتين - أفضل قيمة للعائلة | وفر 129 ريال", 2, 329, {
+      bundle("lunch-1", "قطعة واحدة - للاستخدام اليومي", 1, 279, { sort_order: 1 }),
+      bundle("lunch-2", "قطعتين - أفضل قيمة للعائلة | وفر 129 ريال", 2, 399, {
         compare_at_price_sar: 458,
         savings_label_ar: "وفر 129 ريال",
         is_default: true,
