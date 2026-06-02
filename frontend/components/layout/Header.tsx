@@ -5,7 +5,7 @@ import { ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/providers/cart-provider";
 import { BRAND } from "@/config/brand";
-import { StoreImage } from "@/components/ui/StoreImage";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { COLLECTIONS } from "@/config/collections";
 import { cn } from "@/lib/utils";
 
@@ -23,16 +23,13 @@ export function Header() {
             className="flex items-center shrink-0 group"
             aria-label={`${BRAND.nameAr} — الرئيسية`}
           >
-            <div className="relative h-12 md:h-[52px] w-[60px] md:w-[68px]">
-              <StoreImage
-                src={BRAND.logoSrc}
-                alt={`شعار ${BRAND.nameAr}`}
-                fill
-                sizes="68px"
-                className="object-contain object-center group-hover:opacity-90 transition-opacity"
-                priority
-              />
-            </div>
+            <BrandLogo
+              variant="default"
+              className="h-12 md:h-[52px] w-[60px] md:w-[68px]"
+              sizes="68px"
+              priority
+              imageClassName="group-hover:opacity-90 transition-opacity"
+            />
           </Link>
 
           {/* Desktop Nav */}

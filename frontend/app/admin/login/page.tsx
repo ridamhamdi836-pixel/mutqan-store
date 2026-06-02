@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 
 function AdminLoginForm() {
   const router = useRouter();
@@ -42,8 +43,11 @@ function AdminLoginForm() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
       <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
-        <h1 className="text-2xl font-bold text-white">Mutqan Admin</h1>
-        <p className="text-sm text-slate-400 mt-1">COD store operations dashboard</p>
+        <div className="flex flex-col items-center text-center mb-2">
+          <BrandLogo variant="light" className="h-16 w-[88px] mb-3" sizes="88px" />
+          <h1 className="text-xl font-bold text-white">Admin</h1>
+          <p className="text-sm text-slate-400 mt-1">COD store operations dashboard</p>
+        </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <div>

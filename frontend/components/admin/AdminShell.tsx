@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, Package, LogOut } from "lucide-react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -23,8 +24,14 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <aside className="w-56 shrink-0 border-r border-slate-800 bg-slate-900/80 p-4 flex flex-col">
-        <div className="mb-8 px-2">
-          <p className="text-lg font-bold text-white tracking-tight">Mutqan</p>
+        <div className="mb-8 px-1">
+          <Link href="/admin" className="block">
+            <BrandLogo
+              variant="light"
+              className="h-12 w-[72px] mb-2"
+              sizes="72px"
+            />
+          </Link>
           <p className="text-xs text-slate-400">COD Operations</p>
         </div>
         <nav className="flex-1 space-y-1">

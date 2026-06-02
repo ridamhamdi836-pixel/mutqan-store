@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { BRAND, WHATSAPP_URL } from "@/config/brand";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { Shield, Truck, Banknote } from "lucide-react";
-import { StoreImage } from "@/components/ui/StoreImage";
 
 export function Footer() {
   return (
@@ -44,16 +44,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
           <div>
-            <Link href="/" className="inline-block mb-4 rounded-lg bg-white/95 p-1.5">
-              <div className="relative h-14 w-[64px]">
-                <StoreImage
-                  src={BRAND.logoSrc}
-                  alt={`شعار ${BRAND.nameAr}`}
-                  fill
-                  sizes="64px"
-                  className="object-contain object-center"
-                />
-              </div>
+            <Link href="/" className="inline-block mb-4">
+              <BrandLogo
+                variant="light"
+                className="h-14 w-[72px]"
+                sizes="72px"
+              />
             </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
               تفاصيل عملية ومُتقنة تجعل البيت أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية لبيوت الخليج.

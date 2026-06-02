@@ -2,6 +2,7 @@ export const BRAND = {
   nameAr: "مُتقن",
   nameEn: "Mutqan",
   logoSrc: "/images/brand/mutqan-logo.png",
+  logoSrcLight: "/images/brand/mutqan-logo-light.png",
   taglineAr: "تفاصيل متقنة لبيت أكثر ترتيبًا وراحة",
   domain: "mutqan.online",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212717783042",
