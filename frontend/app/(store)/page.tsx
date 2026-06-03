@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { StoreImage } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { COLLECTIONS } from "@/config/collections";
 import { FEATURED_SLUGS, getProductsBySlugs, toProduct } from "@/config/catalog";
+import { cn } from "@/lib/utils";
 import {
   ArrowLeft,
   Star,
@@ -112,7 +113,7 @@ export default function HomePage() {
 
             {/* Image Column */}
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
-              <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden md:shadow-xl border-4 border-white">
+              <div className={cn("aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden md:shadow-xl border-4 border-white bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight)}>
                 <StoreImage
                   src="/images/hero/saudi-family.png"
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"

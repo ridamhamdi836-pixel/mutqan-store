@@ -39,8 +39,7 @@ function imageQuery(slug: string, variant?: ImageVariant): string {
 }
 
 function staticProductImage(filename: string): string {
-  const webp = filename.replace(/\.(png|jpe?g)$/i, ".webp");
-  return `/images/products/${webp}`;
+  return `/images/products/${filename}`;
 }
 
 /** Prefer static /images/ so Next.js can serve WebP/AVIF at responsive widths */

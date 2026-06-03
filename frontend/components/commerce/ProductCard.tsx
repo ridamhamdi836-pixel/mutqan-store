@@ -6,7 +6,8 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import type { Product } from "@/types";
 import { getProductCardImageSrc } from "@/lib/product-image";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
+import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
@@ -27,7 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
       className="group block rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm card-lift"
     >
       {/* Product Image */}
-      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+      <div className={cn("relative aspect-[4/3] bg-gray-50 overflow-hidden", STORE_IMAGE_FRAME.cardMinHeight)}>
         {!imgError ? (
           <StoreImage
             src={productImageSrc}

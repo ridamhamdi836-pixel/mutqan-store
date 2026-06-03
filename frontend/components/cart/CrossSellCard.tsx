@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import { StoreImage } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
+import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct } from "@/config/catalog";
 import { getProductCardImageSrc } from "@/lib/product-image";
-import { cn } from "@/lib/utils";
 
 interface CrossSellCardProps {
   productSlug: string;
@@ -41,7 +41,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
 
   return (
     <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
-      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+      <div className={cn("relative aspect-[4/3] bg-gray-50 overflow-hidden", STORE_IMAGE_FRAME.cardMinHeight)}>
         {!imgError ? (
           <StoreImage
             src={productImageSrc}

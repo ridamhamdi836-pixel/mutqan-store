@@ -1,6 +1,6 @@
 /**
- * Compress PNG/JPEG under public/images and emit matching .webp siblings.
- * Run from frontend/: npm run optimize-images
+ * Optional WebP siblings only — never resize or overwrite PNG/JPEG originals.
+ * Store serves originals via StoreImage (unoptimized).
  */
 import { readdir, readFile, writeFile, stat } from "fs/promises";
 import path from "path";
@@ -8,42 +8,11 @@ import sharp from "sharp";
 
 const ROOT = path.join(process.cwd(), "public", "images");
 
-/** @type {{ match: (rel: string) => boolean; maxWidth: number; webpQuality: number; jpegQuality?: number; pngQuality?: number }[]} */
+/** @type {{ match: (rel: string) => boolean; webpQuality: number }[]} */
 const RULES = [
-  {
-    match: (rel) => /[/\\]customers[/\\]/.test(rel) || /customer-\d/.test(rel),
-    maxWidth: 160,
-    webpQuality: 75,
-    pngQuality: 80,
-  },
-  {
-    match: (rel) => /-card\.(png|jpe?g)$/i.test(rel) || /card\.(png|jpe?g)$/i.test(rel),
-    maxWidth: 1200,
-    webpQuality: 88,
-    jpegQuality: 88,
-    pngQuality: 88,
-  },
-  {
-    match: (rel) => /[/\\]reviews[/\\]/.test(rel),
-    maxWidth: 1600,
-    webpQuality: 88,
-    jpegQuality: 88,
-    pngQuality: 88,
-  },
-  {
-    match: (rel) => /[/\\]hero[/\\]/.test(rel) || /-hero\.(png|jpe?g)$/i.test(rel),
-    maxWidth: 2560,
-    webpQuality: 90,
-    jpegQuality: 90,
-    pngQuality: 90,
-  },
-  {
-    match: () => true,
-    maxWidth: 1920,
-    webpQuality: 88,
-    jpegQuality: 88,
-    pngQuality: 88,
-  },
+  { match: (rel) => /[/\\]customers[/\\]/.test(rel) || /customer-\d/.test(rel), webpQuality: 90 },
+  { match: (rel) => /[/\\]hero[/\\]/.test(rel) || /-hero\.(png|jpe?g)$/i.test(rel), webpQuality: 95 },
+  { match: () => true, webpQuality: 92 },
 ];
 
 function ruleFor(rel) {
@@ -64,38 +33,17 @@ async function walk(dir) {
 
 async function optimizeFile(filePath) {
   const rel = path.relative(ROOT, filePath);
-  const { maxWidth, webpQuality, jpegQuality = 80, pngQuality = 84 } = ruleFor(rel);
+  const { webpQuality } = ruleFor(rel);
   const before = (await stat(filePath)).size;
-  const input = sharp(await readFile(filePath));
-  const meta = await input.metadata();
-
-  let pipeline = input.rotate();
-  if (meta.width && meta.width > maxWidth) {
-    pipeline = pipeline.resize({ width: maxWidth, withoutEnlargement: true });
-  }
-
-  const ext = path.extname(filePath).toLowerCase();
-  let raster;
-  if (ext === ".png") {
-    raster = await pipeline
-      .png({ quality: pngQuality, compressionLevel: 9, effort: 10 })
-      .toBuffer();
-  } else {
-    raster = await pipeline.jpeg({ quality: jpegQuality, mozjpeg: true }).toBuffer();
-  }
-
-  if (raster.length < before) {
-    await writeFile(filePath, raster);
-  }
+  const input = sharp(await readFile(filePath)).rotate();
 
   const webpPath = filePath.replace(/\.(png|jpe?g)$/i, ".webp");
-  const webp = await sharp(raster).webp({ quality: webpQuality, effort: 4 }).toBuffer();
+  const webp = await input.webp({ quality: webpQuality, effort: 4 }).toBuffer();
   await writeFile(webpPath, webp);
 
-  const after = (await stat(filePath)).size;
   const webpSize = (await stat(webpPath)).size;
   console.log(
-    `${rel}: ${(before / 1024).toFixed(0)}KB → raster ${(after / 1024).toFixed(0)}KB, webp ${(webpSize / 1024).toFixed(0)}KB`,
+    `${rel}: original ${(before / 1024).toFixed(0)}KB (unchanged), webp ${(webpSize / 1024).toFixed(0)}KB`,
   );
 }
 
@@ -108,4 +56,4 @@ for (const f of files) {
     console.error(`FAIL ${f}:`, err.message);
   }
 }
-console.log("\nDone. Store uses .webp via StoreImage when available.");
+console.log("\nDone. Store serves original PNG/JPEG; WebP siblings are optional.");

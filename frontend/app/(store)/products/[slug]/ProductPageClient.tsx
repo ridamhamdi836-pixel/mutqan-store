@@ -19,7 +19,7 @@ import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/lib/use-media-query";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
 
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
@@ -47,8 +47,8 @@ function SectionImage({
   return (
     <div
       className={cn(
-        "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full",
-        !aspect && "aspect-[4/3] bg-brand-beige",
+        "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full bg-brand-beige",
+        !aspect && cn("aspect-[4/3]", STORE_IMAGE_FRAME.heroMinHeight),
         className,
       )}
       style={aspect ? { aspectRatio: aspect } : undefined}
@@ -251,10 +251,10 @@ export function ProductPageClient({
                 "relative rounded-2xl overflow-hidden md:shadow-md",
                 portraitHero
                   ? cn(
-                      "w-full",
-                      config.heroSectionImage ? "" : "aspect-[2/3] bg-white",
+                      "w-full bg-white",
+                      config.heroSectionImage ? STORE_IMAGE_FRAME.heroMinHeight : "aspect-[2/3]",
                     )
-                  : "aspect-square max-h-[min(72vh,28rem)] md:max-h-none bg-brand-beige",
+                  : cn("aspect-square w-full bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight),
               )}
               style={
                 config.heroSectionImage
