@@ -1,7 +1,7 @@
-import { StoreImage } from "@/components/ui/StoreImage";
+import { StoreImageFrame } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME, storeImageAspectStyle } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 interface ReviewCardProps {
   name: string;
@@ -27,21 +27,14 @@ export function ReviewCard({
 }: ReviewCardProps) {
   return (
     <article className={cn("card overflow-hidden flex flex-col w-full", !photo && "self-start")}>
-      {photo && (
-        <div
-          className={cn("relative w-full bg-brand-beige", STORE_IMAGE_FRAME.reviewMinHeight)}
-          style={storeImageAspectStyle(photoAspect ?? "3/4")}
-        >
-          <StoreImage
-            src={photo}
-            alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
-            fill
-            sizes={STORE_IMAGE_SIZES.section}
-            variant="default"
-            loading="lazy"
-          />
-        </div>
-      )}
+      {photo ? (
+        <StoreImageFrame
+          src={photo}
+          alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
+          aspect={photoAspect}
+          sizes={STORE_IMAGE_SIZES.section}
+        />
+      ) : null}
       <div className={cn("flex flex-col gap-2", photo ? "p-4 md:p-5" : "px-4 md:px-5 pt-4 pb-3")}>
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-0.5">

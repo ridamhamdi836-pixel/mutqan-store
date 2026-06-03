@@ -2,10 +2,13 @@ import Image, { type ImageProps } from "next/image";
 import {
   STORE_IMAGE_CONTAIN_CLASS,
   STORE_IMAGE_COVER_CLASS,
+  STORE_IMAGE_INTRINSIC_CLASS,
+  getImageIntrinsic,
+  storeImageAspectStyle,
+  stripImagePath,
 } from "@/lib/image-display";
 import { cn } from "@/lib/utils";
 
-/** Strip ?v= cache-bust; Next/Image uses the file path only */
 export function stripImageQuery(src: string): string {
   return src.split("?")[0];
 }
@@ -13,7 +16,6 @@ export function stripImageQuery(src: string): string {
 type StoreImageProps = Omit<ImageProps, "quality"> & {
   quality?: number;
   variant?: "default" | "thumbnail" | "hero";
-  /** contain = full image visible (default); cover = crop to fill frame */
   fit?: "contain" | "cover";
 };
 
@@ -22,8 +24,8 @@ function defaultQuality(): number {
 }
 
 /**
- * All store images: serve files as-is (no Next.js re-encode, no WebP swap).
- * Default fit is contain — full photo visible inside the frame.
+ * Store images at full quality. With width+height (no fill) the frame matches
+ * the photo's natural aspect — nothing stretched or cropped.
  */
 export function StoreImage({
   quality,
@@ -35,10 +37,23 @@ export function StoreImage({
   fit = "contain",
   priority,
   fetchPriority,
+  fill,
+  width,
+  height,
   ...props
 }: StoreImageProps) {
   const normalizedSrc =
     typeof src === "string" ? stripImageQuery(src) : src;
+
+  const intrinsic =
+    typeof normalizedSrc === "string"
+      ? getImageIntrinsic(normalizedSrc)
+      : null;
+
+  const useFill = fill === true;
+  const resolvedWidth = width ?? intrinsic?.width;
+  const resolvedHeight = height ?? intrinsic?.height;
+  const useIntrinsic = !useFill && resolvedWidth && resolvedHeight;
 
   const resolvedQuality = quality ?? defaultQuality();
   const resolvedFetchPriority =
@@ -53,11 +68,79 @@ export function StoreImage({
       fetchPriority={resolvedFetchPriority}
       loading={loading ?? (priority ? undefined : "lazy")}
       decoding="async"
+      width={useIntrinsic ? resolvedWidth : width}
+      height={useIntrinsic ? resolvedHeight : height}
+      fill={useFill ? true : undefined}
       className={cn(
-        fit === "cover" ? STORE_IMAGE_COVER_CLASS : STORE_IMAGE_CONTAIN_CLASS,
+        useIntrinsic
+          ? STORE_IMAGE_INTRINSIC_CLASS
+          : fit === "cover"
+            ? STORE_IMAGE_COVER_CLASS
+            : STORE_IMAGE_CONTAIN_CLASS,
         className,
       )}
       {...props}
     />
+  );
+}
+
+/** Frame sized to natural image dimensions when known in STORE_IMAGE_INTRINSIC */
+export function StoreImageFrame({
+  src,
+  alt,
+  className,
+  imageClassName,
+  variant = "default",
+  priority,
+  sizes,
+  aspect,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  imageClassName?: string;
+  variant?: StoreImageProps["variant"];
+  priority?: boolean;
+  sizes?: string;
+  aspect?: string;
+}) {
+  const intrinsic = getImageIntrinsic(stripImagePath(src));
+
+  if (intrinsic) {
+    return (
+      <div className={cn("w-full overflow-hidden bg-brand-beige", className)}>
+        <StoreImage
+          src={src}
+          alt={alt}
+          width={intrinsic.width}
+          height={intrinsic.height}
+          variant={variant}
+          priority={priority}
+          sizes={sizes}
+          className={imageClassName}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={cn(
+        "relative w-full overflow-hidden bg-brand-beige",
+        !aspect && "aspect-[4/3]",
+        className,
+      )}
+      style={storeImageAspectStyle(aspect)}
+    >
+      <StoreImage
+        src={src}
+        alt={alt}
+        fill
+        variant={variant}
+        priority={priority}
+        sizes={sizes}
+        className={imageClassName}
+      />
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { StoreImage } from "@/components/ui/StoreImage";
+import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
 import { Star, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { BundleSelector } from "@/components/product/BundleSelector";
@@ -18,19 +18,10 @@ import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
-import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME, storeImageAspectStyle } from "@/lib/image-display";
-
-const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 function beforeAfterImageClass(muted?: boolean): string {
   return cn(muted && "opacity-90 grayscale-[20%]");
-}
-
-function beforeAfterFrameClass(): string {
-  return cn(
-    "relative bg-brand-beige w-full overflow-hidden",
-    STORE_IMAGE_FRAME.sectionMinHeight,
-  );
 }
 
 function SectionImage({
@@ -47,25 +38,18 @@ function SectionImage({
   priority?: boolean;
 }) {
   return (
-    <div
+    <StoreImageFrame
+      src={src}
+      alt={alt}
+      aspect={aspect}
       className={cn(
-        "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full bg-brand-beige",
-        STORE_IMAGE_FRAME.sectionMinHeight,
-        !aspect && "aspect-[3/4]",
+        "rounded-2xl shadow-md border border-brand-border",
         className,
       )}
-      style={storeImageAspectStyle(aspect)}
-    >
-      <StoreImage
-        src={src}
-        alt={alt}
-        fill
-        variant={priority ? "hero" : "default"}
-        sizes={STORE_IMAGE_SIZES.section}
-        priority={priority}
-        loading={priority ? undefined : "lazy"}
-      />
-    </div>
+      variant={priority ? "hero" : "default"}
+      priority={priority}
+      sizes={STORE_IMAGE_SIZES.section}
+    />
   );
 }
 
@@ -130,14 +114,11 @@ export function ProductPageClient({
   const { addItem, openCart } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
-  const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
-  const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
 
   const reviewCount =
     1050 +
@@ -221,7 +202,6 @@ export function ProductPageClient({
                   fill
                   variant="thumbnail"
                   sizes={STORE_IMAGE_SIZES.tiny}
-                  onError={() => { if (!imgError) setImgError(true); }}
                 />
               </div>
               <div className="min-w-0">
@@ -248,26 +228,15 @@ export function ProductPageClient({
       <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
-            <div
-              ref={imageRef}
-              className={cn(
-                "relative rounded-2xl overflow-hidden md:shadow-md w-full bg-brand-beige",
-                STORE_IMAGE_FRAME.heroMinHeight,
-                !config.heroSectionAspect &&
-                  (portraitHero ? "aspect-[2/3]" : "aspect-square"),
-              )}
-              style={storeImageAspectStyle(config.heroSectionAspect)}
-            >
-              <StoreImage
-                src={heroImageSrc}
-                alt={config.heroSectionImageAlt ?? config.heroImageAlt}
-                fill
-                variant="hero"
-                sizes={STORE_IMAGE_SIZES.hero}
-                priority
-                onError={() => { if (!imgError) setImgError(true); }}
-              />
-            </div>
+            <StoreImageFrame
+              src={heroImageSrc}
+              alt={config.heroSectionImageAlt ?? config.heroImageAlt}
+              aspect={config.heroSectionAspect}
+              className="rounded-2xl md:shadow-md"
+              variant="hero"
+              priority
+              sizes={STORE_IMAGE_SIZES.hero}
+            />
 
             <div className="space-y-3 md:space-y-4 lg:sticky lg:top-[4.25rem]">
               <div className="flex items-center gap-2 flex-wrap">
@@ -412,27 +381,13 @@ export function ProductPageClient({
           </div>
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start max-w-4xl mx-auto">
             <div className="card overflow-hidden border border-brand-border">
-              <div
-                className={cn(
-                  beforeAfterFrameClass(),
-                  !config.beforeSectionAspect &&
-                    (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
-                )}
-                style={storeImageAspectStyle(
-                  config.beforeSectionAspect ??
-                    (config.beforeSectionImage ? "717/1024" : undefined),
-                )}
-              >
-                <StoreImage
-                  src={config.beforeSectionImage ?? productImageSrc}
-                  alt={config.beforeSectionImageAlt ?? config.beforeLabel}
-                  fill
-                  sizes={STORE_IMAGE_SIZES.section}
-                  variant="default"
-                  className={beforeAfterImageClass(true)}
-                  loading="lazy"
-                />
-              </div>
+              <StoreImageFrame
+                src={config.beforeSectionImage ?? productImageSrc}
+                alt={config.beforeSectionImageAlt ?? config.beforeLabel}
+                aspect={config.beforeSectionAspect}
+                imageClassName={beforeAfterImageClass(true)}
+                sizes={STORE_IMAGE_SIZES.section}
+              />
               <div className="p-4 text-center bg-white">
                 <span className="text-xs font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">
                   قبل
@@ -441,27 +396,13 @@ export function ProductPageClient({
               </div>
             </div>
             <div className="card overflow-hidden border-2 border-brand-trust/40 shadow-md">
-              <div
-                className={cn(
-                  beforeAfterFrameClass(),
-                  !config.afterSectionAspect &&
-                    (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
-                )}
-                style={storeImageAspectStyle(
-                  config.afterSectionAspect ??
-                    (config.afterSectionImage ? "898/1024" : undefined),
-                )}
-              >
-                <StoreImage
-                  src={config.afterSectionImage ?? productImageSrc}
-                  alt={config.afterSectionImageAlt ?? config.afterLabel}
-                  fill
-                  sizes={STORE_IMAGE_SIZES.section}
-                  variant="default"
-                  className={beforeAfterImageClass()}
-                  loading="lazy"
-                />
-              </div>
+              <StoreImageFrame
+                src={config.afterSectionImage ?? productImageSrc}
+                alt={config.afterSectionImageAlt ?? config.afterLabel}
+                aspect={config.afterSectionAspect}
+                imageClassName={beforeAfterImageClass()}
+                sizes={STORE_IMAGE_SIZES.section}
+              />
               <div className="p-4 text-center bg-brand-surface">
                 <span className="text-xs font-bold text-white bg-brand-trust px-2 py-0.5 rounded">
                   بعد

@@ -1,12 +1,14 @@
-/** Full image visible inside frame — no crop */
+/** Intrinsic layout — frame matches image pixels, no stretch */
+export const STORE_IMAGE_INTRINSIC_CLASS =
+  "w-full h-auto max-w-full block" as const;
+
+/** Full image inside a fixed-ratio box (fallback when dimensions unknown) */
 export const STORE_IMAGE_CONTAIN_CLASS =
   "object-contain object-center w-full h-full" as const;
 
-/** Edge-to-edge crop fill (use only when explicitly requested) */
 export const STORE_IMAGE_COVER_CLASS =
   "object-cover object-center w-full h-full" as const;
 
-/** Full viewport width — no downscale hint on mobile/tablet/desktop */
 export const STORE_IMAGE_SIZES = {
   hero: "100vw",
   section: "100vw",
@@ -15,18 +17,62 @@ export const STORE_IMAGE_SIZES = {
   tiny: "240px",
 } as const;
 
-/** Tall frames so large/portrait photos are not squeezed (mobile + desktop) */
+/** Card thumbnails only — heroes/sections use intrinsic or config aspect */
 export const STORE_IMAGE_FRAME = {
-  cardMinHeight: "min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]",
-  heroMinHeight: "min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] xl:min-h-[560px]",
-  sectionMinHeight: "min-h-[320px] sm:min-h-[400px] lg:min-h-[480px] xl:min-h-[520px]",
-  reviewMinHeight: "min-h-[360px] sm:min-h-[420px] lg:min-h-[480px]",
+  cardMinHeight: "min-h-[220px] sm:min-h-[260px]",
 } as const;
 
-/** Apply config aspect ratio on section/hero frames */
+/** Known source dimensions — frame follows natural aspect (no letterboxing) */
+export const STORE_IMAGE_INTRINSIC: Record<
+  string,
+  { width: number; height: number }
+> = {
+  "/images/hero/saudi-family.png": { width: 1024, height: 950 },
+  "/images/products/smart-stackable-cabinet-couple-hero.png": {
+    width: 884,
+    height: 1015,
+  },
+  "/images/products/smart-stackable-cabinet-chaos.png": {
+    width: 1024,
+    height: 682,
+  },
+  "/images/products/smart-stackable-cabinet-assembly.png": {
+    width: 960,
+    height: 1023,
+  },
+  "/images/products/smart-stackable-cabinet-woman.png": {
+    width: 960,
+    height: 1007,
+  },
+  "/images/products/smart-stackable-cabinet-laundry-sink.png": {
+    width: 898,
+    height: 1024,
+  },
+  "/images/products/smart-stackable-cabinet-laundry-mess.png": {
+    width: 717,
+    height: 1024,
+  },
+};
+
+export function stripImagePath(src: string): string {
+  return src.split("?")[0];
+}
+
+export function getImageIntrinsic(
+  src: string,
+): { width: number; height: number } | null {
+  return STORE_IMAGE_INTRINSIC[stripImagePath(src)] ?? null;
+}
+
 export function storeImageAspectStyle(
   aspect?: string,
 ): { aspectRatio: string } | undefined {
   if (!aspect) return undefined;
-  return { aspectRatio: aspect.includes("/") ? aspect.replace("/", " / ") : aspect };
+  return {
+    aspectRatio: aspect.includes("/") ? aspect.replace("/", " / ") : aspect,
+  };
+}
+
+export function aspectFromDimensions(width: number, height: number): string {
+  return `${width}/${height}`;
 }

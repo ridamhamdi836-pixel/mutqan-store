@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { StoreImage } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
+import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
@@ -113,17 +113,14 @@ export default function HomePage() {
 
             {/* Image Column */}
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
-              <div className={cn("relative aspect-[3/4] md:aspect-square rounded-2xl overflow-hidden md:shadow-xl border-4 border-white bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight)}>
-                <StoreImage
-                  src="/images/hero/saudi-family.png"
-                  alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
-                  fill
-                  variant="hero"
-                  priority
-                  sizes={STORE_IMAGE_SIZES.hero}
-                />
-                {/* no overlay */}
-              </div>
+              <StoreImageFrame
+                src="/images/hero/saudi-family.png"
+                alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
+                className="rounded-2xl md:shadow-xl border-4 border-white"
+                variant="hero"
+                priority
+                sizes={STORE_IMAGE_SIZES.hero}
+              />
 
               {/* Floating Social Proof — overlay on hero (mobile + desktop) */}
               <div className="absolute -bottom-4 start-2 md:-bottom-5 md:-start-6 z-10 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-3 md:animate-float">
