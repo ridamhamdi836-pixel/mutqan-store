@@ -6,17 +6,27 @@ export const STORE_IMAGE_CONTAIN_CLASS =
 export const STORE_IMAGE_COVER_CLASS =
   "object-cover object-center w-full h-full" as const;
 
-/** Request native resolution on retina / large screens (Next Image `sizes`) */
+/** Full viewport width — no downscale hint on mobile/tablet/desktop */
 export const STORE_IMAGE_SIZES = {
-  hero: "(max-width: 768px) 100vw, (max-width: 1536px) 50vw, 2560px",
-  section: "(max-width: 768px) 100vw, (max-width: 1536px) 50vw, 1920px",
-  card: "(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 1200px",
-  thumbnail: "320px",
-  tiny: "160px",
+  hero: "100vw",
+  section: "100vw",
+  card: "(max-width: 1280px) 100vw, 1200px",
+  thumbnail: "480px",
+  tiny: "240px",
 } as const;
 
-/** Minimum frame heights so large portraits are not squeezed on mobile */
+/** Tall frames so large/portrait photos are not squeezed (mobile + desktop) */
 export const STORE_IMAGE_FRAME = {
-  cardMinHeight: "min-h-[220px] sm:min-h-[260px]",
-  heroMinHeight: "min-h-[280px] sm:min-h-[360px] md:min-h-0",
+  cardMinHeight: "min-h-[280px] sm:min-h-[340px] lg:min-h-[380px]",
+  heroMinHeight: "min-h-[360px] sm:min-h-[440px] lg:min-h-[520px] xl:min-h-[560px]",
+  sectionMinHeight: "min-h-[320px] sm:min-h-[400px] lg:min-h-[480px] xl:min-h-[520px]",
+  reviewMinHeight: "min-h-[360px] sm:min-h-[420px] lg:min-h-[480px]",
 } as const;
+
+/** Apply config aspect ratio on section/hero frames */
+export function storeImageAspectStyle(
+  aspect?: string,
+): { aspectRatio: string } | undefined {
+  if (!aspect) return undefined;
+  return { aspectRatio: aspect.includes("/") ? aspect.replace("/", " / ") : aspect };
+}

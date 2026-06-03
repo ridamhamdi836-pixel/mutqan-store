@@ -19,7 +19,7 @@ import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/lib/use-media-query";
-import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME, storeImageAspectStyle } from "@/lib/image-display";
 
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
@@ -28,7 +28,10 @@ function beforeAfterImageClass(muted?: boolean): string {
 }
 
 function beforeAfterFrameClass(): string {
-  return "relative bg-brand-beige w-full overflow-hidden";
+  return cn(
+    "relative bg-brand-beige w-full overflow-hidden",
+    STORE_IMAGE_FRAME.sectionMinHeight,
+  );
 }
 
 function SectionImage({
@@ -48,17 +51,18 @@ function SectionImage({
     <div
       className={cn(
         "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full bg-brand-beige",
-        !aspect && cn("aspect-[4/3]", STORE_IMAGE_FRAME.heroMinHeight),
+        STORE_IMAGE_FRAME.sectionMinHeight,
+        !aspect && "aspect-[3/4]",
         className,
       )}
-      style={aspect ? { aspectRatio: aspect } : undefined}
+      style={storeImageAspectStyle(aspect)}
     >
       <StoreImage
         src={src}
         alt={alt}
         fill
         variant={priority ? "hero" : "default"}
-        sizes={priority ? STORE_IMAGE_SIZES.hero : STORE_IMAGE_SIZES.section}
+        sizes={STORE_IMAGE_SIZES.section}
         priority={priority}
         loading={priority ? undefined : "lazy"}
       />
@@ -248,19 +252,12 @@ export function ProductPageClient({
             <div
               ref={imageRef}
               className={cn(
-                "relative rounded-2xl overflow-hidden md:shadow-md",
-                portraitHero
-                  ? cn(
-                      "w-full bg-white",
-                      config.heroSectionImage ? STORE_IMAGE_FRAME.heroMinHeight : "aspect-[2/3]",
-                    )
-                  : cn("aspect-square w-full bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight),
+                "relative rounded-2xl overflow-hidden md:shadow-md w-full bg-brand-beige",
+                STORE_IMAGE_FRAME.heroMinHeight,
+                !config.heroSectionAspect &&
+                  (portraitHero ? "aspect-[2/3]" : "aspect-square"),
               )}
-              style={
-                config.heroSectionImage
-                  ? { aspectRatio: config.heroSectionAspect ?? "3/4" }
-                  : undefined
-              }
+              style={storeImageAspectStyle(config.heroSectionAspect)}
             >
               <StoreImage
                 src={heroImageSrc}
@@ -437,11 +434,10 @@ export function ProductPageClient({
                   !config.beforeSectionAspect &&
                     (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
                 )}
-                style={
-                  config.beforeSectionImage && config.beforeSectionAspect
-                    ? { aspectRatio: config.beforeSectionAspect }
-                    : undefined
-                }
+                style={storeImageAspectStyle(
+                  config.beforeSectionAspect ??
+                    (config.beforeSectionImage ? "717/1024" : undefined),
+                )}
               >
                 <StoreImage
                   src={config.beforeSectionImage ?? productImageSrc}
@@ -467,11 +463,10 @@ export function ProductPageClient({
                   !config.afterSectionAspect &&
                     (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
                 )}
-                style={
-                  config.afterSectionImage && config.afterSectionAspect
-                    ? { aspectRatio: config.afterSectionAspect }
-                    : undefined
-                }
+                style={storeImageAspectStyle(
+                  config.afterSectionAspect ??
+                    (config.afterSectionImage ? "898/1024" : undefined),
+                )}
               >
                 <StoreImage
                   src={config.afterSectionImage ?? productImageSrc}

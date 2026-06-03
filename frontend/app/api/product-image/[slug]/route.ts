@@ -37,23 +37,11 @@ export async function GET(
   }
 
   const productsDir = path.join(process.cwd(), "public", "images", "products");
-  const webpFile = imageFile.replace(/\.(png|jpe?g)$/i, ".webp");
-  const webpPath = path.join(productsDir, webpFile);
-  const legacyPath = path.join(productsDir, imageFile);
-
-  let filePath = legacyPath;
-  let servedName = imageFile;
-  try {
-    await readFile(webpPath);
-    filePath = webpPath;
-    servedName = webpFile;
-  } catch {
-    filePath = legacyPath;
-  }
+  const filePath = path.join(productsDir, imageFile);
 
   try {
     const buffer = await readFile(filePath);
-    const ext = path.extname(servedName).toLowerCase();
+    const ext = path.extname(imageFile).toLowerCase();
 
     return new NextResponse(buffer, {
       status: 200,

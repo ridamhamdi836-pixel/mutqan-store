@@ -113,7 +113,7 @@ export default function HomePage() {
 
             {/* Image Column */}
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
-              <div className={cn("aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden md:shadow-xl border-4 border-white bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight)}>
+              <div className={cn("relative aspect-[3/4] md:aspect-square rounded-2xl overflow-hidden md:shadow-xl border-4 border-white bg-brand-beige", STORE_IMAGE_FRAME.heroMinHeight)}>
                 <StoreImage
                   src="/images/hero/saudi-family.png"
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"

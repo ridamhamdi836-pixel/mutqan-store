@@ -5,7 +5,7 @@ import {
 } from "@/lib/image-display";
 import { cn } from "@/lib/utils";
 
-/** Strip ?v= cache-bust; Next/Image optimizer uses the file path only */
+/** Strip ?v= cache-bust; Next/Image uses the file path only */
 export function stripImageQuery(src: string): string {
   return src.split("?")[0];
 }
@@ -17,19 +17,13 @@ type StoreImageProps = Omit<ImageProps, "quality"> & {
   fit?: "contain" | "cover";
 };
 
-function defaultQuality(variant: StoreImageProps["variant"]): number {
-  if (variant === "thumbnail") return 95;
-  if (variant === "hero") return 100;
+function defaultQuality(): number {
   return 100;
 }
 
-function isStoreStaticAsset(src: ImageProps["src"]): boolean {
-  return typeof src === "string" && src.startsWith("/images/");
-}
-
 /**
- * Store images: serve originals from /images/ without re-encoding or WebP swap.
- * Default fit is contain so frames show the full photo clearly.
+ * All store images: serve files as-is (no Next.js re-encode, no WebP swap).
+ * Default fit is contain — full photo visible inside the frame.
  */
 export function StoreImage({
   quality,
@@ -46,10 +40,7 @@ export function StoreImage({
   const normalizedSrc =
     typeof src === "string" ? stripImageQuery(src) : src;
 
-  const useOriginal =
-    unoptimizedProp ?? isStoreStaticAsset(normalizedSrc);
-
-  const resolvedQuality = quality ?? defaultQuality(variant);
+  const resolvedQuality = quality ?? defaultQuality();
   const resolvedFetchPriority =
     fetchPriority ?? (priority ? "high" : variant === "thumbnail" ? "low" : "auto");
 
@@ -57,7 +48,7 @@ export function StoreImage({
     <Image
       src={normalizedSrc}
       quality={resolvedQuality}
-      unoptimized={useOriginal}
+      unoptimized={unoptimizedProp ?? true}
       priority={priority}
       fetchPriority={resolvedFetchPriority}
       loading={loading ?? (priority ? undefined : "lazy")}

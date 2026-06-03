@@ -1,7 +1,7 @@
 import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME, storeImageAspectStyle } from "@/lib/image-display";
 
 interface ReviewCardProps {
   name: string;
@@ -29,8 +29,8 @@ export function ReviewCard({
     <article className={cn("card overflow-hidden flex flex-col w-full", !photo && "self-start")}>
       {photo && (
         <div
-          className="relative w-full bg-brand-beige"
-          style={{ aspectRatio: photoAspect ?? "3/4" }}
+          className={cn("relative w-full bg-brand-beige", STORE_IMAGE_FRAME.reviewMinHeight)}
+          style={storeImageAspectStyle(photoAspect ?? "3/4")}
         >
           <StoreImage
             src={photo}
