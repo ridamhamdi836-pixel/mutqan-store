@@ -255,7 +255,7 @@ async function saveLogo(sourcePath, postProcess, filename, fringeOpts = {}) {
   return sharp(path.join(BRAND_DIR, filename)).metadata();
 }
 
-/** Clean white-background header asset (user-provided square logo) */
+/** Header logo: trim empty canvas, transparent white, scale for wide mark (~1.75:1) */
 async function exportHeaderLogo() {
   const input = await readFile(SOURCE_HEADER);
   const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
@@ -274,7 +274,7 @@ async function exportHeaderLogo() {
   const outPath = path.join(BRAND_DIR, "mutqan-logo.png");
   await sharp(out, { raw: { width: w, height: h, channels: 4 } })
     .trim({ threshold: 1 })
-    .resize({ height: 112 })
+    .resize({ width: 320, withoutEnlargement: false })
     .png({ compressionLevel: 9 })
     .toFile(outPath);
   return sharp(outPath).metadata();
