@@ -315,15 +315,6 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 ) : null}
               </div>
 
-              <button
-                type="button"
-                onClick={scrollToOffers}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                {PRODUCT_PRIMARY_CTA}
-              </button>
-
               <div
                 id="bundle-section"
                 ref={bundleRef}
@@ -339,10 +330,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="w-full min-h-[48px] rounded-2xl text-sm md:text-base font-bold flex items-center justify-center gap-2 border-2 border-brand-bronze text-brand-bronze bg-white hover:bg-brand-bronze/5 transition-colors"
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
               >
                 <ShoppingBag className="w-5 h-5" />
-                أضف للسلة · {selectedBundle.price_sar} ر.س
+                {PRODUCT_PRIMARY_CTA}
               </button>
 
               <ProductTrustStrip variant="hero" />
