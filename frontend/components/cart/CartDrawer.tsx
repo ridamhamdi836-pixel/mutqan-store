@@ -11,6 +11,7 @@ import { CrossSellCard } from "./CrossSellCard";
 import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { getProductCardImageSrc } from "@/lib/product-image";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
@@ -22,8 +23,7 @@ function CartItemImage({ slug, name }: { slug: string; name: string }) {
           alt={name}
           fill
           variant="thumbnail"
-          sizes="80px"
-          className="object-cover"
+          sizes={STORE_IMAGE_SIZES.thumbnail}
           onError={() => setErr(true)}
         />
       ) : (

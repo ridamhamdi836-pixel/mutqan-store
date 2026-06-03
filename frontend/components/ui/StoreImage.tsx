@@ -1,4 +1,6 @@
 import Image, { type ImageProps } from "next/image";
+import { STORE_IMAGE_FILL_CLASS } from "@/lib/image-display";
+import { cn } from "@/lib/utils";
 
 /** Strip ?v= cache-bust; Next/Image optimizer uses the file path only */
 export function stripImageQuery(src: string): string {
@@ -16,23 +18,23 @@ export function preferWebpSrc(src: string): string {
 
 type StoreImageProps = Omit<ImageProps, "quality"> & {
   quality?: number;
-  /** Smaller files for thumbnails (cart, avatars) */
   variant?: "default" | "thumbnail" | "hero";
 };
 
 function defaultQuality(variant: StoreImageProps["variant"], priority?: boolean): number {
-  if (variant === "thumbnail") return 48;
-  if (variant === "hero") return priority ? 72 : 65;
-  return priority ? 68 : 52;
+  if (variant === "thumbnail") return 72;
+  if (variant === "hero") return priority ? 92 : 88;
+  return priority ? 88 : 85;
 }
 
 /**
- * Store images: WebP sources + Next.js responsive widths (AVIF/WebP delivery).
+ * High-quality store images with consistent cover fill inside frames.
  */
 export function StoreImage({
   quality,
   loading,
   src,
+  className,
   unoptimized: unoptimizedProp,
   variant = "default",
   priority,
@@ -58,6 +60,7 @@ export function StoreImage({
       fetchPriority={resolvedFetchPriority}
       loading={loading ?? (priority ? undefined : "lazy")}
       decoding="async"
+      className={cn(STORE_IMAGE_FILL_CLASS, className)}
       {...props}
     />
   );

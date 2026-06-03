@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   images: {
-    formats: ["image/webp"],
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [48, 64, 96, 128, 256, 384, 512],
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2560],
+    imageSizes: [48, 64, 96, 128, 256, 384, 512, 640, 960],
     minimumCacheTTL: 60 * 60 * 24 * 90,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },

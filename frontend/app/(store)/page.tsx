@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
@@ -117,9 +118,8 @@ export default function HomePage() {
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
                   fill
                   variant="hero"
-                  className="object-cover object-center"
                   priority
-                  sizes="(max-width: 768px) 100vw, 560px"
+                  sizes={STORE_IMAGE_SIZES.hero}
                 />
                 {/* no overlay */}
               </div>
@@ -134,8 +134,7 @@ export default function HomePage() {
                         alt="عميل سعيد"
                         fill
                         variant="thumbnail"
-                        sizes="36px"
-                        className="object-cover"
+                        sizes={STORE_IMAGE_SIZES.tiny}
                       />
                     </div>
                   ))}

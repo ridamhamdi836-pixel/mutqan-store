@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ShoppingBag, Clock, Star, Flame, Truck, ShieldCheck, Gift } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { CATALOG } from "@/config/catalog";
@@ -263,8 +264,8 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
                       src={product.image}
                       alt={product.name_ar}
                       fill
-                      sizes="60px"
-                      className="object-cover"
+                      sizes={STORE_IMAGE_SIZES.tiny}
+                      variant="thumbnail"
                       onError={() => handleImgError(product.slug)}
                     />
                   </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct } from "@/config/catalog";
@@ -46,8 +47,8 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
             src={productImageSrc}
             alt={catalog.name_ar}
             fill
-            sizes="(max-width: 420px) 100vw, 400px"
-            className="object-cover"
+            sizes={STORE_IMAGE_SIZES.card}
+            variant="thumbnail"
             onError={() => setImgError(true)}
           />
         ) : (

@@ -19,27 +19,16 @@ import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/lib/use-media-query";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
-function isPortraitAspect(aspect?: string): boolean {
-  if (!aspect) return false;
-  const [w, h] = aspect.split("/").map(Number);
-  return w > 0 && h > 0 && w < h;
+function beforeAfterImageClass(muted?: boolean): string {
+  return cn(muted && "opacity-90 grayscale-[20%]");
 }
 
-function beforeAfterImageClass(aspect?: string, muted?: boolean): string {
-  return cn(
-    isPortraitAspect(aspect) ? "object-contain object-center" : "object-cover object-center",
-    muted && "opacity-90 grayscale-[20%]",
-  );
-}
-
-function beforeAfterFrameClass(aspect?: string): string {
-  return cn(
-    "relative bg-brand-beige w-full",
-    isPortraitAspect(aspect) && "mx-auto max-w-[22rem]",
-  );
+function beforeAfterFrameClass(): string {
+  return "relative bg-brand-beige w-full overflow-hidden";
 }
 
 function SectionImage({
@@ -69,8 +58,7 @@ function SectionImage({
         alt={alt}
         fill
         variant={priority ? "hero" : "default"}
-        sizes={priority ? "(max-width: 768px) 100vw, 520px" : "(max-width: 768px) 92vw, 480px"}
-        className="object-cover object-center"
+        sizes={priority ? STORE_IMAGE_SIZES.hero : STORE_IMAGE_SIZES.section}
         priority={priority}
         loading={priority ? undefined : "lazy"}
       />
@@ -237,8 +225,7 @@ export function ProductPageClient({
               alt={product.name_ar}
               fill
               variant="thumbnail"
-              sizes="40px"
-              className="object-cover"
+              sizes={STORE_IMAGE_SIZES.tiny}
               onError={() => { if (!imgError) setImgError(true); }}
             />
           </div>
@@ -280,12 +267,7 @@ export function ProductPageClient({
                 alt={config.heroSectionImageAlt ?? config.heroImageAlt}
                 fill
                 variant="hero"
-                sizes="(max-width: 768px) 100vw, 520px"
-                className={cn(
-                  config.heroSectionImage || !portraitHero
-                    ? "object-cover object-center"
-                    : "object-contain p-2 md:p-4",
-                )}
+                sizes={STORE_IMAGE_SIZES.hero}
                 priority
                 onError={() => { if (!imgError) setImgError(true); }}
               />
@@ -451,7 +433,7 @@ export function ProductPageClient({
             <div className="card overflow-hidden border border-brand-border">
               <div
                 className={cn(
-                  beforeAfterFrameClass(config.beforeSectionAspect),
+                  beforeAfterFrameClass(),
                   !config.beforeSectionAspect &&
                     (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
                 )}
@@ -465,8 +447,9 @@ export function ProductPageClient({
                   src={config.beforeSectionImage ?? productImageSrc}
                   alt={config.beforeSectionImageAlt ?? config.beforeLabel}
                   fill
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                  className={beforeAfterImageClass(config.beforeSectionAspect, true)}
+                  sizes={STORE_IMAGE_SIZES.section}
+                  variant="default"
+                  className={beforeAfterImageClass(true)}
                   loading="lazy"
                 />
               </div>
@@ -480,7 +463,7 @@ export function ProductPageClient({
             <div className="card overflow-hidden border-2 border-brand-trust/40 shadow-md">
               <div
                 className={cn(
-                  beforeAfterFrameClass(config.afterSectionAspect),
+                  beforeAfterFrameClass(),
                   !config.afterSectionAspect &&
                     (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
                 )}
@@ -494,8 +477,9 @@ export function ProductPageClient({
                   src={config.afterSectionImage ?? productImageSrc}
                   alt={config.afterSectionImageAlt ?? config.afterLabel}
                   fill
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                  className={beforeAfterImageClass(config.afterSectionAspect)}
+                  sizes={STORE_IMAGE_SIZES.section}
+                  variant="default"
+                  className={beforeAfterImageClass()}
                   loading="lazy"
                 />
               </div>

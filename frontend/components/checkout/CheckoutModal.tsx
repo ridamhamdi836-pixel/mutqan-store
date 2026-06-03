@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { X, Loader2, ShieldCheck, Clock, Phone, CreditCard, CheckCircle, Star, Truck } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { useCart } from "@/providers/cart-provider";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
@@ -27,8 +28,8 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
         src={getProductCardImageSrc(slug)}
         alt={name}
         fill
-        sizes="56px"
-        className="object-cover"
+        sizes={STORE_IMAGE_SIZES.thumbnail}
+        variant="thumbnail"
         onError={() => { if (!err) setErr(true); }}
       />
     </div>

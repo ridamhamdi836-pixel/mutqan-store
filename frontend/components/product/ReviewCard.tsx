@@ -1,6 +1,7 @@
 import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 interface ReviewCardProps {
   name: string;
@@ -35,8 +36,8 @@ export function ReviewCard({
             src={photo}
             alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover object-center"
+            sizes={STORE_IMAGE_SIZES.section}
+            variant="default"
             loading="lazy"
           />
         </div>

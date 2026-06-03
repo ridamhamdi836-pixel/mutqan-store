@@ -6,6 +6,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { Star } from "lucide-react";
 import type { Product } from "@/types";
 import { getProductCardImageSrc } from "@/lib/product-image";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 interface ProductCardProps {
   product: Product;
@@ -33,8 +34,8 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={product.name_ar}
             fill
             variant="thumbnail"
-            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 280px"
-            className="object-cover md:group-hover:scale-[1.02] md:transition-transform md:duration-300"
+            sizes={STORE_IMAGE_SIZES.card}
+            className="md:group-hover:scale-[1.02] md:transition-transform md:duration-300"
             onError={() => setImgError(true)}
           />
         ) : (

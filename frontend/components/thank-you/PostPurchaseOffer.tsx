@@ -12,6 +12,7 @@ import {
   Truck,
 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { useCountdown } from "@/lib/use-countdown";
 import {
@@ -349,8 +350,8 @@ function UpsellProductRow({
               src={product.image}
               alt={product.name_ar}
               fill
-              sizes="96px"
-              className="object-cover md:group-hover:scale-[1.02] transition-transform duration-200"
+              sizes={STORE_IMAGE_SIZES.thumbnail}
+              className="md:group-hover:scale-[1.02] md:transition-transform md:duration-200"
             />
             {product.isBestseller ? (
               <span className="absolute top-1 start-1 text-[9px] font-bold bg-brand-bronze text-white px-1.5 py-0.5 rounded shadow-sm">

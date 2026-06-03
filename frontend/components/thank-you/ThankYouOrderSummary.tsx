@@ -1,6 +1,7 @@
 "use client";
 
 import { StoreImage } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { getProductMainImageSrc } from "@/lib/product-image";
 import type { LastOrderLineItem } from "@/lib/last-order-session";
@@ -72,8 +73,8 @@ export function ThankYouOrderSummary({
                   src={getProductMainImageSrc(item.productSlug)}
                   alt={item.productNameAr}
                   fill
-                  sizes="64px"
-                  className="object-cover"
+                  sizes={STORE_IMAGE_SIZES.thumbnail}
+                  variant="thumbnail"
                 />
               </div>
               <div className="flex-1 min-w-0">
