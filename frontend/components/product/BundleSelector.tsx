@@ -103,11 +103,11 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
                     {fullLabel}
                   </p>
                   {savings && savings.sar > 0 ? (
-                    <p className="text-xs md:text-sm font-bold text-red-600">
+                    <p className="text-xs md:text-sm font-bold text-emerald-700">
                       وفّر {savings.sar} ر.س ({savings.percent}%)
                     </p>
                   ) : bundle.savings_label_ar ? (
-                    <p className="text-xs font-bold text-brand-bronze">
+                    <p className="text-xs md:text-sm font-bold text-emerald-700">
                       {bundle.savings_label_ar}
                     </p>
                   ) : null}

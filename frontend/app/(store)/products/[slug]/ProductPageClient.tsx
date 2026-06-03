@@ -304,7 +304,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                   </span>
                 ) : null}
                 {savingsVsCompare ? (
-                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
                     وفّر {savingsVsCompare} ر.س
                   </span>
                 ) : null}
