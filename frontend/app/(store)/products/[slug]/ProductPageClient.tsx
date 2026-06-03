@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
+import { StoreImage } from "@/components/ui/StoreImage";
 import Link from "next/link";
-import { Star, ShoppingBag, CheckCircle2 } from "lucide-react";
+import { Star, ShoppingBag, CheckCircle2, Truck, CreditCard, ShieldCheck, ThumbsUp, ChevronDown } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/providers/cart-provider";
 import { BundleSelector } from "@/components/product/BundleSelector";
@@ -10,28 +11,34 @@ import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { TrustBadges } from "@/components/trust/TrustBadges";
 import { ProductCard } from "@/components/commerce/ProductCard";
-import { ProductCodStrip } from "@/components/product/ProductCodStrip";
-import { ProductTrustChips } from "@/components/product/ProductTrustChips";
-import { ProductStatsRow } from "@/components/product/ProductStatsRow";
-import { StoreImage } from "@/components/ui/StoreImage";
-import { ProductMediaFrame } from "@/components/product/ProductMediaFrame";
-import { ProductSpecsSection } from "@/components/product/ProductSpecsSection";
-import { ProductFinalCta } from "@/components/product/ProductFinalCta";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
-import { mergeProductFaqs, DEFAULT_PAIN_HEADLINE } from "@/config/product-page";
-import { PRODUCT_SPECS } from "@/config/product-specs";
 import { cn } from "@/lib/utils";
 
+/** Tall product photos need contain + portrait frame to avoid cropping */
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
 function isPortraitAspect(aspect?: string): boolean {
   if (!aspect) return false;
   const [w, h] = aspect.split("/").map(Number);
   return w > 0 && h > 0 && w < h;
+}
+
+function beforeAfterImageClass(aspect?: string, muted?: boolean): string {
+  return cn(
+    isPortraitAspect(aspect) ? "object-contain object-center" : "object-cover object-center",
+    muted && "opacity-90 grayscale-[20%]",
+  );
+}
+
+function beforeAfterFrameClass(aspect?: string): string {
+  return cn(
+    "relative bg-brand-beige w-full",
+    isPortraitAspect(aspect) && "mx-auto max-w-[22rem]",
+  );
 }
 
 interface ProductPageClientProps {
@@ -71,57 +78,46 @@ interface ProductPageClientProps {
     afterLabel: string;
     howToUse: string[];
     crossSellSlugs: string[];
-    reviews: Array<{
-      name: string;
-      city: string;
-      rating: number;
-      text: string;
-      photo?: string;
-      photoAlt?: string;
-      photoAspect?: string;
-    }>;
+    reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string; photoAspect?: string }>;
     faqs: Array<{ question: string; answer: string }>;
   };
 }
 
 export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const { addItem, openCart } = useCart();
-  const defaultBundle =
-    product.bundles.find((b) => b.is_default) || product.bundles[0];
+  const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
+  const minBundle = [...product.bundles].sort((a, b) => a.price_sar - b.price_sar)[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
+  const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const buyBoxRef = useRef<HTMLDivElement>(null);
-
+  const imageRef = useRef<HTMLDivElement>(null);
+  const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
-  const portraitHero =
-    PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
+  const portraitHero = PORTRAIT_HERO_SLUGS.has(product.slug) || !!config.heroSectionImage;
 
-  const reviewCount =
-    1050 +
-    (product.slug.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) % 950);
+  // Generate deterministic random review count above 1000 based on product slug
+  const reviewCount = 1050 + (product.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
-  const featuredReview =
-    config.reviews.find((r) => r.photo) ?? config.reviews[0];
-  const otherReviews = config.reviews.filter((r) => r !== featuredReview);
-  const faqs = useMemo(() => mergeProductFaqs(config.faqs), [config.faqs]);
-  const specs = PRODUCT_SPECS[product.slug];
-
-  const scrollToBuy = useCallback(() => {
-    const el = document.getElementById("product-heading");
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, []);
-
+  // Intersection Observer for sticky CTA
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => setShowSticky(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" },
+      ([entry]) => {
+        // Show sticky CTA when product image is out of view
+        setShowSticky(!entry.isIntersecting);
+      },
+      { threshold: 0, rootMargin: "-100px 0px 0px 0px" }
     );
-    if (buyBoxRef.current) observer.observe(buyBoxRef.current);
+    
+    if (imageRef.current) {
+      observer.observe(imageRef.current);
+    }
+    
     return () => observer.disconnect();
   }, []);
 
+  // Fire ViewContent on mount
   useEffect(() => {
     firePixelEvent({
       eventId: generateEventId("view_content"),
@@ -143,7 +139,12 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       priceSar: selectedBundle.price_sar,
       itemType: "main",
     });
-    trackStoreEvent({ event_type: "add_to_cart", product_slug: product.slug });
+
+    trackStoreEvent({
+      event_type: "add_to_cart",
+      product_slug: product.slug,
+    });
+
     firePixelEvent({
       eventId: generateEventId("add_to_cart"),
       eventName: "AddToCart",
@@ -154,6 +155,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       bundleId: selectedBundle.id,
       quantity: selectedBundle.quantity,
     });
+
     openCart();
   };
 
@@ -164,371 +166,484 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
-  const heroImageClass = cn(
-    config.heroSectionImage
-      ? isPortraitAspect(config.heroSectionAspect)
-        ? "object-contain object-center p-2 md:p-4"
-        : "object-cover object-center"
-      : portraitHero
-        ? "object-contain p-3 md:p-5"
-        : "object-cover object-center",
-  );
-
   return (
-    <div className="bg-brand-background pb-20 md:pb-8">
+    <div className="bg-brand-background pb-6">
+      {/* Sticky CTA - scrolls to bundle section */}
       <AnimatePresence>
         {showSticky && (
           <motion.div
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             exit={{ y: 100 }}
-            className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur-md border-t border-brand-border shadow-[0_-8px_30px_rgba(0,0,0,0.08)] p-3 md:pb-4 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+            transition={{ type: "tween", duration: 0.3 }}
+            className="fixed bottom-0 inset-x-0 z-40 bg-brand-surface/95 backdrop-blur-md border-t border-brand-border p-3 md:p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
           >
-            <div className="max-w-content mx-auto flex items-center gap-3">
-              <button
-                type="button"
-                onClick={scrollToBuy}
-                className="flex items-center gap-2 min-w-0 flex-1 text-start"
-              >
-                <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
+            <div className="max-w-content mx-auto flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
                   <StoreImage
                     src={mainImageSrc}
-                    alt=""
+                    alt={product.name_ar}
                     fill
-                    sizes="44px"
+                    sizes="40px"
                     className="object-cover"
+                    onError={() => { if (!imgError) setImgError(true); }}
                   />
                 </div>
-                <div className="min-w-0">
-                  <p className="font-bold text-sm text-brand-espresso truncate">
-                    {product.name_ar}
-                  </p>
-                  <p className="text-xs text-brand-muted">
-                    من {selectedBundle.price_sar} ر.س · COD
-                  </p>
+                <div>
+                  <p className="font-bold text-sm text-brand-espresso">{product.name_ar}</p>
+                  <p className="text-xs text-brand-muted">ابتداءً من {minBundle.price_sar} ر.س</p>
                 </div>
-              </button>
+              </div>
               <button
-                type="button"
-                onClick={handleAddToCart}
-                className="btn-primary shrink-0 px-5 py-3 text-sm font-bold shadow-lg"
+                onClick={() => bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+                className="btn-primary flex items-center gap-2 px-6 md:px-8 justify-center shadow-lg py-3"
               >
-                اطلب · {selectedBundle.price_sar} ر.س
+                <span className="font-bold text-sm md:text-base">اختر عرضك الآن</span>
               </button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 1 — Hero + buy box */}
-      <section className="page-x pt-4 md:pt-8 pb-8">
+      {/* Product Hero */}
+      <section className="page-x pt-4 md:pt-6 pb-6">
         <div className="max-w-content mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-            <div className="w-full">
-              <ProductMediaFrame
+          <div className="grid md:grid-cols-2 gap-10 items-start">
+            {/* Image */}
+            <div
+              ref={imageRef}
+              className={cn(
+                "relative rounded-2xl overflow-hidden shadow-md",
+                portraitHero
+                  ? cn(
+                      "w-full mx-auto md:mx-0",
+                      config.heroSectionImage ? "" : cn("aspect-[2/3]", "bg-white"),
+                    )
+                  : "aspect-square bg-brand-beige",
+              )}
+              style={
+                config.heroSectionImage
+                  ? { aspectRatio: config.heroSectionAspect ?? "3/4" }
+                  : undefined
+              }
+            >
+              <StoreImage
                 src={heroImageSrc}
                 alt={config.heroSectionImageAlt ?? config.heroImageAlt}
-                aspect={config.heroSectionAspect ?? (portraitHero ? "4/5" : "1/1")}
-                priority
-                imageClassName={heroImageClass}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className={cn(
-                  portraitHero && !config.heroSectionAspect && "!aspect-[4/5]",
+                  config.heroSectionImage
+                    ? isPortraitAspect(config.heroSectionAspect)
+                      ? "object-contain object-center"
+                      : "object-cover object-center"
+                    : portraitHero
+                      ? "object-contain p-3 md:p-5"
+                      : "object-cover hover:scale-105 transition-transform duration-500",
                 )}
+                priority
+                onError={() => { if (!imgError) setImgError(true); }}
               />
             </div>
 
-            <div ref={buyBoxRef} className="lg:sticky lg:top-20 space-y-5">
-              <nav className="text-xs text-brand-muted flex flex-wrap items-center gap-1.5">
-                <Link href="/" className="hover:text-brand-espresso">
-                  الرئيسية
-                </Link>
+            {/* Info */}
+            <div className="md:sticky md:top-24 space-y-6">
+              {/* Breadcrumb */}
+              <nav className="text-xs text-brand-muted flex items-center gap-1.5">
+                <Link href="/" className="hover:text-brand-espresso">الرئيسية</Link>
                 <span>/</span>
-                <Link href="/collections" className="hover:text-brand-espresso">
-                  المنتجات
-                </Link>
+                <Link href="/collections" className="hover:text-brand-espresso">المنتجات</Link>
+                <span>/</span>
+                <span className="text-brand-espresso font-medium">{product.name_ar}</span>
               </nav>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <div className="flex">
+              {/* Stars & Social Proof */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 text-amber-400 fill-amber-400"
-                    />
+                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
                   ))}
                 </div>
-                <span className="text-sm font-bold text-brand-espresso">
-                  {reviewCount.toLocaleString("ar-SA")}+ تقييم
-                </span>
-                <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-pill">
-                  طلبات نشطة اليوم
-                </span>
+                <span className="text-sm font-medium text-brand-espresso mr-1">(+{reviewCount.toLocaleString()} مراجعة موثقة)</span>
+                <span className="hidden sm:inline-block text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-bold">🔥 طلب عالي اليوم</span>
               </div>
 
-              <h1
-                id="product-heading"
-                className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-espresso leading-tight scroll-mt-20"
-              >
+              <h1 id="product-heading" className="text-3xl md:text-5xl font-extrabold text-brand-espresso leading-tight scroll-mt-24">
                 {product.name_ar}
               </h1>
 
-              <p className="text-base md:text-lg text-brand-muted leading-relaxed font-medium">
+              <p className="text-lg text-brand-muted leading-relaxed font-medium">
                 {config.shortPromise}
               </p>
 
-              <ProductTrustChips />
+              {/* Enhanced Trust Signals */}
+              <div className="bg-brand-surface p-4 rounded-xl border border-brand-bronze/20 flex flex-col gap-3">
+                <div className="flex items-center gap-3 text-sm font-bold text-brand-espresso">
+                  <ShieldCheck className="w-5 h-5 text-brand-trust" />
+                  ضمان ذهبي 30 يوم - استرجاع بدون أسئلة معقدة
+                </div>
+                <div className="flex items-center gap-3 text-sm font-medium text-brand-espresso">
+                  <CheckCircle2 className="w-5 h-5 text-brand-trust" />
+                  أكثر من +50,000 عائلة سعودية تثق في متقن
+                </div>
+              </div>
 
-              {featuredReview && (
-                <ReviewCard {...featuredReview} variant="compact" />
-              )}
-
-              <ProductCodStrip />
-
-              <div id="bundle-section" className="scroll-mt-24">
+              {/* Bundle Selector */}
+              <div ref={bundleRef} id="bundle-section" className="scroll-mt-24">
+                <p className="text-base font-bold text-brand-espresso mb-3">اختر الكمية المناسبة:</p>
                 <BundleSelector
                   bundles={product.bundles}
                   selectedId={selectedBundle.id}
-                  onSelect={setSelectedBundle}
+                  onSelect={(b) => setSelectedBundle(b)}
                 />
               </div>
 
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className="w-full h-14 md:h-[60px] rounded-2xl text-base md:text-lg font-extrabold flex items-center justify-center gap-2 bg-[#1B4DDB] hover:bg-[#1640B5] text-white shadow-lg shadow-[#1B4DDB]/20 active:scale-[0.98] transition-all"
-              >
-                <ShoppingBag className="w-5 h-5" />
-                اطلب الآن · {selectedBundle.price_sar} ر.س
-              </button>
-              <p className="text-center text-xs text-brand-muted font-medium">
-                بدون دفع أونلاين — نتصل لتأكيد العنوان قبل الشحن
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 2 — Trust (full) */}
-      <section className="page-x pb-10">
-        <div className="max-w-content mx-auto space-y-6">
-          <ProductStatsRow />
-          <div className="text-center">
-            <h2 className="text-xl font-bold text-brand-espresso mb-4">
-              تسوقي براحة — COD للسعودية
-            </h2>
-            <TrustBadges />
-          </div>
-        </div>
-      </section>
-
-      {/* 3 — Pain */}
-      <section className="page-x py-10 md:py-14 bg-white">
-        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <ProductMediaFrame
-            src={config.painSectionImage ?? productImageSrc}
-            alt={config.painSectionImageAlt ?? "المشكلة اليومية"}
-            aspect={config.painSectionAspect}
-            imageClassName="object-cover"
-          />
-          <div className="space-y-4 text-start">
-            <span className="text-xs font-bold text-red-600 bg-red-50 px-3 py-1 rounded-pill">
-              المشكلة
-            </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
-              {DEFAULT_PAIN_HEADLINE}
-            </h2>
-            <p className="text-brand-muted text-base md:text-lg leading-relaxed">
-              {config.problemStatement}
-            </p>
-            <ul className="space-y-2 text-sm font-medium text-brand-espresso">
-              <li className="flex gap-2">
-                <span className="text-red-500">●</span>
-                وقت ضايع كل يوم على فوضى صغيرة
-              </li>
-              <li className="flex gap-2">
-                <span className="text-red-500">●</span>
-                حلول معقدة ما تناسب روتين البيت
-              </li>
-              <li className="flex gap-2">
-                <span className="text-red-500">●</span>
-                تعب من منتجات وعودها طويلة
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* 4 — Solution + all benefits */}
-      <section className="page-x py-10 md:py-14 bg-brand-beige/40">
-        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-8 lg:gap-12 items-center">
-          <div className="space-y-4 text-start md:order-2">
-            <span className="text-xs font-bold text-brand-trust bg-brand-trust/10 px-3 py-1 rounded-pill">
-              الحل من متقن
-            </span>
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
-              {config.heroAngle}
-            </h2>
-            <p className="text-brand-muted leading-relaxed">
-              مصمم لبيت سعودي مشغول — تركيب بسيط ونتيجة تحسّينها من أول استخدام، مو بعد أسابيع.
-            </p>
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {config.benefits.map((benefit) => (
-                <li
-                  key={benefit}
-                  className="flex items-start gap-2 bg-white rounded-xl p-3 border border-brand-border/50"
+              {/* CTA */}
+              <div className="space-y-3 pt-2">
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-3 bg-[#1B4DDB] hover:bg-[#1640B5] text-white shadow-lg shadow-[#1B4DDB]/25 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-brand-trust shrink-0 mt-0.5" />
-                  <span className="text-sm font-bold text-brand-espresso">
-                    {benefit}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="md:order-1">
-            <ProductMediaFrame
-              src={config.solutionSectionImage ?? productImageSrc}
-              alt={config.solutionSectionImageAlt ?? "الحل"}
-              aspect={config.solutionSectionAspect}
-              imageClassName="object-cover"
-            />
+                  اطلب الآن · {selectedBundle.price_sar} ر.س
+                </button>
+                <p className="text-xs text-center text-brand-muted font-medium">
+                  الدفع عند الاستلام · بدون دفع أونلاين
+                </p>
+              </div>
+
+              {/* Payment chips */}
+              <div className="flex flex-wrap justify-center gap-4 pt-4 border-t border-brand-border/50">
+                {[
+                  { icon: CreditCard, label: "الدفع عند الاستلام متاح" },
+                  { icon: ShieldCheck, label: "تأكيد الطلب قبل الشحن" },
+                  { icon: ThumbsUp, label: "ضمان الرضا 100%" },
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-1.5 text-xs text-brand-muted font-bold">
+                    <item.icon className="w-4 h-4 text-brand-trust" />
+                    <span>{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 5 — Before / after */}
-      <section className="page-x py-10 md:py-14">
-        <div className="max-w-content mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-2">
-              الفرق من أول استخدام
-            </h2>
-            <p className="text-brand-muted">
-              مو وعد بعيد — ترتيب وراحة تحسّينها اليوم في بيتك.
-            </p>
+      {/* Trust Authority Bar */}
+      <div className="bg-brand-espresso text-brand-surface py-4 my-6">
+        <div className="max-w-content mx-auto page-x flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm font-bold text-center">
+          <div className="flex items-center gap-2">
+            <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+            <span>منتجات مختارة لبيوت الخليج</span>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto">
-            <div className="card overflow-hidden">
-              <ProductMediaFrame
-                src={config.beforeSectionImage ?? productImageSrc}
-                alt={config.beforeSectionImageAlt ?? config.beforeLabel}
-                aspect={config.beforeSectionAspect ?? "4/5"}
-                className="!min-h-[280px] md:!min-h-[340px] !rounded-b-none !border-b-0"
-                imageClassName="object-cover opacity-95"
-              />
-              <div className="p-4 text-center bg-white">
-                <span className="text-xs font-bold text-red-700 bg-red-50 px-3 py-1 rounded-pill">
-                  قبل
-                </span>
-                <p className="font-bold text-brand-muted mt-2">{config.beforeLabel}</p>
+          <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-brand-bronze"></div>
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-brand-trust" />
+            <span>ضمان ذهبي للاستبدال والاسترجاع</span>
+          </div>
+          <div className="hidden md:block w-1.5 h-1.5 rounded-full bg-brand-bronze"></div>
+          <div className="flex items-center gap-2">
+            <CreditCard className="w-5 h-5 text-brand-trust" />
+            <span>ادفع براحتك عند الاستلام</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Alternating Problem/Solution Feature Sections */}
+      <section className="section-pad page-x bg-white overflow-hidden">
+        <div className="max-w-content mx-auto space-y-16 md:space-y-24">
+          
+          {/* Section 1: The Pain Point (Image Left, Text Right) */}
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+            <div className="w-full md:w-1/2 order-1">
+              <div
+                className={cn(
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border bg-brand-beige w-full",
+                  !config.painSectionAspect && "aspect-[4/3]",
+                )}
+                style={
+                  config.painSectionImage && config.painSectionAspect
+                    ? { aspectRatio: config.painSectionAspect }
+                    : undefined
+                }
+              >
+                <StoreImage
+                  src={config.painSectionImage ?? productImageSrc}
+                  alt={config.painSectionImageAlt ?? "مشكلة الفوضى اليومية"}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className={cn(
+                    config.painSectionImage
+                      ? "object-cover object-center"
+                      : "object-cover opacity-80",
+                  )}
+                />
               </div>
             </div>
-            <div className="card overflow-hidden border-2 border-brand-trust/40 shadow-lg">
-              <div className="relative">
-                <ProductMediaFrame
-                  src={config.afterSectionImage ?? productImageSrc}
-                  alt={config.afterSectionImageAlt ?? config.afterLabel}
-                  aspect={config.afterSectionAspect ?? "4/5"}
-                  className="!min-h-[280px] md:!min-h-[340px] !rounded-b-none !border-b-0"
-                  imageClassName="object-cover"
-                />
-                <span className="absolute top-3 start-3 bg-brand-trust text-white text-xs font-bold px-3 py-1 rounded-pill">
-                  بعد متقن
-                </span>
-              </div>
-              <div className="p-4 text-center bg-brand-surface">
-                <p className="font-extrabold text-brand-espresso text-lg">
-                  {config.afterLabel}
+            <div className="w-full md:w-1/2 order-2 space-y-5 text-right">
+              <h2 className="text-3xl font-extrabold text-brand-espresso">
+                شعور الفوضى يسرق من راحتك ووقتك؟
+              </h2>
+              <p className="text-lg text-brand-muted leading-relaxed">
+                {config.problemStatement}
+              </p>
+              <div className="bg-red-50 p-4 rounded-xl border border-red-100 mt-4">
+                <p className="text-red-800 font-medium text-sm">
+                  نعلم أن ضيق الوقت وكثرة المهام في البيت السعودي تجعل الترتيب عبئاً يومياً مزعجاً. لكن ماذا لو كان الحل بسيطاً ولا يحتاج جهداً؟
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 6 — Specs */}
-      {specs && (
-        <ProductSpecsSection
-          title={specs.title}
-          lead={specs.lead}
-          items={specs.items}
-        />
-      )}
-
-      {/* 7 — How to use */}
-      <section className="page-x py-10 md:py-12 bg-brand-surface">
-        <div className="max-w-content mx-auto max-w-2xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-2">
-            جاهز من أول يوم
-          </h2>
-          <p className="text-center text-brand-muted mb-8">
-            خطوات بسيطة — بدون فني ولا تعقيد.
-          </p>
-          <ol className="space-y-3">
-            {config.howToUse.map((step, i) => (
-              <li
-                key={step}
-                className="flex gap-4 items-center card p-4 md:p-5"
+          {/* Section 2: The Solution (Image Right, Text Left) */}
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+            <div className="w-full md:w-1/2 order-1 md:order-2">
+              <div
+                className={cn(
+                  "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                  !config.solutionSectionAspect &&
+                    (config.solutionSectionImage ? "aspect-square" : "aspect-[4/3] bg-brand-beige"),
+                )}
+                style={
+                  config.solutionSectionImage && config.solutionSectionAspect
+                    ? { aspectRatio: config.solutionSectionAspect }
+                    : undefined
+                }
               >
-                <span className="w-10 h-10 rounded-full bg-brand-bronze text-white font-black flex items-center justify-center shrink-0">
-                  {i + 1}
-                </span>
-                <p className="font-bold text-brand-espresso">{step}</p>
-              </li>
-            ))}
-          </ol>
+                <StoreImage
+                  src={config.solutionSectionImage ?? productImageSrc}
+                  alt={config.solutionSectionImageAlt ?? "الحل العملي من متقن"}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className={cn(
+                    config.solutionSectionImage
+                      ? "object-cover object-center"
+                      : "object-cover",
+                  )}
+                />
+              </div>
+            </div>
+            <div className="w-full md:w-1/2 order-2 md:order-1 space-y-5 text-right">
+              <h2 className="text-3xl font-extrabold text-brand-espresso">
+                {config.heroAngle}
+              </h2>
+              <p className="text-lg text-brand-muted leading-relaxed">
+                وفرنا لك في متقن هذا المنتج ليكون حلك السحري. لن تعاني بعد اليوم، ستحصل على الراحة والترتيب الذي يستحقه بيتك.
+              </p>
+              <ul className="space-y-3 mt-4">
+                {config.benefits.slice(0, 3).map((benefit, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-6 h-6 text-brand-trust flex-shrink-0 mt-0.5" />
+                    <span className="text-base text-brand-espresso font-bold">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Section 3: More Benefits (Image Left, Text Right) */}
+          {config.benefits.length > 3 && (
+            <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
+              <div className="w-full md:w-1/2 order-1">
+                <div
+                  className={cn(
+                    "relative rounded-2xl overflow-hidden shadow-lg border border-brand-border w-full",
+                    !config.lifestyleSectionAspect &&
+                      (config.lifestyleSectionImage ? "aspect-[2/3]" : "aspect-[4/3] bg-brand-beige"),
+                  )}
+                  style={
+                    config.lifestyleSectionImage && config.lifestyleSectionAspect
+                      ? { aspectRatio: config.lifestyleSectionAspect }
+                      : undefined
+                  }
+                >
+                  <StoreImage
+                    src={config.lifestyleSectionImage ?? productImageSrc}
+                    alt={config.lifestyleSectionImageAlt ?? "مميزات إضافية"}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className={cn(
+                      config.lifestyleSectionImage
+                        ? "object-cover object-center"
+                        : "object-cover",
+                    )}
+                  />
+                </div>
+              </div>
+              <div className="w-full md:w-1/2 order-2 space-y-5 text-right">
+                <h2 className="text-3xl font-extrabold text-brand-espresso">
+                  مصمم خصيصاً ليناسب نمط حياتك
+                </h2>
+                <p className="text-lg text-brand-muted leading-relaxed">
+                  تفاصيل صغيرة تصنع فرقاً كبيراً في استخدامك اليومي. راعينا أعلى معايير الجودة لتجربة تدوم طويلاً.
+                </p>
+                <ul className="space-y-3 mt-4">
+                  {config.benefits.slice(3).map((benefit, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-6 h-6 text-brand-trust flex-shrink-0 mt-0.5" />
+                      <span className="text-base text-brand-espresso font-bold">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
         </div>
       </section>
 
-      {/* 8 — Reviews */}
-      <section className="page-x py-10 md:py-14 bg-white">
-        <div className="max-w-content mx-auto space-y-8">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-2">
-              عملاء من الرياض وجدة والدمام
-            </h2>
-            <p className="text-brand-muted">
-              تقييمات حقيقية — كثير منهم ردّوا على اتصال التأكيد واستلموا الطلب.
-            </p>
+      {/* Before/After with emotional touch */}
+      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
+        <div className="max-w-content mx-auto">
+          <div className="text-center mb-10 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
+            <p className="text-lg text-brand-muted">انتقل من الإزعاج والفوضى إلى الراحة التامة بخطوة واحدة بسيطة.</p>
           </div>
-          {featuredReview?.photo && (
-            <ReviewCard {...featuredReview} variant="featured" />
-          )}
-          <div className="grid md:grid-cols-2 gap-5">
-            {otherReviews.map((review, i) => (
+          <div className="grid md:grid-cols-2 gap-8 items-start max-w-4xl mx-auto">
+            <div className="card overflow-hidden shadow-md border border-brand-border hover:shadow-lg transition-shadow">
+              <div
+                className={cn(
+                  beforeAfterFrameClass(config.beforeSectionAspect),
+                  !config.beforeSectionAspect &&
+                    (config.beforeSectionImage ? "aspect-[717/1024]" : "aspect-[4/3]"),
+                )}
+                style={
+                  config.beforeSectionImage && config.beforeSectionAspect
+                    ? { aspectRatio: config.beforeSectionAspect }
+                    : undefined
+                }
+              >
+                <StoreImage
+                  src={config.beforeSectionImage ?? productImageSrc}
+                  alt={config.beforeSectionImageAlt ?? config.beforeLabel}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  className={beforeAfterImageClass(config.beforeSectionAspect, !!config.beforeSectionImage)}
+                />
+              </div>
+              <div className="px-5 pt-4 pb-3 flex flex-col items-center gap-2 bg-white text-center">
+                <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-bold">قبل الاستخدام</span>
+                <p className="text-base font-bold text-brand-muted">{config.beforeLabel}</p>
+              </div>
+            </div>
+            <div className="card overflow-hidden shadow-xl border-2 border-brand-trust/50 hover:shadow-2xl transition-shadow md:scale-[1.02] z-10">
+              <div
+                className={cn(
+                  beforeAfterFrameClass(config.afterSectionAspect),
+                  !config.afterSectionAspect &&
+                    (config.afterSectionImage ? "aspect-[898/1024]" : "aspect-[4/3]"),
+                )}
+                style={
+                  config.afterSectionImage && config.afterSectionAspect
+                    ? { aspectRatio: config.afterSectionAspect }
+                    : undefined
+                }
+              >
+                <StoreImage
+                  src={config.afterSectionImage ?? productImageSrc}
+                  alt={config.afterSectionImageAlt ?? config.afterLabel}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 45vw"
+                  className={beforeAfterImageClass(config.afterSectionAspect, false)}
+                />
+                <div className="absolute top-4 right-4 bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5 fill-current" /> النتيجة المذهلة
+                </div>
+              </div>
+              <div className="px-5 pt-4 pb-3 flex flex-col items-center gap-2 bg-brand-surface text-center">
+                <span className="bg-brand-trust text-white px-3 py-1 rounded-full text-xs font-bold">بعد استخدام متقن</span>
+                <p className="text-lg font-extrabold text-brand-espresso">{config.afterLabel}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How to Use */}
+      <section className="page-x pt-6 md:pt-8 pb-8 md:pb-10">
+        <div className="max-w-content mx-auto max-w-3xl">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">بساطة الاستخدام هي سرنا</h2>
+            <p className="text-lg text-brand-muted">لا حاجة لفنيين أو أدوات معقدة، يمكنك استخدامه بنفسك فور استلامه.</p>
+          </div>
+          <div className="grid gap-4">
+            {config.howToUse.map((step, i) => (
+              <div key={i} className="flex items-center gap-5 card p-5 hover:border-brand-bronze transition-colors">
+                <div className="w-12 h-12 rounded-full bg-brand-bronze text-white font-bold text-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                  {i + 1}
+                </div>
+                <p className="text-lg text-brand-espresso font-bold">{step}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Bundle CTA */}
+      <section className="py-16 page-x bg-brand-espresso relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+        <div className="max-w-content mx-auto max-w-xl text-center relative z-10">
+          <span className="inline-block bg-brand-bronze text-white text-xs font-bold px-3 py-1 rounded-full mb-4">الكمية محدودة جداً</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">اتخذ القرار لبيت أكثر راحة اليوم</h2>
+          <p className="text-brand-sand/90 text-lg mb-8">اطلب الآن، الدفع عند الاستلام والتأكيد خلال ساعات. لا تدع الفوضى تسرق راحتك بعد الآن.</p>
+          <button
+            onClick={handleAddToCart}
+            className="bg-brand-bronze text-white font-extrabold rounded-pill px-8 py-5 text-xl w-full hover:bg-brand-sand hover:text-brand-espresso transition-all flex items-center justify-center gap-3 shadow-2xl hover:scale-105"
+          >
+            <ShoppingBag className="w-6 h-6" />
+            أضف للسلة - {selectedBundle.price_sar} ر.س
+          </button>
+          <div className="flex items-center justify-center gap-4 mt-6 text-brand-sand/80 text-sm">
+            <div className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4"/> ضمان 30 يوم</div>
+            <div className="w-1 h-1 bg-brand-sand/50 rounded-full"></div>
+            <div className="flex items-center gap-1.5"><CreditCard className="w-4 h-4"/> دفع عند الاستلام</div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
+        <div className="max-w-content mx-auto">
+          <div className="text-center mb-10 max-w-2xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضم لآلاف العائلات السعيدة</h2>
+            <p className="text-lg text-brand-muted">أكثر من +50,000 عميل في السعودية يثقون في متقن يومياً.</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+            {config.reviews.map((review, i) => (
               <ReviewCard key={i} {...review} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* 9 — Mid CTA */}
-      <ProductFinalCta
-        productName={product.name_ar}
-        bundles={product.bundles}
-        selectedBundle={selectedBundle}
-        onSelectBundle={setSelectedBundle}
-        onAddToCart={handleAddToCart}
-      />
-
-      {/* 10 — FAQ */}
-      <section className="page-x py-10 md:py-14 bg-brand-surface">
-        <div className="max-w-content mx-auto max-w-2xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-8">
-            أسئلة قبل الطلب
-          </h2>
-          <FAQAccordion items={faqs} />
+      {/* COD Reassurance */}
+      <section className="page-x bg-white pt-6 md:pt-8 pb-8 md:pb-10">
+        <div className="max-w-content mx-auto">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-bold text-brand-espresso">تسوق بأمان تام وموثوقية عالية</h2>
+          </div>
+          <TrustBadges />
         </div>
       </section>
 
-      {/* 11 — Cross-sell */}
+      {/* FAQ */}
+      <section className="py-10 md:py-12 page-x bg-brand-surface">
+        <div className="max-w-content mx-auto max-w-3xl">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-extrabold text-brand-espresso mb-4">عندك استفسار؟ إجاباتنا واضحة</h2>
+            <p className="text-brand-muted text-lg">كل ما تحتاج معرفته لطلب مطمئن</p>
+          </div>
+          <FAQAccordion items={config.faqs} />
+        </div>
+      </section>
+
+      {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="page-x py-10 border-t border-brand-border/40">
+        <section className="pt-10 pb-6 md:pt-12 md:pb-8 page-x bg-white border-t border-brand-border/30">
           <div className="max-w-content mx-auto">
-            <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
-              يكمل طلبك — نفس الشحنة COD
-            </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-6">عزّز راحة بيتك مع هذه المنتجات</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {relatedProducts.slice(0, 3).map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
@@ -536,6 +651,9 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           </div>
         </section>
       )}
+
+      {/* Space for sticky mobile CTA */}
+      <div className="h-16 md:h-4" />
     </div>
   );
 }
