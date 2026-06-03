@@ -35,7 +35,7 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   }
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-3 max-md:grid max-md:grid-cols-2">
+    <div className="flex flex-wrap gap-2 md:gap-3">
       {ITEMS.map((item) => (
         <span
           key={item.label}

@@ -143,28 +143,17 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
 
-  /**
-   * Defer paint on desktop only — content-visibility breaks mobile browsers
-   * (stacked/ghost duplicates while scrolling).
-   */
-  @media (min-width: 1024px) {
-    .cv-section {
-      content-visibility: auto;
-      contain-intrinsic-size: auto 600px;
-    }
-  }
 }
 
 /**
- * Mobile scroll: no infinite transforms; flat layers at section boundaries.
+ * content-visibility on scroll sections breaks GPU compositing on Android
+ * (Honor): duplicated cards/text at section boundaries. Disabled entirely.
  */
+
+/** Infinite transform animations corrupt layers on some Android GPUs */
 @media (max-width: 1023px) {
   .animate-float {
     animation: none !important;
-  }
-
-  .store-image-frame {
-    overflow: visible;
   }
 }
 

@@ -8,7 +8,6 @@ import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { COLLECTIONS } from "@/config/collections";
 import { FEATURED_SLUGS, getProductsBySlugs, toProduct } from "@/config/catalog";
-import { cn } from "@/lib/utils";
 import {
   ArrowLeft,
   Star,
@@ -57,15 +56,15 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           1. HERO — Emotional, full-width
       ════════════════════════════════════════════ */}
-      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x max-md:overflow-visible">
-        <div className="hidden md:block absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
-        <div className="hidden md:block absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
+      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
 
-        <div className="max-w-content mx-auto relative md:z-10">
+        <div className="max-w-content mx-auto relative z-10">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             {/* Text Column */}
             <div className="order-2 md:order-1">
-              <div className="inline-flex items-center gap-2.5 bg-gradient-to-l from-brand-bronze/15 to-brand-bronze/5 text-brand-bronze rounded-pill px-5 py-2 text-sm font-bold mb-8 border border-brand-bronze/20 max-md:shadow-none md:shadow-sm">
+              <div className="inline-flex items-center gap-2.5 bg-gradient-to-l from-brand-bronze/15 to-brand-bronze/5 text-brand-bronze rounded-pill px-5 py-2 text-sm font-bold mb-8 border border-brand-bronze/20 shadow-sm">
                 <Sparkles className="w-4 h-4" />
                 <span>الخيار الأول لأكثر من 50,000 عائلة سعودية</span>
               </div>
@@ -86,7 +85,7 @@ export default function HomePage() {
 
               <Link
                 href="/collections"
-                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold md:shadow-lg mb-8"
+                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg mb-8"
               >
                 <span>تسوق الآن · الدفع عند الاستلام</span>
                 <ArrowLeft className="w-5 h-5" />
@@ -102,7 +101,7 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl max-md:shadow-none md:shadow-sm border border-brand-border/60"
+                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl md:shadow-sm border border-brand-border/60"
                   >
                     <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <span>{item.label}</span>
@@ -112,31 +111,26 @@ export default function HomePage() {
             </div>
 
             {/* Image Column */}
-            <div className="order-1 md:order-2 mb-4 md:mb-0 md:relative">
+            <div className="order-1 md:order-2 relative mb-8 md:mb-0">
               <StoreImageFrame
                 src="/images/hero/saudi-family.png"
                 alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
-                className="rounded-2xl md:shadow-xl md:border-4 md:border-white"
+                className="rounded-2xl md:shadow-xl border-4 border-white"
                 variant="hero"
                 priority
                 sizes={STORE_IMAGE_SIZES.hero}
               />
 
-              {/* Social proof — in-flow on mobile, floating on desktop */}
-              <div className="mt-4 md:hidden bg-white p-3 rounded-xl border border-gray-100 flex items-center gap-3">
+              {/* Floating Social Proof — overlay on hero (mobile + desktop) */}
+              <div className="absolute -bottom-4 start-2 md:-bottom-5 md:-start-6 z-10 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-3 md:animate-float">
                 <div className="flex -space-x-2 rtl:space-x-reverse">
                   {[1, 2, 3, 4].map((id) => (
-                    <div
-                      key={id}
-                      className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden"
-                    >
+                    <div key={id} className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden relative">
                       <StoreImage
                         src={`/images/customers/customer-${id}.png`}
                         alt="عميل سعيد"
-                        width={36}
-                        height={36}
+                        fill
                         variant="thumbnail"
-                        fit="cover"
                         sizes={STORE_IMAGE_SIZES.tiny}
                       />
                     </div>
@@ -144,52 +138,16 @@ export default function HomePage() {
                 </div>
                 <div>
                   <div className="flex text-amber-400 gap-0.5">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-3 h-3 fill-current" />
-                    ))}
+                    {[1,2,3,4,5].map((i) => <Star key={i} className="w-3 h-3 fill-current" />)}
                   </div>
-                  <p className="text-xs font-bold text-brand-espresso mt-1">
-                    +50,000 عميل سعيد
-                  </p>
+                  <p className="text-xs font-bold text-brand-espresso mt-1">+50,000 عميل سعيد</p>
                 </div>
               </div>
 
-              <div className="hidden md:flex absolute -bottom-5 -start-6 z-10 bg-white p-4 rounded-xl shadow-xl border border-gray-100 items-center gap-3 animate-float">
-                <div className="flex -space-x-2 rtl:space-x-reverse">
-                  {[1, 2, 3, 4].map((id) => (
-                    <div
-                      key={id}
-                      className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden"
-                    >
-                      <StoreImage
-                        src={`/images/customers/customer-${id}.png`}
-                        alt="عميل سعيد"
-                        width={36}
-                        height={36}
-                        variant="thumbnail"
-                        fit="cover"
-                        sizes={STORE_IMAGE_SIZES.tiny}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div>
-                  <div className="flex text-amber-400 gap-0.5">
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <Star key={i} className="w-3 h-3 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-xs font-bold text-brand-espresso mt-1">
-                    +50,000 عميل سعيد
-                  </p>
-                </div>
-              </div>
-
-              <div className="hidden md:block absolute -top-3 -end-4 bg-emerald-500 text-white p-3 rounded-xl shadow-lg">
-                <ShieldCheck className="w-6 h-6 mx-auto" />
-                <p className="text-[10px] font-bold mt-0.5 text-center leading-tight">
-                  ضمان 30 يوم
-                </p>
+              {/* Floating Guarantee Badge */}
+              <div className="absolute top-3 end-3 md:-top-3 md:-end-4 bg-emerald-500 text-white p-2.5 md:p-3 rounded-xl shadow-lg">
+                <ShieldCheck className="w-5 h-5 md:w-6 md:h-6 mx-auto" />
+                <p className="text-[9px] md:text-[10px] font-bold mt-0.5 text-center leading-tight">ضمان 30 يوم</p>
               </div>
             </div>
           </div>
@@ -199,7 +157,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
+      <section className="py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
@@ -208,8 +166,8 @@ export default function HomePage() {
               { value: "100%", label: "دفع آمن عند الاستلام", icon: BadgeCheck },
               { value: "24/7", label: "دعم لخدمتك في أي وقت", icon: Clock },
             ].map((stat) => (
-              <div key={stat.value} className="flex flex-col items-center gap-3 max-md:transform-none">
-                <stat.icon className="w-6 h-6 text-brand-bronze/70 shrink-0" />
+              <div key={stat.value} className="flex flex-col items-center gap-3">
+                <stat.icon className="w-6 h-6 text-brand-bronze/70" />
                 <div className="text-3xl md:text-4xl font-extrabold text-brand-bronze tracking-tight">
                   {stat.value}
                 </div>
@@ -269,7 +227,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           5. WHY MUTQAN — Value propositions
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-surface relative max-md:overflow-visible md:overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
@@ -379,7 +337,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           7. HOW COD WORKS — Dark, 4 steps
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-espresso text-white relative max-md:overflow-visible md:overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-espresso text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(27,77,219,0.08),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(27,77,219,0.06),transparent_60%)]" />
 
@@ -452,7 +410,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           8. REVIEWS — Social proof
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-surface relative max-md:overflow-visible md:overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
         <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-amber-400/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
@@ -506,7 +464,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           10. FINAL CTA — Urgency + reassurance
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-gradient-to-b from-brand-beige to-brand-background">
+      <section className="cv-section section-pad page-x bg-gradient-to-b from-brand-beige to-brand-background">
         <div className="max-w-content mx-auto text-center bg-white rounded-[2rem] p-10 md:p-16 lg:p-20 shadow-2xl border border-brand-bronze/15 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-l from-brand-bronze via-brand-bronze/60 to-transparent" />
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-bronze/5 rounded-full pointer-events-none" aria-hidden />

@@ -62,8 +62,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
     <div className="space-y-3" role="group" aria-label="اختر العرض">
       <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
 
-      {/* overflow-visible + in-flow badges — absolute badges ghost on mobile scroll */}
-      <div className="flex flex-col gap-3 overflow-visible">
+      <div className="flex flex-col gap-3">
         {sorted.map((bundle) => {
           const isSelected = bundle.id === selectedId;
           const isDefault = bundle.is_default;
@@ -86,63 +85,57 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "w-full rounded-2xl border-2 p-4 md:p-5 text-start max-md:transition-none md:transition-colors md:duration-200",
+                "relative w-full flex items-center justify-between rounded-2xl border-2 p-4 md:p-5 text-start max-md:transition-none md:transition-all md:duration-200",
                 isSelected
                   ? "border-brand-bronze bg-brand-bronze/5 md:shadow-md md:shadow-brand-bronze/10"
                   : "border-brand-border bg-white hover:border-brand-bronze/30",
               )}
             >
-              {isDefault || isBestValue ? (
-                <div className="flex flex-wrap justify-end gap-2 mb-2">
-                  {isDefault ? (
-                    <span className="bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold whitespace-nowrap md:shadow-md">
-                      الأكثر اختياراً
-                    </span>
-                  ) : null}
-                  {isBestValue ? (
-                    <span className="bg-amber-500 text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold whitespace-nowrap md:shadow-md">
-                      الأكثر توفيراً
-                    </span>
-                  ) : null}
-                </div>
+              {isDefault ? (
+                <span className="absolute -top-3 end-4 md:end-5 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                  الأكثر اختياراً
+                </span>
+              ) : null}
+              {isBestValue ? (
+                <span className="absolute -top-3 end-4 md:end-5 bg-amber-500 text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                  الأكثر توفيراً
+                </span>
               ) : null}
 
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    className={cn(
-                      "w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0",
-                      isSelected ? "border-brand-bronze" : "border-brand-muted/40",
-                    )}
-                  >
-                    {isSelected ? (
-                      <div className="w-3 h-3 rounded-full bg-brand-bronze" />
-                    ) : null}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="font-bold text-sm md:text-base leading-snug text-brand-espresso">
-                      {fullLabel}
-                    </p>
-                    {savingsLabel ? (
-                      <p className="text-xs md:text-sm font-bold text-brand-bronze mt-1">
-                        {savingsLabel}
-                      </p>
-                    ) : null}
-                  </div>
+              <div className="flex items-center gap-3 flex-1 min-w-0 pt-1">
+                <div
+                  className={cn(
+                    "w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0",
+                    isSelected ? "border-brand-bronze" : "border-brand-muted/40",
+                  )}
+                >
+                  {isSelected ? (
+                    <div className="w-3 h-3 rounded-full bg-brand-bronze" />
+                  ) : null}
                 </div>
 
-                <div className="text-end flex-shrink-0 ms-3">
-                  <p className="font-black text-xl md:text-2xl text-brand-espresso tabular-nums">
-                    {bundle.price_sar}{" "}
-                    <span className="text-sm font-bold">ر.س</span>
+                <div className="flex-1 min-w-0">
+                  <p className="font-bold text-sm md:text-base leading-snug text-brand-espresso">
+                    {fullLabel}
                   </p>
-                  {bundle.compare_at_price_sar ? (
-                    <p className="text-xs text-brand-muted line-through tabular-nums">
-                      {bundle.compare_at_price_sar} ر.س
+                  {savingsLabel ? (
+                    <p className="text-xs md:text-sm font-bold text-brand-bronze mt-1">
+                      {savingsLabel}
                     </p>
                   ) : null}
                 </div>
+              </div>
+
+              <div className="text-end flex-shrink-0 ms-3">
+                <p className="font-black text-xl md:text-2xl text-brand-espresso tabular-nums">
+                  {bundle.price_sar}{" "}
+                  <span className="text-sm font-bold">ر.س</span>
+                </p>
+                {bundle.compare_at_price_sar ? (
+                  <p className="text-xs text-brand-muted line-through tabular-nums">
+                    {bundle.compare_at_price_sar} ر.س
+                  </p>
+                ) : null}
               </div>
             </button>
           );
