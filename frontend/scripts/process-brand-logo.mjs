@@ -1,117 +1,173 @@
 /**
- * Build transparent logo for store (header + dark UI).
- * Removes white background + black square frame.
- * Run: node scripts/process-brand-logo.mjs
+ * Logo: flood-fill frame/white from edges → transparent PNG → trim
  */
 import { readFile } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 
 const BRAND_DIR = path.join(process.cwd(), "public", "images", "brand");
-const SOURCE_LIGHT_BG = path.join(BRAND_DIR, "mutqan-logo-source.png");
-const SOURCE_DARK_BG = path.join(BRAND_DIR, "mutqan-logo-dark-source.png");
+const SOURCE = path.join(BRAND_DIR, "mutqan-logo-source.png");
+const OUTPUT_WIDTH = 280;
 
-function isCyanDot(r, g, b) {
-  return b > 150 && g > 110 && r < 130;
+function isCyan(r, g, b) {
+  return b > 130 && g > 90 && r < 150;
 }
 
-/** White / off-white background */
-function isBackground(r, g, b) {
-  return r >= 238 && g >= 238 && b >= 238;
+/** Pixels that are clearly background (not logo ink) */
+function isHardBackground(r, g, b) {
+  const lum = (r + g + b) / 3;
+  if (lum > 242) return true;
+  if (r <= 42 && g <= 58 && b <= 78 && lum < 62) return true;
+  return false;
 }
 
-/** Black frame lines (not solid logo text) */
-function isFrameBlack(r, g, b) {
-  return r <= 55 && g <= 55 && b <= 55 && !isCyanDot(r, g, b);
-}
+/** Edge flood: frame, white, and gray JPEG halo connected to the border */
+function floodBackgroundMask(data, width, height) {
+  const bg = new Uint8Array(width * height);
+  const queue = [];
 
-function countOpaqueNeighbors(data, w, h, x, y) {
-  let n = 0;
-  for (let dy = -1; dy <= 1; dy++) {
-    for (let dx = -1; dx <= 1; dx++) {
-      if (dx === 0 && dy === 0) continue;
-      const nx = x + dx;
-      const ny = y + dy;
-      if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue;
-      const o = (ny * w + nx) * 4;
-      if (data[o + 3] > 0) n++;
-    }
+  const push = (x, y) => {
+    const p = y * width + x;
+    if (bg[p]) return;
+    bg[p] = 1;
+    queue.push(p);
+  };
+
+  for (let x = 0; x < width; x++) {
+    push(x, 0);
+    push(x, height - 1);
   }
-  return n;
-}
+  for (let y = 0; y < height; y++) {
+    push(0, y);
+    push(width - 1, y);
+  };
 
-function toTransparentRgba(data, width, height, channels) {
-  const out = Buffer.alloc(width * height * 4);
+  const neighbors = [
+    [-1, 0],
+    [1, 0],
+    [0, -1],
+    [0, 1],
+  ];
 
-  for (let i = 0; i < width * height; i++) {
-    const o = i * channels;
+  while (queue.length) {
+    const p = queue.pop();
+    const x = p % width;
+    const y = (p - x) / width;
+    const o = p * 3;
     const r = data[o];
     const g = data[o + 1];
     const b = data[o + 2];
-    const t = i * 4;
 
-    if (isBackground(r, g, b)) {
-      out[t + 3] = 0;
-      continue;
+    for (const [dx, dy] of neighbors) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+      const np = ny * width + nx;
+      if (bg[np]) continue;
+
+      const no = np * 3;
+      const nr = data[no];
+      const ng = data[no + 1];
+      const nb = data[no + 2];
+
+      if (isHardBackground(nr, ng, nb)) {
+        push(nx, ny);
+        continue;
+      }
+
+      const lum = (nr + ng + nb) / 3;
+      const sat = Math.max(nr, ng, nb) - Math.min(nr, ng, nb);
+      const lumHere = (r + g + b) / 3;
+      const satHere = Math.max(r, g, b) - Math.min(r, g, b);
+
+      if (isCyan(nr, ng, nb) || isCyan(r, g, b)) continue;
+
+      const grayHalo =
+        sat < 42 &&
+        satHere < 42 &&
+        lum > 95 &&
+        lumHere > 95 &&
+        Math.abs(nr - r) + Math.abs(ng - g) + Math.abs(nb - b) < 72;
+
+      if (grayHalo) push(nx, ny);
     }
-
-    out[t] = r;
-    out[t + 1] = g;
-    out[t + 2] = b;
-    out[t + 3] = 255;
   }
 
-  // Remove black border: dark pixels with few opaque neighbors (thin frame)
+  return bg;
+}
+
+function boundsFromMask(bg, width, height) {
+  let minX = width;
+  let minY = height;
+  let maxX = 0;
+  let maxY = 0;
+
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
-      const t = (y * width + x) * 4;
-      if (out[t + 3] === 0) continue;
-      const r = out[t];
-      const g = out[t + 1];
-      const b = out[t + 2];
-      if (!isFrameBlack(r, g, b)) continue;
-
-      const neighbors = countOpaqueNeighbors(out, width, height, x, y);
-      if (neighbors < 5) {
-        out[t + 3] = 0;
-      }
+      if (bg[y * width + x]) continue;
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
     }
   }
 
-  // Second pass: edge black remnants touching transparency
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const t = (y * width + x) * 4;
-      if (out[t + 3] === 0) continue;
-      const r = out[t];
-      const g = out[t + 1];
-      const b = out[t + 2];
-      if (!isFrameBlack(r, g, b)) continue;
+  if (maxX < minX) return null;
+  const pad = 2;
+  return {
+    left: Math.max(0, minX - pad),
+    top: Math.max(0, minY - pad),
+    width: Math.min(width, maxX - minX + 1 + pad * 2),
+    height: Math.min(height, maxY - minY + 1 + pad * 2),
+  };
+}
 
-      let transparentNeighbors = 0;
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          if (dx === 0 && dy === 0) continue;
-          const nx = x + dx;
-          const ny = y + dy;
-          if (nx < 0 || ny < 0 || nx >= width || ny >= height) {
-            transparentNeighbors++;
-            continue;
-          }
-          const o = (ny * width + nx) * 4;
-          if (out[o + 3] === 0) transparentNeighbors++;
-        }
-      }
-      if (transparentNeighbors >= 3) {
-        out[t + 3] = 0;
-      }
-    }
+function maskToRgba(data, width, height, bg) {
+  const out = Buffer.alloc(width * height * 4);
+  for (let p = 0; p < width * height; p++) {
+    const o = p * 3;
+    const t = p * 4;
+    out[t] = data[o];
+    out[t + 1] = data[o + 1];
+    out[t + 2] = data[o + 2];
+    out[t + 3] = bg[p] ? 0 : 255;
   }
-
   return out;
 }
 
-function lightenDarkText(data, width, height) {
+/** Drop white/gray halos; binarize alpha after resize */
+function cleanFringe(rgba, width, height) {
+  for (let i = 0; i < width * height; i++) {
+    const o = i * 4;
+    const r = rgba[o];
+    const g = rgba[o + 1];
+    const b = rgba[o + 2];
+    const lum = (r + g + b) / 3;
+    const sat = Math.max(r, g, b) - Math.min(r, g, b);
+
+    if (rgba[o + 3] === 0) continue;
+
+    if (isCyan(r, g, b)) {
+      rgba[o + 3] = 255;
+      continue;
+    }
+
+    if (lum > 118 && sat < 50) {
+      rgba[o + 3] = 0;
+      continue;
+    }
+
+    if (rgba[o + 3] < 200) {
+      rgba[o + 3] = 0;
+      continue;
+    }
+
+    rgba[o + 3] = 255;
+  }
+  return rgba;
+}
+
+function lightenForDarkBg(data, width, height) {
   const out = Buffer.from(data);
   for (let i = 0; i < width * height; i++) {
     const o = i * 4;
@@ -119,69 +175,95 @@ function lightenDarkText(data, width, height) {
     const r = out[o];
     const g = out[o + 1];
     const b = out[o + 2];
+    if (isCyan(r, g, b)) continue;
     const lum = (r + g + b) / 3;
-
-    if (isCyanDot(r, g, b)) continue;
-
-    if (lum < 120) {
+    if (lum < 150) {
       out[o] = 255;
       out[o + 1] = 255;
       out[o + 2] = 255;
-    } else if (lum < 200) {
-      out[o] = Math.min(255, r + 80);
-      out[o + 1] = Math.min(255, g + 80);
-      out[o + 2] = Math.min(255, b + 80);
+    } else if (lum < 220) {
+      out[o] = Math.min(255, r + 90);
+      out[o + 1] = Math.min(255, g + 90);
+      out[o + 2] = Math.min(255, b + 90);
     }
   }
   return out;
 }
 
-async function processFromBuffer(inputBuffer, outputPath, postProcess) {
-  const trimmed = await sharp(inputBuffer)
-    .flatten({ background: { r: 255, g: 255, b: 255 } })
-    .trim({ threshold: 18 })
-    .toBuffer();
+async function saveLogo(postProcess, filename) {
+  const input = await readFile(SOURCE);
+  const { data, info } = await sharp(input).removeAlpha().raw().toBuffer({ resolveWithObject: true });
 
-  const { data, info } = await sharp(trimmed)
+  const bg = floodBackgroundMask(data, info.width, info.height);
+  const bounds = boundsFromMask(bg, info.width, info.height);
+  if (!bounds) throw new Error("No logo content in source");
+
+  const cropW = bounds.width;
+  const cropH = bounds.height;
+  const cropped = Buffer.alloc(cropW * cropH * 3);
+  const croppedBg = new Uint8Array(cropW * cropH);
+
+  for (let y = 0; y < cropH; y++) {
+    for (let x = 0; x < cropW; x++) {
+      const sx = bounds.left + x;
+      const sy = bounds.top + y;
+      const sp = sy * info.width + sx;
+      const dp = y * cropW + x;
+      cropped[dp * 3] = data[sp * 3];
+      cropped[dp * 3 + 1] = data[sp * 3 + 1];
+      cropped[dp * 3 + 2] = data[sp * 3 + 2];
+      croppedBg[dp] = bg[sp];
+    }
+  }
+
+  const refinedBg = floodBackgroundMask(cropped, cropW, cropH);
+  for (let p = 0; p < cropW * cropH; p++) {
+    if (refinedBg[p]) croppedBg[p] = 1;
+  }
+
+  let rgba = maskToRgba(cropped, cropW, cropH, croppedBg);
+  rgba = cleanFringe(rgba, cropW, cropH);
+  if (postProcess) rgba = postProcess(rgba, cropW, cropH);
+
+  const scale = OUTPUT_WIDTH / Math.max(cropW, cropH);
+  const outW = Math.round(cropW * scale);
+  const outH = Math.round(cropH * scale);
+
+  const resized = await sharp(rgba, {
+    raw: { width: cropW, height: cropH, channels: 4 },
+  })
+    .resize(outW, outH, { kernel: sharp.kernel.nearest })
     .ensureAlpha()
     .raw()
-    .toBuffer({ resolveWithObject: true });
+    .toBuffer();
 
-  let rgba = toTransparentRgba(data, info.width, info.height, info.channels);
-  if (postProcess) rgba = postProcess(rgba, info.width, info.height);
-
-  await sharp(rgba, {
-    raw: { width: info.width, height: info.height, channels: 4 },
+  const pngBuffer = await sharp(cleanFringe(resized, outW, outH), {
+    raw: { width: outW, height: outH, channels: 4 },
   })
+    .png()
+    .toBuffer();
+
+  await sharp(pngBuffer)
+    .trim({ threshold: 1 })
     .png({ compressionLevel: 9 })
-    .toFile(outputPath);
+    .toFile(path.join(BRAND_DIR, filename));
+
+  return sharp(path.join(BRAND_DIR, filename)).metadata();
 }
 
-async function processLogo() {
-  const source = await readFile(SOURCE_LIGHT_BG);
+async function main() {
+  const m1 = await saveLogo(null, "mutqan-logo.png");
+  const m2 = await saveLogo(lightenForDarkBg, "mutqan-logo-light.png");
+  console.log("mutqan-logo.png", m1.width, "x", m1.height);
+  console.log("mutqan-logo-light.png", m2.width, "x", m2.height);
 
-  await processFromBuffer(source, path.join(BRAND_DIR, "mutqan-logo.png"), null);
-  console.log("Wrote mutqan-logo.png (no frame, transparent)");
-
-  await processFromBuffer(
-    source,
-    path.join(BRAND_DIR, "mutqan-logo-light.png"),
-    lightenDarkText,
-  );
-  console.log("Wrote mutqan-logo-light.png");
-
-  const iconSrc = path.join(BRAND_DIR, "mutqan-logo.png");
-  await sharp(iconSrc)
-    .resize(512, 512, {
-      fit: "contain",
-      background: { r: 255, g: 255, b: 255, alpha: 0 },
-    })
+  await sharp(path.join(BRAND_DIR, "mutqan-logo.png"))
+    .resize(512, 512, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
     .toFile(path.join(process.cwd(), "app", "icon.png"));
-  console.log("Wrote app/icon.png");
 }
 
-processLogo().catch((err) => {
-  console.error(err);
+main().catch((e) => {
+  console.error(e);
   process.exit(1);
 });

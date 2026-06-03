@@ -22,14 +22,22 @@ export function BrandLogo({
     variant === "light" ? BRAND.logoSrcLight : BRAND.logoSrc;
 
   return (
-    <div className={cn("relative shrink-0", className)}>
+    <div
+      className={cn(
+        "relative shrink-0 overflow-hidden bg-transparent",
+        className,
+      )}
+    >
       <StoreImage
         src={src}
         alt={`شعار ${BRAND.nameAr}`}
         fill
         sizes={sizes}
         priority={priority}
-        className={cn("object-contain object-center", imageClassName)}
+        className={cn(
+          "object-contain object-center bg-transparent",
+          imageClassName,
+        )}
       />
     </div>
   );
