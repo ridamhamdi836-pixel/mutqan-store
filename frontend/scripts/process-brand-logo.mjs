@@ -6,7 +6,8 @@ import path from "path";
 import sharp from "sharp";
 
 const BRAND_DIR = path.join(process.cwd(), "public", "images", "brand");
-const SOURCE = path.join(BRAND_DIR, "mutqan-logo-source.png");
+const SOURCE_HEADER = path.join(BRAND_DIR, "mutqan-logo-source.png");
+const SOURCE_DARK = path.join(BRAND_DIR, "mutqan-logo-dark-source.png");
 const OUTPUT_WIDTH = 280;
 
 function isCyan(r, g, b) {
@@ -16,7 +17,10 @@ function isCyan(r, g, b) {
 /** Pixels that are clearly background (not logo ink) */
 function isHardBackground(r, g, b) {
   const lum = (r + g + b) / 3;
+  const sat = Math.max(r, g, b) - Math.min(r, g, b);
   if (lum > 242) return true;
+  if (lum < 22) return true;
+  if (lum > 168 && sat < 28) return true;
   if (r <= 42 && g <= 58 && b <= 78 && lum < 62) return true;
   return false;
 }
@@ -136,7 +140,7 @@ function maskToRgba(data, width, height, bg) {
 }
 
 /** Drop white/gray halos; binarize alpha after resize */
-function cleanFringe(rgba, width, height) {
+function cleanFringe(rgba, width, height, { grayLumCutoff = 118 } = {}) {
   for (let i = 0; i < width * height; i++) {
     const o = i * 4;
     const r = rgba[o];
@@ -152,7 +156,7 @@ function cleanFringe(rgba, width, height) {
       continue;
     }
 
-    if (lum > 118 && sat < 50) {
+    if (lum > grayLumCutoff && sat < 50) {
       rgba[o + 3] = 0;
       continue;
     }
@@ -190,8 +194,8 @@ function lightenForDarkBg(data, width, height) {
   return out;
 }
 
-async function saveLogo(postProcess, filename) {
-  const input = await readFile(SOURCE);
+async function saveLogo(sourcePath, postProcess, filename, fringeOpts = {}) {
+  const input = await readFile(sourcePath);
   const { data, info } = await sharp(input).removeAlpha().raw().toBuffer({ resolveWithObject: true });
 
   const bg = floodBackgroundMask(data, info.width, info.height);
@@ -222,7 +226,7 @@ async function saveLogo(postProcess, filename) {
   }
 
   let rgba = maskToRgba(cropped, cropW, cropH, croppedBg);
-  rgba = cleanFringe(rgba, cropW, cropH);
+  rgba = cleanFringe(rgba, cropW, cropH, fringeOpts);
   if (postProcess) rgba = postProcess(rgba, cropW, cropH);
 
   const scale = OUTPUT_WIDTH / Math.max(cropW, cropH);
@@ -237,7 +241,7 @@ async function saveLogo(postProcess, filename) {
     .raw()
     .toBuffer();
 
-  const pngBuffer = await sharp(cleanFringe(resized, outW, outH), {
+  const pngBuffer = await sharp(cleanFringe(resized, outW, outH, fringeOpts), {
     raw: { width: outW, height: outH, channels: 4 },
   })
     .png()
@@ -252,8 +256,13 @@ async function saveLogo(postProcess, filename) {
 }
 
 async function main() {
-  const m1 = await saveLogo(null, "mutqan-logo.png");
-  const m2 = await saveLogo(lightenForDarkBg, "mutqan-logo-light.png");
+  const m1 = await saveLogo(
+    SOURCE_HEADER,
+    null,
+    "mutqan-logo.png",
+    { grayLumCutoff: 178 },
+  );
+  const m2 = await saveLogo(SOURCE_DARK, lightenForDarkBg, "mutqan-logo-light.png");
   console.log("mutqan-logo.png", m1.width, "x", m1.height);
   console.log("mutqan-logo-light.png", m2.width, "x", m2.height);
 
