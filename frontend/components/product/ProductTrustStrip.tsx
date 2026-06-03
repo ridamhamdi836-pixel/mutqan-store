@@ -1,7 +1,6 @@
 "use client";
 
-import { CreditCard, ShieldCheck, Truck, Phone, MessageCircle } from "lucide-react";
-import { WHATSAPP_URL } from "@/config/brand";
+import { CreditCard, ShieldCheck, Truck, Phone } from "lucide-react";
 import { useMediaQuery } from "@/lib/use-media-query";
 
 const ITEMS = [
@@ -30,15 +29,6 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
               {item.label}
             </span>
           ))}
-          <a
-            href={WHATSAPP_URL("مرحباً، عندي استفسار عن منتج في متقن")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-brand-trust hover:text-white transition-colors"
-          >
-            <MessageCircle className="w-4 h-4" />
-            دعم واتساب
-          </a>
         </div>
       </div>
     );
@@ -55,15 +45,6 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
           {item.label}
         </span>
       ))}
-      <a
-        href={WHATSAPP_URL("مرحباً، عندي استفسار عن منتج في متقن")}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-[11px] md:text-xs font-bold text-brand-bronze bg-brand-bronze/10 border border-brand-bronze/20 px-2.5 py-1.5 rounded-lg hover:bg-brand-bronze/15 transition-colors"
-      >
-        <MessageCircle className="w-3.5 h-3.5 shrink-0" />
-        دعم واتساب
-      </a>
     </div>
   );
 }

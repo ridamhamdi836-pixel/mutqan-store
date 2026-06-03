@@ -578,7 +578,7 @@ export function ProductPageClient({
             {PRODUCT_PRIMARY_CTA}
           </button>
           <p className="text-xs text-brand-sand/80 font-medium">
-            ضمان 30 يوم · شحن سريع · تأكيد قبل الشحن · دعم واتساب
+            ضمان 30 يوم · شحن سريع · تأكيد قبل الشحن
           </p>
         </div>
       </section>
