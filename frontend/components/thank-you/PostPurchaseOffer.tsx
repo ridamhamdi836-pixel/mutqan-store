@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Check,
   ChevronRight,
@@ -24,7 +25,7 @@ import {
   type LastOrderLineItem,
 } from "@/lib/last-order-session";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
-import { UpsellProductPreviewModal } from "@/components/thank-you/UpsellProductPreviewModal";
+import { UpsellProductPagePreview } from "@/components/thank-you/UpsellProductPagePreview";
 import { cn } from "@/lib/utils";
 
 const UPSELL_OFFER_SECONDS = 9 * 60 + 59;
@@ -40,18 +41,34 @@ export function PostPurchaseOffer({
   orderedSlugs,
   onFinished,
 }: PostPurchaseOfferProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [localOrderedSlugs, setLocalOrderedSlugs] = useState(orderedSlugs);
   const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set());
-  const [previewSlug, setPreviewSlug] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
+  const previewSlug = searchParams?.get("preview") ?? null;
   const offerCountdown = useCountdown(UPSELL_OFFER_SECONDS);
   const products = listThankYouUpsellProducts(localOrderedSlugs);
-  const previewProduct =
-    previewSlug != null
-      ? products.find((p) => p.slug === previewSlug) ?? null
-      : null;
+  const previewProduct = useMemo(
+    () =>
+      previewSlug != null
+        ? products.find((p) => p.slug === previewSlug) ?? null
+        : null,
+    [previewSlug, products],
+  );
+
+  const setPreviewSlug = useCallback(
+    (slug: string | null) => {
+      const params = new URLSearchParams(searchParams?.toString() ?? "");
+      if (slug) params.set("preview", slug);
+      else params.delete("preview");
+      const qs = params.toString();
+      router.push(qs ? `/order-offer?${qs}` : "/order-offer", { scroll: false });
+    },
+    [router, searchParams],
+  );
 
   useEffect(() => {
     firePixelEvent({
@@ -175,7 +192,12 @@ export function PostPurchaseOffer({
 
   return (
     <>
-      <div className="max-w-xl mx-auto space-y-5 pb-36 md:pb-32">
+      <div
+        className={cn(
+          "mx-auto space-y-5 pb-36 md:pb-32",
+          previewProduct ? "max-w-content w-full" : "max-w-xl",
+        )}
+      >
         <div className="text-center space-y-2 px-1">
           <div className="inline-flex items-center gap-2 text-brand-trust font-bold text-sm bg-brand-trust/10 px-4 py-2 rounded-pill">
             <PackageCheck className="w-4 h-4" />
@@ -212,17 +234,32 @@ export function PostPurchaseOffer({
             </div>
           </div>
 
-          <div className="space-y-4">
-            {products.map((product) => (
-              <UpsellProductRow
-                key={product.slug}
-                product={product}
-                isSelected={selectedSlugs.has(product.slug)}
-                onToggle={() => toggle(product.slug)}
-                onOpenPreview={() => setPreviewSlug(product.slug)}
-              />
-            ))}
-          </div>
+          {previewProduct ? (
+            <UpsellProductPagePreview
+              product={previewProduct}
+              isSelected={selectedSlugs.has(previewProduct.slug)}
+              onClose={() => setPreviewSlug(null)}
+              onAcceptProduct={() => {
+                if (!selectedSlugs.has(previewProduct.slug)) {
+                  toggle(previewProduct.slug);
+                }
+                setPreviewSlug(null);
+              }}
+              onDeclineProduct={() => setPreviewSlug(null)}
+            />
+          ) : (
+            <div className="space-y-4">
+              {products.map((product) => (
+                <UpsellProductRow
+                  key={product.slug}
+                  product={product}
+                  isSelected={selectedSlugs.has(product.slug)}
+                  onToggle={() => toggle(product.slug)}
+                  onOpenPreview={() => setPreviewSlug(product.slug)}
+                />
+              ))}
+            </div>
+          )}
 
           {error ? (
             <p className="text-sm text-red-600 font-medium" role="alert">
@@ -238,7 +275,12 @@ export function PostPurchaseOffer({
       </div>
 
       <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 border-t border-brand-border shadow-[0_-8px_28px_rgba(0,0,0,0.08)] px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div className="max-w-xl mx-auto space-y-2.5">
+        <div
+          className={cn(
+            "mx-auto space-y-2.5",
+            previewProduct ? "max-w-content w-full" : "max-w-xl",
+          )}
+        >
           <button
             type="button"
             onClick={handleAcceptOffer}
@@ -260,20 +302,6 @@ export function PostPurchaseOffer({
         </div>
       </div>
 
-      {previewProduct ? (
-        <UpsellProductPreviewModal
-          product={previewProduct}
-          isSelected={selectedSlugs.has(previewProduct.slug)}
-          onClose={() => setPreviewSlug(null)}
-          onAcceptProduct={() => {
-            if (!selectedSlugs.has(previewProduct.slug)) {
-              toggle(previewProduct.slug);
-            }
-            setPreviewSlug(null);
-          }}
-          onDeclineProduct={() => setPreviewSlug(null)}
-        />
-      ) : null}
     </>
   );
 }

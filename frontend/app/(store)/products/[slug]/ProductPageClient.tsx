@@ -77,6 +77,8 @@ function SectionImage({
 }
 
 interface ProductPageClientProps {
+  /** Full PDP embedded in post-purchase offer — no modal overlay, no duplicate sticky bar */
+  embedMode?: "store" | "upsell-preview";
   product: {
     id: string;
     slug: string;
@@ -126,7 +128,12 @@ interface ProductPageClientProps {
   };
 }
 
-export function ProductPageClient({ product, config }: ProductPageClientProps) {
+export function ProductPageClient({
+  product,
+  config,
+  embedMode = "store",
+}: ProductPageClientProps) {
+  const isUpsellPreview = embedMode === "upsell-preview";
   const { addItem, openCart } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
@@ -209,7 +216,8 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
   return (
     <div className="bg-brand-background pb-4">
-      {/* Sticky CTA */}
+      {/* Sticky CTA — hidden when embedded in order-offer preview */}
+      {!isUpsellPreview ? (
       <div
         aria-hidden={!showSticky}
         className={cn(
@@ -238,6 +246,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           </button>
         </div>
       </div>
+      ) : null}
 
       {/* 1. Hero — above the fold */}
       <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
