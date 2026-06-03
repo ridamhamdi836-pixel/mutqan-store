@@ -15,7 +15,7 @@ type ProductTrustStripProps = {
 export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) {
   if (variant === "bar") {
     return (
-      <div className="bg-brand-espresso text-brand-surface py-3">
+      <div className="hidden lg:block bg-brand-espresso text-brand-surface py-3">
         <div className="max-w-content mx-auto page-x flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs md:text-sm font-bold">
           {ITEMS.map((item) => (
             <span key={item.label} className="inline-flex items-center gap-1.5">

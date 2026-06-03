@@ -18,6 +18,7 @@ import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
+import { useMediaQuery } from "@/lib/use-media-query";
 
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
 
@@ -140,6 +141,7 @@ export function ProductPageClient({
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
@@ -152,13 +154,20 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
+    if (!isDesktop) {
+      setShowSticky(false);
+      return;
+    }
+    const target = bundleRef.current;
+    if (!target) return;
+
     const observer = new IntersectionObserver(
       ([entry]) => setShowSticky(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" },
+      { threshold: 0, rootMargin: "-72px 0px 0px 0px" },
     );
-    if (imageRef.current) observer.observe(imageRef.current);
+    observer.observe(target);
     return () => observer.disconnect();
-  }, []);
+  }, [isDesktop]);
 
   useEffect(() => {
     firePixelEvent({
@@ -219,15 +228,8 @@ export function ProductPageClient({
 
   return (
     <div className="bg-brand-background pb-4">
-      {/* Sticky CTA — hidden when embedded in order-offer preview */}
-      {!isUpsellPreview ? (
-      <div
-        aria-hidden={!showSticky}
-        className={cn(
-          "fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transition-transform duration-200 ease-out",
-          showSticky ? "translate-y-0 pointer-events-auto" : "translate-y-full pointer-events-none",
-        )}
-      >
+      {!isUpsellPreview && isDesktop && showSticky ? (
+      <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
         <div className="max-w-content mx-auto flex items-center gap-3">
           <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0 hidden sm:block">
             <StoreImage
@@ -289,7 +291,7 @@ export function ProductPageClient({
               />
             </div>
 
-            <div className="md:sticky md:top-[4.25rem] space-y-3 md:space-y-4">
+            <div className="space-y-3 md:space-y-4 lg:sticky lg:top-[4.25rem]">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (

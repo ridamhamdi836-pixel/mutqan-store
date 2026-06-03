@@ -69,7 +69,6 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-[#1B4DDB] text-white font-bold rounded-xl px-8 py-3.5 text-base
       transition-colors duration-150 ease-out
       hover:bg-[#1640B8]
-      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -77,7 +76,6 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-transparent border-2 border-[#1B4DDB] text-[#1B4DDB] font-semibold rounded-xl px-7 py-3 text-base
       transition-colors duration-150 ease-out
       hover:bg-[#1B4DDB] hover:text-white
-      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -85,8 +83,15 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] text-white font-bold rounded-2xl px-10 py-4 text-lg
       shadow-btn-lg transition-colors duration-150 ease-out
       hover:brightness-110
-      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:active,
+    .btn-secondary:active,
+    .btn-cta:active {
+      transform: scale(0.98);
+    }
   }
 
   .card {
@@ -138,10 +143,23 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
 
-  /** Defer paint for below-the-fold sections (faster scroll) */
+}
+
+/**
+ * content-visibility on scroll sections breaks GPU compositing on Android
+ * (reported on Honor). Desktop-only deferral — see b0cf21e.
+ */
+@media (min-width: 1024px) {
   .cv-section {
     content-visibility: auto;
     contain-intrinsic-size: auto 600px;
+  }
+}
+
+/** Infinite transform animations corrupt layers on some Android GPUs */
+@media (max-width: 1023px) {
+  .animate-float {
+    animation: none !important;
   }
 }
 
