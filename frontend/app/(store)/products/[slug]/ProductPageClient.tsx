@@ -151,11 +151,13 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
+    const target = bundleRef.current;
+    if (!target) return;
     const observer = new IntersectionObserver(
       ([entry]) => setShowSticky(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" },
+      { threshold: 0, rootMargin: "-72px 0px 0px 0px" },
     );
-    if (imageRef.current) observer.observe(imageRef.current);
+    observer.observe(target);
     return () => observer.disconnect();
   }, []);
 
@@ -217,14 +219,13 @@ export function ProductPageClient({
       : null;
 
   return (
-    <div className="bg-brand-background pb-4">
+    <div className="bg-brand-background pb-24 md:pb-4">
       {/* Sticky CTA — hidden when embedded in order-offer preview */}
       {!isUpsellPreview ? (
       <div
-        aria-hidden={!showSticky}
         className={cn(
-          "fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transition-transform duration-200 ease-out",
-          showSticky ? "translate-y-0 pointer-events-auto" : "translate-y-full pointer-events-none",
+          "fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]",
+          showSticky ? "visible" : "hidden",
         )}
       >
         <div className="max-w-content mx-auto flex items-center gap-3">
@@ -286,7 +287,7 @@ export function ProductPageClient({
               />
             </div>
 
-            <div className="md:sticky md:top-[4.25rem] space-y-3 md:space-y-4">
+            <div className="relative isolate max-md:overflow-visible md:sticky md:top-[4.25rem] space-y-3 md:space-y-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (

@@ -40,7 +40,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
     <div className="space-y-3" role="group" aria-label="اختر العرض">
       <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
 
-      <div className="flex flex-col gap-2.5 md:gap-3">
+      <div className="flex flex-col gap-2.5 md:gap-3 overflow-visible pt-1">
         {sorted.map((bundle) => {
           const isSelected = bundle.id === selectedId;
           const isFeatured = bundle.id === defaultBundle.id;
@@ -61,10 +61,10 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start transition-colors duration-150",
-                isFeatured ? "p-4 md:p-6 shadow-lg" : "p-3.5 md:p-4",
+                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start transition-colors duration-150 overflow-visible",
+                isFeatured ? "p-4 md:p-6 max-md:shadow-md md:shadow-lg" : "p-3.5 md:p-4",
                 isSelected
-                  ? "border-brand-bronze bg-brand-bronze/5 shadow-brand-bronze/10"
+                  ? "border-brand-bronze bg-brand-bronze/5 md:shadow-md"
                   : "border-brand-border bg-white hover:border-brand-bronze/40",
                 isFeatured && !isSelected && "border-brand-bronze/30 bg-brand-bronze/[0.03]",
               )}

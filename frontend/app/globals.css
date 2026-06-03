@@ -138,10 +138,15 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
 
-  /** Defer paint for below-the-fold sections (faster scroll) */
-  .cv-section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 600px;
+  /**
+   * Defer paint on desktop only — content-visibility breaks mobile Safari/Chrome
+   * (stacked/ghost duplicates while scrolling).
+   */
+  @media (min-width: 768px) {
+    .cv-section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 600px;
+    }
   }
 }
 

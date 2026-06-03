@@ -16,20 +16,23 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   if (variant === "bar") {
     return (
       <div className="bg-brand-espresso text-brand-surface py-3">
-        <div className="max-w-content mx-auto page-x flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs md:text-sm font-bold">
+        <div className="max-w-content mx-auto page-x grid grid-cols-2 gap-x-3 gap-y-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2 text-xs md:text-sm font-bold">
           {ITEMS.map((item) => (
-            <span key={item.label} className="inline-flex items-center gap-1.5">
-              <item.icon className="w-4 h-4 text-brand-trust" />
-              {item.label}
+            <span
+              key={item.label}
+              className="inline-flex items-center justify-center sm:justify-start gap-1.5 min-w-0"
+            >
+              <item.icon className="w-4 h-4 text-brand-trust shrink-0" />
+              <span className="truncate">{item.label}</span>
             </span>
           ))}
           <a
             href={WHATSAPP_URL("مرحباً، عندي استفسار عن منتج في متقن")}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-brand-trust hover:text-white transition-colors"
+            className="inline-flex items-center justify-center sm:justify-start gap-1.5 text-brand-trust hover:text-white transition-colors col-span-2 sm:col-span-1"
           >
-            <MessageCircle className="w-4 h-4" />
+            <MessageCircle className="w-4 h-4 shrink-0" />
             دعم واتساب
           </a>
         </div>
@@ -38,7 +41,7 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   }
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-3">
+    <div className="flex flex-wrap gap-2 md:gap-3 max-md:grid max-md:grid-cols-2">
       {ITEMS.map((item) => (
         <span
           key={item.label}
