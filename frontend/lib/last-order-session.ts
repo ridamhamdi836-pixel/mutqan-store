@@ -14,8 +14,43 @@ export type LastOrderSession = {
   /** For merging upsell into the same Google Sheets row when DB sync is delayed */
   customerName?: string;
   phoneE164?: string;
+  /** User finished or skipped the post-purchase offer interstitial */
+  upsellOfferCompleted?: boolean;
   savedAt: number;
 };
+
+export function buildThankYouUrl(orderNumber: string, totalSar: number): string {
+  const params = new URLSearchParams({
+    order: orderNumber,
+    total: String(totalSar),
+  });
+  return `/thank-you?${params.toString()}`;
+}
+
+export function buildOrderOfferUrl(orderNumber: string, totalSar: number): string {
+  const params = new URLSearchParams({
+    order: orderNumber,
+    total: String(totalSar),
+  });
+  return `/order-offer?${params.toString()}`;
+}
+
+export function markUpsellOfferCompleted(): void {
+  const current = loadLastOrderSession();
+  if (!current) return;
+  try {
+    sessionStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        ...current,
+        upsellOfferCompleted: true,
+        savedAt: Date.now(),
+      }),
+    );
+  } catch {
+    /* ignore */
+  }
+}
 
 const STORAGE_KEY = "mutqan_last_order";
 const MAX_AGE_MS = 2 * 60 * 60 * 1000;

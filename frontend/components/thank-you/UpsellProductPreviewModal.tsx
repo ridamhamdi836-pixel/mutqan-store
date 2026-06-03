@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import { X, Star, CheckCircle2, ShoppingBag } from "lucide-react";
+import { X, Star, CheckCircle2 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { formatSARCompact } from "@/lib/currency";
@@ -11,14 +11,17 @@ type UpsellProductPreviewModalProps = {
   product: UpsellProductDetail;
   isSelected: boolean;
   onClose: () => void;
-  onToggleSelect: () => void;
+  onAcceptProduct: () => void;
+  onDeclineProduct: () => void;
 };
 
+/** Compact centered dialog — does not fill the full screen */
 export function UpsellProductPreviewModal({
   product,
   isSelected,
   onClose,
-  onToggleSelect,
+  onAcceptProduct,
+  onDeclineProduct,
 }: UpsellProductPreviewModalProps) {
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
@@ -36,8 +39,10 @@ export function UpsellProductPreviewModal({
     };
   }, [handleEscape]);
 
+  const previewReviews = product.reviews.slice(0, 2);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8">
       <button
         type="button"
         className="drawer-backdrop"
@@ -49,12 +54,12 @@ export function UpsellProductPreviewModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="upsell-preview-title"
-        className="relative z-10 w-full max-w-lg max-h-[92vh] sm:max-h-[88vh] bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+        className="relative z-10 w-full max-w-md max-h-[min(82vh,36rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-brand-border/80"
       >
-        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-brand-border/60 shrink-0">
+        <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border-brand-border/60 shrink-0 bg-brand-surface">
           <h2
             id="upsell-preview-title"
-            className="font-black text-base text-brand-espresso line-clamp-1"
+            className="font-black text-sm md:text-base text-brand-espresso line-clamp-1"
           >
             {product.name_ar}
           </h2>
@@ -68,13 +73,13 @@ export function UpsellProductPreviewModal({
           </button>
         </div>
 
-        <div className="overflow-y-auto overscroll-contain flex-1 px-4 py-4 space-y-5">
-          <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-brand-beige">
+        <div className="overflow-y-auto overscroll-contain flex-1 px-4 py-3 space-y-4">
+          <div className="relative aspect-[16/10] max-h-40 rounded-xl overflow-hidden bg-brand-beige">
             <StoreImage
               src={product.image}
               alt={product.name_ar}
               fill
-              sizes="(max-width: 512px) 100vw, 512px"
+              sizes="400px"
               className="object-cover"
             />
           </div>
@@ -82,53 +87,50 @@ export function UpsellProductPreviewModal({
           <p className="text-sm font-bold text-brand-bronze leading-relaxed">
             {product.hook_ar}
           </p>
-          <p className="text-sm text-brand-muted leading-relaxed">
+          <p className="text-xs md:text-sm text-brand-muted leading-relaxed line-clamp-3">
             {product.shortPromise}
           </p>
 
           {product.benefits.length > 0 ? (
-            <ul className="space-y-2">
-              {product.benefits.map((b) => (
+            <ul className="space-y-1.5">
+              {product.benefits.slice(0, 3).map((b) => (
                 <li
                   key={b}
-                  className="flex items-start gap-2 text-sm text-brand-espresso"
+                  className="flex items-start gap-2 text-xs md:text-sm text-brand-espresso"
                 >
-                  <CheckCircle2 className="w-4 h-4 text-brand-trust shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-trust shrink-0 mt-0.5" />
                   <span>{b}</span>
                 </li>
               ))}
             </ul>
           ) : null}
 
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-black text-xl text-brand-espresso">
+          <div className="flex items-center gap-2 flex-wrap rounded-xl bg-brand-beige/50 p-3">
+            <span className="font-black text-lg text-brand-espresso">
               {formatSARCompact(product.upsell_price_sar)}
             </span>
             <span className="text-sm text-red-500 line-through">
               {product.original_price_sar} ر.س
             </span>
             <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">
-              -{product.savings_percent}%
-            </span>
-            <span className="text-xs text-brand-muted w-full">
-              يُضاف لنفس طلبك — شحنة واحدة
+              وفّر {product.savings_percent}%
             </span>
           </div>
 
-          {product.reviews.length > 0 ? (
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
+          {previewReviews.length > 0 ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5">
                 <div className="flex text-amber-400">
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
+                    <Star key={i} className="w-3.5 h-3.5 fill-current" />
                   ))}
                 </div>
-                <h3 className="font-bold text-sm text-brand-espresso">
-                  تجارب عملاء طلبوا هذا المنتج
-                </h3>
+                <span className="text-xs font-bold text-brand-espresso">
+                  تجارب عملاء
+                </span>
               </div>
-              <div className="space-y-4">
-                {product.reviews.map((review, i) => (
+              <div className="space-y-3 max-h-48 overflow-y-auto">
+                {previewReviews.map((review, i) => (
                   <ReviewCard key={`${review.name}-${i}`} {...review} />
                 ))}
               </div>
@@ -139,21 +141,17 @@ export function UpsellProductPreviewModal({
         <div className="shrink-0 p-4 border-t border-brand-border/60 bg-brand-surface space-y-2">
           <button
             type="button"
-            onClick={() => {
-              if (!isSelected) onToggleSelect();
-              onClose();
-            }}
-            className="w-full btn-primary h-12 flex items-center justify-center gap-2"
+            onClick={onAcceptProduct}
+            className="w-full btn-primary min-h-[48px] flex items-center justify-center gap-2 text-sm font-bold"
           >
-            <ShoppingBag className="w-5 h-5" />
-            {isSelected ? "مُختار — أغلق" : "اختر وأضفه لطلبي"}
+            {isSelected ? "مُختار — إغلاق" : "نعم، أريد هذا المنتج"}
           </button>
           <button
             type="button"
-            onClick={onClose}
-            className="w-full text-sm text-brand-muted hover:text-brand-espresso py-1"
+            onClick={onDeclineProduct}
+            className="w-full btn-secondary min-h-[44px] text-sm font-semibold"
           >
-            العودة للقائمة
+            لا، لا أريد هذا المنتج
           </button>
         </div>
       </div>

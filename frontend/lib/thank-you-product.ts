@@ -57,3 +57,7 @@ export function listThankYouUpsellProducts(orderedSlugs: string[]): UpsellProduc
     .map((p) => getUpsellProductDetail(p.slug)!)
     .filter(Boolean);
 }
+
+export function hasPostPurchaseUpsell(orderedSlugs: string[]): boolean {
+  return listThankYouUpsellProducts(orderedSlugs).length > 0;
+}

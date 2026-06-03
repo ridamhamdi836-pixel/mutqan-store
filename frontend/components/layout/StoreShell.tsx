@@ -8,6 +8,12 @@ import { Header } from "@/components/layout/Header";
 import { TrustBar } from "@/components/layout/TrustBar";
 import { Footer } from "@/components/layout/Footer";
 import type { CreateOrderResponse } from "@/types";
+import { hasPostPurchaseUpsell } from "@/lib/thank-you-product";
+import {
+  buildOrderOfferUrl,
+  buildThankYouUrl,
+  loadLastOrderSession,
+} from "@/lib/last-order-session";
 
 const CartDrawer = dynamic(
   () => import("@/components/cart/CartDrawer").then((m) => m.CartDrawer),
@@ -25,9 +31,18 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
 
   const handleOrderSuccess = useCallback(
     (response: CreateOrderResponse) => {
-      router.push(
-        `/thank-you?order=${response.order.public_order_number}&total=${response.order.total_sar}`,
-      );
+      const orderNumber = response.order.public_order_number;
+      const totalSar = response.order.total_sar;
+      const slugs =
+        response.order_slugs ??
+        loadLastOrderSession()?.orderedSlugs ??
+        [];
+
+      if (hasPostPurchaseUpsell(slugs)) {
+        router.push(buildOrderOfferUrl(orderNumber, totalSar));
+      } else {
+        router.push(buildThankYouUrl(orderNumber, totalSar));
+      }
     },
     [router],
   );
