@@ -57,15 +57,15 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           1. HERO — Emotional, full-width
       ════════════════════════════════════════════ */}
-      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
+      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x max-md:overflow-visible">
+        <div className="hidden md:block absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
+        <div className="hidden md:block absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
 
-        <div className="max-w-content mx-auto relative z-10">
+        <div className="max-w-content mx-auto relative md:z-10">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
             {/* Text Column */}
             <div className="order-2 md:order-1">
-              <div className="inline-flex items-center gap-2.5 bg-gradient-to-l from-brand-bronze/15 to-brand-bronze/5 text-brand-bronze rounded-pill px-5 py-2 text-sm font-bold mb-8 border border-brand-bronze/20 shadow-sm">
+              <div className="inline-flex items-center gap-2.5 bg-gradient-to-l from-brand-bronze/15 to-brand-bronze/5 text-brand-bronze rounded-pill px-5 py-2 text-sm font-bold mb-8 border border-brand-bronze/20 max-md:shadow-none md:shadow-sm">
                 <Sparkles className="w-4 h-4" />
                 <span>الخيار الأول لأكثر من 50,000 عائلة سعودية</span>
               </div>
@@ -102,7 +102,7 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl md:shadow-sm border border-brand-border/60"
+                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl max-md:shadow-none md:shadow-sm border border-brand-border/60"
                   >
                     <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <span>{item.label}</span>
@@ -199,7 +199,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
+      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
@@ -208,8 +208,8 @@ export default function HomePage() {
               { value: "100%", label: "دفع آمن عند الاستلام", icon: BadgeCheck },
               { value: "24/7", label: "دعم لخدمتك في أي وقت", icon: Clock },
             ].map((stat) => (
-              <div key={stat.value} className="flex flex-col items-center gap-3">
-                <stat.icon className="w-6 h-6 text-brand-bronze/70" />
+              <div key={stat.value} className="flex flex-col items-center gap-3 max-md:transform-none">
+                <stat.icon className="w-6 h-6 text-brand-bronze/70 shrink-0" />
                 <div className="text-3xl md:text-4xl font-extrabold text-brand-bronze tracking-tight">
                   {stat.value}
                 </div>
@@ -223,7 +223,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           3. TRUST BADGES
       ════════════════════════════════════════════ */}
-      <section className="pt-16 md:pt-20 pb-8 page-x">
+      <section className="cv-section pt-16 md:pt-20 pb-8 page-x">
         <div className="max-w-content mx-auto">
           <TrustBadges />
         </div>
@@ -232,7 +232,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           4. FEATURED PRODUCTS
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -336,7 +336,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           6. COLLECTIONS — Browse by category
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -485,7 +485,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           9. FAQ
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">

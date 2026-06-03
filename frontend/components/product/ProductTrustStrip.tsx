@@ -1,6 +1,7 @@
 "use client";
 
 import { CreditCard, ShieldCheck, Truck, Phone } from "lucide-react";
+import { useMediaQuery } from "@/lib/use-media-query";
 
 const ITEMS = [
   { icon: CreditCard, label: "الدفع عند الاستلام" },
@@ -14,7 +15,11 @@ type ProductTrustStripProps = {
 };
 
 export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) {
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   if (variant === "bar") {
+    if (!isDesktop) return null;
+
     return (
       <div className="bg-brand-espresso text-brand-surface py-3">
         <div className="max-w-content mx-auto page-x flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs md:text-sm font-bold">
@@ -30,7 +35,7 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   }
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-3">
+    <div className="flex flex-wrap gap-2 md:gap-3 max-md:grid max-md:grid-cols-2">
       {ITEMS.map((item) => (
         <span
           key={item.label}

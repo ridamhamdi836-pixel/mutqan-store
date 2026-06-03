@@ -127,19 +127,15 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
-    const updateSticky = () => {
-      const hero = heroRef.current;
-      if (!hero) return;
-      setShowSticky(hero.getBoundingClientRect().bottom < 80);
-    };
+    const hero = heroRef.current;
+    if (!hero) return;
 
-    updateSticky();
-    window.addEventListener("scroll", updateSticky, { passive: true });
-    window.addEventListener("resize", updateSticky, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", updateSticky);
-      window.removeEventListener("resize", updateSticky);
-    };
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-64px 0px 0px 0px" },
+    );
+    observer.observe(hero);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -201,7 +197,7 @@ export function ProductPageClient({
       ) : null}
 
       {/* 1. Hero — above the fold */}
-      <section ref={heroRef} className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
+      <section ref={heroRef} className="page-x pt-2 md:pt-4 pb-4 md:pb-6 max-md:overflow-visible">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
             <StoreImageFrame
@@ -240,7 +236,7 @@ export function ProductPageClient({
               <div
                 id="bundle-section"
                 ref={bundleRef}
-                className="scroll-mt-24 md:scroll-mt-28"
+                className="scroll-mt-24 md:scroll-mt-28 overflow-visible"
               >
                 <BundleSelector
                   bundles={product.bundles}
@@ -269,7 +265,7 @@ export function ProductPageClient({
       <ProductTrustStrip variant="bar" />
 
       {/* 2. Problem */}
-      <section className="product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white max-md:overflow-visible">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <SectionImage
             src={config.painSectionImage ?? productImageSrc}
@@ -309,7 +305,7 @@ export function ProductPageClient({
       </section>
 
       {/* 4. Benefits */}
-      <section className="product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white max-md:overflow-visible">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             لماذا ستحب هذا المنتج؟
