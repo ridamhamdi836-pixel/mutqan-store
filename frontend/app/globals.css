@@ -147,14 +147,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /**
  * content-visibility on scroll sections breaks GPU compositing on Android
- * (reported on Honor). Desktop-only deferral — see b0cf21e.
+ * (Honor): duplicated cards/text at section boundaries. Disabled entirely.
  */
-@media (min-width: 1024px) {
-  .cv-section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 600px;
-  }
-}
 
 /** Infinite transform animations corrupt layers on some Android GPUs */
 @media (max-width: 1023px) {

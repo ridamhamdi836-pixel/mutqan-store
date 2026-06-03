@@ -248,7 +248,7 @@ export function ProductPageClient({
             <div
               ref={imageRef}
               className={cn(
-                "relative rounded-2xl overflow-hidden shadow-md",
+                "relative rounded-2xl overflow-hidden md:shadow-md",
                 portraitHero
                   ? cn(
                       "w-full",
@@ -328,7 +328,7 @@ export function ProductPageClient({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 md:shadow-lg md:shadow-[#1B4DDB]/20"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {PRODUCT_PRIMARY_CTA}

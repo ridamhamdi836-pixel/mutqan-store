@@ -31,10 +31,10 @@ export function TrustBar() {
   const { icon: Icon, text } = MESSAGES[currentIndex];
 
   return (
-    <div className="bg-brand-espresso text-brand-surface py-2 overflow-hidden">
+    <div className="bg-brand-espresso text-brand-surface py-2 md:overflow-hidden">
       <div className="max-w-content mx-auto page-x h-6 flex items-center justify-center">
         <div
-          className={`flex items-center justify-center gap-2 text-xs md:text-sm font-bold text-brand-sand whitespace-nowrap transition-opacity duration-200 ${
+          className={`flex items-center justify-center gap-2 text-xs md:text-sm font-bold text-brand-sand whitespace-nowrap max-md:transition-none md:transition-opacity md:duration-200 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
           aria-live="polite"

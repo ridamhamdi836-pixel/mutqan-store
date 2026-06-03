@@ -61,7 +61,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "w-full rounded-2xl border-2 text-start transition-colors duration-150",
+                "w-full rounded-2xl border-2 text-start max-md:transition-none md:transition-colors md:duration-150",
                 isFeatured ? "p-3 md:p-6 md:shadow-lg" : "p-3.5 md:p-4",
                 isSelected
                   ? "border-brand-bronze bg-brand-bronze/5"

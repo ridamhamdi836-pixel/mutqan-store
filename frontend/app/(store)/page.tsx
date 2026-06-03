@@ -101,7 +101,7 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl shadow-sm border border-brand-border/60"
+                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl md:shadow-sm border border-brand-border/60"
                   >
                     <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <span>{item.label}</span>
@@ -112,7 +112,7 @@ export default function HomePage() {
 
             {/* Image Column */}
             <div className="order-1 md:order-2 relative mb-8 md:mb-0">
-              <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
+              <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden md:shadow-xl border-4 border-white">
                 <StoreImage
                   src="/images/hero/saudi-family.png"
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
@@ -125,7 +125,7 @@ export default function HomePage() {
               </div>
 
               {/* Floating Social Proof */}
-              <div className="mt-3 md:mt-0 md:absolute md:-bottom-5 md:-start-6 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-3 md:animate-float">
+              <div className="mt-3 md:mt-0 md:absolute md:-bottom-5 md:-start-6 bg-white p-3 md:p-4 rounded-xl md:shadow-xl border border-gray-100 flex items-center gap-3 md:animate-float">
                 <div className="flex -space-x-2 rtl:space-x-reverse">
                   {[1, 2, 3, 4].map((id) => (
                     <div key={id} className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden relative">
@@ -160,7 +160,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-y-4 border-brand-bronze/40">
+      <section className="py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
