@@ -20,15 +20,15 @@ export function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center shrink-0 group"
+            className="flex items-center shrink-0 group py-1"
             aria-label={`${BRAND.nameAr} — الرئيسية`}
           >
             <BrandLogo
               variant="default"
-              className="h-14 md:h-16 w-[72px] md:w-[80px]"
-              sizes="80px"
+              className="h-[52px] md:h-14 w-[64px] md:w-[72px]"
+              sizes="72px"
               priority
-              imageClassName="group-hover:opacity-90 transition-opacity"
+              imageClassName="object-contain object-center group-hover:opacity-90 transition-opacity"
             />
           </Link>
 
