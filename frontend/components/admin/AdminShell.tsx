@@ -28,8 +28,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
           <Link href="/admin" className="block">
             <BrandLogo
               variant="light"
-              className="h-12 w-[72px] mb-2"
-              sizes="72px"
+              className="h-14 w-[80px] mb-2"
+              sizes="80px"
             />
           </Link>
           <p className="text-xs text-slate-400">COD Operations</p>
