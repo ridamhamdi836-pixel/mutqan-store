@@ -133,6 +133,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
   const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
+  const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
@@ -160,6 +161,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       productSlug: product.slug,
       productName: product.name_ar,
     });
+  }, []);
+
+  const scrollToOffers = useCallback(() => {
+    bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, []);
 
   const handleAddToCart = useCallback(() => {
@@ -225,7 +230,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
           </div>
           <button
             type="button"
-            onClick={handleAddToCart}
+            onClick={scrollToOffers}
             className="btn-primary flex-1 min-h-[48px] md:min-h-[52px] flex items-center justify-center gap-2 px-4 text-sm md:text-base font-bold"
           >
             <ShoppingBag className="w-5 h-5 shrink-0" />
@@ -310,7 +315,20 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
                 ) : null}
               </div>
 
-              <div id="bundle-section" className="scroll-mt-20">
+              <button
+                type="button"
+                onClick={scrollToOffers}
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                {PRODUCT_PRIMARY_CTA}
+              </button>
+
+              <div
+                id="bundle-section"
+                ref={bundleRef}
+                className="scroll-mt-24 md:scroll-mt-28"
+              >
                 <BundleSelector
                   bundles={product.bundles}
                   selectedId={selectedBundle.id}
@@ -321,10 +339,10 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
+                className="w-full min-h-[48px] rounded-2xl text-sm md:text-base font-bold flex items-center justify-center gap-2 border-2 border-brand-bronze text-brand-bronze bg-white hover:bg-brand-bronze/5 transition-colors"
               >
                 <ShoppingBag className="w-5 h-5" />
-                {PRODUCT_PRIMARY_CTA}
+                أضف للسلة · {selectedBundle.price_sar} ر.س
               </button>
 
               <ProductTrustStrip variant="hero" />
