@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Clock } from "lucide-react";
 import type { ProductBundle } from "@/types";
 
 interface BundleSelectorProps {
@@ -10,40 +9,49 @@ interface BundleSelectorProps {
   onSelect: (bundle: ProductBundle) => void;
 }
 
+function bundleSavings(
+  bundle: ProductBundle,
+  unitPrice: number,
+): { percent: number; sar: number } | null {
+  if (bundle.compare_at_price_sar && bundle.compare_at_price_sar > bundle.price_sar) {
+    const sar = bundle.compare_at_price_sar - bundle.price_sar;
+    return {
+      sar,
+      percent: Math.round((sar / bundle.compare_at_price_sar) * 100),
+    };
+  }
+  if (bundle.quantity > 1 && unitPrice > 0) {
+    const full = unitPrice * bundle.quantity;
+    if (full > bundle.price_sar) {
+      const sar = full - bundle.price_sar;
+      return { sar, percent: Math.round((sar / full) * 100) };
+    }
+  }
+  return null;
+}
+
 export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelectorProps) {
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
-  const lastBundle = sorted[sorted.length - 1];
+  const unitBundle = sorted.find((b) => b.quantity === 1) ?? sorted[0];
+  const unitPrice = unitBundle.price_sar;
+  const defaultBundle = sorted.find((b) => b.is_default) ?? sorted[Math.floor(sorted.length / 2)];
 
   return (
-    <div className="space-y-4" role="group" aria-label="اختر العرض">
-      {/* Urgency bar */}
-      <div className="flex items-center justify-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-amber-700">
-        <Clock className="w-4 h-4 flex-shrink-0" />
-        <span className="text-sm font-bold">آخر 48 ساعة على عرض الشحن المجاني هذا الأسبوع</span>
-      </div>
+    <div className="space-y-3" role="group" aria-label="اختر العرض">
+      <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
 
-      {/* Heading */}
-      <div className="flex items-center justify-between">
-        <p className="font-bold text-base text-gray-900">اختر العرض:</p>
-        {sorted.length > 1 && (
-          <span className="text-xs font-bold text-[#1B4DDB] bg-[#1B4DDB]/10 px-3 py-1 rounded-full">
-            نتيجة من أول قطعة
-          </span>
-        )}
-      </div>
-
-      {/* Bundles */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2.5 md:gap-3">
         {sorted.map((bundle) => {
           const isSelected = bundle.id === selectedId;
-          const isDefault = bundle.is_default;
-          const isLast = bundle.id === lastBundle?.id && sorted.length > 2;
+          const isFeatured = bundle.id === defaultBundle.id;
+          const savings = bundleSavings(bundle, unitPrice);
 
-          const parts = bundle.label_ar.split(' - ');
+          const parts = bundle.label_ar.split(" - ");
           const title = parts[0].trim();
-          let subtitle = parts.length > 1 ? parts.slice(1).join(' - ').trim() : "";
-          subtitle = subtitle.replace(/\|?\s*الأكثر اختيارًا(\s*للمطبخ|\s*للعائلة والضيوف)?/g, '').trim();
-
+          let subtitle = parts.length > 1 ? parts.slice(1).join(" - ").trim() : "";
+          subtitle = subtitle
+            .replace(/\|?\s*الأكثر اختيارًا(\s*للمطبخ|\s*للعائلة والضيوف)?/g, "")
+            .trim();
           const fullLabel = subtitle ? `${title} · ${subtitle}` : title;
 
           return (
@@ -53,60 +61,74 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "relative w-full flex items-center justify-between rounded-2xl border-2 p-4 md:p-5 transition-all duration-200 text-start",
+                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start transition-colors duration-150",
+                isFeatured ? "p-4 md:p-6 shadow-lg" : "p-3.5 md:p-4",
                 isSelected
-                  ? "border-[#1B4DDB] bg-[#1B4DDB]/5 shadow-md shadow-[#1B4DDB]/10"
-                  : "border-gray-200 bg-white hover:border-gray-300"
+                  ? "border-brand-bronze bg-brand-bronze/5 shadow-brand-bronze/10"
+                  : "border-brand-border bg-white hover:border-brand-bronze/40",
+                isFeatured && !isSelected && "border-brand-bronze/30 bg-brand-bronze/[0.03]",
               )}
             >
-              {/* Badges */}
-              {isDefault && (
-                <span className="absolute -top-3 right-5 bg-[#1B4DDB] text-white text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap shadow-md">
-                  الأكثر اختياراً
-                </span>
-              )}
-              {isLast && !isDefault && (
-                <span className="absolute -top-3 right-5 bg-amber-500 text-white text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap shadow-md">
-                  الأكثر توفيراً
+              {isFeatured && (
+                <span className="absolute -top-3 right-4 md:right-6 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                  الأكثر طلباً
                 </span>
               )}
 
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                {/* Radio */}
-                <div className={cn(
-                  "w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all",
-                  isSelected ? "border-[#1B4DDB]" : "border-gray-300"
-                )}>
-                  {isSelected && <div className="w-3 h-3 rounded-full bg-[#1B4DDB]" />}
+                <div
+                  className={cn(
+                    "rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+                    isFeatured ? "w-7 h-7" : "w-6 h-6",
+                    isSelected ? "border-brand-bronze" : "border-brand-muted/40",
+                  )}
+                >
+                  {isSelected && (
+                    <div
+                      className={cn(
+                        "rounded-full bg-brand-bronze",
+                        isFeatured ? "w-3.5 h-3.5" : "w-3 h-3",
+                      )}
+                    />
+                  )}
                 </div>
 
-                <div className="flex-1 min-w-0">
-                  <p className={cn(
-                    "font-bold text-sm leading-snug",
-                    isSelected ? "text-gray-900" : "text-gray-800"
-                  )}>
+                <div className="flex-1 min-w-0 space-y-1">
+                  <p
+                    className={cn(
+                      "font-bold leading-snug text-brand-espresso",
+                      isFeatured ? "text-base md:text-lg" : "text-sm",
+                    )}
+                  >
                     {fullLabel}
                   </p>
-                  {bundle.savings_label_ar && (
-                    <p className="text-xs text-[#1B4DDB] font-bold mt-1">
-                      وفّر {bundle.savings_label_ar.replace('وفر ', '').replace('وفّري ', '').replace('وفّر ', '')}
+                  {savings && savings.sar > 0 ? (
+                    <p className="text-xs md:text-sm font-bold text-red-600">
+                      وفّر {savings.sar} ر.س ({savings.percent}%)
                     </p>
-                  )}
+                  ) : bundle.savings_label_ar ? (
+                    <p className="text-xs font-bold text-brand-bronze">
+                      {bundle.savings_label_ar}
+                    </p>
+                  ) : null}
                 </div>
               </div>
 
-              <div className="text-end flex-shrink-0 ms-3">
-                <p className={cn(
-                  "font-black text-xl",
-                  isSelected ? "text-gray-900" : "text-gray-800"
-                )}>
-                  {bundle.price_sar} <span className="text-sm font-bold">ر.س</span>
+              <div className="text-end flex-shrink-0 ms-2 md:ms-3">
+                <p
+                  className={cn(
+                    "font-black text-brand-espresso tabular-nums",
+                    isFeatured ? "text-2xl md:text-3xl" : "text-xl",
+                  )}
+                >
+                  {bundle.price_sar}{" "}
+                  <span className="text-sm font-bold">ر.س</span>
                 </p>
-                {bundle.compare_at_price_sar && (
-                  <p className="text-xs text-gray-400 line-through">
+                {bundle.compare_at_price_sar ? (
+                  <p className="text-xs text-red-500 line-through tabular-nums">
                     {bundle.compare_at_price_sar} ر.س
                   </p>
-                )}
+                ) : null}
               </div>
             </button>
           );

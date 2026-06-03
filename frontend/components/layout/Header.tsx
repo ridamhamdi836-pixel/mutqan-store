@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "@/providers/cart-provider";
@@ -12,11 +13,13 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const { itemCount, openCart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isProductPage = pathname?.startsWith("/products/");
 
   return (
     <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm">
       <div className="max-w-content mx-auto page-x">
-        <div className="flex items-center justify-between h-16">
+        <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-16")}>
           {/* Logo */}
           <Link
             href="/"
@@ -29,8 +32,13 @@ export function Header() {
             />
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-brand-muted">
+          {/* Desktop Nav — hidden on product pages to reduce exit clicks */}
+          <nav
+            className={cn(
+              "hidden md:flex items-center gap-7 text-sm font-medium text-brand-muted",
+              isProductPage && "!hidden",
+            )}
+          >
             {COLLECTIONS.map((col) => (
               <Link
                 key={col.slug}
@@ -63,19 +71,21 @@ export function Header() {
               )}
             </button>
 
-            <button
-              className="md:hidden p-2.5 rounded-xl hover:bg-brand-beige transition-colors"
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
-            >
-              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            {!isProductPage ? (
+              <button
+                className="md:hidden p-2.5 rounded-xl hover:bg-brand-beige transition-colors"
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+              >
+                {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
-      {menuOpen && (
+      {menuOpen && !isProductPage && (
         <div className="md:hidden bg-white border-t border-brand-border/60 animate-fade-in">
           <nav className="max-w-content mx-auto page-x py-4 flex flex-col gap-1">
             {COLLECTIONS.map((col) => (
