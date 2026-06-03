@@ -47,8 +47,8 @@ export function Footer() {
             <Link href="/" className="inline-block mb-4">
               <BrandLogo
                 variant="light"
-                className="h-14 w-[120px]"
-                sizes="120px"
+                className="h-14 w-14"
+                sizes="56px"
               />
             </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
