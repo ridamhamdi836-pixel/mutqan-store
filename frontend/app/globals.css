@@ -146,14 +146,44 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /**
- * content-visibility on scroll sections breaks GPU compositing on Android
- * (Honor): duplicated cards/text at section boundaries. Disabled entirely.
+ * Android (Honor/Mali): shadows, transforms, and overflow clips at section
+ * boundaries cause smeared/duplicated pixels. Keep mobile layers flat.
  */
-
-/** Infinite transform animations corrupt layers on some Android GPUs */
 @media (max-width: 1023px) {
   .animate-float {
     animation: none !important;
+  }
+
+  .shadow-xl,
+  .shadow-lg,
+  .shadow-md,
+  .shadow-card,
+  .shadow-sm,
+  .shadow-btn-lg {
+    --tw-shadow: 0 0 #0000 !important;
+    --tw-shadow-colored: 0 0 #0000 !important;
+    box-shadow: none !important;
+  }
+
+  .card {
+    box-shadow: none;
+  }
+
+  .card-lift:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .store-image-frame {
+    overflow: visible;
+    transform: none;
+    -webkit-transform: none;
+  }
+
+  .store-image-frame img {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
 }
 

@@ -92,12 +92,12 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               )}
             >
               {isDefault ? (
-                <span className="absolute -top-3 end-4 md:end-5 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                <span className="absolute -top-3 end-4 md:end-5 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold md:shadow-md whitespace-nowrap z-10">
                   الأكثر اختياراً
                 </span>
               ) : null}
               {isBestValue ? (
-                <span className="absolute -top-3 end-4 md:end-5 bg-amber-500 text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                <span className="absolute -top-3 end-4 md:end-5 bg-amber-500 text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold md:shadow-md whitespace-nowrap z-10">
                   الأكثر توفيراً
                 </span>
               ) : null}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { StoreImageFrame } from "@/components/ui/StoreImage";
 import { Star, ShoppingBag, CheckCircle2 } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { BundleSelector } from "@/components/product/BundleSelector";
@@ -9,6 +9,7 @@ import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { ProductComparisonTable } from "@/components/product/ProductComparisonTable";
 import { ProductTrustStrip } from "@/components/product/ProductTrustStrip";
+import { ProductStickyBar } from "@/components/product/ProductStickyBar";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
@@ -115,6 +116,7 @@ export function ProductPageClient({
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [showSticky, setShowSticky] = useState(false);
+  const heroRef = useRef<HTMLElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
   const mainImageSrc = getProductMainImageSrc(product.slug);
@@ -125,15 +127,19 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
-    const target = bundleRef.current;
-    if (!target) return;
+    const updateSticky = () => {
+      const hero = heroRef.current;
+      if (!hero) return;
+      setShowSticky(hero.getBoundingClientRect().bottom < 80);
+    };
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowSticky(!entry.isIntersecting),
-      { threshold: 0, rootMargin: "-72px 0px 0px 0px" },
-    );
-    observer.observe(target);
-    return () => observer.disconnect();
+    updateSticky();
+    window.addEventListener("scroll", updateSticky, { passive: true });
+    window.addEventListener("resize", updateSticky, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", updateSticky);
+      window.removeEventListener("resize", updateSticky);
+    };
   }, []);
 
   useEffect(() => {
@@ -145,10 +151,6 @@ export function ProductPageClient({
       productSlug: product.slug,
       productName: product.name_ar,
     });
-  }, []);
-
-  const scrollToOffers = useCallback(() => {
-    bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, []);
 
   const handleAddToCart = useCallback(() => {
@@ -187,45 +189,19 @@ export function ProductPageClient({
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
-  const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
-
   return (
     <div className="bg-brand-background pb-20 md:pb-4">
-      {!isUpsellPreview && showSticky ? (
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-          <div className="max-w-content mx-auto flex items-center gap-3">
-            <div className="flex items-center gap-2 min-w-0 flex-1">
-              <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
-                <StoreImage
-                  src={mainImageSrc}
-                  alt={product.name_ar}
-                  fill
-                  variant="thumbnail"
-                  sizes={STORE_IMAGE_SIZES.tiny}
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="font-bold text-sm text-brand-espresso truncate">
-                  {product.name_ar}
-                </p>
-                <p className="text-xs text-brand-muted tabular-nums">
-                  ابتداءً من {minBundlePrice} ر.س
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={scrollToOffers}
-              className="btn-primary shrink-0 px-4 py-3 text-sm font-bold whitespace-nowrap"
-            >
-              اختر عرضك الآن
-            </button>
-          </div>
-        </div>
+      {!isUpsellPreview ? (
+        <ProductStickyBar
+          visible={showSticky}
+          productNameAr={product.name_ar}
+          imageSrc={mainImageSrc}
+          onOrder={handleAddToCart}
+        />
       ) : null}
 
       {/* 1. Hero — above the fold */}
-      <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
+      <section ref={heroRef} className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
             <StoreImageFrame
@@ -293,7 +269,7 @@ export function ProductPageClient({
       <ProductTrustStrip variant="bar" />
 
       {/* 2. Problem */}
-      <section className="cv-section product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <SectionImage
             src={config.painSectionImage ?? productImageSrc}
@@ -312,7 +288,7 @@ export function ProductPageClient({
       </section>
 
       {/* 3. Solution */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <div className="space-y-4 text-start md:order-2">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
@@ -333,7 +309,7 @@ export function ProductPageClient({
       </section>
 
       {/* 4. Benefits */}
-      <section className="cv-section product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             لماذا ستحب هذا المنتج؟
@@ -369,7 +345,7 @@ export function ProductPageClient({
       </section>
 
       {/* 5. Before / After */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-8 max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
@@ -420,7 +396,7 @@ export function ProductPageClient({
       <ProductComparisonTable />
 
       {/* 7. How it works */}
-      <section className="cv-section page-x py-8 md:py-10 bg-white">
+      <section className="page-x py-8 md:py-10 bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             كيف تستخدمه؟
@@ -442,7 +418,7 @@ export function ProductPageClient({
       </section>
 
       {/* 8. Reviews */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             آراء عملاء اشتروا المنتج
@@ -461,7 +437,7 @@ export function ProductPageClient({
 
       {/* Cross-sell — before FAQ */}
       {relatedProducts.length > 0 && (
-        <section className="cv-section page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
+        <section className="page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
           <div className="max-w-content mx-auto">
             <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
               العملاء الذين اشتروا هذا المنتج اشتروا أيضاً
@@ -476,7 +452,7 @@ export function ProductPageClient({
       )}
 
       {/* 9. FAQ */}
-      <section className="cv-section py-8 md:py-10 page-x bg-brand-surface">
+      <section className="py-8 md:py-10 page-x bg-brand-surface">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             أسئلة شائعة
@@ -486,7 +462,7 @@ export function ProductPageClient({
       </section>
 
       {/* 10. Final CTA */}
-      <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
+      <section className="page-x py-10 md:py-14 bg-brand-espresso">
         <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
             جاهز تطلب؟ الدفع عند الاستلام فقط

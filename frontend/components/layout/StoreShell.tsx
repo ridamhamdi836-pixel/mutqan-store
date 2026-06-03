@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useCallback } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { StoreAnalyticsTracker } from "@/components/analytics/StoreAnalyticsTracker";
 import { Header } from "@/components/layout/Header";
 import { TrustBar } from "@/components/layout/TrustBar";
@@ -28,8 +28,6 @@ const CheckoutModal = dynamic(
 
 export function StoreShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const pathname = usePathname();
-  const isProductPage = pathname?.startsWith("/products/");
 
   const handleOrderSuccess = useCallback(
     (response: CreateOrderResponse) => {
@@ -52,7 +50,7 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <StoreAnalyticsTracker />
-      {!isProductPage ? <TrustBar /> : null}
+      <TrustBar />
       <Header />
       <main>{children}</main>
       <Footer />

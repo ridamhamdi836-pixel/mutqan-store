@@ -31,6 +31,7 @@ export function StoreImage({
   quality,
   loading,
   src,
+  alt = "",
   className,
   unoptimized: unoptimizedProp,
   variant = "default",
@@ -51,34 +52,71 @@ export function StoreImage({
       : null;
 
   const useFill = fill === true;
+  const useNaturalIntrinsic =
+    !useFill && width == null && height == null && intrinsic;
+  const useSizedNative = !useFill && width != null && height != null;
   const resolvedWidth = width ?? intrinsic?.width;
   const resolvedHeight = height ?? intrinsic?.height;
-  const useIntrinsic = !useFill && resolvedWidth && resolvedHeight;
 
   const resolvedQuality = quality ?? defaultQuality();
   const resolvedFetchPriority =
     fetchPriority ?? (priority ? "high" : variant === "thumbnail" ? "low" : "auto");
 
+  const resolvedLoading = loading ?? (priority ? undefined : "lazy");
+  const resolvedClassName = cn(
+    useNaturalIntrinsic
+      ? STORE_IMAGE_INTRINSIC_CLASS
+      : fit === "cover"
+        ? STORE_IMAGE_COVER_CLASS
+        : STORE_IMAGE_CONTAIN_CLASS,
+    className,
+  );
+
+  /** Native img avoids Next/Image compositor bugs on some Android GPUs (Honor) */
+  if (useNaturalIntrinsic && typeof normalizedSrc === "string") {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={normalizedSrc}
+        alt={alt}
+        width={intrinsic!.width}
+        height={intrinsic!.height}
+        loading={resolvedLoading === "eager" ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        className={resolvedClassName}
+      />
+    );
+  }
+
+  if (useSizedNative && typeof normalizedSrc === "string") {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={normalizedSrc}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={resolvedLoading === "eager" ? "eager" : "lazy"}
+        decoding="async"
+        className={resolvedClassName}
+      />
+    );
+  }
+
   return (
     <Image
       src={normalizedSrc}
+      alt={alt}
       quality={resolvedQuality}
       unoptimized={unoptimizedProp ?? true}
       priority={priority}
       fetchPriority={resolvedFetchPriority}
-      loading={loading ?? (priority ? undefined : "lazy")}
+      loading={resolvedLoading}
       decoding="async"
-      width={useIntrinsic ? resolvedWidth : width}
-      height={useIntrinsic ? resolvedHeight : height}
+      width={resolvedWidth}
+      height={resolvedHeight}
       fill={useFill ? true : undefined}
-      className={cn(
-        useIntrinsic
-          ? STORE_IMAGE_INTRINSIC_CLASS
-          : fit === "cover"
-            ? STORE_IMAGE_COVER_CLASS
-            : STORE_IMAGE_CONTAIN_CLASS,
-        className,
-      )}
+      className={resolvedClassName}
       {...props}
     />
   );
@@ -108,7 +146,12 @@ export function StoreImageFrame({
 
   if (intrinsic) {
     return (
-      <div className={cn("w-full overflow-hidden bg-brand-beige", className)}>
+      <div
+        className={cn(
+          "w-full bg-brand-beige store-image-frame max-md:overflow-visible md:overflow-hidden",
+          className,
+        )}
+      >
         <StoreImage
           src={src}
           alt={alt}
@@ -126,20 +169,23 @@ export function StoreImageFrame({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden bg-brand-beige",
+        "relative w-full bg-brand-beige store-image-frame max-md:overflow-visible md:overflow-hidden",
         !aspect && "aspect-[4/3]",
         className,
       )}
       style={storeImageAspectStyle(aspect)}
     >
-      <StoreImage
-        src={src}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={stripImagePath(src)}
         alt={alt}
-        fill
-        variant={variant}
-        priority={priority}
-        sizes={sizes}
-        className={imageClassName}
+        loading={priority ? "eager" : "lazy"}
+        decoding={priority ? "sync" : "async"}
+        className={cn(
+          STORE_IMAGE_CONTAIN_CLASS,
+          "absolute inset-0",
+          imageClassName,
+        )}
       />
     </div>
   );

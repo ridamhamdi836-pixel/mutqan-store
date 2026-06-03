@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export function ProductComparisonTable() {
   return (
-    <section className="cv-section product-section-pad page-x bg-white">
+    <section className="product-section-pad page-x bg-white">
       <div className="max-w-content mx-auto">
         <div className="text-center mb-8 md:mb-10 max-w-2xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
