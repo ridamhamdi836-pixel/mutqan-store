@@ -255,13 +255,33 @@ async function saveLogo(sourcePath, postProcess, filename, fringeOpts = {}) {
   return sharp(path.join(BRAND_DIR, filename)).metadata();
 }
 
+/** Clean white-background header asset (user-provided square logo) */
+async function exportHeaderLogo() {
+  const input = await readFile(SOURCE_HEADER);
+  const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const w = info.width;
+  const h = info.height;
+  const out = Buffer.alloc(w * h * 4);
+  for (let i = 0; i < w * h; i++) {
+    const o3 = i * 3;
+    const o4 = i * 4;
+    out[o4] = data[o3];
+    out[o4 + 1] = data[o3 + 1];
+    out[o4 + 2] = data[o3 + 2];
+    const lum = (data[o3] + data[o3 + 1] + data[o3 + 2]) / 3;
+    out[o4 + 3] = lum > 252 ? 0 : 255;
+  }
+  const outPath = path.join(BRAND_DIR, "mutqan-logo.png");
+  await sharp(out, { raw: { width: w, height: h, channels: 4 } })
+    .trim({ threshold: 1 })
+    .resize({ height: 112 })
+    .png({ compressionLevel: 9 })
+    .toFile(outPath);
+  return sharp(outPath).metadata();
+}
+
 async function main() {
-  const m1 = await saveLogo(
-    SOURCE_HEADER,
-    null,
-    "mutqan-logo.png",
-    { grayLumCutoff: 178 },
-  );
+  const m1 = await exportHeaderLogo();
   const m2 = await saveLogo(SOURCE_DARK, lightenForDarkBg, "mutqan-logo-light.png");
   console.log("mutqan-logo.png", m1.width, "x", m1.height);
   console.log("mutqan-logo-light.png", m2.width, "x", m2.height);

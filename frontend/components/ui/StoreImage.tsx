@@ -16,14 +16,19 @@ export function StoreImage({
   quality = 75,
   loading,
   src,
+  unoptimized: unoptimizedProp,
   ...props
 }: StoreImageProps) {
   const normalizedSrc = typeof src === "string" ? stripImageQuery(src) : src;
+  const isBrandAsset =
+    typeof normalizedSrc === "string" &&
+    normalizedSrc.startsWith("/images/brand/");
 
   return (
     <Image
       src={normalizedSrc}
       quality={quality}
+      unoptimized={unoptimizedProp ?? isBrandAsset}
       loading={loading ?? (props.priority ? undefined : "lazy")}
       {...props}
     />
