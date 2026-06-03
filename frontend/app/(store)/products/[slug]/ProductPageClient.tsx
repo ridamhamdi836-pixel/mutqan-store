@@ -57,7 +57,7 @@ function SectionImage({
   return (
     <div
       className={cn(
-        "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full",
+        "store-media-frame relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full max-md:shadow-none",
         !aspect && "aspect-[4/3] bg-brand-beige",
         className,
       )}
@@ -266,13 +266,13 @@ export function ProductPageClient({
       ) : null}
 
       {/* 1. Hero — above the fold */}
-      <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
+      <section className="paint-section page-x pt-2 md:pt-4 pb-4 md:pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
             <div
               ref={imageRef}
               className={cn(
-                "relative rounded-2xl overflow-hidden shadow-md",
+                "store-media-frame relative rounded-2xl overflow-hidden shadow-md max-md:shadow-none",
                 portraitHero
                   ? cn(
                       "w-full",
@@ -301,7 +301,7 @@ export function ProductPageClient({
               />
             </div>
 
-            <div className="relative md:sticky md:top-[4.25rem] space-y-3 md:space-y-4">
+            <div className="paint-section relative space-y-3 md:space-y-4 md:sticky md:top-[4.25rem]">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (

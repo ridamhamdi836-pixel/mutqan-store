@@ -50,11 +50,15 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="store-shell min-h-screen max-md:block md:flex md:flex-col">
       <StoreAnalyticsTracker />
-      {!isProductPage ? <TrustBar /> : null}
+      {!isProductPage ? (
+        <div className="store-chrome">
+          <TrustBar />
+        </div>
+      ) : null}
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="md:flex-1">{children}</main>
       <Footer />
       <CartDrawer />
       <CheckoutModal onOrderSuccess={handleOrderSuccess} />

@@ -148,9 +148,16 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
 
+  /* Isolated paint layer per major block (mobile scroll safety) */
+  .paint-section {
+    @apply relative z-0;
+  }
 }
 
-/** Mobile: never use content-visibility (causes stacked ghost UI while scrolling). */
+/**
+ * Mobile Safari / Chrome: scroll "ghost" duplicates (stacked text & cards).
+ * Causes: sticky inside flex shell, transforms, shadows, content-visibility, web fonts.
+ */
 @media (max-width: 767px) {
   .cv-section {
     content-visibility: visible !important;
@@ -158,9 +165,58 @@ h1, h2, h3, h4, h5, h6 {
     contain-intrinsic-size: unset !important;
   }
 
-  /* iOS: fixed layers + scroll often duplicate painted content */
   .pdp-sticky-cta {
     display: none !important;
+  }
+
+  /* Document scroll — not flex column compositing */
+  .store-shell {
+    display: block !important;
+    min-height: 100vh;
+  }
+
+  .store-shell main {
+    display: block;
+    min-height: 0;
+  }
+
+  .store-chrome {
+    position: relative !important;
+    top: auto !important;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  .paint-section {
+    isolation: isolate;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  /* Reduce GPU repaint trails from shadows during momentum scroll */
+  .paint-section .shadow-sm,
+  .paint-section .shadow-md,
+  .paint-section .shadow-lg,
+  .paint-section .shadow-xl,
+  .paint-section [class*="shadow-"] {
+    box-shadow: none !important;
+  }
+
+  .store-media-frame {
+    isolation: isolate;
+    overflow: hidden;
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  .store-media-frame img {
+    transform: none !important;
+    -webkit-transform: none !important;
+  }
+
+  /* Custom web fonts can leave text trails on iOS when scrolling */
+  body {
+    text-rendering: optimizeSpeed;
   }
 }
 

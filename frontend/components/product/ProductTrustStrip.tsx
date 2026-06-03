@@ -15,7 +15,7 @@ type ProductTrustStripProps = {
 export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) {
   if (variant === "bar") {
     return (
-      <div className="bg-brand-espresso text-brand-surface py-3 relative z-0">
+      <div className="hidden md:block paint-section bg-brand-espresso text-brand-surface py-3 relative z-0">
         <div className="max-w-content mx-auto page-x grid grid-cols-2 gap-x-3 gap-y-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2 text-xs md:text-sm font-bold max-md:[transform:none]">
           {ITEMS.map((item) => (
             <span

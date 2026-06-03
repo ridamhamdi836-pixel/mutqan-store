@@ -41,7 +41,7 @@ export function TrustBar() {
   const { icon: Icon, text } = MESSAGES[currentIndex];
 
   return (
-    <div className="bg-brand-espresso text-brand-surface py-2 overflow-hidden relative z-20">
+    <div className="store-chrome bg-brand-espresso text-brand-surface py-2 overflow-hidden relative z-20">
       <div className="max-w-content mx-auto page-x min-h-6 flex items-center justify-center">
         <div
           className={`flex items-center justify-center gap-2 text-xs md:text-sm font-bold text-brand-sand whitespace-nowrap max-md:transition-none md:transition-opacity md:duration-200 ${
