@@ -18,7 +18,6 @@ import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
-import { useMediaQuery } from "@/lib/use-media-query";
 import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME, storeImageAspectStyle } from "@/lib/image-display";
 
 const PORTRAIT_HERO_SLUGS = new Set(["smart-stackable-cabinet"]);
@@ -133,7 +132,6 @@ export function ProductPageClient({
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
@@ -146,10 +144,6 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
-    if (!isDesktop) {
-      setShowSticky(false);
-      return;
-    }
     const target = bundleRef.current;
     if (!target) return;
 
@@ -159,7 +153,7 @@ export function ProductPageClient({
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [isDesktop]);
+  }, []);
 
   useEffect(() => {
     firePixelEvent({
@@ -212,37 +206,42 @@ export function ProductPageClient({
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
 
-  const savingsVsCompare =
-    selectedBundle.compare_at_price_sar &&
-    selectedBundle.compare_at_price_sar > selectedBundle.price_sar
-      ? selectedBundle.compare_at_price_sar - selectedBundle.price_sar
-      : null;
+  const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   return (
-    <div className="bg-brand-background pb-4">
-      {!isUpsellPreview && isDesktop && showSticky ? (
-      <div className="hidden md:block fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-        <div className="max-w-content mx-auto flex items-center gap-3">
-          <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0 hidden sm:block">
-            <StoreImage
-              src={mainImageSrc}
-              alt={product.name_ar}
-              fill
-              variant="thumbnail"
-              sizes={STORE_IMAGE_SIZES.tiny}
-              onError={() => { if (!imgError) setImgError(true); }}
-            />
+    <div className="bg-brand-background pb-20 md:pb-4">
+      {!isUpsellPreview && showSticky ? (
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+          <div className="max-w-content mx-auto flex items-center gap-3">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
+                <StoreImage
+                  src={mainImageSrc}
+                  alt={product.name_ar}
+                  fill
+                  variant="thumbnail"
+                  sizes={STORE_IMAGE_SIZES.tiny}
+                  onError={() => { if (!imgError) setImgError(true); }}
+                />
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-brand-espresso truncate">
+                  {product.name_ar}
+                </p>
+                <p className="text-xs text-brand-muted tabular-nums">
+                  ابتداءً من {minBundlePrice} ر.س
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={scrollToOffers}
+              className="btn-primary shrink-0 px-4 py-3 text-sm font-bold whitespace-nowrap"
+            >
+              اختر عرضك الآن
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={scrollToOffers}
-            className="btn-primary flex-1 min-h-[48px] md:min-h-[52px] flex items-center justify-center gap-2 px-4 text-sm md:text-base font-bold"
-          >
-            <ShoppingBag className="w-5 h-5 shrink-0" />
-            <span className="truncate">{PRODUCT_PRIMARY_CTA}</span>
-          </button>
         </div>
-      </div>
       ) : null}
 
       {/* 1. Hero — above the fold */}
@@ -293,23 +292,6 @@ export function ProductPageClient({
                 {config.shortPromise}
               </p>
 
-              <div className="flex items-baseline gap-2 flex-wrap py-1">
-                <span className="text-2xl md:text-3xl font-black text-brand-espresso tabular-nums">
-                  {selectedBundle.price_sar}{" "}
-                  <span className="text-base font-bold">ر.س</span>
-                </span>
-                {selectedBundle.compare_at_price_sar ? (
-                  <span className="text-sm text-red-500 line-through tabular-nums">
-                    {selectedBundle.compare_at_price_sar} ر.س
-                  </span>
-                ) : null}
-                {savingsVsCompare ? (
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                    وفّر {savingsVsCompare} ر.س
-                  </span>
-                ) : null}
-              </div>
-
               <div
                 id="bundle-section"
                 ref={bundleRef}
@@ -325,11 +307,13 @@ export function ProductPageClient({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 md:shadow-lg md:shadow-[#1B4DDB]/20"
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center md:shadow-lg md:shadow-[#1B4DDB]/20"
               >
-                <ShoppingBag className="w-5 h-5" />
-                {PRODUCT_PRIMARY_CTA}
+                اطلب الآن · {selectedBundle.price_sar} ر.س
               </button>
+              <p className="text-center text-xs text-brand-muted font-medium">
+                الدفع عند الاستلام · بدون دفع أونلاين
+              </p>
 
               <ProductTrustStrip variant="hero" />
             </div>
