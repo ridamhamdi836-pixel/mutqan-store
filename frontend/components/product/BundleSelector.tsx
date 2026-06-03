@@ -37,7 +37,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
   const defaultBundle = sorted.find((b) => b.is_default) ?? sorted[Math.floor(sorted.length / 2)];
 
   return (
-    <div className="space-y-3 paint-section" role="group" aria-label="اختر العرض">
+    <div className="space-y-3" role="group" aria-label="اختر العرض">
       <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
 
       <div className="flex flex-col gap-2.5 md:gap-3">

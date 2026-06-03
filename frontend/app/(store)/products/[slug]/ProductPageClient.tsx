@@ -57,7 +57,7 @@ function SectionImage({
   return (
     <div
       className={cn(
-        "store-media-frame relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full max-md:shadow-none",
+        "relative rounded-2xl overflow-hidden shadow-md border border-brand-border w-full",
         !aspect && "aspect-[4/3] bg-brand-beige",
         className,
       )}
@@ -266,13 +266,13 @@ export function ProductPageClient({
       ) : null}
 
       {/* 1. Hero — above the fold */}
-      <section className="paint-section page-x pt-2 md:pt-4 pb-4 md:pb-6">
+      <section className="page-x pt-2 md:pt-4">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
             <div
               ref={imageRef}
               className={cn(
-                "store-media-frame relative rounded-2xl overflow-hidden shadow-md max-md:shadow-none",
+                "relative rounded-2xl overflow-hidden shadow-md",
                 portraitHero
                   ? cn(
                       "w-full",
@@ -301,7 +301,7 @@ export function ProductPageClient({
               />
             </div>
 
-            <div className="paint-section relative space-y-3 md:space-y-4 md:sticky md:top-[4.25rem]">
+            <div className="space-y-3 md:space-y-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -356,22 +356,23 @@ export function ProductPageClient({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 max-md:shadow-none md:shadow-lg md:shadow-[#1B4DDB]/20"
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 md:shadow-lg md:shadow-[#1B4DDB]/20"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {PRODUCT_PRIMARY_CTA}
               </button>
-
-              <ProductTrustStrip variant="hero" />
             </div>
           </div>
+
+          <div className="mt-4 pb-4 md:pb-6">
+            <ProductTrustStrip variant="hero" />
+          </div>
+          <ProductTrustStrip variant="bar" />
         </div>
       </section>
 
-      <ProductTrustStrip variant="bar" />
-
       {/* 2. Problem */}
-      <section className="cv-section product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <SectionImage
             src={config.painSectionImage ?? productImageSrc}
@@ -390,7 +391,7 @@ export function ProductPageClient({
       </section>
 
       {/* 3. Solution */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <div className="space-y-4 text-start md:order-2">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
@@ -411,7 +412,7 @@ export function ProductPageClient({
       </section>
 
       {/* 4. Benefits */}
-      <section className="cv-section product-section-pad page-x bg-white">
+      <section className="product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             لماذا ستحب هذا المنتج؟
@@ -447,7 +448,7 @@ export function ProductPageClient({
       </section>
 
       {/* 5. Before / After */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-8 max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
@@ -526,7 +527,7 @@ export function ProductPageClient({
       <ProductComparisonTable />
 
       {/* 7. How it works */}
-      <section className="cv-section page-x py-8 md:py-10 bg-white">
+      <section className="page-x py-8 md:py-10 bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             كيف تستخدمه؟
@@ -548,7 +549,7 @@ export function ProductPageClient({
       </section>
 
       {/* 8. Reviews */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
+      <section className="product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             آراء عملاء اشتروا المنتج
@@ -567,7 +568,7 @@ export function ProductPageClient({
 
       {/* Cross-sell — before FAQ */}
       {relatedProducts.length > 0 && (
-        <section className="cv-section page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
+        <section className="page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
           <div className="max-w-content mx-auto">
             <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
               العملاء الذين اشتروا هذا المنتج اشتروا أيضاً
@@ -582,7 +583,7 @@ export function ProductPageClient({
       )}
 
       {/* 9. FAQ */}
-      <section className="cv-section py-8 md:py-10 page-x bg-brand-surface">
+      <section className="py-8 md:py-10 page-x bg-brand-surface">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             أسئلة شائعة
@@ -592,7 +593,7 @@ export function ProductPageClient({
       </section>
 
       {/* 10. Final CTA */}
-      <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
+      <section className="page-x py-10 md:py-14 bg-brand-espresso">
         <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
             جاهز تطلب؟ الدفع عند الاستلام فقط
