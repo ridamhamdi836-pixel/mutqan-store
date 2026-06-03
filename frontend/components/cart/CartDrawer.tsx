@@ -10,20 +10,26 @@ import { formatSARCompact } from "@/lib/currency";
 import { CrossSellCard } from "./CrossSellCard";
 import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
-    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
-      <StoreImage
-        src={getProductMainImageSrc(slug)}
-        alt={name}
-        fill
-        sizes="64px"
-        className="object-cover"
-        onError={() => { if (!err) setErr(true); }}
-      />
+    <div className="relative w-20 aspect-[4/3] rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
+      {!err ? (
+        <StoreImage
+          src={getProductCardImageSrc(slug)}
+          alt={name}
+          fill
+          sizes="80px"
+          className="object-cover"
+          onError={() => setErr(true)}
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-[10px] text-gray-400 px-1 text-center">
+          {name}
+        </div>
+      )}
     </div>
   );
 }

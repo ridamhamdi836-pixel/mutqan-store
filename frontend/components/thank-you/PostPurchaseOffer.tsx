@@ -322,7 +322,7 @@ function UpsellProductRow({
           onClick={onOpenPreview}
           className="flex flex-1 items-start gap-3 min-w-0 text-start group"
         >
-          <div className="relative w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0 border border-brand-border/50">
+          <div className="relative w-20 aspect-[4/3] md:w-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-brand-border/50">
             <StoreImage
               src={product.image}
               alt={product.name_ar}

@@ -1,7 +1,7 @@
 import { CATALOG, getProduct } from "@/config/catalog";
 import { THANK_YOU_BESTSELLER_SLUGS } from "@/config/thank-you";
 import { PRODUCTS_CONFIG } from "@/config/products";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 
 export type UpsellProductDetail = {
   slug: string;
@@ -38,7 +38,7 @@ export function getUpsellProductDetail(slug: string): UpsellProductDetail | null
     isBestseller: THANK_YOU_BESTSELLER_SLUGS.has(slug),
     name_ar: catalog.name_ar,
     short_description_ar: catalog.short_description_ar,
-    image: getProductMainImageSrc(slug),
+    image: getProductCardImageSrc(slug),
     hook_ar: u.hook_ar,
     original_price_sar: u.original_price_sar,
     upsell_price_sar: u.upsell_price_sar,

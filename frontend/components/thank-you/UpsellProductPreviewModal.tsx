@@ -74,7 +74,7 @@ export function UpsellProductPreviewModal({
         </div>
 
         <div className="overflow-y-auto overscroll-contain flex-1 px-4 py-3 space-y-4">
-          <div className="relative aspect-[16/10] max-h-40 rounded-xl overflow-hidden bg-brand-beige">
+          <div className="relative aspect-[4/3] max-h-44 rounded-xl overflow-hidden bg-gray-50">
             <StoreImage
               src={product.image}
               alt={product.name_ar}

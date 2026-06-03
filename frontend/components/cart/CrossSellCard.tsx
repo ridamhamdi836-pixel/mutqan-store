@@ -5,7 +5,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct } from "@/config/catalog";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 
 interface CrossSellCardProps {
@@ -36,42 +36,50 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     });
   };
 
+  const productImageSrc = getProductCardImageSrc(productSlug);
+
   return (
-    <div className="flex items-center gap-3 p-3 rounded-card border border-brand-border bg-brand-background">
-      <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
-        <StoreImage
-          src={getProductMainImageSrc(productSlug)}
-          alt={catalog.name_ar}
-          fill
-          sizes="56px"
-          className="object-cover"
-          onError={() => {
-            if (!imgError) setImgError(true);
-          }}
-        />
-      </div>
-
-      <div className="flex-1 min-w-0">
-        <p className="text-xs font-semibold text-brand-espresso leading-snug">{catalog.name_ar}</p>
-        <p className="text-xs text-brand-muted">{crossSell.shortDesc}</p>
-        <p className="text-xs font-bold text-brand-espresso mt-1">
-          {crossSell.singleUnitPriceSar} ر.س
-        </p>
-      </div>
-
-      <button
-        onClick={handleAdd}
-        disabled={alreadyInCart}
-        aria-label={`أضف ${catalog.name_ar} للطلب`}
-        className={cn(
-          "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all",
-          alreadyInCart
-            ? "bg-brand-trust/20 text-brand-trust cursor-default"
-            : "bg-brand-espresso text-white hover:bg-brand-bronze",
+    <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
+      <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
+        {!imgError ? (
+          <StoreImage
+            src={productImageSrc}
+            alt={catalog.name_ar}
+            fill
+            sizes="(max-width: 420px) 100vw, 400px"
+            className="object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-xs text-gray-400 px-2 text-center">
+            {catalog.name_ar}
+          </div>
         )}
-      >
-        {alreadyInCart ? "✓" : <Plus className="w-4 h-4" />}
-      </button>
+      </div>
+
+      <div className="flex items-center gap-3 p-3">
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-bold text-gray-900 leading-snug">{catalog.name_ar}</p>
+          <p className="text-xs text-gray-500 mt-0.5">{crossSell.shortDesc}</p>
+          <p className="text-sm font-bold text-[#1B4DDB] mt-1">
+            {crossSell.singleUnitPriceSar} ر.س
+          </p>
+        </div>
+
+        <button
+          onClick={handleAdd}
+          disabled={alreadyInCart}
+          aria-label={`أضف ${catalog.name_ar} للطلب`}
+          className={cn(
+            "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all",
+            alreadyInCart
+              ? "bg-[#10B981]/15 text-[#10B981] cursor-default"
+              : "bg-[#1B4DDB] text-white hover:bg-[#1640b8]",
+          )}
+        >
+          {alreadyInCart ? "✓" : <Plus className="w-4 h-4" />}
+        </button>
+      </div>
     </div>
   );
 }

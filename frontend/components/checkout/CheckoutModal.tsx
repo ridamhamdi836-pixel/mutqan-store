@@ -11,7 +11,7 @@ import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analy
 import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
 import { saveLastOrderSession } from "@/lib/last-order-session";
 
@@ -24,7 +24,7 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
   return (
     <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0">
       <StoreImage
-        src={getProductMainImageSrc(slug)}
+        src={getProductCardImageSrc(slug)}
         alt={name}
         fill
         sizes="56px"

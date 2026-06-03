@@ -7,7 +7,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { CATALOG } from "@/config/catalog";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 
 interface UpsellProduct {
   slug: string;
@@ -34,7 +34,7 @@ const ALL_UPSELL_PRODUCTS: UpsellProduct[] = CATALOG.filter((p) => p.upsell).map
     slug: p.slug,
     name_ar: p.name_ar,
     hook_ar: u.hook_ar,
-    image: getProductMainImageSrc(p.slug),
+    image: getProductCardImageSrc(p.slug),
     original_price_sar: u.original_price_sar,
     upsell_price_sar: u.upsell_price_sar,
     savings_percent: savings,
