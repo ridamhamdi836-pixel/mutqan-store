@@ -19,7 +19,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
       {/* Urgency bar */}
       <div className="flex items-center justify-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-2.5 text-amber-700">
         <Clock className="w-4 h-4 flex-shrink-0" />
-        <span className="text-sm font-bold">آخر 48 ساعة على عرض الشحن المجاني هذا الأسبوع</span>
+        <span className="text-sm font-bold">شحن مجاني داخل السعودية — لفترة محدودة</span>
       </div>
 
       {/* Heading */}
