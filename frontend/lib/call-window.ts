@@ -1,0 +1,62 @@
+/** COD confirmation call window — Asia/Riyadh, 9:00–21:00 */
+export type CallExpectationVariant = "within_minutes" | "morning_today" | "morning_tomorrow";
+
+export type CallExpectation = {
+  variant: CallExpectationVariant;
+  bannerHeadline: string;
+  bannerSubline: string;
+  phoneStep: string;
+  etaLabel: string;
+};
+
+const CALL_OPEN_HOUR = 9;
+const CALL_CLOSE_HOUR = 21;
+
+function getRiyadhHour(now: Date): number {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Riyadh",
+    hour: "numeric",
+    hour12: false,
+  }).formatToParts(now);
+  const hour = parts.find((p) => p.type === "hour")?.value;
+  return hour ? parseInt(hour, 10) : now.getHours();
+}
+
+export function getCallExpectation(now = new Date()): CallExpectation {
+  const hour = getRiyadhHour(now);
+  const inWindow = hour >= CALL_OPEN_HOUR && hour < CALL_CLOSE_HOUR;
+
+  if (inWindow) {
+    return {
+      variant: "within_minutes",
+      bannerHeadline: "انتظر اتصالنا خلال 10 دقائق",
+      bannerSubline:
+        "قد يظهر الرقم كـ «غير معروف» — هذا فريق متقن لتأكيد عنوانك قبل الشحن. الرد يضمن شحن طلبك اليوم.",
+      phoneStep:
+        "أجب على الجوال خلال الدقائق القادمة — نؤكد العنوان والكمية فقط، بدون أي دفع الآن.",
+      etaLabel: "خلال ~10 دقائق",
+    };
+  }
+
+  if (hour < CALL_OPEN_HOUR) {
+    return {
+      variant: "morning_today",
+      bannerHeadline: "ستتلقى اتصالنا صباحًا اليوم",
+      bannerSubline:
+        "طلبك مسجّل. نتصل من الساعة 9 صباحًا حتى 9 مساءً — قد يظهر الرقم غير محفوظ، وهذا فريق متقن للتأكيد قبل الشحن.",
+      phoneStep:
+        "احتفظ بجوالك قريبًا منك صباحًا — نؤكد العنوان والتفاصيل، والدفع عند الاستلام فقط.",
+      etaLabel: "ابتداءً من 9 صباحًا",
+    };
+  }
+
+  return {
+    variant: "morning_tomorrow",
+    bannerHeadline: "ستتلقى اتصالنا صباح الغد",
+    bannerSubline:
+      "طلبك محفوظ وسنتصل في أول فترة عمل (9 ص–9 م). الرقم قد يكون غير معروف — فريق متقن لتأكيد عنوانك قبل الشحن.",
+    phoneStep:
+      "غدًا صباحًا نؤكد معك العنوان على نفس رقم الطلب — لا دفع مقدّم، ويمكنك الإلغاء قبل الشحن.",
+    etaLabel: "صباح الغد (من 9 ص)",
+  };
+}

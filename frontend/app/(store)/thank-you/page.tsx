@@ -1,72 +1,113 @@
 "use client";
 
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle2, MessageCircle, Package, Truck } from "lucide-react";
-import { Suspense } from "react";
+import { CheckCircle2 } from "lucide-react";
+import { ConfirmationBanner } from "@/components/thank-you/ConfirmationBanner";
+import { ThankYouOrderSummary } from "@/components/thank-you/ThankYouOrderSummary";
+import { CallPrepSection } from "@/components/thank-you/CallPrepSection";
+import { ThankYouSocialProof } from "@/components/thank-you/ThankYouSocialProof";
+import { ThankYouRecommendations } from "@/components/thank-you/ThankYouRecommendations";
+import { ThankYouFaq } from "@/components/thank-you/ThankYouFaq";
+import { getCallExpectation } from "@/lib/call-window";
+import {
+  loadLastOrderSession,
+  type LastOrderLineItem,
+} from "@/lib/last-order-session";
+import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { WHATSAPP_URL } from "@/config/brand";
 
 function ThankYouContent() {
   const params = useSearchParams();
-  const orderNumber = params?.get("order") || "MQN-XXXXXX-XXXX";
-  const total = params?.get("total") || "0";
+  const [sessionItems, setSessionItems] = useState<LastOrderLineItem[]>([]);
+  const [orderedSlugs, setOrderedSlugs] = useState<string[]>([]);
+
+  const orderNumber =
+    params?.get("order") || loadLastOrderSession()?.orderNumber || "";
+  const totalParam = params?.get("total");
+  const totalSar = useMemo(() => {
+    const fromUrl = totalParam ? parseInt(totalParam, 10) : 0;
+    if (fromUrl > 0) return fromUrl;
+    return loadLastOrderSession()?.totalSar ?? 0;
+  }, [totalParam]);
+
+  const expectation = useMemo(() => getCallExpectation(), []);
+
+  useEffect(() => {
+    const session = loadLastOrderSession();
+    if (session) {
+      setSessionItems(session.items);
+      setOrderedSlugs(session.orderedSlugs);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!orderNumber) return;
+    firePixelEvent({
+      eventId: generateEventId("thank_you_view"),
+      eventName: "thank_you_view",
+      orderNumber,
+    });
+  }, [orderNumber]);
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-16 page-x">
-      <div className="max-w-lg w-full text-center space-y-6">
-        {/* Success icon */}
-        <div className="flex justify-center">
-          <div className="w-20 h-20 rounded-full bg-brand-trust/10 flex items-center justify-center">
-            <CheckCircle2 className="w-10 h-10 text-brand-trust" />
+    <div className="py-10 md:py-14 page-x">
+      <div className="max-w-xl mx-auto space-y-6">
+        <div className="text-center space-y-3">
+          <div className="flex justify-center">
+            <div className="w-16 h-16 rounded-full bg-brand-trust/10 flex items-center justify-center">
+              <CheckCircle2 className="w-8 h-8 text-brand-trust" />
+            </div>
           </div>
-        </div>
-
-        <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-espresso mb-3">
-            شكرًا لك، تم استلام طلبك بنجاح
+          <h1 className="text-2xl md:text-3xl font-black text-brand-espresso">
+            تم استلام طلبك بنجاح
           </h1>
-          <p className="text-brand-muted leading-relaxed">
-            سيتواصل معك فريق متقن لتأكيد الطلب قبل الشحن.
+          <p className="text-sm text-brand-muted leading-relaxed max-w-md mx-auto">
+            خطوة واحدة تفصلك عن الشحن:{" "}
+            <strong className="text-brand-espresso">الرد على مكالمة التأكيد</strong>
+            . لا نعرض بياناتك هنا — نتصل على نفس رقم الطلب فقط.
           </p>
         </div>
 
-        {/* Order details */}
-        <div className="card p-5 text-start space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-brand-muted">رقم الطلب</span>
-            <span className="font-bold text-brand-espresso">{orderNumber}</span>
-          </div>
-          {parseInt(total) > 0 && (
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-brand-muted">الإجمالي</span>
-              <span className="font-bold text-brand-espresso">{total} ر.س</span>
-            </div>
-          )}
-          <div className="flex items-center justify-between">
-            <span className="text-sm text-brand-muted">طريقة الدفع</span>
-            <span className="font-semibold text-brand-espresso">الدفع عند الاستلام</span>
-          </div>
-        </div>
+        <ConfirmationBanner expectation={expectation} />
 
-        {/* Next steps */}
-        <div className="card p-5 text-start space-y-4">
-          <h2 className="font-bold text-brand-espresso text-base">الخطوات القادمة</h2>
-          {[
-            { icon: MessageCircle, label: "سيتواصل فريق متقن معك خلال فترة وجيزة لتأكيد الطلب." },
-            { icon: Package, label: "بعد التأكيد، يُجهّز الطلب ويُرسل خلال 1-2 يوم عمل." },
-            { icon: Truck, label: "التوصيل خلال 2-5 أيام عمل داخل المدن الرئيسية." },
-          ].map((item, i) => (
-            <div key={i} className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-brand-trust/10 flex items-center justify-center flex-shrink-0">
-                <item.icon className="w-4 h-4 text-brand-trust" />
-              </div>
-              <p className="text-sm text-brand-muted leading-relaxed mt-1">{item.label}</p>
-            </div>
-          ))}
-        </div>
+        <ThankYouOrderSummary
+          orderNumber={orderNumber}
+          totalSar={totalSar}
+          items={sessionItems}
+        />
 
-        <Link href="/collections" className="block text-sm text-brand-bronze hover:text-brand-espresso font-medium transition-colors">
-          مواصلة التسوق
-        </Link>
+        <CallPrepSection expectation={expectation} />
+
+        {orderNumber ? (
+          <ThankYouRecommendations
+            orderNumber={orderNumber}
+            orderedSlugs={orderedSlugs}
+          />
+        ) : null}
+
+        <ThankYouSocialProof />
+
+        <ThankYouFaq />
+
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <Link
+            href="/track-order"
+            className="text-sm font-semibold text-brand-bronze hover:text-brand-espresso"
+          >
+            تتبع الطلب لاحقًا
+          </Link>
+          <span className="hidden sm:inline text-brand-border">·</span>
+          <a
+            href={WHATSAPP_URL("مرحبًا، أتممت طلبًا وأحتاج مساعدة")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm text-brand-muted hover:text-brand-espresso"
+          >
+            مساعدة عبر واتساب
+          </a>
+        </div>
       </div>
     </div>
   );
@@ -74,7 +115,13 @@ function ThankYouContent() {
 
 export default function ThankYouPage() {
   return (
-    <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><p className="text-brand-muted">جارٍ التحميل...</p></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <p className="text-brand-muted">جارٍ التحميل...</p>
+        </div>
+      }
+    >
       <ThankYouContent />
     </Suspense>
   );

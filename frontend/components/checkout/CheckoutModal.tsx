@@ -13,6 +13,7 @@ import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { getProductMainImageSrc } from "@/lib/product-image";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
+import { saveLastOrderSession } from "@/lib/last-order-session";
 
 interface CheckoutModalProps {
   onOrderSuccess: (response: CreateOrderResponse) => void;
@@ -142,6 +143,20 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
         currency: "SAR",
         contents: items.map((i) => ({ id: i.productSlug, quantity: i.quantity, item_price: i.priceSar })),
         orderNumber: response.order.public_order_number,
+      });
+
+      saveLastOrderSession({
+        orderNumber: response.order.public_order_number,
+        totalSar: response.order.total_sar,
+        items: items.map((item) => ({
+          productSlug: item.productSlug,
+          productNameAr: item.productNameAr,
+          bundleLabelAr: item.bundleLabelAr,
+          quantity: item.quantity,
+          priceSar: item.priceSar,
+        })),
+        orderedSlugs:
+          response.order_slugs ?? items.map((i) => i.productSlug),
       });
 
       closeCheckout();
