@@ -25,10 +25,7 @@ export function Header() {
           >
             <BrandLogo
               variant="default"
-              className="h-11 w-11 sm:h-[52px] sm:w-[52px]"
-              sizes="104px"
-              priority
-              imageClassName="object-contain object-center group-hover:opacity-90 transition-opacity"
+              className="h-14 w-[50px] sm:h-[60px] sm:w-[54px] transition-opacity group-hover:opacity-90"
             />
           </Link>
 

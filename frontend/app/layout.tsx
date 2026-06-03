@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
   icons: {
-    icon: "/images/brand/mutqan-logo.png",
-    apple: "/images/brand/mutqan-logo.png",
+    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
   },
 };
 

@@ -45,11 +45,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="inline-block mb-4">
-              <BrandLogo
-                variant="light"
-                className="h-14 w-14"
-                sizes="56px"
-              />
+              <BrandLogo variant="light" className="h-16 w-[58px]" />
             </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
               تفاصيل عملية ومُتقنة تجعل البيت أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية لبيوت الخليج.

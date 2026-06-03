@@ -26,11 +26,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <aside className="w-56 shrink-0 border-r border-slate-800 bg-slate-900/80 p-4 flex flex-col">
         <div className="mb-8 px-1">
           <Link href="/admin" className="block">
-            <BrandLogo
-              variant="light"
-              className="h-14 w-14 mb-2"
-              sizes="56px"
-            />
+            <BrandLogo variant="light" className="h-14 w-[50px] mb-2" />
           </Link>
           <p className="text-xs text-slate-400">COD Operations</p>
         </div>
