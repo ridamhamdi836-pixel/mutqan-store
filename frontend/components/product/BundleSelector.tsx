@@ -40,7 +40,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
     <div className="space-y-3" role="group" aria-label="اختر العرض">
       <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
 
-      <div className="flex flex-col gap-2.5 md:gap-3 overflow-visible pt-1">
+      <div className="flex flex-col gap-2.5 md:gap-3 pt-4">
         {sorted.map((bundle) => {
           const isSelected = bundle.id === selectedId;
           const isFeatured = bundle.id === defaultBundle.id;
@@ -61,11 +61,11 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start transition-colors duration-150 overflow-visible",
-                isFeatured ? "p-4 md:p-6 max-md:shadow-md md:shadow-lg" : "p-3.5 md:p-4",
+                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start max-md:transition-none md:transition-colors md:duration-150",
+                isFeatured ? "p-4 md:p-6 max-md:shadow-none md:shadow-lg" : "p-3.5 md:p-4 max-md:shadow-none",
                 isSelected
-                  ? "border-brand-bronze bg-brand-bronze/5 md:shadow-md"
-                  : "border-brand-border bg-white hover:border-brand-bronze/40",
+                  ? "border-brand-bronze bg-brand-bronze/5"
+                  : "border-brand-border bg-white md:hover:border-brand-bronze/40",
                 isFeatured && !isSelected && "border-brand-bronze/30 bg-brand-bronze/[0.03]",
               )}
             >
@@ -78,7 +78,7 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div
                   className={cn(
-                    "rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+                    "rounded-full border-2 flex items-center justify-center flex-shrink-0 max-md:transition-none md:transition-colors",
                     isFeatured ? "w-7 h-7" : "w-6 h-6",
                     isSelected ? "border-brand-bronze" : "border-brand-muted/40",
                   )}

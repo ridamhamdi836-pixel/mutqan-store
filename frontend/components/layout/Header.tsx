@@ -17,7 +17,7 @@ export function Header() {
   const isProductPage = pathname?.startsWith("/products/");
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm">
+    <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm max-md:shadow-none">
       <div className="max-w-content mx-auto page-x">
         <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-16")}>
           {/* Logo */}

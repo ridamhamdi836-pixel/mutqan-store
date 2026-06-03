@@ -110,7 +110,7 @@ export default function HomePage() {
             </div>
 
             {/* Image Column */}
-            <div className="order-1 md:order-2 relative mb-8 md:mb-0 isolate pb-14 md:pb-0">
+            <div className="order-1 md:order-2 relative mb-8 md:mb-0 pb-14 md:pb-0">
               <div className="aspect-[4/3] md:aspect-square relative rounded-2xl overflow-hidden shadow-xl border-4 border-white">
                 <StoreImage
                   src="/images/hero/saudi-family.png"
@@ -153,7 +153,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-y-4 border-brand-bronze/40">
+      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-y-4 border-brand-bronze/40 relative z-0">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
@@ -223,7 +223,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           5. WHY MUTQAN — Value propositions
       ════════════════════════════════════════════ */}
-      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-surface relative max-md:overflow-x-clip md:overflow-hidden">
         <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
@@ -333,7 +333,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           7. HOW COD WORKS — Dark, 4 steps
       ════════════════════════════════════════════ */}
-      <section className="cv-section section-pad page-x bg-brand-espresso text-white relative overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-espresso text-white relative max-md:overflow-x-clip md:overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(27,77,219,0.08),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(27,77,219,0.06),transparent_60%)]" />
 
@@ -406,7 +406,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           8. REVIEWS — Social proof
       ════════════════════════════════════════════ */}
-      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-surface relative max-md:overflow-x-clip md:overflow-hidden">
         <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-amber-400/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">

@@ -15,8 +15,8 @@ type ProductTrustStripProps = {
 export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) {
   if (variant === "bar") {
     return (
-      <div className="bg-brand-espresso text-brand-surface py-3">
-        <div className="max-w-content mx-auto page-x grid grid-cols-2 gap-x-3 gap-y-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2 text-xs md:text-sm font-bold">
+      <div className="bg-brand-espresso text-brand-surface py-3 relative z-0">
+        <div className="max-w-content mx-auto page-x grid grid-cols-2 gap-x-3 gap-y-2.5 sm:flex sm:flex-wrap sm:justify-center sm:gap-x-6 sm:gap-y-2 text-xs md:text-sm font-bold max-md:[transform:none]">
           {ITEMS.map((item) => (
             <span
               key={item.label}
@@ -41,7 +41,7 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   }
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-3 max-md:grid max-md:grid-cols-2">
+    <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-3">
       {ITEMS.map((item) => (
         <span
           key={item.label}
