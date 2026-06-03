@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import Link from "next/link";
 import { Star, ShoppingBag, CheckCircle2, Truck, CreditCard, ShieldCheck, ThumbsUp, ChevronDown } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
 import { useCart } from "@/providers/cart-provider";
 import { BundleSelector } from "@/components/product/BundleSelector";
 import { ReviewCard } from "@/components/product/ReviewCard";
@@ -168,43 +167,40 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
   return (
     <div className="bg-brand-background pb-6">
-      {/* Sticky CTA - scrolls to bundle section */}
-      <AnimatePresence>
-        {showSticky && (
-          <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            exit={{ y: 100 }}
-            transition={{ type: "tween", duration: 0.3 }}
-            className="fixed bottom-0 inset-x-0 z-40 bg-brand-surface/95 backdrop-blur-md border-t border-brand-border p-3 md:p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)]"
-          >
-            <div className="max-w-content mx-auto flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3 flex-1">
-                <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
-                  <StoreImage
-                    src={mainImageSrc}
-                    alt={product.name_ar}
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                    onError={() => { if (!imgError) setImgError(true); }}
-                  />
-                </div>
-                <div>
-                  <p className="font-bold text-sm text-brand-espresso">{product.name_ar}</p>
-                  <p className="text-xs text-brand-muted">ابتداءً من {minBundle.price_sar} ر.س</p>
-                </div>
-              </div>
-              <button
-                onClick={() => bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
-                className="btn-primary flex items-center gap-2 px-6 md:px-8 justify-center shadow-lg py-3"
-              >
-                <span className="font-bold text-sm md:text-base">اختر عرضك الآن</span>
-              </button>
-            </div>
-          </motion.div>
+      {/* Sticky CTA - CSS only (no motion lib on scroll) */}
+      <div
+        aria-hidden={!showSticky}
+        className={cn(
+          "fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 md:p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transition-transform duration-200 ease-out will-change-transform",
+          showSticky ? "translate-y-0 pointer-events-auto" : "translate-y-full pointer-events-none",
         )}
-      </AnimatePresence>
+      >
+        <div className="max-w-content mx-auto flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0">
+              <StoreImage
+                src={mainImageSrc}
+                alt={product.name_ar}
+                fill
+                sizes="40px"
+                className="object-cover"
+                onError={() => { if (!imgError) setImgError(true); }}
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="font-bold text-sm text-brand-espresso truncate">{product.name_ar}</p>
+              <p className="text-xs text-brand-muted">ابتداءً من {minBundle.price_sar} ر.س</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+            className="btn-primary flex items-center gap-2 px-6 md:px-8 justify-center shadow-lg py-3 shrink-0"
+          >
+            <span className="font-bold text-sm md:text-base">اختر عرضك الآن</span>
+          </button>
+        </div>
+      </div>
 
       {/* Product Hero */}
       <section className="page-x pt-4 md:pt-6 pb-6">
@@ -303,7 +299,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
               <div className="space-y-3 pt-2">
                 <button
                   onClick={handleAddToCart}
-                  className="w-full h-14 md:h-16 rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-3 bg-[#1B4DDB] hover:bg-[#1640B5] text-white shadow-lg shadow-[#1B4DDB]/25 hover:shadow-xl hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+                  className="btn-primary w-full h-14 md:h-16 rounded-2xl text-base md:text-lg flex items-center justify-center gap-3 shadow-lg shadow-[#1B4DDB]/25"
                 >
                   اطلب الآن · {selectedBundle.price_sar} ر.س
                 </button>
@@ -351,7 +347,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </div>
 
       {/* Alternating Problem/Solution Feature Sections */}
-      <section className="section-pad page-x bg-white overflow-hidden">
+      <section className="cv-section section-pad page-x bg-white overflow-hidden">
         <div className="max-w-content mx-auto space-y-16 md:space-y-24">
           
           {/* Section 1: The Pain Point (Image Left, Text Right) */}
@@ -494,7 +490,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* Before/After with emotional touch */}
-      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
+      <section className="cv-section product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">الفرق واضح ولا يحتاج تفكير</h2>
@@ -561,7 +557,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* How to Use */}
-      <section className="page-x pt-6 md:pt-8 pb-8 md:pb-10">
+      <section className="cv-section page-x pt-6 md:pt-8 pb-8 md:pb-10">
         <div className="max-w-content mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">بساطة الاستخدام هي سرنا</h2>
@@ -581,7 +577,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* Bundle CTA */}
-      <section className="py-16 page-x bg-brand-espresso relative overflow-hidden">
+      <section className="cv-section py-16 page-x bg-brand-espresso relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
         <div className="max-w-content mx-auto max-w-xl text-center relative z-10">
           <span className="inline-block bg-brand-bronze text-white text-xs font-bold px-3 py-1 rounded-full mb-4">الكمية محدودة جداً</span>
@@ -603,7 +599,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* Reviews */}
-      <section className="product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
+      <section className="cv-section product-section-pad page-x bg-brand-surface pb-6 md:pb-8">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-10 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-4">انضم لآلاف العائلات السعيدة</h2>
@@ -618,7 +614,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* COD Reassurance */}
-      <section className="page-x bg-white pt-6 md:pt-8 pb-8 md:pb-10">
+      <section className="cv-section page-x bg-white pt-6 md:pt-8 pb-8 md:pb-10">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-6">
             <h2 className="text-2xl font-bold text-brand-espresso">تسوق بأمان تام وموثوقية عالية</h2>
@@ -628,7 +624,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
       </section>
 
       {/* FAQ */}
-      <section className="py-10 md:py-12 page-x bg-brand-surface">
+      <section className="cv-section py-10 md:py-12 page-x bg-brand-surface">
         <div className="max-w-content mx-auto max-w-3xl">
           <div className="text-center mb-10">
             <h2 className="text-3xl font-extrabold text-brand-espresso mb-4">عندك استفسار؟ إجاباتنا واضحة</h2>
@@ -640,7 +636,7 @@ export function ProductPageClient({ product, config }: ProductPageClientProps) {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="pt-10 pb-6 md:pt-12 md:pb-8 page-x bg-white border-t border-brand-border/30">
+        <section className="cv-section pt-10 pb-6 md:pt-12 md:pb-8 page-x bg-white border-t border-brand-border/30">
           <div className="max-w-content mx-auto">
             <h2 className="text-3xl font-extrabold text-brand-espresso text-center mb-6">عزّز راحة بيتك مع هذه المنتجات</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

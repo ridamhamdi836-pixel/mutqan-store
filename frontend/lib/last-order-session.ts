@@ -11,6 +11,9 @@ export type LastOrderSession = {
   totalSar: number;
   items: LastOrderLineItem[];
   orderedSlugs: string[];
+  /** For merging upsell into the same Google Sheets row when DB sync is delayed */
+  customerName?: string;
+  phoneE164?: string;
   savedAt: number;
 };
 
@@ -29,6 +32,31 @@ export function saveLastOrderSession(
   } catch {
     /* quota / private mode */
   }
+}
+
+export function appendUpsellToLastOrderSession(
+  added: LastOrderLineItem[],
+): LastOrderSession | null {
+  const current = loadLastOrderSession();
+  if (!current) return null;
+
+  const next: LastOrderSession = {
+    ...current,
+    items: [...current.items, ...added],
+    orderedSlugs: [
+      ...current.orderedSlugs,
+      ...added.map((a) => a.productSlug),
+    ],
+    totalSar: current.totalSar + added.reduce((s, i) => s + i.priceSar, 0),
+    savedAt: Date.now(),
+  };
+
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+  } catch {
+    /* ignore */
+  }
+  return next;
 }
 
 export function loadLastOrderSession(): LastOrderSession | null {

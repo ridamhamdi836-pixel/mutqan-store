@@ -23,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300"
+      className="group block rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm card-lift"
     >
       {/* Product Image */}
       <div className="relative aspect-[4/3] bg-gray-50 overflow-hidden">
@@ -33,7 +33,7 @@ export function ProductCard({ product }: ProductCardProps) {
             alt={product.name_ar}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+            className="object-cover md:group-hover:scale-[1.02] md:transition-transform md:duration-300"
             onError={() => setImgError(true)}
           />
         ) : (

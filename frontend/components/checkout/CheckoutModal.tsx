@@ -5,7 +5,7 @@ import { X, Loader2, ShieldCheck, Clock, Phone, CreditCard, CheckCircle, Star, T
 import { motion, AnimatePresence } from "framer-motion";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { useCart } from "@/providers/cart-provider";
-import { validatePhone } from "@/lib/phone";
+import { normalizePhone, validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
 import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analytics";
 import { formatSARCompact } from "@/lib/currency";
@@ -145,9 +145,13 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
         orderNumber: response.order.public_order_number,
       });
 
+      const { e164: phoneE164 } = normalizePhone(phone);
+
       saveLastOrderSession({
         orderNumber: response.order.public_order_number,
         totalSar: response.order.total_sar,
+        customerName: name.trim(),
+        phoneE164,
         items: items.map((item) => ({
           productSlug: item.productSlug,
           productNameAr: item.productNameAr,
@@ -183,7 +187,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="drawer-backdrop z-50"
             onClick={closeCheckout}
           />
 

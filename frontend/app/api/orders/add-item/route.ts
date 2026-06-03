@@ -1,13 +1,38 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPool } from "@/lib/db";
-import { syncOrderByNumberToGoogleSheets } from "@/lib/google-sheets";
+import {
+  mergeUpsellIntoGoogleSheets,
+  syncOrderByNumberToGoogleSheets,
+  type GoogleSheetsOrderInput,
+} from "@/lib/google-sheets";
+
+type AddItemInput = {
+  slug: string;
+  name_ar?: string;
+  price_sar?: number;
+};
+
+type MergeContext = {
+  customer_name: string;
+  phone_e164: string;
+  existing_items: Array<{
+    product_slug: string;
+    name_ar?: string;
+    quantity?: number;
+  }>;
+  total_sar: number;
+};
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { order_number, items } = body;
+    const { order_number, items, merge_context } = body as {
+      order_number: string;
+      items: AddItemInput[];
+      merge_context?: MergeContext;
+    };
 
-    if (!order_number || !items || !Array.isArray(items) || items.length === 0) {
+    if (!order_number || !items?.length) {
       return NextResponse.json(
         { error: { code: "INVALID_REQUEST", message_ar: "بيانات غير صالحة." } },
         { status: 400 },
@@ -15,12 +40,14 @@ export async function POST(request: NextRequest) {
     }
 
     const totalAdded = items.reduce(
-      (sum: number, item: { price_sar?: number }) => sum + (item.price_sar || 0),
+      (sum, item) => sum + (item.price_sar || 0),
       0,
     );
 
     const now = new Date().toISOString();
     const pool = getPool();
+    let dbUpdated = false;
+    let newTotalSar = (merge_context?.total_sar ?? 0) + totalAdded;
 
     if (pool) {
       try {
@@ -57,13 +84,14 @@ export async function POST(request: NextRequest) {
             }
 
             const newUpsellTotal = (order.upsell_total_sar || 0) + totalAdded;
-            const newTotal = (order.total_sar || 0) + totalAdded;
+            newTotalSar = (order.total_sar || 0) + totalAdded;
             await client.query(
               "UPDATE orders SET upsell_total_sar = $1, total_sar = $2, updated_at = $3 WHERE id = $4",
-              [newUpsellTotal, newTotal, now, order.id],
+              [newUpsellTotal, newTotalSar, now, order.id],
             );
 
             await client.query("COMMIT");
+            dbUpdated = true;
           }
         } catch (dbErr) {
           await client.query("ROLLBACK");
@@ -76,14 +104,58 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    syncOrderByNumberToGoogleSheets(order_number).catch((err) => {
-      console.error("[add-item] Google Sheets sync failed (non-blocking):", err);
-    });
+    let sheetsResult: { success: boolean; error?: string } = { success: false };
+
+    if (dbUpdated) {
+      sheetsResult = await syncOrderByNumberToGoogleSheets(order_number);
+    } else if (merge_context?.customer_name && merge_context.phone_e164) {
+      const mergedItems = [
+        ...merge_context.existing_items.map((i) => ({
+          product_slug: i.product_slug,
+          name_ar: i.name_ar,
+          quantity: i.quantity || 1,
+        })),
+        ...items.map((i) => ({
+          product_slug: i.slug,
+          name_ar: i.name_ar || i.slug,
+          quantity: 1,
+        })),
+      ];
+
+      const sheetsOrder: GoogleSheetsOrderInput = {
+        orderid: order_number,
+        customerName: merge_context.customer_name,
+        phoneE164: merge_context.phone_e164,
+        items: mergedItems,
+        totalSar: newTotalSar,
+        address: "",
+      };
+
+      sheetsResult = await mergeUpsellIntoGoogleSheets(sheetsOrder);
+    } else {
+      console.warn("[add-item] No DB row and no merge_context — Sheets sync skipped", {
+        order_number,
+      });
+    }
+
+    if (!dbUpdated && !sheetsResult.success) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "ORDER_NOT_FOUND",
+            message_ar: "تعذر دمج الإضافة مع الطلب. تواصل معنا عبر واتساب.",
+          },
+        },
+        { status: 404 },
+      );
+    }
 
     return NextResponse.json({
       success: true,
       message_ar: "تم إضافة المنتجات لطلبك بنجاح!",
       total_added_sar: totalAdded,
+      total_sar: newTotalSar,
+      sheets_synced: sheetsResult.success,
     });
   } catch {
     return NextResponse.json(

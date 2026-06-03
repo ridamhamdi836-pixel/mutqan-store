@@ -13,7 +13,7 @@ type StoreImageProps = Omit<ImageProps, "quality"> & {
  * Store images with Next.js optimization (WebP/AVIF, responsive width, lazy load).
  */
 export function StoreImage({
-  quality = 75,
+  quality = 68,
   loading,
   src,
   unoptimized: unoptimizedProp,

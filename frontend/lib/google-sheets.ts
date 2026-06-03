@@ -278,6 +278,13 @@ export async function sendOrderToGoogleSheets(
   }
 }
 
+/** Merge upsell lines into one Sheets row (same orderid — Apps Script updates, never duplicates). */
+export async function mergeUpsellIntoGoogleSheets(
+  order: GoogleSheetsOrderInput,
+): Promise<SheetsSendResult> {
+  return sendOrderToGoogleSheets(order);
+}
+
 /** Re-sync full order to Sheets (e.g. after post-purchase upsell). Updates row if orderid exists. */
 export async function syncOrderByNumberToGoogleSheets(
   orderNumber: string,

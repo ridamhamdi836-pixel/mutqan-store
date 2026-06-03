@@ -10,9 +10,16 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        arabic: ["IBM Plex Sans Arabic", "Tajawal", "Noto Sans Arabic", "sans-serif"],
-        sans: ["Inter", "IBM Plex Sans Arabic", "Tajawal", "Noto Sans Arabic", "sans-serif"],
-        inter: ["Inter", "sans-serif"],
+        sans: [
+          "var(--font-arabic)",
+          "var(--font-latin)",
+          "Tajawal",
+          "Noto Sans Arabic",
+          "system-ui",
+          "sans-serif",
+        ],
+        arabic: ["var(--font-arabic)", "Tajawal", "Noto Sans Arabic", "sans-serif"],
+        inter: ["var(--font-latin)", "Inter", "system-ui", "sans-serif"],
       },
       colors: {
         brand: {

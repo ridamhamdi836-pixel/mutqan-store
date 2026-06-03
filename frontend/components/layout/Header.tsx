@@ -14,7 +14,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-lg border-b border-brand-border/60">
+    <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm">
       <div className="max-w-content mx-auto page-x">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -76,7 +76,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-lg border-t border-brand-border/60 animate-fade-in">
+        <div className="md:hidden bg-white border-t border-brand-border/60 animate-fade-in">
           <nav className="max-w-content mx-auto page-x py-4 flex flex-col gap-1">
             {COLLECTIONS.map((col) => (
               <Link

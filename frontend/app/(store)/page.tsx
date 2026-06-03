@@ -56,8 +56,8 @@ export default function HomePage() {
           1. HERO — Emotional, full-width
       ════════════════════════════════════════════ */}
       <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full blur-3xl -z-10" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/30 rounded-full blur-3xl -z-10" />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
 
         <div className="max-w-content mx-auto relative z-10">
           <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
@@ -84,7 +84,7 @@ export default function HomePage() {
 
               <Link
                 href="/collections"
-                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all mb-8"
+                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg mb-8"
               >
                 <span>تسوق الآن · الدفع عند الاستلام</span>
                 <ArrowLeft className="w-5 h-5" />
@@ -100,7 +100,7 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white/80 backdrop-blur-sm px-4 py-2.5 rounded-xl shadow-sm border border-brand-border/60"
+                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl shadow-sm border border-brand-border/60"
                   >
                     <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                     <span>{item.label}</span>
@@ -153,7 +153,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="py-10 md:py-12 bg-brand-espresso text-white border-y-4 border-brand-bronze/40">
+      <section className="cv-section py-10 md:py-12 bg-brand-espresso text-white border-y-4 border-brand-bronze/40">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
@@ -177,7 +177,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           3. TRUST BADGES
       ════════════════════════════════════════════ */}
-      <section className="pt-16 md:pt-20 pb-8 page-x">
+      <section className="cv-section pt-16 md:pt-20 pb-8 page-x">
         <div className="max-w-content mx-auto">
           <TrustBadges />
         </div>
@@ -186,7 +186,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           4. FEATURED PRODUCTS
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -223,8 +223,8 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           5. WHY MUTQAN — Value propositions
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-surface relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-brand-bronze/5 rounded-full blur-[100px] -z-10" />
+      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -268,7 +268,7 @@ export default function HomePage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="card bg-white rounded-2xl p-8 md:p-9 text-center hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group"
+                className="card card-lift bg-white rounded-2xl p-8 md:p-9 text-center group"
               >
                 <div
                   className={`w-18 h-18 rounded-2xl bg-gradient-to-br ${item.accent} flex items-center justify-center mx-auto mb-7 group-hover:scale-110 transition-transform duration-300`}
@@ -290,7 +290,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           6. COLLECTIONS — Browse by category
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -312,7 +312,7 @@ export default function HomePage() {
               <Link
                 key={cat.slug}
                 href={`/collections/${cat.slug}`}
-                className="group bg-white rounded-2xl p-5 md:p-7 text-center border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden"
+                className="group card-lift bg-white rounded-2xl p-5 md:p-7 text-center border border-gray-100 relative overflow-hidden"
               >
                 <div className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                   <cat.icon className="w-7 h-7 md:w-8 md:h-8 text-white" />
@@ -333,7 +333,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           7. HOW COD WORKS — Dark, 4 steps
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-espresso text-white relative overflow-hidden">
+      <section className="cv-section section-pad page-x bg-brand-espresso text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(27,77,219,0.08),transparent_70%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(27,77,219,0.06),transparent_60%)]" />
 
@@ -394,7 +394,7 @@ export default function HomePage() {
           <div className="text-center mt-14">
             <Link
               href="/collections"
-              className="inline-flex items-center gap-3 bg-brand-bronze text-white font-extrabold rounded-pill px-10 py-4.5 text-lg shadow-xl shadow-brand-bronze/25 hover:shadow-2xl hover:-translate-y-0.5 transition-all duration-300"
+              className="btn-primary inline-flex items-center gap-3 px-10 py-4.5 text-lg font-extrabold"
             >
               <span>ابدأ تجربتك الآن</span>
               <ArrowLeft className="w-5 h-5" />
@@ -406,8 +406,8 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           8. REVIEWS — Social proof
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-brand-surface relative overflow-hidden">
-        <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-amber-400/5 rounded-full blur-[80px] -z-10" />
+      <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
+        <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-amber-400/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-amber-500 font-bold text-sm mb-4">
@@ -439,7 +439,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           9. FAQ
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-white">
+      <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
@@ -460,11 +460,11 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           10. FINAL CTA — Urgency + reassurance
       ════════════════════════════════════════════ */}
-      <section className="section-pad page-x bg-gradient-to-b from-brand-beige to-brand-background">
+      <section className="cv-section section-pad page-x bg-gradient-to-b from-brand-beige to-brand-background">
         <div className="max-w-content mx-auto text-center bg-white rounded-[2rem] p-10 md:p-16 lg:p-20 shadow-2xl border border-brand-bronze/15 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-l from-brand-bronze via-brand-bronze/60 to-transparent" />
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-bronze/5 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-emerald-500/5 rounded-full blur-3xl" />
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-bronze/5 rounded-full pointer-events-none" aria-hidden />
+          <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-emerald-500/5 rounded-full pointer-events-none" aria-hidden />
 
           <div className="relative z-10">
             <div className="w-16 h-16 rounded-full bg-brand-bronze/10 flex items-center justify-center mx-auto mb-8">
@@ -484,7 +484,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-5 justify-center">
               <Link
                 href="/collections"
-                className="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 text-lg font-extrabold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
+                className="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 text-lg font-extrabold shadow-xl"
               >
                 <span>تسوق وابدأ الترتيب</span>
                 <ArrowLeft className="w-5 h-5" />
