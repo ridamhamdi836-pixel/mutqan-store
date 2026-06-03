@@ -67,7 +67,8 @@ function SectionImage({
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 768px) 100vw, 50vw"
+        variant={priority ? "hero" : "default"}
+        sizes={priority ? "(max-width: 768px) 100vw, 520px" : "(max-width: 768px) 92vw, 480px"}
         className="object-cover object-center"
         priority={priority}
         loading={priority ? undefined : "lazy"}
@@ -233,6 +234,7 @@ export function ProductPageClient({
               src={mainImageSrc}
               alt={product.name_ar}
               fill
+              variant="thumbnail"
               sizes="40px"
               className="object-cover"
               onError={() => { if (!imgError) setImgError(true); }}
@@ -275,7 +277,8 @@ export function ProductPageClient({
                 src={heroImageSrc}
                 alt={config.heroSectionImageAlt ?? config.heroImageAlt}
                 fill
-                sizes="(max-width: 768px) 100vw, 50vw"
+                variant="hero"
+                sizes="(max-width: 768px) 100vw, 520px"
                 className={cn(
                   config.heroSectionImage || !portraitHero
                     ? "object-cover object-center"

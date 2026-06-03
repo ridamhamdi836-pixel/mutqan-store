@@ -36,23 +36,30 @@ export async function GET(
     }
   }
 
-  const filePath = path.join(
-    process.cwd(),
-    "public",
-    "images",
-    "products",
-    imageFile,
-  );
+  const productsDir = path.join(process.cwd(), "public", "images", "products");
+  const webpFile = imageFile.replace(/\.(png|jpe?g)$/i, ".webp");
+  const webpPath = path.join(productsDir, webpFile);
+  const legacyPath = path.join(productsDir, imageFile);
+
+  let filePath = legacyPath;
+  let servedName = imageFile;
+  try {
+    await readFile(webpPath);
+    filePath = webpPath;
+    servedName = webpFile;
+  } catch {
+    filePath = legacyPath;
+  }
 
   try {
     const buffer = await readFile(filePath);
-    const ext = path.extname(imageFile).toLowerCase();
+    const ext = path.extname(servedName).toLowerCase();
 
     return new NextResponse(buffer, {
       status: 200,
       headers: {
         "Content-Type": MIME[ext] || "image/jpeg",
-        "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+        "Cache-Control": "public, max-age=2592000, immutable",
       },
     });
   } catch (err) {

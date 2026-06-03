@@ -116,9 +116,10 @@ export default function HomePage() {
                   src="/images/hero/saudi-family.png"
                   alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
                   fill
+                  variant="hero"
                   className="object-cover object-center"
                   priority
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 560px"
                 />
                 {/* no overlay */}
               </div>
@@ -128,7 +129,14 @@ export default function HomePage() {
                 <div className="flex -space-x-2 rtl:space-x-reverse">
                   {[1, 2, 3, 4].map((id) => (
                     <div key={id} className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden relative">
-                      <StoreImage src={`/images/customers/customer-${id}.png`} alt="عميل سعيد" fill sizes="36px" className="object-cover" />
+                      <StoreImage
+                        src={`/images/customers/customer-${id}.png`}
+                        alt="عميل سعيد"
+                        fill
+                        variant="thumbnail"
+                        sizes="36px"
+                        className="object-cover"
+                      />
                     </div>
                   ))}
                 </div>

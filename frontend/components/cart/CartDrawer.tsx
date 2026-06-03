@@ -21,6 +21,7 @@ function CartItemImage({ slug, name }: { slug: string; name: string }) {
           src={getProductCardImageSrc(slug)}
           alt={name}
           fill
+          variant="thumbnail"
           sizes="80px"
           className="object-cover"
           onError={() => setErr(true)}

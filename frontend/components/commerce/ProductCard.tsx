@@ -32,7 +32,8 @@ export function ProductCard({ product }: ProductCardProps) {
             src={productImageSrc}
             alt={product.name_ar}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            variant="thumbnail"
+            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 280px"
             className="object-cover md:group-hover:scale-[1.02] md:transition-transform md:duration-300"
             onError={() => setImgError(true)}
           />
