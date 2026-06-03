@@ -20,6 +20,7 @@ import {
 } from "@/lib/thank-you-product";
 import {
   appendUpsellToLastOrderSession,
+  buildOrderMergeContext,
   loadLastOrderSession,
   markUpsellOfferCompleted,
   type LastOrderLineItem,
@@ -107,19 +108,12 @@ export function PostPurchaseOffer({
     }));
 
     const session = loadLastOrderSession();
-    const merge_context =
-      session?.customerName && session.phoneE164
-        ? {
-            customer_name: session.customerName,
-            phone_e164: session.phoneE164,
-            existing_items: session.items.map((i) => ({
-              product_slug: i.productSlug,
-              name_ar: i.productNameAr,
-              quantity: i.quantity,
-            })),
-            total_sar: session.totalSar,
-          }
-        : undefined;
+    if (!session?.items?.length) {
+      setError("تعذر دمج الإضافة — لم نجد تفاصيل طلبك. تواصل معنا عبر واتساب.");
+      return false;
+    }
+
+    const merge_context = buildOrderMergeContext(session);
 
     const res = await fetch("/api/orders/add-item", {
       method: "POST",

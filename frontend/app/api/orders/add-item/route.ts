@@ -23,6 +23,35 @@ type MergeContext = {
   total_sar: number;
 };
 
+function buildMergedSheetsOrder(
+  orderNumber: string,
+  items: AddItemInput[],
+  mergeContext: MergeContext,
+  totalSar: number,
+): GoogleSheetsOrderInput {
+  const mergedItems = [
+    ...mergeContext.existing_items.map((i) => ({
+      product_slug: i.product_slug,
+      name_ar: i.name_ar,
+      quantity: i.quantity || 1,
+    })),
+    ...items.map((i) => ({
+      product_slug: i.slug,
+      name_ar: i.name_ar || i.slug,
+      quantity: 1,
+    })),
+  ];
+
+  return {
+    orderid: orderNumber,
+    customerName: mergeContext.customer_name,
+    phoneE164: mergeContext.phone_e164,
+    items: mergedItems,
+    totalSar,
+    address: "",
+  };
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -39,6 +68,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!merge_context?.existing_items?.length) {
+      return NextResponse.json(
+        {
+          error: {
+            code: "MISSING_MERGE_CONTEXT",
+            message_ar: "تعذر دمج الإضافة — أعد إتمام الطلب من السلة.",
+          },
+        },
+        { status: 400 },
+      );
+    }
+
     const totalAdded = items.reduce(
       (sum, item) => sum + (item.price_sar || 0),
       0,
@@ -47,7 +88,7 @@ export async function POST(request: NextRequest) {
     const now = new Date().toISOString();
     const pool = getPool();
     let dbUpdated = false;
-    let newTotalSar = (merge_context?.total_sar ?? 0) + totalAdded;
+    let newTotalSar = merge_context.total_sar + totalAdded;
 
     if (pool) {
       try {
@@ -108,34 +149,16 @@ export async function POST(request: NextRequest) {
 
     if (dbUpdated) {
       sheetsResult = await syncOrderByNumberToGoogleSheets(order_number);
-    } else if (merge_context?.customer_name && merge_context.phone_e164) {
-      const mergedItems = [
-        ...merge_context.existing_items.map((i) => ({
-          product_slug: i.product_slug,
-          name_ar: i.name_ar,
-          quantity: i.quantity || 1,
-        })),
-        ...items.map((i) => ({
-          product_slug: i.slug,
-          name_ar: i.name_ar || i.slug,
-          quantity: 1,
-        })),
-      ];
+    }
 
-      const sheetsOrder: GoogleSheetsOrderInput = {
-        orderid: order_number,
-        customerName: merge_context.customer_name,
-        phoneE164: merge_context.phone_e164,
-        items: mergedItems,
-        totalSar: newTotalSar,
-        address: "",
-      };
-
-      sheetsResult = await mergeUpsellIntoGoogleSheets(sheetsOrder);
-    } else {
-      console.warn("[add-item] No DB row and no merge_context — Sheets sync skipped", {
+    if (!sheetsResult.success) {
+      const mergedOrder = buildMergedSheetsOrder(
         order_number,
-      });
+        items,
+        merge_context,
+        newTotalSar,
+      );
+      sheetsResult = await mergeUpsellIntoGoogleSheets(mergedOrder);
     }
 
     if (!dbUpdated && !sheetsResult.success) {
@@ -156,6 +179,7 @@ export async function POST(request: NextRequest) {
       total_added_sar: totalAdded,
       total_sar: newTotalSar,
       sheets_synced: sheetsResult.success,
+      merged_into_order: order_number,
     });
   } catch {
     return NextResponse.json(

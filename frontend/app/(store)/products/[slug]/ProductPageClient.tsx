@@ -175,6 +175,8 @@ export function ProductPageClient({
   }, []);
 
   const handleAddToCart = useCallback(() => {
+    if (isUpsellPreview) return;
+
     addItem({
       productSlug: product.slug,
       productNameAr: product.name_ar,
@@ -199,7 +201,7 @@ export function ProductPageClient({
     });
 
     openCart();
-  }, [addItem, openCart, product, selectedBundle]);
+  }, [addItem, openCart, product, selectedBundle, isUpsellPreview]);
 
   const relatedProducts = config.crossSellSlugs
     .map((slug) => {

@@ -69,6 +69,20 @@ export function saveLastOrderSession(
   }
 }
 
+/** Payload for merging upsell lines into the same order (DB + Google Sheets). */
+export function buildOrderMergeContext(session: LastOrderSession) {
+  return {
+    customer_name: session.customerName?.trim() || "",
+    phone_e164: session.phoneE164 || "",
+    existing_items: session.items.map((i) => ({
+      product_slug: i.productSlug,
+      name_ar: i.productNameAr,
+      quantity: i.quantity,
+    })),
+    total_sar: session.totalSar,
+  };
+}
+
 export function appendUpsellToLastOrderSession(
   added: LastOrderLineItem[],
 ): LastOrderSession | null {
