@@ -9,7 +9,7 @@ import { HelpCircle } from "lucide-react";
 
 export function ThankYouFaq() {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 cv-section">
       <div className="flex items-center gap-2">
         <HelpCircle className="w-5 h-5 text-brand-bronze" />
         <h2 className="font-bold text-brand-espresso text-base md:text-lg">

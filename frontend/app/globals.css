@@ -25,7 +25,6 @@ html {
   font-family: var(--font-arabic), "Tajawal", "Noto Sans Arabic", sans-serif;
   background-color: var(--brand-background);
   color: var(--brand-text);
-  overflow-x: hidden;
 }
 
 body {
@@ -70,6 +69,7 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-[#1B4DDB] text-white font-bold rounded-xl px-8 py-3.5 text-base
       transition-colors duration-150 ease-out
       hover:bg-[#1640B8]
+      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -77,6 +77,7 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-transparent border-2 border-[#1B4DDB] text-[#1B4DDB] font-semibold rounded-xl px-7 py-3 text-base
       transition-colors duration-150 ease-out
       hover:bg-[#1B4DDB] hover:text-white
+      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -84,19 +85,8 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] text-white font-bold rounded-2xl px-10 py-4 text-lg
       shadow-btn-lg transition-colors duration-150 ease-out
       hover:brightness-110
+      active:scale-[0.98]
       disabled:opacity-60 disabled:cursor-not-allowed;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .btn-primary:active {
-      transform: scale(0.98);
-    }
-    .btn-secondary:active {
-      transform: scale(0.98);
-    }
-    .btn-cta:active {
-      transform: scale(0.98);
-    }
   }
 
   .card {
@@ -147,14 +137,11 @@ h1, h2, h3, h4, h5, h6 {
   .gradient-text {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
-}
 
-/* Floating / infinite animations break mobile compositing during scroll */
-@media (max-width: 1023px) {
-  .animate-float,
-  .animate-pulse-slow,
-  .animate-shimmer {
-    animation: none !important;
+  /** Defer paint for below-the-fold sections (faster scroll) */
+  .cv-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { X, ShoppingBag, Trash2, CreditCard } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { useCart } from "@/providers/cart-provider";
 import { PRODUCTS_CONFIG } from "@/config/products";
@@ -77,24 +78,32 @@ export function CartDrawer() {
     setTimeout(() => openCheckout(), 150);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <>
-      <div
-        className="drawer-backdrop z-[60]"
-        onClick={closeCart}
-        aria-hidden="true"
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="drawer-backdrop z-[60]"
+            onClick={closeCart}
+            aria-hidden="true"
+          />
 
-      <div
-        ref={drawerRef}
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
-        aria-label="سلة المشتريات"
-        className="fixed inset-y-0 start-0 z-[70] w-full max-w-[420px] bg-white shadow-2xl flex flex-col outline-none"
-      >
+          <motion.div
+            ref={drawerRef}
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label="سلة المشتريات"
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "tween", duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+            className="fixed inset-y-0 start-0 z-[70] w-full max-w-[420px] bg-white shadow-2xl flex flex-col outline-none"
+          >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
               <div className="flex items-center gap-3">
@@ -207,8 +216,8 @@ export function CartDrawer() {
                   onClick={handleCheckout}
                   className={cn(
                     "w-full h-14 rounded-2xl font-bold text-base text-white",
-                    "bg-[#1B4DDB] hover:bg-[#1640b8]",
-                    "transition-colors duration-150 shadow-lg shadow-[#1B4DDB]/25"
+                    "bg-[#1B4DDB] hover:bg-[#1640b8] active:scale-[0.98]",
+                    "transition-all duration-150 shadow-lg shadow-[#1B4DDB]/25"
                   )}
                 >
                   أكمل الطلب · الدفع عند الاستلام
@@ -219,7 +228,9 @@ export function CartDrawer() {
                 </p>
               </div>
             )}
-      </div>
-    </>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

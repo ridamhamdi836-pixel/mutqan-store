@@ -61,78 +61,74 @@ export function BundleSelector({ bundles, selectedId, onSelect }: BundleSelector
               onClick={() => onSelect(bundle)}
               aria-pressed={isSelected}
               className={cn(
-                "w-full rounded-2xl border-2 text-start max-md:transition-none md:transition-colors md:duration-150",
-                isFeatured ? "p-3 md:p-6 md:shadow-lg" : "p-3.5 md:p-4",
+                "relative w-full flex items-center justify-between rounded-2xl border-2 text-start transition-colors duration-150",
+                isFeatured ? "p-4 md:p-6 shadow-lg" : "p-3.5 md:p-4",
                 isSelected
-                  ? "border-brand-bronze bg-brand-bronze/5"
-                  : "border-brand-border bg-white md:hover:border-brand-bronze/40",
+                  ? "border-brand-bronze bg-brand-bronze/5 shadow-brand-bronze/10"
+                  : "border-brand-border bg-white hover:border-brand-bronze/40",
                 isFeatured && !isSelected && "border-brand-bronze/30 bg-brand-bronze/[0.03]",
               )}
             >
-              {isFeatured ? (
-                <div className="flex justify-end mb-2">
-                  <span className="bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 py-1 rounded-full font-bold whitespace-nowrap">
-                    الأكثر طلباً
-                  </span>
-                </div>
-              ) : null}
+              {isFeatured && (
+                <span className="absolute -top-3 right-4 md:right-6 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
+                  الأكثر طلباً
+                </span>
+              )}
 
-              <div className="flex items-center justify-between gap-3">
-                <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <div
-                    className={cn(
-                      "rounded-full border-2 flex items-center justify-center flex-shrink-0 max-md:transition-none md:transition-colors",
-                      isFeatured ? "w-7 h-7" : "w-6 h-6",
-                      isSelected ? "border-brand-bronze" : "border-brand-muted/40",
-                    )}
-                  >
-                    {isSelected ? (
-                      <div
-                        className={cn(
-                          "rounded-full bg-brand-bronze",
-                          isFeatured ? "w-3.5 h-3.5" : "w-3 h-3",
-                        )}
-                      />
-                    ) : null}
-                  </div>
-
-                  <div className="flex-1 min-w-0 space-y-1">
-                    <p
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div
+                  className={cn(
+                    "rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+                    isFeatured ? "w-7 h-7" : "w-6 h-6",
+                    isSelected ? "border-brand-bronze" : "border-brand-muted/40",
+                  )}
+                >
+                  {isSelected && (
+                    <div
                       className={cn(
-                        "font-bold leading-snug text-brand-espresso",
-                        isFeatured ? "text-base md:text-lg" : "text-sm",
+                        "rounded-full bg-brand-bronze",
+                        isFeatured ? "w-3.5 h-3.5" : "w-3 h-3",
                       )}
-                    >
-                      {fullLabel}
-                    </p>
-                    {savings && savings.sar > 0 ? (
-                      <p className="text-xs md:text-sm font-bold text-emerald-700">
-                        وفّر {savings.sar} ر.س ({savings.percent}%)
-                      </p>
-                    ) : bundle.savings_label_ar ? (
-                      <p className="text-xs md:text-sm font-bold text-emerald-700">
-                        {bundle.savings_label_ar}
-                      </p>
-                    ) : null}
-                  </div>
+                    />
+                  )}
                 </div>
 
-                <div className="text-end flex-shrink-0">
+                <div className="flex-1 min-w-0 space-y-1">
                   <p
                     className={cn(
-                      "font-black text-brand-espresso tabular-nums",
-                      isFeatured ? "text-2xl md:text-3xl" : "text-xl",
+                      "font-bold leading-snug text-brand-espresso",
+                      isFeatured ? "text-base md:text-lg" : "text-sm",
                     )}
                   >
-                    {bundle.price_sar}{" "}
-                    <span className="text-sm font-bold">ر.س</span>
+                    {fullLabel}
                   </p>
-                  {bundle.compare_at_price_sar ? (
-                    <p className="text-xs text-red-500 line-through tabular-nums">
-                      {bundle.compare_at_price_sar} ر.س
+                  {savings && savings.sar > 0 ? (
+                    <p className="text-xs md:text-sm font-bold text-emerald-700">
+                      وفّر {savings.sar} ر.س ({savings.percent}%)
+                    </p>
+                  ) : bundle.savings_label_ar ? (
+                    <p className="text-xs md:text-sm font-bold text-emerald-700">
+                      {bundle.savings_label_ar}
                     </p>
                   ) : null}
                 </div>
+              </div>
+
+              <div className="text-end flex-shrink-0 ms-2 md:ms-3">
+                <p
+                  className={cn(
+                    "font-black text-brand-espresso tabular-nums",
+                    isFeatured ? "text-2xl md:text-3xl" : "text-xl",
+                  )}
+                >
+                  {bundle.price_sar}{" "}
+                  <span className="text-sm font-bold">ر.س</span>
+                </p>
+                {bundle.compare_at_price_sar ? (
+                  <p className="text-xs text-red-500 line-through tabular-nums">
+                    {bundle.compare_at_price_sar} ر.س
+                  </p>
+                ) : null}
               </div>
             </button>
           );

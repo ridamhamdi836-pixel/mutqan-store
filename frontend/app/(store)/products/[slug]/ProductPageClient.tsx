@@ -139,7 +139,6 @@ export function ProductPageClient({
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [imgError, setImgError] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
-  const [enableDesktopSticky, setEnableDesktopSticky] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
@@ -152,32 +151,12 @@ export function ProductPageClient({
     (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
 
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 768px)");
-    const syncMq = () => {
-      const on = mq.matches;
-      setEnableDesktopSticky(on);
-      if (!on) setShowSticky(false);
-    };
-    syncMq();
-    mq.addEventListener("change", syncMq);
-
-    const target = bundleRef.current;
-    if (!target) {
-      return () => mq.removeEventListener("change", syncMq);
-    }
-
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!mq.matches) return;
-        setShowSticky(!entry.isIntersecting);
-      },
-      { threshold: 0, rootMargin: "-72px 0px 0px 0px" },
+      ([entry]) => setShowSticky(!entry.isIntersecting),
+      { threshold: 0, rootMargin: "-80px 0px 0px 0px" },
     );
-    observer.observe(target);
-    return () => {
-      mq.removeEventListener("change", syncMq);
-      observer.disconnect();
-    };
+    if (imageRef.current) observer.observe(imageRef.current);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -239,9 +218,15 @@ export function ProductPageClient({
 
   return (
     <div className="bg-brand-background pb-4">
-      {/* Sticky CTA — desktop only (fixed bar causes iOS scroll ghosting on mobile) */}
-      {!isUpsellPreview && enableDesktopSticky && showSticky ? (
-      <div className="pdp-sticky-cta hidden md:block fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+      {/* Sticky CTA — hidden when embedded in order-offer preview */}
+      {!isUpsellPreview ? (
+      <div
+        aria-hidden={!showSticky}
+        className={cn(
+          "fixed bottom-0 inset-x-0 z-40 bg-brand-surface border-t border-brand-border p-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] transition-transform duration-200 ease-out",
+          showSticky ? "translate-y-0 pointer-events-auto" : "translate-y-full pointer-events-none",
+        )}
+      >
         <div className="max-w-content mx-auto flex items-center gap-3">
           <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border flex-shrink-0 hidden sm:block">
             <StoreImage
@@ -266,7 +251,7 @@ export function ProductPageClient({
       ) : null}
 
       {/* 1. Hero — above the fold */}
-      <section className="page-x pt-2 md:pt-4">
+      <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
             <div
@@ -301,7 +286,7 @@ export function ProductPageClient({
               />
             </div>
 
-            <div className="space-y-3 md:space-y-4">
+            <div className="md:sticky md:top-[4.25rem] space-y-3 md:space-y-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -356,23 +341,22 @@ export function ProductPageClient({
               <button
                 type="button"
                 onClick={handleAddToCart}
-                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 md:shadow-lg md:shadow-[#1B4DDB]/20"
+                className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center gap-2 shadow-lg shadow-[#1B4DDB]/20"
               >
                 <ShoppingBag className="w-5 h-5" />
                 {PRODUCT_PRIMARY_CTA}
               </button>
+
+              <ProductTrustStrip variant="hero" />
             </div>
           </div>
-
-          <div className="mt-4 pb-4 md:pb-6">
-            <ProductTrustStrip variant="hero" />
-          </div>
-          <ProductTrustStrip variant="bar" />
         </div>
       </section>
 
+      <ProductTrustStrip variant="bar" />
+
       {/* 2. Problem */}
-      <section className="product-section-pad page-x bg-white">
+      <section className="cv-section product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <SectionImage
             src={config.painSectionImage ?? productImageSrc}
@@ -391,7 +375,7 @@ export function ProductPageClient({
       </section>
 
       {/* 3. Solution */}
-      <section className="product-section-pad page-x bg-brand-surface">
+      <section className="cv-section product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <div className="space-y-4 text-start md:order-2">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
@@ -412,7 +396,7 @@ export function ProductPageClient({
       </section>
 
       {/* 4. Benefits */}
-      <section className="product-section-pad page-x bg-white">
+      <section className="cv-section product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             لماذا ستحب هذا المنتج؟
@@ -448,7 +432,7 @@ export function ProductPageClient({
       </section>
 
       {/* 5. Before / After */}
-      <section className="product-section-pad page-x bg-brand-surface">
+      <section className="cv-section product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <div className="text-center mb-8 max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
@@ -527,7 +511,7 @@ export function ProductPageClient({
       <ProductComparisonTable />
 
       {/* 7. How it works */}
-      <section className="page-x py-8 md:py-10 bg-white">
+      <section className="cv-section page-x py-8 md:py-10 bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             كيف تستخدمه؟
@@ -549,7 +533,7 @@ export function ProductPageClient({
       </section>
 
       {/* 8. Reviews */}
-      <section className="product-section-pad page-x bg-brand-surface">
+      <section className="cv-section product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
             آراء عملاء اشتروا المنتج
@@ -568,7 +552,7 @@ export function ProductPageClient({
 
       {/* Cross-sell — before FAQ */}
       {relatedProducts.length > 0 && (
-        <section className="page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
+        <section className="cv-section page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
           <div className="max-w-content mx-auto">
             <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
               العملاء الذين اشتروا هذا المنتج اشتروا أيضاً
@@ -583,7 +567,7 @@ export function ProductPageClient({
       )}
 
       {/* 9. FAQ */}
-      <section className="py-8 md:py-10 page-x bg-brand-surface">
+      <section className="cv-section py-8 md:py-10 page-x bg-brand-surface">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             أسئلة شائعة
@@ -593,7 +577,7 @@ export function ProductPageClient({
       </section>
 
       {/* 10. Final CTA */}
-      <section className="page-x py-10 md:py-14 bg-brand-espresso">
+      <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
         <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
           <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
             جاهز تطلب؟ الدفع عند الاستلام فقط

@@ -4,7 +4,7 @@ import { ThankYouReviewCard } from "@/components/thank-you/ThankYouReviewCard";
 
 export function ThankYouReviews() {
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 cv-section">
       <div className="text-center space-y-1">
         <div className="inline-flex items-center gap-1.5 text-amber-500 font-bold text-xs">
           <Star className="w-4 h-4 fill-current" />

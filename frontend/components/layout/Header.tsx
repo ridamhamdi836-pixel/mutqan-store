@@ -17,7 +17,7 @@ export function Header() {
   const isProductPage = pathname?.startsWith("/products/");
 
   return (
-    <header className="relative z-30 bg-white border-b border-brand-border/60 lg:sticky lg:top-0 lg:shadow-sm">
+    <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm">
       <div className="max-w-content mx-auto page-x">
         <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-16")}>
           {/* Logo */}
@@ -86,7 +86,7 @@ export function Header() {
 
       {/* Mobile Menu */}
       {menuOpen && !isProductPage && (
-        <div className="md:hidden bg-white border-t border-brand-border/60">
+        <div className="md:hidden bg-white border-t border-brand-border/60 animate-fade-in">
           <nav className="max-w-content mx-auto page-x py-4 flex flex-col gap-1">
             {COLLECTIONS.map((col) => (
               <Link
