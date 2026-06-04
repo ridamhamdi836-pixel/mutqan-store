@@ -1,5 +1,8 @@
 /** COD confirmation call window — Asia/Riyadh, 9:00–21:00 */
-export type CallExpectationVariant = "within_minutes" | "morning_today" | "morning_tomorrow";
+export type CallExpectationVariant =
+  | "business_hours"
+  | "morning_today"
+  | "morning_tomorrow";
 
 export type CallExpectation = {
   variant: CallExpectationVariant;
@@ -28,13 +31,13 @@ export function getCallExpectation(now = new Date()): CallExpectation {
 
   if (inWindow) {
     return {
-      variant: "within_minutes",
-      bannerHeadline: "انتظر اتصالنا خلال 10 دقائق",
+      variant: "business_hours",
+      bannerHeadline: "انتظر اتصال فريق متقن لتأكيد طلبك",
       bannerSubline:
-        "قد يظهر الرقم كـ «غير معروف» — هذا فريق متقن لتأكيد عنوانك قبل الشحن. الرد يضمن شحن طلبك اليوم.",
+        "قد يظهر الرقم «غير معروف» — هذا نحن. أبقِ جوالك قريباً؛ الرد يؤكد العنوان ويبدأ تجهيز الشحنة.",
       phoneStep:
-        "أجب على الجوال خلال الدقائق القادمة — نؤكد العنوان والكمية فقط، بدون أي دفع الآن.",
-      etaLabel: "خلال ~10 دقائق",
+        "عند وصول الاتصال نؤكد العنوان والكمية فقط — بدون أي دفع الآن، والدفع عند الاستلام.",
+      etaLabel: "ساعات التأكيد: 9 ص – 9 م",
     };
   }
 

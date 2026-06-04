@@ -9,7 +9,7 @@ type ConfirmationBannerProps = {
 };
 
 export function ConfirmationBanner({ expectation }: ConfirmationBannerProps) {
-  const urgent = expectation.variant === "within_minutes";
+  const urgent = expectation.variant === "business_hours";
 
   return (
     <div

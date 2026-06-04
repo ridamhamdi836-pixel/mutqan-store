@@ -1,12 +1,23 @@
 "use client";
 
+import { useMemo } from "react";
 import { CheckCircle2, Phone } from "lucide-react";
-import { useCountdown } from "@/lib/use-countdown";
+import { getCallExpectation } from "@/lib/call-window";
+import { cn } from "@/lib/utils";
 
-const CALL_COUNTDOWN_SECONDS = 10 * 60;
+const HERO_SUBLINES: Record<
+  ReturnType<typeof getCallExpectation>["variant"],
+  string
+> = {
+  business_hours: "تبقى خطوة واحدة — أجب على اتصال التأكيد لنبدأ تجهيز طلبك.",
+  morning_today: "طلبك محفوظ. نتصل صباحاً بين 9 ص و 9 م لتأكيد التفاصيل.",
+  morning_tomorrow:
+    "طلبك محفوظ. نتصل في أول فترة عمل غداً (9 ص – 9 م) لتأكيد التفاصيل.",
+};
 
 export function ThankYouHero() {
-  const { formatted, isExpired } = useCountdown(CALL_COUNTDOWN_SECONDS);
+  const expectation = useMemo(() => getCallExpectation(), []);
+  const duringHours = expectation.variant === "business_hours";
 
   return (
     <section className="text-center space-y-4">
@@ -21,32 +32,30 @@ export function ThankYouHero() {
           تم حجز طلبك بنجاح ✅
         </h1>
         <p className="text-sm md:text-base text-brand-muted leading-relaxed max-w-md mx-auto font-medium">
-          تبقى خطوة واحدة فقط ليتم شحن طلبك اليوم.
+          {HERO_SUBLINES[expectation.variant]}
         </p>
       </div>
 
-      <div className="inline-flex flex-col items-center gap-2">
-        <span className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-brand-espresso bg-amber-50 border border-amber-200/80 px-4 py-2 rounded-pill">
-          <Phone className="w-4 h-4 text-amber-600" />
-          سيصلك اتصال التأكيد خلال 10 دقائق
-        </span>
-
-        <div
-          className="rounded-2xl border-2 border-brand-bronze/25 bg-gradient-to-l from-brand-bronze/5 to-white px-6 py-3 min-w-[8.5rem]"
-          aria-live="polite"
-          aria-label={`الوقت المتبقي للاتصال ${formatted}`}
+      <div className="max-w-md mx-auto space-y-2">
+        <span
+          className={cn(
+            "inline-flex items-center gap-2 text-xs md:text-sm font-bold px-4 py-2 rounded-pill border",
+            duringHours
+              ? "text-brand-espresso bg-amber-50 border-amber-200/80"
+              : "text-brand-espresso bg-brand-trust/10 border-brand-trust/30",
+          )}
         >
-          <p className="text-[10px] font-bold text-brand-muted mb-0.5">
-            الوقت المتوقع للاتصال
-          </p>
-          <p
-            className={`text-3xl md:text-4xl font-black tabular-nums tracking-tight ${
-              isExpired ? "text-brand-muted" : "text-brand-bronze"
-            }`}
-          >
-            {isExpired ? "قريباً" : formatted}
-          </p>
-        </div>
+          <Phone
+            className={cn(
+              "w-4 h-4 shrink-0",
+              duringHours ? "text-amber-600" : "text-brand-trust",
+            )}
+          />
+          {expectation.bannerHeadline}
+        </span>
+        <p className="text-xs md:text-sm text-brand-muted leading-relaxed px-1">
+          {expectation.bannerSubline}
+        </p>
       </div>
     </section>
   );
