@@ -22,7 +22,7 @@ import { reviewDateLabel } from "@/lib/product-review-dates";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
-import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
+import { getProductImageSrc, getProductCardImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
@@ -122,8 +122,9 @@ export function ProductPageClient({
   const [showSticky, setShowSticky] = useState(false);
   const bundleRef = useRef<HTMLDivElement>(null);
   const productImageSrc = getProductImageSrc(product.slug);
-  const mainImageSrc = getProductMainImageSrc(product.slug);
+  const cardImageSrc = getProductCardImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
+  const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   const specs = PRODUCT_SPECS[product.slug] ?? [];
   const allFaqs = useMemo(
@@ -217,7 +218,7 @@ export function ProductPageClient({
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
                 <StoreImage
-                  src={mainImageSrc}
+                  src={cardImageSrc}
                   alt={product.name_ar}
                   fill
                   variant="thumbnail"
@@ -229,7 +230,7 @@ export function ProductPageClient({
                   {product.name_ar}
                 </p>
                 <p className="text-xs text-brand-muted tabular-nums">
-                  {selectedBundle.price_sar} ر.س · دفع عند الاستلام
+                  ابتداءً من {minBundlePrice} ر.س · دفع عند الاستلام
                 </p>
               </div>
             </div>
@@ -450,10 +451,10 @@ export function ProductPageClient({
 
           {!isUpsellPreview ? (
             <ProductOrderCta
-              onAction={handlePlaceOrder}
-              buttonLabel={`اطلب الآن · ${selectedBundle.price_sar} ر.س`}
+              onAction={scrollToOffers}
+              buttonLabel="اختر عرضك الآن"
               title="شفت الفرق؟ اطلب الآن"
-              subtitle="نفس العرض المختار — تأكيد هاتفي ثم دفع عند الاستلام فقط."
+              subtitle={`ابتداءً من ${minBundlePrice} ر.س — اختر العرض ثم أكمل الطلب بالدفع عند الاستلام.`}
             />
           ) : null}
         </div>
@@ -544,24 +545,17 @@ export function ProductPageClient({
               آخر خطوة — احجز طلبك الآن
             </h2>
             <p className="text-brand-sand/90 text-sm md:text-base leading-relaxed">
-              {selectedBundle.label_ar.split(" - ")[0]} · {selectedBundle.price_sar} ر.س
+              ابتداءً من {minBundlePrice} ر.س
               <br />
               دفع عند الاستلام · تأكيد هاتفي · ضمان 30 يوم
             </p>
             <button
               type="button"
-              onClick={handlePlaceOrder}
+              onClick={scrollToOffers}
               className="btn-primary w-full min-h-[56px] text-lg font-bold flex items-center justify-center gap-2"
             >
               <ShoppingBag className="w-6 h-6" />
-              اطلب الآن · {selectedBundle.price_sar} ر.س
-            </button>
-            <button
-              type="button"
-              onClick={scrollToOffers}
-              className="text-sm font-semibold text-brand-sand/90 hover:text-white underline-offset-2 hover:underline"
-            >
-              تغيير العرض المختار
+              اختر عرضك الآن
             </button>
           </div>
         </section>
