@@ -205,26 +205,11 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
               className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between gap-3 px-5 py-4 border-b border-gray-100">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
                 <h2 className="font-bold text-lg text-gray-900">إتمام الطلب</h2>
-                <div className="flex items-center gap-1">
-                  <Link
-                    href="/collections"
-                    onClick={closeCheckout}
-                    className="flex items-center gap-1.5 text-xs font-bold text-[#1B4DDB] hover:text-[#1539ad] px-2.5 py-2 rounded-lg hover:bg-[#1B4DDB]/5 transition-colors min-h-[44px]"
-                    aria-label="الاستمرار في التسوق"
-                  >
-                    <Store className="w-4 h-4 shrink-0" />
-                    <span className="hidden sm:inline">تسوق منتجات أخرى</span>
-                  </Link>
-                  <button
-                    onClick={closeCheckout}
-                    aria-label="إغلاق"
-                    className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors shrink-0"
-                  >
-                    <X className="w-5 h-5 text-gray-400" />
-                  </button>
-                </div>
+                <button onClick={closeCheckout} aria-label="إغلاق" className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+                  <X className="w-5 h-5 text-gray-400" />
+                </button>
               </div>
 
               {/* Urgency bar */}
@@ -248,6 +233,16 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
               <div className="overflow-y-auto flex-1">
                 <form onSubmit={handleSubmit} noValidate className="p-5 space-y-5">
+                  {/* Continue shopping */}
+                  <Link
+                    href="/collections"
+                    onClick={closeCheckout}
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed border-gray-200 text-sm font-bold text-gray-700 hover:border-[#1B4DDB]/40 hover:text-[#1B4DDB] hover:bg-[#1B4DDB]/5 transition-colors"
+                  >
+                    <Store className="w-5 h-5 shrink-0" />
+                    الاستمرار في التسوق — اختر منتجات أخرى
+                  </Link>
+
                   {/* Order items */}
                   <div>
                     <p className="text-sm font-bold text-gray-900 mb-3">طلبك</p>

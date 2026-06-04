@@ -22,7 +22,10 @@ import { reviewDateLabel } from "@/lib/product-review-dates";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
-import { getProductImageSrc, getProductCardImageSrc } from "@/lib/product-image";
+import {
+  getProductCardImageSrc,
+  getProductImageSrc,
+} from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
@@ -230,7 +233,7 @@ export function ProductPageClient({
                   {product.name_ar}
                 </p>
                 <p className="text-xs text-brand-muted tabular-nums">
-                  ابتداءً من {minBundlePrice} ر.س · دفع عند الاستلام
+                  ابتداءً من {minBundlePrice} ر.س
                 </p>
               </div>
             </div>
@@ -505,7 +508,7 @@ export function ProductPageClient({
               onAction={scrollToOffers}
               buttonLabel="اختر عرضك الآن"
               title="انضم لعملاء متقن"
-              subtitle="اختر العرض المناسب لك ثم أكمل الطلب — الدفع عند الاستلام فقط."
+              subtitle={`ابتداءً من ${minBundlePrice} ر.س — اختر العرض المناسب ثم أكمل الطلب.`}
             />
           ) : null}
         </div>
