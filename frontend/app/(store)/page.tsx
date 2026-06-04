@@ -3,6 +3,7 @@ import Link from "next/link";
 import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { TrustBadges } from "@/components/trust/TrustBadges";
+import { HomeEasyOrderSteps } from "@/components/home/HomeEasyOrderSteps";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
@@ -90,29 +91,7 @@ export default function HomePage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
 
-              {/* بديل بطاقات الثقة — خطوات واحدة بدون طبقات (تجنّب التشوه على الهاتف) */}
-              <div className="rounded-2xl border border-brand-border/70 bg-gradient-to-l from-brand-beige/90 to-white px-4 py-3.5">
-                <p className="text-xs font-bold text-brand-bronze mb-2.5">
-                  طلبك في 3 خطوات — بدون بطاقة بنكية
-                </p>
-                <ol className="space-y-2">
-                  {[
-                    "اختر المنتج واضغط تسوق الآن",
-                    "نؤكد معك هاتفياً قبل الشحن",
-                    "ادفع نقداً عند استلام طلبك",
-                  ].map((step, i) => (
-                    <li
-                      key={step}
-                      className="flex items-start gap-2.5 text-xs md:text-sm text-brand-espresso font-medium leading-snug"
-                    >
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-brand-bronze/10 text-brand-bronze text-[11px] font-bold flex items-center justify-center">
-                        {i + 1}
-                      </span>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ol>
-              </div>
+              <HomeEasyOrderSteps variant="hero" />
             </div>
 
             {/* Image Column */}
@@ -158,6 +137,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <HomeEasyOrderSteps variant="featured" />
 
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
