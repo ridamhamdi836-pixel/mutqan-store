@@ -53,9 +53,16 @@ Check: `https://mutqan.online/api/health-deploy` → `admin.ready` should be `tr
 
 إذا `sheets_live_test.error` يحتوي `Set SHEET_ID` → عيّن SHEET_ID في Apps Script وأعد Deploy.
 
+### إذا فشل Deploy (أحمر)
+
+1. **لا تعِد نشر كوميت قديم فاشل** — اضغط Deploy على آخر كوميت في `main` (أو Redeploy بدون cache).
+2. افتح **Build logs** — إن ظهر `Property 'iconClass' does not exist` فالمستودع قديم؛ يلزم `7e885a6` أو أحدث.
+3. **Build Path** = `.` (جذر المستودع) وليس `frontend`.
+4. بعد كل push ناجح: Redeploy **بدون cache**.
+
 ### بعد النشر — تحقق
 
-1. `https://mutqan.online/api/health-deploy` → `"build": "mutqan-store-v3-images"`
+1. `https://mutqan.online/api/health-deploy` → `git_commit_short` يطابق آخر push على `main`
 2. `https://mutqan.online/api/product-image/magic-under-sink-organizer` → صورة المنتج
 3. Redeploy **بدون cache** بعد كل push على `main`
 
