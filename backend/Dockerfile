@@ -4,6 +4,7 @@ WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV MUTQAN_BACKEND_BUILD=backend-db-url-fix-v2
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \

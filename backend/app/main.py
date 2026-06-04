@@ -60,9 +60,18 @@ app.include_router(router, prefix=settings.API_PREFIX)
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("startup", app=settings.APP_NAME, env=settings.APP_ENV)
+    from app.db.url import database_url_scheme, mask_database_url
+
+    logger.info(
+        "startup",
+        app=settings.APP_NAME,
+        env=settings.APP_ENV,
+        db_scheme=database_url_scheme(settings.DATABASE_URL),
+        db_url=mask_database_url(settings.DATABASE_URL),
+    )
 
     from app.db.base import Base
     from app.db.session import engine
+
     Base.metadata.create_all(bind=engine)
     logger.info("database_tables_initialized")
