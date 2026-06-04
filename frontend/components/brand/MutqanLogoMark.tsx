@@ -39,10 +39,10 @@ export function MutqanLogoMark({
       className={cn("block h-full w-full", className)}
     >
       <title>{title}</title>
-      <circle cx="50" cy="13" r="7.5" fill={c.dot} />
+      <circle cx="50" cy="17" r="7.5" fill={c.dot} />
       <text
         x="50"
-        y="56"
+        y="50"
         textAnchor="middle"
         dominantBaseline="middle"
         fill={c.arabic}
