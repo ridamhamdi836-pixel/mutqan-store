@@ -41,48 +41,52 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 p-8 shadow-xl">
+    <div className="min-h-screen flex items-center justify-center p-6 bg-brand-background">
+      <div className="w-full max-w-md admin-panel p-8 shadow-lg">
         <div className="flex flex-col items-center text-center mb-2">
-          <BrandLogo variant="light" className="h-[72px] w-[64px] mb-3" />
-          <h1 className="text-xl font-bold text-white">Admin</h1>
-          <p className="text-sm text-slate-400 mt-1">COD store operations dashboard</p>
+          <BrandLogo className="h-[72px] w-[64px] mb-3" />
+          <h1 className="text-xl font-bold text-brand-espresso">لوحة متقن</h1>
+          <p className="text-sm text-brand-muted mt-1">إدارة الطلبات والمؤشرات</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">Username</label>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              اسم المستخدم
+            </label>
             <input
               type="text"
               autoComplete="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              className="admin-input py-3"
               required
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-400 mb-1.5">Password</label>
+            <label className="block text-xs font-medium text-brand-muted mb-1.5">
+              كلمة المرور
+            </label>
             <input
               type="password"
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500"
+              className="admin-input py-3"
               required
             />
           </div>
           {error && (
-            <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/30 rounded-lg px-3 py-2">
+            <p className="text-sm text-brand-error bg-red-50 border border-red-200 rounded-lg px-3 py-2">
               {error}
             </p>
           )}
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 text-white font-semibold py-3 transition-colors"
+            className="w-full admin-btn-primary py-3"
           >
-            {loading ? "Signing in…" : "Sign in"}
+            {loading ? "جارٍ الدخول…" : "تسجيل الدخول"}
           </button>
         </form>
       </div>
@@ -92,7 +96,13 @@ function AdminLoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-500">Loading…</div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-brand-background flex items-center justify-center text-brand-muted">
+          جارٍ التحميل…
+        </div>
+      }
+    >
       <AdminLoginForm />
     </Suspense>
   );

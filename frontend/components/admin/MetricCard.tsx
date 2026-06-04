@@ -6,20 +6,27 @@ interface MetricCardProps {
 }
 
 const accentBorder = {
-  default: "border-slate-700",
-  green: "border-emerald-600/50",
-  amber: "border-amber-500/50",
-  blue: "border-sky-500/50",
+  default: "border-brand-border",
+  green: "border-emerald-200 ring-1 ring-emerald-100",
+  amber: "border-amber-200 ring-1 ring-amber-100",
+  blue: "border-brand-bronze/30 ring-1 ring-brand-bronze/10",
+};
+
+const accentValue = {
+  default: "text-brand-espresso",
+  green: "text-emerald-700",
+  amber: "text-amber-700",
+  blue: "text-brand-bronze",
 };
 
 export function MetricCard({ label, value, hint, accent = "default" }: MetricCardProps) {
   return (
-    <div
-      className={`rounded-xl border bg-slate-900/60 p-5 ${accentBorder[accent]}`}
-    >
-      <p className="text-xs font-medium uppercase tracking-wide text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-bold text-white tabular-nums">{value}</p>
-      {hint && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
+    <div className={`admin-metric-card ${accentBorder[accent]}`}>
+      <p className="text-xs font-medium uppercase tracking-wide text-brand-muted">{label}</p>
+      <p className={`mt-2 text-2xl font-bold tabular-nums ${accentValue[accent]}`}>
+        {value}
+      </p>
+      {hint && <p className="mt-1 text-xs text-brand-muted">{hint}</p>}
     </div>
   );
 }

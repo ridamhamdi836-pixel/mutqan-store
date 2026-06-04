@@ -63,8 +63,8 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="p-6 md:p-8 max-w-7xl">
-      <h1 className="text-2xl font-bold text-white mb-2">Orders</h1>
-      <p className="text-sm text-slate-400 mb-6">{total} orders in selected range</p>
+      <h1 className="text-2xl font-bold text-brand-espresso mb-2">الطلبات</h1>
+      <p className="text-sm text-brand-muted mb-6">{total} طلب في الفترة المحددة</p>
 
       <div className="flex flex-wrap gap-4 mb-6">
         <DateRangeControls
@@ -85,91 +85,84 @@ export default function AdminOrdersPage() {
 
       <div className="flex flex-wrap gap-3 mb-6">
         <div className="relative flex-1 min-w-[200px] max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted" />
           <input
             type="search"
-            placeholder="Order #, name, phone…"
+            placeholder="رقم الطلب، الاسم، الجوال…"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && load()}
-            className="w-full rounded-lg border border-slate-700 bg-slate-900 pl-10 pr-4 py-2.5 text-sm text-white"
+            className="admin-input ps-10"
           />
         </div>
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
-          className="rounded-lg border border-slate-700 bg-slate-900 px-4 py-2.5 text-sm text-white"
+          className="admin-input w-auto min-w-[10rem]"
         >
-          <option value="">All statuses</option>
-          <option value="pending">Pending confirmation</option>
-          <option value="confirmed">Confirmed</option>
-          <option value="shipped">Shipped</option>
-          <option value="delivered">Delivered</option>
-          <option value="cancelled">Cancelled</option>
+          <option value="">كل الحالات</option>
+          <option value="pending">بانتظار التأكيد</option>
+          <option value="confirmed">مؤكد</option>
+          <option value="shipped">شُحن</option>
+          <option value="delivered">تم التسليم</option>
+          <option value="cancelled">ملغى</option>
         </select>
-        <button
-          type="button"
-          onClick={load}
-          className="rounded-lg bg-sky-600 hover:bg-sky-500 px-5 py-2.5 text-sm font-semibold text-white"
-        >
-          Apply
+        <button type="button" onClick={load} className="admin-btn-primary">
+          تطبيق
         </button>
       </div>
 
-      <div className="rounded-xl border border-slate-800 overflow-hidden">
+      <div className="admin-panel overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-slate-900 text-slate-400 text-left">
+          <thead className="admin-table-head">
             <tr>
-              <th className="px-4 py-3 font-medium">Order</th>
-              <th className="px-4 py-3 font-medium">Customer</th>
-              <th className="px-4 py-3 font-medium">Total</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Source</th>
-              <th className="px-4 py-3 font-medium">Date</th>
+              <th className="px-4 py-3 font-medium">الطلب</th>
+              <th className="px-4 py-3 font-medium">العميل</th>
+              <th className="px-4 py-3 font-medium">المجموع</th>
+              <th className="px-4 py-3 font-medium">الحالة</th>
+              <th className="px-4 py-3 font-medium">المصدر</th>
+              <th className="px-4 py-3 font-medium">التاريخ</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-slate-500 text-center">
-                  Loading…
+                <td colSpan={6} className="px-4 py-8 text-brand-muted text-center">
+                  جارٍ التحميل…
                 </td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-slate-500 text-center">
-                  No orders found
+                <td colSpan={6} className="px-4 py-8 text-brand-muted text-center">
+                  لا توجد طلبات
                 </td>
               </tr>
             ) : (
               orders.map((o) => (
-                <tr
-                  key={o.id}
-                  className="border-t border-slate-800 hover:bg-slate-900/80 transition-colors"
-                >
+                <tr key={o.id} className="admin-table-row">
                   <td className="px-4 py-3">
                     <Link
                       href={`/admin/orders/${o.id}`}
-                      className="font-semibold text-sky-400 hover:underline"
+                      className="font-semibold admin-link hover:underline"
                     >
                       {o.order_number}
                     </Link>
-                    <p className="text-xs text-slate-500">{o.items_count} items</p>
+                    <p className="text-xs text-brand-muted">{o.items_count} منتج</p>
                   </td>
                   <td className="px-4 py-3">
-                    <p className="text-white">{o.customer_name}</p>
-                    <p className="text-xs text-slate-500">{o.customer_phone_e164}</p>
+                    <p className="text-brand-espresso font-medium">{o.customer_name}</p>
+                    <p className="text-xs text-brand-muted">{o.customer_phone_e164}</p>
                   </td>
-                  <td className="px-4 py-3 font-bold text-white tabular-nums">
-                    {o.total_sar} SAR
+                  <td className="px-4 py-3 font-bold text-brand-espresso tabular-nums">
+                    {o.total_sar} ر.س
                   </td>
                   <td className="px-4 py-3">
-                    <p className="text-slate-300 capitalize">{o.confirmation_status}</p>
-                    <p className="text-xs text-slate-500 capitalize">{o.delivery_status}</p>
+                    <p className="text-brand-espresso capitalize">{o.confirmation_status}</p>
+                    <p className="text-xs text-brand-muted capitalize">{o.delivery_status}</p>
                   </td>
-                  <td className="px-4 py-3 text-slate-400">{o.utm_source || "—"}</td>
-                  <td className="px-4 py-3 text-slate-400 whitespace-nowrap">
-                    {new Date(o.created_at).toLocaleString("en-GB", {
+                  <td className="px-4 py-3 text-brand-muted">{o.utm_source || "—"}</td>
+                  <td className="px-4 py-3 text-brand-muted whitespace-nowrap">
+                    {new Date(o.created_at).toLocaleString("ar-SA", {
                       timeZone: "Asia/Riyadh",
                       dateStyle: "short",
                       timeStyle: "short",

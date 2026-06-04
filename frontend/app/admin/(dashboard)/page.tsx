@@ -55,9 +55,9 @@ export default function AdminDashboardPage() {
     <div className="p-6 md:p-8 max-w-7xl">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Traffic counts only valid KSA IPs (no VPN/proxy/hosting)
+          <h1 className="text-2xl font-bold text-brand-espresso">لوحة التحكم</h1>
+          <p className="text-sm text-brand-muted mt-1">
+            الزيارات تُحسب لعناوين IP سعودية صالحة فقط (بدون VPN/بروكسي/استضافة)
           </p>
         </div>
         <DateRangeControls
@@ -77,67 +77,69 @@ export default function AdminDashboardPage() {
       </div>
 
       {loading && !metrics ? (
-        <p className="text-slate-500">Loading metrics…</p>
+        <p className="text-brand-muted">جارٍ تحميل المؤشرات…</p>
       ) : metrics ? (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             <MetricCard
-              label="Valid product views"
+              label="مشاهدات منتج (صالحة)"
               value={metrics.product_views.toLocaleString()}
-              hint="KSA, non-VPN"
+              hint="السعودية، بدون VPN"
               accent="blue"
             />
             <MetricCard
-              label="Orders"
+              label="الطلبات"
               value={metrics.orders_count.toLocaleString()}
               accent="green"
             />
             <MetricCard
-              label="Revenue (SAR)"
+              label="الإيراد (ر.س)"
               value={metrics.revenue_sar.toLocaleString()}
               accent="green"
             />
             <MetricCard
-              label="Conversion (views → orders)"
+              label="التحويل (مشاهدة → طلب)"
               value={`${metrics.conversion_rate_product_view}%`}
-              hint={`${metrics.orders_count} / ${metrics.product_views} product views`}
+              hint={`${metrics.orders_count} / ${metrics.product_views} مشاهدة`}
               accent="amber"
             />
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            <MetricCard label="Page views (valid)" value={metrics.page_views} />
-            <MetricCard label="Valid sessions" value={metrics.valid_sessions} />
+            <MetricCard label="مشاهدات الصفحات" value={metrics.page_views} />
+            <MetricCard label="جلسات صالحة" value={metrics.valid_sessions} />
             <MetricCard
-              label="Session conversion"
+              label="تحويل الجلسة"
               value={`${metrics.conversion_rate_session}%`}
-              hint="Orders / unique sessions"
+              hint="طلبات / جلسات فريدة"
             />
-            <MetricCard label="Avg order (SAR)" value={metrics.avg_order_sar} />
-            <MetricCard label="Add to cart (valid)" value={metrics.add_to_carts} />
-            <MetricCard label="Checkout started" value={metrics.checkouts_started} />
+            <MetricCard label="متوسط الطلب (ر.س)" value={metrics.avg_order_sar} />
+            <MetricCard label="إضافة للسلة" value={metrics.add_to_carts} />
+            <MetricCard label="بدء الدفع" value={metrics.checkouts_started} />
             <MetricCard
-              label="Blocked events"
+              label="أحداث محجوبة"
               value={metrics.blocked_events}
-              hint="Non-KSA or VPN/proxy"
+              hint="خارج السعودية أو VPN"
             />
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6">
-            <section className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <h2 className="text-sm font-semibold text-slate-300 mb-4">Orders by product</h2>
+            <section className="admin-panel p-5">
+              <h2 className="text-sm font-semibold text-brand-espresso mb-4">
+                الطلبات حسب المنتج
+              </h2>
               <div className="space-y-2">
                 {metrics.by_product.length === 0 ? (
-                  <p className="text-sm text-slate-500">No orders in range</p>
+                  <p className="text-sm text-brand-muted">لا طلبات في الفترة</p>
                 ) : (
                   metrics.by_product.map((row) => (
                     <div
                       key={row.product_slug}
-                      className="flex justify-between text-sm py-2 border-b border-slate-800 last:border-0"
+                      className="flex justify-between text-sm py-2 border-b border-brand-border last:border-0"
                     >
-                      <span className="text-slate-300">{row.product_slug}</span>
-                      <span className="text-white font-medium tabular-nums">
-                        {row.orders} · {row.revenue_sar} SAR
+                      <span className="text-brand-espresso">{row.product_slug}</span>
+                      <span className="text-brand-bronze font-semibold tabular-nums">
+                        {row.orders} · {row.revenue_sar} ر.س
                       </span>
                     </div>
                   ))
@@ -145,20 +147,22 @@ export default function AdminDashboardPage() {
               </div>
             </section>
 
-            <section className="rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <h2 className="text-sm font-semibold text-slate-300 mb-4">Orders by UTM source</h2>
+            <section className="admin-panel p-5">
+              <h2 className="text-sm font-semibold text-brand-espresso mb-4">
+                الطلبات حسب مصدر UTM
+              </h2>
               <div className="space-y-2">
                 {metrics.by_utm.length === 0 ? (
-                  <p className="text-sm text-slate-500">No attribution data</p>
+                  <p className="text-sm text-brand-muted">لا بيانات إسناد</p>
                 ) : (
                   metrics.by_utm.map((row) => (
                     <div
                       key={row.source}
-                      className="flex justify-between text-sm py-2 border-b border-slate-800 last:border-0"
+                      className="flex justify-between text-sm py-2 border-b border-brand-border last:border-0"
                     >
-                      <span className="text-slate-300">{row.source}</span>
-                      <span className="text-white font-medium tabular-nums">
-                        {row.orders} · {row.revenue_sar} SAR
+                      <span className="text-brand-espresso">{row.source}</span>
+                      <span className="text-brand-bronze font-semibold tabular-nums">
+                        {row.orders} · {row.revenue_sar} ر.س
                       </span>
                     </div>
                   ))
@@ -168,23 +172,25 @@ export default function AdminDashboardPage() {
           </div>
 
           {metrics.daily.length > 0 && (
-            <section className="mt-6 rounded-xl border border-slate-800 bg-slate-900/50 p-5">
-              <h2 className="text-sm font-semibold text-slate-300 mb-4">Daily trend</h2>
+            <section className="mt-6 admin-panel p-5">
+              <h2 className="text-sm font-semibold text-brand-espresso mb-4">الاتجاه اليومي</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left">
                   <thead>
-                    <tr className="text-slate-500 border-b border-slate-800">
-                      <th className="py-2 pr-4">Day</th>
-                      <th className="py-2 pr-4">Product views</th>
-                      <th className="py-2">Orders</th>
+                    <tr className="text-brand-muted border-b border-brand-border">
+                      <th className="py-2 pr-4">اليوم</th>
+                      <th className="py-2 pr-4">مشاهدات المنتج</th>
+                      <th className="py-2">الطلبات</th>
                     </tr>
                   </thead>
                   <tbody>
                     {metrics.daily.map((d) => (
-                      <tr key={d.day} className="border-b border-slate-800/60">
-                        <td className="py-2 text-slate-300">{d.day}</td>
-                        <td className="py-2 tabular-nums">{d.product_views}</td>
-                        <td className="py-2 tabular-nums font-medium text-white">{d.orders}</td>
+                      <tr key={d.day} className="border-b border-brand-border/80">
+                        <td className="py-2 text-brand-espresso">{d.day}</td>
+                        <td className="py-2 tabular-nums text-brand-muted">{d.product_views}</td>
+                        <td className="py-2 tabular-nums font-semibold text-brand-bronze">
+                          {d.orders}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -194,7 +200,9 @@ export default function AdminDashboardPage() {
           )}
         </>
       ) : (
-        <p className="text-red-400">Failed to load metrics. Check DATABASE_URL and migration.</p>
+        <p className="text-brand-error">
+          تعذر تحميل المؤشرات. تحقق من DATABASE_URL والترحيل.
+        </p>
       )}
     </div>
   );

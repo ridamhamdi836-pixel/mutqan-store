@@ -7,8 +7,8 @@ import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/orders", label: "Orders", icon: Package },
+  { href: "/admin", label: "لوحة التحكم", icon: LayoutDashboard },
+  { href: "/admin/orders", label: "الطلبات", icon: Package },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -23,12 +23,12 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="w-56 shrink-0 border-r border-slate-800 bg-slate-900/80 p-4 flex flex-col">
+      <aside className="admin-sidebar">
         <div className="mb-8 px-1">
           <Link href="/admin" className="block">
-            <BrandLogo variant="light" className="h-14 w-[50px] mb-2" />
+            <BrandLogo className="h-14 w-[50px] mb-2" />
           </Link>
-          <p className="text-xs text-slate-400">COD Operations</p>
+          <p className="text-xs text-brand-muted font-medium">عمليات الدفع عند الاستلام</p>
         </div>
         <nav className="flex-1 space-y-1">
           {NAV.map((item) => {
@@ -41,10 +41,8 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-slate-800 text-white"
-                    : "text-slate-400 hover:bg-slate-800/60 hover:text-slate-200",
+                  "admin-nav-link",
+                  active && "admin-nav-link-active",
                 )}
               >
                 <item.icon className="w-4 h-4" />
@@ -56,13 +54,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
         <button
           type="button"
           onClick={logout}
-          className="flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm text-slate-400 hover:bg-slate-800 hover:text-white transition-colors mt-4"
+          className="admin-nav-link mt-4 w-full text-start"
         >
           <LogOut className="w-4 h-4" />
-          Log out
+          تسجيل الخروج
         </button>
       </aside>
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-auto bg-brand-background">{children}</main>
     </div>
   );
 }

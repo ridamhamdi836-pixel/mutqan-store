@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowRight, Save } from "lucide-react";
 import { OrderPreview, type AdminOrderItem, type AdminOrderRow } from "@/components/admin/OrderPreview";
 
 export default function AdminOrderDetailPage() {
@@ -49,20 +49,23 @@ export default function AdminOrderDetailPage() {
     });
     setSaving(false);
     if (res.ok) {
-      setMessage("Saved");
+      setMessage("تم الحفظ");
       load();
     } else {
-      setMessage("Save failed");
+      setMessage("فشل الحفظ");
     }
   };
 
   if (!order) {
     return (
-      <div className="p-8 text-slate-500">
-        <Link href="/admin/orders" className="text-sky-400 text-sm inline-flex items-center gap-1 mb-4">
-          <ArrowLeft className="w-4 h-4" /> Back to orders
+      <div className="p-8 text-brand-muted">
+        <Link
+          href="/admin/orders"
+          className="admin-link text-sm inline-flex items-center gap-1 mb-4"
+        >
+          <ArrowRight className="w-4 h-4" /> العودة للطلبات
         </Link>
-        Loading order…
+        جارٍ تحميل الطلب…
       </div>
     );
   }
@@ -71,24 +74,24 @@ export default function AdminOrderDetailPage() {
     <div className="p-6 md:p-8 max-w-4xl">
       <Link
         href="/admin/orders"
-        className="text-sky-400 text-sm inline-flex items-center gap-1 mb-6 hover:underline"
+        className="admin-link text-sm inline-flex items-center gap-1 mb-6 hover:underline"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to orders
+        <ArrowRight className="w-4 h-4" /> العودة للطلبات
       </Link>
 
       <OrderPreview order={order} items={items} />
 
-      <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6 space-y-4">
-        <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">
-          Update order
+      <section className="mt-8 admin-panel p-6 space-y-4">
+        <h2 className="text-sm font-semibold text-brand-espresso uppercase tracking-wide">
+          تحديث الطلب
         </h2>
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-slate-500 mb-1">Confirmation</label>
+            <label className="block text-xs text-brand-muted mb-1">التأكيد</label>
             <select
               value={confirmation}
               onChange={(e) => setConfirmation(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white text-sm"
+              className="admin-input"
             >
               {["pending", "confirmed", "cancelled", "no_answer"].map((s) => (
                 <option key={s} value={s}>
@@ -98,11 +101,11 @@ export default function AdminOrderDetailPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs text-slate-500 mb-1">Delivery</label>
+            <label className="block text-xs text-brand-muted mb-1">التوصيل</label>
             <select
               value={delivery}
               onChange={(e) => setDelivery(e.target.value)}
-              className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white text-sm"
+              className="admin-input"
             >
               {["pending", "packed", "shipped", "out_for_delivery", "delivered", "returned"].map(
                 (s) => (
@@ -115,13 +118,13 @@ export default function AdminOrderDetailPage() {
           </div>
         </div>
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Internal notes</label>
+          <label className="block text-xs text-brand-muted mb-1">ملاحظات داخلية</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={4}
-            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2.5 text-white text-sm resize-y"
-            placeholder="Call log, courier ref, cancellation reason…"
+            className="admin-input resize-y"
+            placeholder="سجل المكالمة، رقم المندوب، سبب الإلغاء…"
           />
         </div>
         <div className="flex items-center gap-3">
@@ -129,12 +132,14 @@ export default function AdminOrderDetailPage() {
             type="button"
             onClick={save}
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-lg bg-sky-600 hover:bg-sky-500 disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white"
+            className="admin-btn-primary inline-flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
-            {saving ? "Saving…" : "Save changes"}
+            {saving ? "جارٍ الحفظ…" : "حفظ التغييرات"}
           </button>
-          {message && <span className="text-sm text-emerald-400">{message}</span>}
+          {message && (
+            <span className="text-sm text-emerald-600 font-medium">{message}</span>
+          )}
         </div>
       </section>
     </div>

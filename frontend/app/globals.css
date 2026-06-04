@@ -147,6 +147,52 @@ h1, h2, h3, h4, h5, h6 {
     @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
   }
 
+  /* Admin — white + blue (matches storefront) */
+  .admin-root {
+    @apply min-h-screen bg-brand-background text-brand-espresso;
+  }
+
+  .admin-sidebar {
+    @apply w-56 shrink-0 border-s border-brand-border bg-brand-surface shadow-sm p-4 flex flex-col;
+  }
+
+  .admin-nav-link {
+    @apply flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors text-brand-muted hover:bg-brand-beige hover:text-brand-espresso;
+  }
+
+  .admin-nav-link-active {
+    @apply bg-brand-bronze/10 text-brand-bronze font-semibold ring-1 ring-brand-bronze/20;
+  }
+
+  .admin-panel {
+    @apply rounded-xl border border-brand-border bg-brand-surface shadow-card;
+  }
+
+  .admin-input {
+    @apply w-full rounded-lg border border-brand-border bg-white px-3 py-2.5 text-sm text-brand-espresso
+      focus:border-brand-bronze focus:ring-2 focus:ring-brand-bronze/15 outline-none transition-colors;
+  }
+
+  .admin-btn-primary {
+    @apply rounded-lg bg-brand-bronze hover:bg-[#1640B8] disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white transition-colors;
+  }
+
+  .admin-link {
+    @apply text-brand-bronze hover:text-[#1640B8] font-medium transition-colors;
+  }
+
+  .admin-metric-card {
+    @apply rounded-xl border bg-white p-5 shadow-card;
+  }
+
+  .admin-table-head {
+    @apply bg-brand-beige text-brand-muted text-left;
+  }
+
+  .admin-table-row {
+    @apply border-t border-brand-border hover:bg-brand-beige/50 transition-colors;
+  }
+
 }
 
 /**
