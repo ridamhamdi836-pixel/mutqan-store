@@ -40,12 +40,19 @@ NEXT_PUBLIC_SITE_URL=https://mutqan.online
 NEXT_PUBLIC_API_URL=https://api.mutqan.online
 SECRET_KEY=نفس_قيمة_backend_SECRET_KEY
 
-TIKTOK_PIXEL_CODE=D4GVCMBC77UAP3H8QDS0
-SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
 NEXT_PUBLIC_ENABLE_PIXELS=true
 ```
 
-احذف كل أسطر `NEXT_PUBLIC_TIKTOK_PIXEL_ID=` و`NEXT_PUBLIC_SNAPCHAT_PIXEL_ID=` **الفارغة** — سطر واحد فقط لكل مفتاح.
+TikTok + Snapchat browser pixel IDs are also in `frontend/config/web-pixels.ts` (work even if Easypanel env is wrong). Env still overrides when set.
+
+Optional (only if you want to override the file):
+
+```
+TIKTOK_PIXEL_CODE=D4GVCMBC77UAP3H8QDS0
+SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
+```
+
+احذف كل أسطر `NEXT_PUBLIC_*` **الفارغة** المكررة.
 
 **Backend** (توكنات CAPI فقط — لا حاجة لـ NEXT_PUBLIC_* هنا):
 

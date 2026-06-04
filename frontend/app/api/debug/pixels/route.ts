@@ -23,8 +23,11 @@ export async function GET() {
       tiktok: "TIKTOK_PIXEL_CODE + TIKTOK_ACCESS_TOKEN",
       snapchat: "SNAPCHAT_PIXEL_ID + SNAPCHAT_ACCESS_TOKEN",
     },
-    fix_empty_duplicates:
-      "Remove empty NEXT_PUBLIC_TIKTOK_PIXEL_ID lines on frontend — keep one line or use TIKTOK_PIXEL_CODE only",
+    baked_in_defaults: {
+      tiktok: "D4GVCMBC77UAP3H8QDS0",
+      snapchat: "d8f90588-0a07-41a3-87ed-0c829150b41a",
+      meta: "set in config/web-pixels.ts when ready",
+    },
     after_change: "Redeploy frontend + backend, hard refresh store",
   });
 }

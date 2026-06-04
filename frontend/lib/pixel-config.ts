@@ -1,7 +1,8 @@
 /**
- * Pixel IDs for the storefront — read on the server at runtime (Easypanel env after deploy).
- * Supports NEXT_PUBLIC_* and backend-style names so one set of vars works on the frontend service.
+ * Browser pixel IDs — env overrides, then WEB_PIXEL_IDS in config/web-pixels.ts.
  */
+
+import { WEB_PIXEL_IDS } from "@/config/web-pixels";
 
 export type PixelConfig = {
   metaId?: string;
@@ -9,7 +10,7 @@ export type PixelConfig = {
   snapchatId?: string;
 };
 
-/** Last non-empty wins (Easypanel sometimes lists empty NEXT_PUBLIC_* before filled lines). */
+/** Last non-empty wins */
 function pick(...values: (string | undefined)[]): string | undefined {
   let chosen: string | undefined;
   for (const v of values) {
@@ -28,16 +29,19 @@ export function getPixelConfig(): PixelConfig {
     metaId: pick(
       process.env.META_PIXEL_ID,
       process.env.NEXT_PUBLIC_META_PIXEL_ID,
+      WEB_PIXEL_IDS.meta || undefined,
     ),
     tiktokId: pick(
       process.env.TIKTOK_PIXEL_CODE,
       process.env.TIKTOK_PIXEL_ID,
       process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
+      WEB_PIXEL_IDS.tiktok,
     ),
     snapchatId: pick(
       process.env.SNAPCHAT_PIXEL_ID,
       process.env.NEXT_PUBLIC_SNAPCHAT_PIXEL_ID,
       process.env.NEXT_PUBLIC_SNAP_PIXEL_ID,
+      WEB_PIXEL_IDS.snapchat,
     ),
   };
 }
@@ -50,5 +54,6 @@ export function getPixelConfigStatus(config: PixelConfig) {
     meta_suffix: config.metaId?.slice(-4),
     tiktok_suffix: config.tiktokId?.slice(-4),
     snapchat_suffix: config.snapchatId?.slice(-4),
+    defaults_file: "frontend/config/web-pixels.ts",
   };
 }
