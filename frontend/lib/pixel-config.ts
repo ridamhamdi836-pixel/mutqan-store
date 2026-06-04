@@ -9,12 +9,14 @@ export type PixelConfig = {
   snapchatId?: string;
 };
 
+/** Last non-empty wins (Easypanel sometimes lists empty NEXT_PUBLIC_* before filled lines). */
 function pick(...values: (string | undefined)[]): string | undefined {
+  let chosen: string | undefined;
   for (const v of values) {
     const t = v?.trim();
-    if (t) return t;
+    if (t) chosen = t;
   }
-  return undefined;
+  return chosen;
 }
 
 export function getPixelConfig(): PixelConfig {
@@ -24,18 +26,18 @@ export function getPixelConfig(): PixelConfig {
 
   return {
     metaId: pick(
-      process.env.NEXT_PUBLIC_META_PIXEL_ID,
       process.env.META_PIXEL_ID,
+      process.env.NEXT_PUBLIC_META_PIXEL_ID,
     ),
     tiktokId: pick(
-      process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
       process.env.TIKTOK_PIXEL_CODE,
       process.env.TIKTOK_PIXEL_ID,
+      process.env.NEXT_PUBLIC_TIKTOK_PIXEL_ID,
     ),
     snapchatId: pick(
+      process.env.SNAPCHAT_PIXEL_ID,
       process.env.NEXT_PUBLIC_SNAPCHAT_PIXEL_ID,
       process.env.NEXT_PUBLIC_SNAP_PIXEL_ID,
-      process.env.SNAPCHAT_PIXEL_ID,
     ),
   };
 }

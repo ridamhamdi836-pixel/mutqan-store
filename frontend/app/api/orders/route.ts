@@ -3,6 +3,8 @@ import { normalizePhone, validatePhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
 import { sendOrderToGoogleSheets, type GoogleSheetsOrderInput } from "@/lib/google-sheets";
 import { allocateOrderNumber, allocateOrderNumberStandalone } from "@/lib/order-number";
+import { firePurchaseConversions } from "@/lib/fire-server-conversions";
+import type { TrackingData } from "@/types";
 
 interface OrderItemInput {
   product_slug: string;
@@ -13,15 +15,7 @@ interface OrderItemInput {
   name_ar?: string;
 }
 
-interface TrackingInput {
-  utm_source?: string;
-  utm_medium?: string;
-  utm_campaign?: string;
-  utm_content?: string;
-  utm_term?: string;
-  landing_page?: string;
-  referrer?: string;
-}
+type TrackingInput = TrackingData;
 
 const recentOrders = new Map<string, number>();
 const DUPLICATE_WINDOW_MS = 30 * 60 * 1000;
@@ -229,6 +223,23 @@ export async function POST(request: NextRequest) {
       });
     } else {
       console.log("[Orders] Google Sheets OK:", orderNumber);
+    }
+
+    const clientIp =
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      request.headers.get("x-real-ip") ||
+      null;
+
+    if (tracking?.client_event_id) {
+      void firePurchaseConversions({
+        eventId: tracking.client_event_id,
+        phoneE164,
+        value: totalSar,
+        orderNumber,
+        items,
+        tracking,
+        clientIp,
+      });
     }
 
     return NextResponse.json(

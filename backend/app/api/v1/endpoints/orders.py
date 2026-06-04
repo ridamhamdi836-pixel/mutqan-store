@@ -14,9 +14,10 @@ from app.services.order_service import (
     create_order, accept_upsell, decline_upsell,
     track_order, update_order_status,
 )
-from app.integrations import meta_capi, tiktok_events, snapchat_capi
 from app.core.security import verify_admin_key
 from app.core.logging import logger
+from app.schemas.conversion import ConversionPurchaseIn
+from app.services.conversion_service import fire_purchase_conversions
 
 router = APIRouter()
 
@@ -52,61 +53,28 @@ async def place_order(payload: CreateOrderIn, request: Request, db: Session = De
 
 
 async def _fire_non_sheet_integrations(db, order, phone_e164, client_ip, payload):
-    try:
-        tracking = payload.tracking
-        items = order.items
-        slugs = [i.product_slug for i in items]
-        quantities = [i.quantity for i in items]
-        prices = [i.unit_price_sar for i in items]
+    tracking = payload.tracking
+    if not tracking or not tracking.client_event_id:
+        return
 
-        if tracking and tracking.client_event_id:
-            await meta_capi.send_purchase_event(
-                event_id=tracking.client_event_id,
-                phone_e164=phone_e164,
-                value=order.total_sar,
-                order_number=order.public_order_number,
-                product_slugs=slugs,
-                quantities=quantities,
-                prices=prices,
-                client_ip=client_ip,
-                user_agent=tracking.user_agent,
-                fbp=tracking.meta_fbp,
-                fbc=tracking.meta_fbc,
-                event_source_url=tracking.landing_page,
-            )
-    except Exception as e:
-        logger.error("meta_capi_integration_error", error=str(e))
-
-    try:
-        if tracking and tracking.client_event_id:
-            await tiktok_events.send_complete_payment_event(
-                event_id=tracking.client_event_id,
-                phone_e164=phone_e164,
-                value=order.total_sar,
-                order_number=order.public_order_number,
-                product_slugs=slugs,
-                quantities=quantities,
-                prices=prices,
-                client_ip=client_ip,
-                user_agent=tracking.user_agent,
-                ttclid=tracking.tiktok_click_id,
-            )
-    except Exception as e:
-        logger.error("tiktok_integration_error", error=str(e))
-
-    try:
-        if tracking and tracking.client_event_id:
-            await snapchat_capi.send_purchase_event(
-                event_id=tracking.client_event_id,
-                phone_e164=phone_e164,
-                value=order.total_sar,
-                order_number=order.public_order_number,
-                client_ip=client_ip,
-                user_agent=tracking.user_agent,
-                sc_click_id=tracking.snapchat_click_id,
-            )
-    except Exception as e:
-        logger.error("snapchat_integration_error", error=str(e))
+    items = order.items
+    conv = ConversionPurchaseIn(
+        event_id=tracking.client_event_id,
+        phone_e164=phone_e164,
+        value=order.total_sar,
+        order_number=order.public_order_number,
+        product_slugs=[i.product_slug for i in items],
+        quantities=[i.quantity for i in items],
+        prices=[float(i.unit_price_sar) for i in items],
+        client_ip=client_ip,
+        user_agent=tracking.user_agent,
+        meta_fbp=tracking.meta_fbp,
+        meta_fbc=tracking.meta_fbc,
+        landing_page=tracking.landing_page,
+        tiktok_click_id=tracking.tiktok_click_id,
+        snapchat_click_id=tracking.snapchat_click_id,
+    )
+    await fire_purchase_conversions(conv)
 
 
 @router.post("/orders/{order_id}/upsell/accept", response_model=AcceptUpsellOut)

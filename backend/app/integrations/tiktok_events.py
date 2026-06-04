@@ -22,6 +22,7 @@ async def send_complete_payment_event(
     ttclid: str = None,
 ) -> None:
     if not settings.TIKTOK_PIXEL_CODE or not settings.TIKTOK_ACCESS_TOKEN:
+        logger.info("tiktok_events_skipped", reason="missing_pixel_or_token")
         return
 
     contents = [
@@ -29,28 +30,34 @@ async def send_complete_payment_event(
         for slug, qty, price in zip(product_slugs, quantities, prices)
     ]
 
+    user: dict = {"phone_number": sha256_hash(phone_e164)}
+    if ttclid:
+        user["ttclid"] = ttclid
+
     payload = {
-        "pixel_code": settings.TIKTOK_PIXEL_CODE,
-        "event": "CompletePayment",
-        "event_id": event_id,
-        "timestamp": str(int(time.time())),
-        "context": {
-            "ip": client_ip or "",
-            "user_agent": user_agent or "",
-        },
-        "properties": {
-            "currency": "SAR",
-            "value": str(value),
-            "contents": contents,
-            "order_id": order_number,
-        },
-        "user": {
-            "phone_number": sha256_hash(phone_e164),
-        },
+        "event_source": "web",
+        "event_source_id": settings.TIKTOK_PIXEL_CODE,
+        "data": [
+            {
+                "event": "CompletePayment",
+                "event_time": int(time.time()),
+                "event_id": event_id,
+                "user": user,
+                "properties": {
+                    "currency": "SAR",
+                    "value": value,
+                    "contents": contents,
+                    "order_id": order_number,
+                },
+            }
+        ],
     }
 
-    if ttclid:
-        payload["context"]["ttclid"] = ttclid
+    if client_ip or user_agent:
+        payload["data"][0]["context"] = {
+            "ip": client_ip or "",
+            "user_agent": user_agent or "",
+        }
 
     try:
         async with httpx.AsyncClient(timeout=8.0) as client:
@@ -60,7 +67,11 @@ async def send_complete_payment_event(
                 headers={"Access-Token": settings.TIKTOK_ACCESS_TOKEN},
             )
             if resp.status_code >= 300:
-                logger.warning("tiktok_events_failed", status=resp.status_code)
+                logger.warning(
+                    "tiktok_events_failed",
+                    status=resp.status_code,
+                    body=resp.text[:300],
+                )
             else:
                 logger.info("tiktok_events_sent", event_id=event_id)
     except Exception as e:

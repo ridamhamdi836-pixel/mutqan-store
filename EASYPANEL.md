@@ -31,30 +31,39 @@ Check: `https://mutqan.online/api/health-deploy` → `admin.ready` should be `tr
 
 **مهم:** بعد تغيير Repository إلى `mutqan-store` أعد إدخال `GOOGLE_SHEETS_WEBHOOK_URL` يدوياً — المتغيرات القديمة لا تنتقل تلقائياً.
 
-### Pixels (Meta / TikTok / Snapchat) — FRONTEND فقط
+### Pixels + CAPI
 
-ضع المتغيرات على خدمة **frontend** (ليس backend). احذف الأسطر الفارغة المكررة.
+**Frontend** (متصفح + استدعاء CAPI بعد الطلب):
 
 ```
-NEXT_PUBLIC_META_PIXEL_ID=معرف_ميتا
-NEXT_PUBLIC_TIKTOK_PIXEL_ID=D4GVCMBC77UAP3H8QDS0
-NEXT_PUBLIC_SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
+NEXT_PUBLIC_SITE_URL=https://mutqan.online
+NEXT_PUBLIC_API_URL=https://api.mutqan.online
+SECRET_KEY=نفس_قيمة_backend_SECRET_KEY
+
+TIKTOK_PIXEL_CODE=D4GVCMBC77UAP3H8QDS0
+SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
 NEXT_PUBLIC_ENABLE_PIXELS=true
 ```
 
-أو بدون `NEXT_PUBLIC_` (يُقرأ وقت التشغيل أيضاً):
+احذف كل أسطر `NEXT_PUBLIC_TIKTOK_PIXEL_ID=` و`NEXT_PUBLIC_SNAPCHAT_PIXEL_ID=` **الفارغة** — سطر واحد فقط لكل مفتاح.
+
+**Backend** (توكنات CAPI فقط — لا حاجة لـ NEXT_PUBLIC_* هنا):
 
 ```
-TIKTOK_PIXEL_CODE=...
-SNAPCHAT_PIXEL_ID=...
-META_PIXEL_ID=...
+SECRET_KEY=نفس_القيمة_أعلاه
+TIKTOK_PIXEL_CODE=D4GVCMBC77UAP3H8QDS0
+TIKTOK_ACCESS_TOKEN=...
+SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
+SNAPCHAT_ACCESS_TOKEN=...
+META_PIXEL_ID=معرف_ميتا_من_فيسبوك
+META_ACCESS_TOKEN=توكن_ميتا
 ```
 
-**Backend** يحتفظ فقط بـ `TIKTOK_ACCESS_TOKEN`, `SNAPCHAT_ACCESS_TOKEN`, `META_ACCESS_TOKEN` لـ CAPI عند إنشاء الطلب — لا يشغّل البكسل في المتصفح.
+الطلبات تمر عبر `frontend` → `/api/orders` → يستدعي `backend` `/api/v1/conversions/purchase`.
 
-بعد الحفظ: **Deploy frontend بدون cache** ثم افتح `https://mutqan.online/api/debug/pixels` — يجب `tiktok: true`, `snapchat: true`.
+تحقق: `https://mutqan.online/api/debug/pixels` → `browser_pixels.tiktok: true`, `capi.ready: true`.
 
-**لا تضع** `NEXT_PUBLIC_*` فارغة فوق نفس المفتاح بقيمة — Easypanel قد يأخذ الأول الفارغ.
+Deploy **frontend + backend** بدون cache بعد أي تغيير env.
 
 ### Google Apps Script (مرة واحدة)
 
