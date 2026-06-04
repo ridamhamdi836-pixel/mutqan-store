@@ -2,16 +2,16 @@ import { ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ProductOrderCtaProps = {
-  priceSar: number;
-  onOrder: () => void;
+  onAction: () => void;
+  buttonLabel: string;
   title?: string;
   subtitle?: string;
   className?: string;
 };
 
 export function ProductOrderCta({
-  priceSar,
-  onOrder,
+  onAction,
+  buttonLabel,
   title = "جاهز تطلب؟",
   subtitle = "نؤكد معك هاتفياً قبل الشحن — بدون دفع الآن.",
   className,
@@ -29,11 +29,11 @@ export function ProductOrderCta({
       </p>
       <button
         type="button"
-        onClick={onOrder}
+        onClick={onAction}
         className="btn-primary w-full max-w-md mx-auto min-h-[52px] rounded-2xl text-base font-bold flex items-center justify-center gap-2"
       >
         <ShoppingBag className="w-5 h-5" />
-        اطلب الآن · {priceSar} ر.س
+        {buttonLabel}
       </button>
       <p className="text-xs font-medium text-brand-muted">
         الدفع عند الاستلام فقط · ضمان 30 يوم

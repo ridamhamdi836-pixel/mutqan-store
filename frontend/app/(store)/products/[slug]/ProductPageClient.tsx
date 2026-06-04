@@ -19,6 +19,7 @@ import { trackStoreEvent } from "@/lib/store-analytics-client";
 import { PRODUCT_COD_FAQS } from "@/lib/product-cod-faqs";
 import { PRODUCT_SPECS } from "@/config/product-specs";
 import { reviewDateLabel } from "@/lib/product-review-dates";
+import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
 import { getProductImageSrc, getProductMainImageSrc } from "@/lib/product-image";
@@ -132,16 +133,18 @@ export function ProductPageClient({
 
   const reviewStats = useMemo(() => {
     const n = config.reviews.length;
-    if (n === 0) return { avg: 4.9, label: "تقييمات عملاء متقن" };
     const avg =
-      Math.round(
-        (config.reviews.reduce((s, r) => s + r.rating, 0) / n) * 10,
-      ) / 10;
+      n > 0
+        ? Math.round(
+            (config.reviews.reduce((s, r) => s + r.rating, 0) / n) * 10,
+          ) / 10
+        : 4.9;
+    const displayCount = getProductReviewDisplayCount(product.slug);
     return {
       avg,
-      label: `${n} تقييم${n > 1 ? "ات" : ""} موثقة على هذه الصفحة`,
+      label: `${displayCount.toLocaleString("ar-SA")} تقييم موثق`,
     };
-  }, [config.reviews]);
+  }, [config.reviews, product.slug]);
 
   useEffect(() => {
     const target = bundleRef.current;
@@ -232,10 +235,10 @@ export function ProductPageClient({
             </div>
             <button
               type="button"
-              onClick={handlePlaceOrder}
+              onClick={scrollToOffers}
               className="btn-primary shrink-0 px-4 py-3 text-sm font-bold whitespace-nowrap"
             >
-              اطلب · {selectedBundle.price_sar} ر.س
+              اختر عرضك الآن
             </button>
           </div>
         </div>
@@ -447,8 +450,8 @@ export function ProductPageClient({
 
           {!isUpsellPreview ? (
             <ProductOrderCta
-              priceSar={selectedBundle.price_sar}
-              onOrder={handlePlaceOrder}
+              onAction={handlePlaceOrder}
+              buttonLabel={`اطلب الآن · ${selectedBundle.price_sar} ر.س`}
               title="شفت الفرق؟ اطلب الآن"
               subtitle="نفس العرض المختار — تأكيد هاتفي ثم دفع عند الاستلام فقط."
             />
@@ -498,10 +501,10 @@ export function ProductPageClient({
 
           {!isUpsellPreview ? (
             <ProductOrderCta
-              priceSar={selectedBundle.price_sar}
-              onOrder={handlePlaceOrder}
+              onAction={scrollToOffers}
+              buttonLabel="اختر عرضك الآن"
               title="انضم لعملاء متقن"
-              subtitle="نفس السعر والعرض — خطوة واحدة للتسجيل والتأكيد."
+              subtitle="اختر العرض المناسب لك ثم أكمل الطلب — الدفع عند الاستلام فقط."
             />
           ) : null}
         </div>
