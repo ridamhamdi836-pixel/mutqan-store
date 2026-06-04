@@ -10,11 +10,15 @@ const HERO_ITEMS = [
   { icon: Phone, label: "تأكيد قبل الشحن" },
 ] as const;
 
-const BAR_ITEMS = [
+const BAR_ITEMS: Array<{
+  icon: typeof Star;
+  label: string;
+  iconClass?: string;
+}> = [
   { icon: Star, label: "منتجات مختارة لبيوت الخليج", iconClass: "text-amber-400 fill-amber-400" },
   { icon: ShieldCheck, label: "ضمان ذهبي للاستبدال والاسترجاع" },
   { icon: CreditCard, label: "ادفع براحتك عند الاستلام" },
-] as const;
+];
 
 type ProductTrustStripProps = {
   variant?: "hero" | "bar";

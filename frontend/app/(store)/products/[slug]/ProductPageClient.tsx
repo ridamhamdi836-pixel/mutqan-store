@@ -1,18 +1,23 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
-import { Star, ShoppingBag, CheckCircle2 } from "lucide-react";
+import { Star, ShoppingBag } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { BundleSelector } from "@/components/product/BundleSelector";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { ProductComparisonTable } from "@/components/product/ProductComparisonTable";
 import { ProductTrustStrip } from "@/components/product/ProductTrustStrip";
+import { ProductCodSteps } from "@/components/product/ProductCodSteps";
+import { ProductHeroTrust } from "@/components/product/ProductHeroTrust";
+import { ProductOrderCta } from "@/components/product/ProductOrderCta";
+import { ProductSpecsSection } from "@/components/product/ProductSpecsSection";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
-import { PRODUCT_PRIMARY_CTA } from "@/lib/product-cta";
+import { PRODUCT_COD_FAQS } from "@/lib/product-cod-faqs";
+import { PRODUCT_SPECS } from "@/config/product-specs";
 import { reviewDateLabel } from "@/lib/product-review-dates";
 import type { ProductBundle } from "@/types";
 import { getProduct, toProduct } from "@/config/catalog";
@@ -54,7 +59,6 @@ function SectionImage({
 }
 
 interface ProductPageClientProps {
-  /** Full PDP embedded in post-purchase offer — no modal overlay, no duplicate sticky bar */
   embedMode?: "store" | "upsell-preview";
   product: {
     id: string;
@@ -111,7 +115,7 @@ export function ProductPageClient({
   embedMode = "store",
 }: ProductPageClientProps) {
   const isUpsellPreview = embedMode === "upsell-preview";
-  const { addItem, openCart } = useCart();
+  const { addItem, openCheckout } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const [showSticky, setShowSticky] = useState(false);
@@ -120,9 +124,24 @@ export function ProductPageClient({
   const mainImageSrc = getProductMainImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
 
-  const reviewCount =
-    1050 +
-    (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 950);
+  const specs = PRODUCT_SPECS[product.slug] ?? [];
+  const allFaqs = useMemo(
+    () => [...PRODUCT_COD_FAQS, ...config.faqs],
+    [config.faqs],
+  );
+
+  const reviewStats = useMemo(() => {
+    const n = config.reviews.length;
+    if (n === 0) return { avg: 4.9, label: "تقييمات عملاء متقن" };
+    const avg =
+      Math.round(
+        (config.reviews.reduce((s, r) => s + r.rating, 0) / n) * 10,
+      ) / 10;
+    return {
+      avg,
+      label: `${n} تقييم${n > 1 ? "ات" : ""} موثقة على هذه الصفحة`,
+    };
+  }, [config.reviews]);
 
   useEffect(() => {
     const target = bundleRef.current;
@@ -148,10 +167,10 @@ export function ProductPageClient({
   }, []);
 
   const scrollToOffers = useCallback(() => {
-    bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    bundleRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }, []);
 
-  const handleAddToCart = useCallback(() => {
+  const handlePlaceOrder = useCallback(() => {
     if (isUpsellPreview) return;
 
     addItem({
@@ -177,8 +196,8 @@ export function ProductPageClient({
       quantity: selectedBundle.quantity,
     });
 
-    openCart();
-  }, [addItem, openCart, product, selectedBundle, isUpsellPreview]);
+    openCheckout();
+  }, [addItem, openCheckout, product, selectedBundle, isUpsellPreview]);
 
   const relatedProducts = config.crossSellSlugs
     .map((slug) => {
@@ -186,8 +205,6 @@ export function ProductPageClient({
       return p ? toProduct(p) : null;
     })
     .filter((p): p is NonNullable<typeof p> => p !== null);
-
-  const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   return (
     <div className="bg-brand-background pb-20 md:pb-4">
@@ -209,22 +226,22 @@ export function ProductPageClient({
                   {product.name_ar}
                 </p>
                 <p className="text-xs text-brand-muted tabular-nums">
-                  ابتداءً من {minBundlePrice} ر.س
+                  {selectedBundle.price_sar} ر.س · دفع عند الاستلام
                 </p>
               </div>
             </div>
             <button
               type="button"
-              onClick={scrollToOffers}
+              onClick={handlePlaceOrder}
               className="btn-primary shrink-0 px-4 py-3 text-sm font-bold whitespace-nowrap"
             >
-              اختر عرضك الآن
+              اطلب · {selectedBundle.price_sar} ر.س
             </button>
           </div>
         </div>
       ) : null}
 
-      {/* 1. Hero — above the fold */}
+      {/* ── 1. شراء — كل ما يحتاجه الزائر للقرار ── */}
       <section className="page-x pt-2 md:pt-4 pb-4 md:pb-6">
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start">
@@ -240,13 +257,21 @@ export function ProductPageClient({
 
             <div className="space-y-3 md:space-y-4 lg:sticky lg:top-[4.25rem]">
               <div className="flex items-center gap-2 flex-wrap">
-                <div className="flex items-center">
+                <div className="flex items-center" aria-hidden>
                   {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    <Star
+                      key={i}
+                      className={cn(
+                        "w-4 h-4",
+                        i < Math.round(reviewStats.avg)
+                          ? "text-amber-400 fill-amber-400"
+                          : "text-brand-border fill-brand-border",
+                      )}
+                    />
                   ))}
                 </div>
                 <span className="text-xs md:text-sm font-bold text-brand-espresso">
-                  4.9 · (+{reviewCount.toLocaleString()} مراجعة)
+                  {reviewStats.avg} · {reviewStats.label}
                 </span>
               </div>
 
@@ -257,9 +282,11 @@ export function ProductPageClient({
                 {product.name_ar}
               </h1>
 
-              <p className="text-sm md:text-base text-brand-muted leading-relaxed">
+              <p className="text-sm md:text-base text-brand-muted leading-relaxed font-medium">
                 {config.shortPromise}
               </p>
+
+              <ProductHeroTrust />
 
               <div
                 id="bundle-section"
@@ -275,14 +302,16 @@ export function ProductPageClient({
 
               <button
                 type="button"
-                onClick={handleAddToCart}
+                onClick={handlePlaceOrder}
                 className="btn-primary w-full min-h-[52px] md:min-h-[56px] rounded-2xl text-base md:text-lg font-bold flex items-center justify-center md:shadow-lg md:shadow-[#1B4DDB]/20"
               >
                 اطلب الآن · {selectedBundle.price_sar} ر.س
               </button>
               <p className="text-center text-xs text-brand-muted font-medium">
-                الدفع عند الاستلام · بدون دفع أونلاين
+                بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
               </p>
+
+              {!isUpsellPreview ? <ProductCodSteps /> : null}
             </div>
           </div>
         </div>
@@ -290,7 +319,7 @@ export function ProductPageClient({
 
       <ProductTrustStrip variant="bar" />
 
-      {/* 2. Problem */}
+      {/* ── 2. القصة: مشكلة → حل → فوائد ── */}
       <section className="cv-section product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <SectionImage
@@ -299,8 +328,11 @@ export function ProductPageClient({
             aspect={config.painSectionAspect}
           />
           <div className="space-y-4 text-start">
+            <p className="text-xs font-bold text-brand-bronze uppercase tracking-wide">
+              المشكلة
+            </p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
-              هل تعاني من هذه المشكلة يومياً؟
+              هل تعاني من هذا يومياً؟
             </h2>
             <p className="text-base md:text-lg text-brand-muted leading-relaxed">
               {config.problemStatement}
@@ -309,15 +341,17 @@ export function ProductPageClient({
         </div>
       </section>
 
-      {/* 3. Solution */}
       <section className="cv-section product-section-pad page-x bg-brand-surface">
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
           <div className="space-y-4 text-start md:order-2">
+            <p className="text-xs font-bold text-brand-trust uppercase tracking-wide">
+              الحل من متقن
+            </p>
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso">
               {config.heroAngle}
             </h2>
             <p className="text-base md:text-lg text-brand-muted leading-relaxed">
-              منتج متقن صُمم ليحل المشكلة بسرعة — بدون تعقيد أو أدوات إضافية.
+              منتج مختار لبيوت الخليج — سهل الاستخدام من أول يوم، بدون تعقيد.
             </p>
           </div>
           <div className="md:order-1">
@@ -330,7 +364,6 @@ export function ProductPageClient({
         </div>
       </section>
 
-      {/* 4. Benefits */}
       <section className="cv-section product-section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
@@ -353,9 +386,9 @@ export function ProductPageClient({
               {config.benefits.map((benefit) => (
                 <li
                   key={benefit}
-                  className="flex items-start gap-3 card p-4 border-brand-border/60"
+                  className="flex items-start gap-3 rounded-xl border border-brand-border/60 bg-brand-surface p-4"
                 >
-                  <CheckCircle2 className="w-5 h-5 text-brand-trust flex-shrink-0 mt-0.5" />
+                  <span className="w-2 h-2 rounded-full bg-brand-trust shrink-0 mt-2" />
                   <span className="text-sm md:text-base font-bold text-brand-espresso leading-snug">
                     {benefit}
                   </span>
@@ -366,15 +399,15 @@ export function ProductPageClient({
         </div>
       </section>
 
-      {/* 5. Before / After */}
+      {/* ── 3. إثبات بصري + طلب ── */}
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto">
-          <div className="text-center mb-8 max-w-2xl mx-auto">
+        <div className="max-w-content mx-auto space-y-8">
+          <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
-              شوف الفرق بنفسك — قبل وبعد
+              الفرق واضح — قبل وبعد
             </h2>
             <p className="text-sm md:text-base text-brand-muted">
-              نتيجة حقيقية من بيوت سعودية استخدمت المنتج.
+              نتيجة من بيوت سعودية جرّبت المنتج.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-5 md:gap-8 items-start max-w-4xl mx-auto">
@@ -393,7 +426,7 @@ export function ProductPageClient({
                 <p className="text-sm font-bold text-brand-muted mt-2">{config.beforeLabel}</p>
               </div>
             </div>
-            <div className="card overflow-hidden border-2 border-brand-trust/40 shadow-md">
+            <div className="card overflow-hidden border-2 border-brand-trust/40">
               <StoreImageFrame
                 src={config.afterSectionImage ?? productImageSrc}
                 alt={config.afterSectionImageAlt ?? config.afterLabel}
@@ -411,13 +444,20 @@ export function ProductPageClient({
               </div>
             </div>
           </div>
+
+          {!isUpsellPreview ? (
+            <ProductOrderCta
+              priceSar={selectedBundle.price_sar}
+              onOrder={handlePlaceOrder}
+              title="شفت الفرق؟ اطلب الآن"
+              subtitle="نفس العرض المختار — تأكيد هاتفي ثم دفع عند الاستلام فقط."
+            />
+          ) : null}
         </div>
       </section>
 
-      {/* 6. Features — comparison */}
-      <ProductComparisonTable />
+      <ProductSpecsSection specs={specs} />
 
-      {/* 7. How it works */}
       <section className="cv-section page-x py-8 md:py-10 bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
@@ -427,7 +467,7 @@ export function ProductPageClient({
             {config.howToUse.map((step, i) => (
               <li
                 key={step}
-                className="flex items-center gap-4 card p-4 border-brand-border/60"
+                className="flex items-center gap-4 rounded-xl border border-brand-border/60 bg-brand-surface p-4"
               >
                 <span className="w-10 h-10 rounded-full bg-brand-bronze text-white font-black flex items-center justify-center shrink-0">
                   {i + 1}
@@ -439,11 +479,12 @@ export function ProductPageClient({
         </div>
       </section>
 
-      {/* 8. Reviews */}
+      <ProductComparisonTable />
+
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6 md:mb-8">
-            آراء عملاء اشتروا المنتج
+        <div className="max-w-content mx-auto space-y-8">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
+            آراء من اشتروا المنتج
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 items-start">
             {config.reviews.map((review, i) => (
@@ -454,15 +495,35 @@ export function ProductPageClient({
               />
             ))}
           </div>
+
+          {!isUpsellPreview ? (
+            <ProductOrderCta
+              priceSar={selectedBundle.price_sar}
+              onOrder={handlePlaceOrder}
+              title="انضم لعملاء متقن"
+              subtitle="نفس السعر والعرض — خطوة واحدة للتسجيل والتأكيد."
+            />
+          ) : null}
         </div>
       </section>
 
-      {/* Cross-sell — before FAQ */}
-      {relatedProducts.length > 0 && (
-        <section className="cv-section page-x py-8 md:py-10 bg-white border-y border-brand-border/40">
+      <section className="cv-section py-8 md:py-10 page-x bg-white">
+        <div className="max-w-content mx-auto max-w-3xl">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-2">
+            أسئلة قبل الطلب
+          </h2>
+          <p className="text-sm text-brand-muted text-center mb-6">
+            إجابات واضحة عن الدفع، الاتصال، والتوصيل — بدون لبس.
+          </p>
+          <FAQAccordion items={allFaqs} />
+        </div>
+      </section>
+
+      {relatedProducts.length > 0 ? (
+        <section className="cv-section page-x py-8 md:py-10 bg-brand-surface border-t border-brand-border/40">
           <div className="max-w-content mx-auto">
             <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
-              العملاء الذين اشتروا هذا المنتج اشتروا أيضاً
+              قد يعجبك أيضاً
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               {relatedProducts.slice(0, 3).map((p) => (
@@ -471,40 +532,37 @@ export function ProductPageClient({
             </div>
           </div>
         </section>
-      )}
+      ) : null}
 
-      {/* 9. FAQ */}
-      <section className="cv-section py-8 md:py-10 page-x bg-brand-surface">
-        <div className="max-w-content mx-auto max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
-            أسئلة شائعة
-          </h2>
-          <FAQAccordion items={config.faqs} />
-        </div>
-      </section>
-
-      {/* 10. Final CTA */}
-      <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
-        <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
-            جاهز تطلب؟ الدفع عند الاستلام فقط
-          </h2>
-          <p className="text-brand-sand/90 text-sm md:text-base leading-relaxed">
-            نؤكد طلبك هاتفياً قبل الشحن — بدون بطاقة ولا دفع مقدم.
-          </p>
-          <button
-            type="button"
-            onClick={handleAddToCart}
-            className="btn-primary w-full min-h-[56px] text-lg font-bold flex items-center justify-center gap-2"
-          >
-            <ShoppingBag className="w-6 h-6" />
-            {PRODUCT_PRIMARY_CTA}
-          </button>
-          <p className="text-xs text-brand-sand/80 font-medium">
-            ضمان 30 يوم · شحن سريع · تأكيد قبل الشحن
-          </p>
-        </div>
-      </section>
+      {!isUpsellPreview ? (
+        <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
+          <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
+              آخر خطوة — احجز طلبك الآن
+            </h2>
+            <p className="text-brand-sand/90 text-sm md:text-base leading-relaxed">
+              {selectedBundle.label_ar.split(" - ")[0]} · {selectedBundle.price_sar} ر.س
+              <br />
+              دفع عند الاستلام · تأكيد هاتفي · ضمان 30 يوم
+            </p>
+            <button
+              type="button"
+              onClick={handlePlaceOrder}
+              className="btn-primary w-full min-h-[56px] text-lg font-bold flex items-center justify-center gap-2"
+            >
+              <ShoppingBag className="w-6 h-6" />
+              اطلب الآن · {selectedBundle.price_sar} ر.س
+            </button>
+            <button
+              type="button"
+              onClick={scrollToOffers}
+              className="text-sm font-semibold text-brand-sand/90 hover:text-white underline-offset-2 hover:underline"
+            >
+              تغيير العرض المختار
+            </button>
+          </div>
+        </section>
+      ) : null}
 
       <div className="h-20 md:h-6" aria-hidden />
     </div>
