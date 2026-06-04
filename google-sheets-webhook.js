@@ -38,6 +38,7 @@ var FIELD_BY_HEADER = {
   name: "name",
   phone: "phone",
   "Order Number": "orderid",
+  "رقم الطلب": "orderid",
   orderid: "orderid",
   order_number: "orderid",
   address: "address",
@@ -82,8 +83,8 @@ function doPost(e) {
 
     if (targetRow > 0) {
       sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+      applyOrderNumberToRow(sheet, targetRow, orderId);
       formatQuantityCellAsText(sheet, targetRow);
-      formatOrderNumberCellAsText(sheet, targetRow);
       SpreadsheetApp.flush();
       return jsonOut({
         status: "success",
@@ -95,8 +96,8 @@ function doPost(e) {
 
     sheet.appendRow(row);
     var newRow = sheet.getLastRow();
+    applyOrderNumberToRow(sheet, newRow, orderId);
     formatQuantityCellAsText(sheet, newRow);
-    formatOrderNumberCellAsText(sheet, newRow);
     SpreadsheetApp.flush();
 
     return jsonOut({
@@ -193,7 +194,7 @@ function doGet() {
   return jsonOut({
     status: "ok",
     message: "Mutqan Google Sheets webhook working",
-    version: "upsell-merge-v4",
+    version: "order-number-visible-v5",
     sheet_id_set: isSheetConfigured(),
     sheet_id_preview: isSheetConfigured()
       ? SHEET_ID.slice(0, 6) + "..."
@@ -214,6 +215,7 @@ function ensureHeaders(sheet) {
   }
 
   ensureOrderNumberHeader(sheet);
+  formatOrderNumberHeaderAsText(sheet);
 }
 
 /** Add Order Number column on existing sheets that only have the old header row */
@@ -223,7 +225,12 @@ function ensureOrderNumberHeader(sheet) {
 
   for (var i = 0; i < headers.length; i++) {
     var h = String(headers[i]).trim().toLowerCase();
-    if (h === "order number" || h === "orderid" || h === "order_number") {
+    if (
+      h === "order number" ||
+      h === "orderid" ||
+      h === "order_number" ||
+      h === "رقم الطلب"
+    ) {
       return;
     }
   }
@@ -251,19 +258,22 @@ function formatQuantityCellAsText(sheet, rowNum) {
   }
 }
 
-/** Keep mutqan-0001 readable (not parsed as date) */
-function formatOrderNumberCellAsText(sheet, rowNum) {
+/** Force order id into the Order Number column (mutqan-0001) on every write */
+function applyOrderNumberToRow(sheet, rowNum, orderId) {
+  if (!orderId || rowNum < 2) return;
+
+  ensureOrderNumberHeader(sheet);
   var col = getOrderNumberColumn(sheet);
-  if (col > 0 && rowNum >= 2) {
-    sheet.getRange(rowNum, col).setNumberFormat("@");
-    var orderId = sheet.getRange(rowNum, col).getValue();
-    if (!orderId || String(orderId).trim() === "") {
-      // Try to recover from legacy columns (address used before Order Number existed)
-      var legacy = findLegacyOrderIdInRow(sheet, rowNum);
-      if (legacy) {
-        sheet.getRange(rowNum, col).setValue(String(legacy));
-      }
-    }
+  if (col < 1) return;
+
+  sheet.getRange(rowNum, col).setValue(String(orderId));
+  sheet.getRange(rowNum, col).setNumberFormat("@");
+}
+
+function formatOrderNumberHeaderAsText(sheet) {
+  var col = getOrderNumberColumn(sheet);
+  if (col > 0) {
+    sheet.getRange(1, col).setNumberFormat("@");
   }
 }
 
@@ -278,6 +288,7 @@ function headerToField(header) {
     name: "name",
     phone: "phone",
     "order number": "orderid",
+    "رقم الطلب": "orderid",
     orderid: "orderid",
     order_number: "orderid",
     address: "address",
@@ -306,7 +317,12 @@ function getOrderNumberColumn(sheet) {
   var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   for (var i = 0; i < headers.length; i++) {
     var h = String(headers[i]).trim().toLowerCase();
-    if (h === "order number" || h === "orderid" || h === "order_number") {
+    if (
+      h === "order number" ||
+      h === "orderid" ||
+      h === "order_number" ||
+      h === "رقم الطلب"
+    ) {
       return i + 1;
     }
   }
@@ -352,12 +368,19 @@ function buildRow(sheet, data) {
     row.push(value);
   }
 
-  // Always write order id into Order Number column (even if header spelling differs)
   if (orderId) {
     var ordCol = getOrderNumberColumn(sheet);
-    if (ordCol > 0 && ordCol <= row.length) {
+    if (ordCol > 0) {
+      while (row.length < ordCol) {
+        row.push("");
+      }
       row[ordCol - 1] = orderId;
     }
+  }
+
+  var sheetCols = Math.max(sheet.getLastColumn(), row.length);
+  while (row.length < sheetCols) {
+    row.push("");
   }
 
   return row;
@@ -433,7 +456,7 @@ function backfillOrderNumbersInSheet() {
     var legacy = findLegacyOrderIdInRow(sheet, r);
     if (legacy) {
       sheet.getRange(r, orderCol).setValue(legacy);
-      formatOrderNumberCellAsText(sheet, r);
+      applyOrderNumberToRow(sheet, r, legacy);
       fixed++;
     }
   }

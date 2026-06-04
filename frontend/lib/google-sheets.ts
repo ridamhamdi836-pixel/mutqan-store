@@ -6,7 +6,7 @@
 import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
-export const SHEETS_BUILD = "google-sheets-upsell-merge-v4";
+export const SHEETS_BUILD = "google-sheets-order-number-visible-v5";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 const WEBHOOK_TIMEOUT_MS = 25_000;
