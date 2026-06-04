@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="bg-brand-background">
-      <section className="bg-brand-espresso py-16 page-x">
+      <section className="bg-brand-espresso py-10 md:py-12 page-x">
         <div className="max-w-content mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-brand-surface mb-4">عن متقن</h1>
           <p className="text-brand-sand/80 max-w-xl mx-auto text-lg">
@@ -20,7 +20,7 @@ export default function AboutPage() {
       </section>
 
       <section className="section-pad page-x">
-        <div className="max-w-content mx-auto max-w-3xl space-y-8">
+        <div className="max-w-content mx-auto max-w-3xl space-y-6">
           <div className="card p-6 md:p-8">
             <h2 className="text-2xl font-bold text-brand-espresso mb-4">قصتنا</h2>
             <div className="space-y-4 text-brand-muted leading-relaxed">

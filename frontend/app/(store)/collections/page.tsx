@@ -16,7 +16,7 @@ const ALL_PRODUCTS = CATALOG.map(toProduct);
 export default function CollectionsPage() {
   return (
     <div className="bg-brand-background">
-      <section className="bg-brand-espresso py-14 page-x">
+      <section className="bg-brand-espresso py-10 md:py-11 page-x">
         <div className="max-w-content mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-bold text-brand-surface mb-4">
             جميع منتجات متقن

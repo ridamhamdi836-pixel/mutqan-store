@@ -54,7 +54,7 @@ function OrderOfferContent() {
   }
 
   return (
-    <div className="py-8 md:py-10 page-x">
+    <div className="py-6 md:py-8 page-x">
       <PostPurchaseOffer
         orderNumber={orderNumber}
         orderedSlugs={orderedSlugs}

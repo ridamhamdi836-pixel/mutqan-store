@@ -56,12 +56,12 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           1. HERO — Emotional, full-width
       ════════════════════════════════════════════ */}
-      <section className="relative pt-8 pb-16 md:pt-16 md:pb-28 page-x">
+      <section className="relative pt-6 pb-10 md:pt-10 md:pb-14 page-x">
         <div className="absolute top-0 right-0 w-72 h-72 bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-beige/40 rounded-full -z-10 pointer-events-none" aria-hidden />
 
         <div className="max-w-content mx-auto relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Text Column */}
             <div className="order-2 md:order-1">
               <div className="inline-flex items-center gap-2.5 bg-gradient-to-l from-brand-bronze/15 to-brand-bronze/5 text-brand-bronze rounded-pill px-5 py-2 text-sm font-bold mb-8 border border-brand-bronze/20 shadow-sm">
@@ -142,7 +142,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
       ════════════════════════════════════════════ */}
-      <section className="py-10 md:py-12 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
+      <section className="py-7 md:py-9 bg-brand-espresso text-white border-t-4 border-brand-bronze/40 md:border-y-4">
         <div className="max-w-content mx-auto page-x">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6 text-center">
             {[
@@ -166,7 +166,7 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════
           3. TRUST BADGES
       ════════════════════════════════════════════ */}
-      <section className="cv-section pt-16 md:pt-20 pb-8 page-x">
+      <section className="cv-section pt-8 md:pt-10 pb-6 page-x">
         <div className="max-w-content mx-auto">
           <TrustBadges />
         </div>
@@ -177,7 +177,7 @@ export default function HomePage() {
       ════════════════════════════════════════════ */}
       <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <Sparkles className="w-4 h-4" />
               <span>حلول مُختارة بعناية</span>
@@ -197,7 +197,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-14">
+          <div className="text-center mt-8 md:mt-10">
             <Link
               href="/collections"
               className="btn-secondary inline-flex items-center gap-3 px-10 py-4.5 font-extrabold text-lg hover:bg-brand-espresso hover:text-white transition-all duration-300 border-2 shadow-sm hover:shadow-lg"
@@ -215,7 +215,7 @@ export default function HomePage() {
       <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-brand-bronze/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <Heart className="w-4 h-4" />
               <span>ليش عائلات كثيرة تختارنا؟</span>
@@ -281,7 +281,7 @@ export default function HomePage() {
       ════════════════════════════════════════════ */}
       <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-content mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <Gift className="w-4 h-4" />
               <span>تصفح حسب احتياجك</span>
@@ -327,7 +327,7 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(27,77,219,0.06),transparent_60%)]" />
 
         <div className="max-w-content mx-auto relative z-10">
-          <div className="text-center mb-16">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <CreditCard className="w-4 h-4" />
               <span>بدون مجازفة مالية</span>
@@ -340,7 +340,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             {[
               {
                 num: "١",
@@ -380,7 +380,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-14">
+          <div className="text-center mt-8 md:mt-10">
             <Link
               href="/collections"
               className="btn-primary inline-flex items-center gap-3 px-10 py-4.5 text-lg font-extrabold"
@@ -398,7 +398,7 @@ export default function HomePage() {
       <section className="cv-section section-pad page-x bg-brand-surface relative overflow-hidden">
         <div className="absolute top-10 right-10 w-[200px] h-[200px] bg-amber-400/5 rounded-full -z-10 pointer-events-none" aria-hidden />
         <div className="max-w-content mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-amber-500 font-bold text-sm mb-4">
               <Star className="w-4 h-4 fill-current" />
               <span>تجارب حقيقية</span>
@@ -417,7 +417,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="text-center mt-12">
+          <div className="text-center mt-8">
             <p className="text-brand-muted font-bold text-base">
               +50,000 عائلة سعودية اختارت مُتقن — انضم لهم اليوم
             </p>
@@ -430,7 +430,7 @@ export default function HomePage() {
       ════════════════════════════════════════════ */}
       <section className="cv-section section-pad page-x bg-white">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center section-title-gap">
             <div className="inline-flex items-center gap-2 text-brand-bronze font-bold text-sm mb-4">
               <CheckCircle2 className="w-4 h-4" />
               <span>نجاوب بكل شفافية</span>
@@ -450,7 +450,7 @@ export default function HomePage() {
           10. FINAL CTA — Urgency + reassurance
       ════════════════════════════════════════════ */}
       <section className="cv-section section-pad page-x bg-gradient-to-b from-brand-beige to-brand-background">
-        <div className="max-w-content mx-auto text-center bg-white rounded-[2rem] p-10 md:p-16 lg:p-20 shadow-2xl border border-brand-bronze/15 relative overflow-hidden">
+        <div className="max-w-content mx-auto text-center bg-white rounded-[2rem] p-8 md:p-12 lg:p-14 shadow-2xl border border-brand-bronze/15 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-l from-brand-bronze via-brand-bronze/60 to-transparent" />
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-brand-bronze/5 rounded-full pointer-events-none" aria-hidden />
           <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-emerald-500/5 rounded-full pointer-events-none" aria-hidden />
@@ -464,7 +464,7 @@ export default function HomePage() {
               لا تؤجل راحة بيتك للغد!
             </h2>
 
-            <p className="text-brand-muted text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-[1.8]">
+            <p className="text-brand-muted text-lg md:text-xl mb-8 max-w-2xl mx-auto leading-[1.8]">
               انضم لعشرات الآلاف من العائلات السعودية التي حوّلت بيوتها
               للأفضل مع مُتقن. اطلب اليوم بدون أي مجازفة — الدفع عند
               الاستلام مع ضمان ذهبي 30 يوم.

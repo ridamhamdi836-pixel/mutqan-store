@@ -328,7 +328,7 @@ export function ProductPageClient({
 
       {/* ── 2. القصة: مشكلة → حل → فوائد ── */}
       <section className="cv-section product-section-pad page-x bg-white">
-        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-5 md:gap-8 items-center">
           <SectionImage
             src={config.painSectionImage ?? productImageSrc}
             alt={config.painSectionImageAlt ?? "المشكلة اليومية"}
@@ -349,7 +349,7 @@ export function ProductPageClient({
       </section>
 
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-6 md:gap-12 items-center">
+        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-5 md:gap-8 items-center">
           <div className="space-y-4 text-start md:order-2">
             <p className="text-xs font-bold text-brand-trust uppercase tracking-wide">
               الحل من متقن
@@ -408,7 +408,7 @@ export function ProductPageClient({
 
       {/* ── 3. إثبات بصري + طلب ── */}
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto space-y-8">
+        <div className="max-w-content mx-auto space-y-6">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso mb-3">
               الفرق واضح — قبل وبعد
@@ -465,7 +465,7 @@ export function ProductPageClient({
 
       <ProductSpecsSection specs={specs} />
 
-      <section className="cv-section page-x py-8 md:py-10 bg-white">
+      <section className="cv-section page-x py-6 md:py-8 bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-6">
             كيف تستخدمه؟
@@ -489,7 +489,7 @@ export function ProductPageClient({
       <ProductComparisonTable />
 
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto space-y-8">
+        <div className="max-w-content mx-auto space-y-6">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
             آراء من اشتروا المنتج
           </h2>
@@ -514,7 +514,7 @@ export function ProductPageClient({
         </div>
       </section>
 
-      <section className="cv-section py-8 md:py-10 page-x bg-white">
+      <section className="cv-section py-6 md:py-8 page-x bg-white">
         <div className="max-w-content mx-auto max-w-3xl">
           <h2 className="text-2xl md:text-3xl font-extrabold text-brand-espresso text-center mb-2">
             أسئلة قبل الطلب
@@ -527,7 +527,7 @@ export function ProductPageClient({
       </section>
 
       {relatedProducts.length > 0 ? (
-        <section className="cv-section page-x py-8 md:py-10 bg-brand-surface border-t border-brand-border/40">
+        <section className="cv-section page-x py-6 md:py-8 bg-brand-surface border-t border-brand-border/40">
           <div className="max-w-content mx-auto">
             <h2 className="text-xl md:text-2xl font-extrabold text-brand-espresso text-center mb-6">
               قد يعجبك أيضاً
@@ -542,7 +542,7 @@ export function ProductPageClient({
       ) : null}
 
       {!isUpsellPreview ? (
-        <section className="cv-section page-x py-10 md:py-14 bg-brand-espresso">
+        <section className="cv-section page-x py-8 md:py-10 bg-brand-espresso">
           <div className="max-w-content mx-auto max-w-lg text-center space-y-5">
             <h2 className="text-2xl md:text-3xl font-extrabold text-white leading-snug">
               آخر خطوة — احجز طلبك الآن

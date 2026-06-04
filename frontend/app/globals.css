@@ -116,11 +116,15 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .section-pad {
-    @apply py-14 md:py-20 lg:py-28;
+    @apply py-8 md:py-11 lg:py-12;
   }
 
   .product-section-pad {
-    @apply py-8 md:py-10 lg:py-12;
+    @apply py-5 md:py-7 lg:py-8;
+  }
+
+  .section-title-gap {
+    @apply mb-6 md:mb-8;
   }
 
   .page-x {

@@ -34,12 +34,12 @@ export function HomeEasyOrderSteps({ className }: HomeEasyOrderStepsProps) {
   return (
     <section
       className={cn(
-        "py-10 md:py-14 page-x bg-gradient-to-b from-brand-beige/50 via-white to-white border-y border-brand-border/50",
+        "py-7 md:py-9 page-x bg-gradient-to-b from-brand-beige/50 via-white to-white border-y border-brand-border/50",
         className,
       )}
     >
       <div className="max-w-content mx-auto">
-        <div className="grid md:grid-cols-[1fr_1.15fr] gap-8 md:gap-12 items-center">
+        <div className="grid md:grid-cols-[1fr_1.15fr] gap-6 md:gap-8 items-center">
           {/* Visual — أيقونات الخطوات */}
           <div className="order-2 md:order-1 flex justify-center md:justify-end">
             <div className="relative w-full max-w-xs md:max-w-sm">
