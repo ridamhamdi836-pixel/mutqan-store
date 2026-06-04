@@ -66,12 +66,18 @@ Check: `https://mutqan.online/api/health-deploy` → `admin.ready` should be `tr
 2. `https://mutqan.online/api/product-image/magic-under-sink-organizer` → صورة المنتج
 3. Redeploy **بدون cache** بعد كل push على `main`
 
-## خدمة Backend (اختياري)
+## خدمة Backend
 
 | الحقل | القيمة |
 |--------|--------|
 | Repository | `mutqan-store` |
+| Branch | `main` |
 | Build Path | `backend` |
-| أو Dockerfile | `backend/Dockerfile` |
+| Dockerfile | `backend/Dockerfile` |
+
+> **مهم:** الـ push على GitHub يحدّث الكود للجميع، لكن Easypanel يعيد النشر **لكل خدمة على حدة**.  
+> بعد أي إصلاح في `backend/` اضغط **Deploy** على خدمة **backend** (ليس frontend فقط).
+
+تحقق: `GET https://YOUR-API-HOST/api/v1/health` → `"db_driver":"postgresql+psycopg"`
 
 Google Sheets يعمل من **Frontend فقط** — لا حاجة لـ `GOOGLE_SHEETS_WEBHOOK_URL` على الـ backend.
