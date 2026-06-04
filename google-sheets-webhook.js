@@ -54,6 +54,8 @@ function isSheetConfigured() {
 }
 
 function doPost(e) {
+  var lock = LockService.getScriptLock();
+  var locked = false;
   try {
     if (!e || !e.postData || !e.postData.contents) {
       return jsonOut({ status: "error", message: "Empty request body" });
@@ -63,25 +65,31 @@ function doPost(e) {
       return jsonOut({ status: "error", message: "Set SHEET_ID in Apps Script" });
     }
 
+    lock.waitLock(25000);
+    locked = true;
+
     var data = JSON.parse(e.postData.contents);
     var orderId = String(data.orderid || data.order_number || "").trim();
-    Logger.log("doPost orderid=" + orderId);
+    var isMerge = String(data.action || "").toLowerCase() === "merge";
+    Logger.log("doPost orderid=" + orderId + " action=" + (data.action || "create"));
 
     var ss = SpreadsheetApp.openById(SHEET_ID);
     var sheet = ss.getSheets()[0];
     ensureHeaders(sheet);
 
     var row = buildRow(sheet, data);
+    var targetRow = resolveRowForOrder(sheet, orderId, data, isMerge);
 
-    if (orderId && isDuplicate(sheet, orderId)) {
-      var updatedRow = updateRowByOrderId(sheet, orderId, row);
-      formatQuantityCellAsText(sheet, updatedRow);
-      formatOrderNumberCellAsText(sheet, updatedRow);
+    if (targetRow > 0) {
+      sheet.getRange(targetRow, 1, 1, row.length).setValues([row]);
+      formatQuantityCellAsText(sheet, targetRow);
+      formatOrderNumberCellAsText(sheet, targetRow);
+      SpreadsheetApp.flush();
       return jsonOut({
         status: "success",
         action: "updated",
         orderid: orderId,
-        row: updatedRow,
+        row: targetRow,
       });
     }
 
@@ -100,14 +108,92 @@ function doPost(e) {
   } catch (err) {
     Logger.log("doPost error: " + err);
     return jsonOut({ status: "error", message: String(err) });
+  } finally {
+    if (locked) {
+      try {
+        lock.releaseLock();
+      } catch (releaseErr) {
+        Logger.log("lock release: " + releaseErr);
+      }
+    }
   }
+}
+
+/** Find row to update: by order id, or (merge only) latest row for same phone within 45 min */
+function resolveRowForOrder(sheet, orderid, data, isMerge) {
+  if (orderid) {
+    var byId = findRowByOrderId(sheet, orderid);
+    if (byId > 0) return byId;
+  }
+
+  if (isMerge && data.phone) {
+    var byPhone = findLatestRowByPhone(sheet, data.phone, 45);
+    if (byPhone > 0) {
+      if (orderid) {
+        var ordCol = getOrderNumberColumn(sheet);
+        if (ordCol > 0) {
+          sheet.getRange(byPhone, ordCol).setValue(orderid);
+        }
+      }
+      return byPhone;
+    }
+  }
+
+  if (orderid && isDuplicate(sheet, orderid)) {
+    return findRowByOrderId(sheet, orderid);
+  }
+
+  return -1;
+}
+
+function normalizePhoneDigits(phone) {
+  var digits = String(phone || "").replace(/\D/g, "");
+  if (digits.indexOf("966") === 0) return digits;
+  if (digits.indexOf("0") === 0) return "966" + digits.slice(1);
+  return digits ? "966" + digits : "";
+}
+
+function findLatestRowByPhone(sheet, phone, maxAgeMinutes) {
+  var target = normalizePhoneDigits(phone);
+  if (!target) return -1;
+
+  var phoneCol = findColumnByHeader(sheet, "phone");
+  if (phoneCol < 1) return -1;
+
+  var dateCol = findColumnByHeader(sheet, "Order Date");
+  if (dateCol < 0) dateCol = findColumnByHeader(sheet, "order date");
+
+  var lastRow = sheet.getLastRow();
+  var cutoff = new Date().getTime() - maxAgeMinutes * 60 * 1000;
+  var bestRow = -1;
+  var bestTime = 0;
+
+  for (var r = lastRow; r >= 2; r--) {
+    var cellPhone = normalizePhoneDigits(sheet.getRange(r, phoneCol).getValue());
+    if (cellPhone !== target) continue;
+
+    var rowTime = cutoff;
+    if (dateCol > 0) {
+      var dateVal = sheet.getRange(r, dateCol).getValue();
+      if (dateVal instanceof Date) {
+        rowTime = dateVal.getTime();
+      }
+    }
+
+    if (rowTime >= cutoff && rowTime >= bestTime) {
+      bestTime = rowTime;
+      bestRow = r;
+    }
+  }
+
+  return bestRow;
 }
 
 function doGet() {
   return jsonOut({
     status: "ok",
     message: "Mutqan Google Sheets webhook working",
-    version: "order-number-col-v3",
+    version: "upsell-merge-v4",
     sheet_id_set: isSheetConfigured(),
     sheet_id_preview: isSheetConfigured()
       ? SHEET_ID.slice(0, 6) + "..."

@@ -37,7 +37,7 @@ function buildMergedSheetsOrder(
     })),
     ...items.map((i) => ({
       product_slug: i.slug,
-      name_ar: i.name_ar || i.slug,
+      name_ar: `${i.name_ar || i.slug} (إضافة لنفس الطلب)`,
       quantity: 1,
     })),
   ];
@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
                   1,
                   item.price_sar || 0,
                   item.price_sar || 0,
-                  "upsell",
+                  "post_order_upsell",
                   now,
                 ],
               );
@@ -145,20 +145,18 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    let sheetsResult: { success: boolean; error?: string } = { success: false };
+    const mergedOrder = buildMergedSheetsOrder(
+      order_number,
+      items,
+      merge_context,
+      newTotalSar,
+    );
 
-    if (dbUpdated) {
+    // Always merge into the same Sheets row (session has full line items + new upsells).
+    let sheetsResult = await mergeUpsellIntoGoogleSheets(mergedOrder);
+
+    if (!sheetsResult.success && dbUpdated) {
       sheetsResult = await syncOrderByNumberToGoogleSheets(order_number);
-    }
-
-    if (!sheetsResult.success) {
-      const mergedOrder = buildMergedSheetsOrder(
-        order_number,
-        items,
-        merge_context,
-        newTotalSar,
-      );
-      sheetsResult = await mergeUpsellIntoGoogleSheets(mergedOrder);
     }
 
     if (!dbUpdated && !sheetsResult.success) {

@@ -8,6 +8,10 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { CATALOG } from "@/config/catalog";
+import {
+  buildOrderMergeContext,
+  loadLastOrderSession,
+} from "@/lib/last-order-session";
 import { getProductCardImageSrc } from "@/lib/product-image";
 
 interface UpsellProduct {
@@ -121,10 +125,18 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
       .map((p) => ({ slug: p.slug, name_ar: p.name_ar, price_sar: p.upsell_price_sar }));
 
     try {
+      const session = loadLastOrderSession();
+      const merge_context = session
+        ? buildOrderMergeContext(session)
+        : undefined;
       await fetch("/api/orders/add-item", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ order_number: orderNumber, items: addedItems }),
+        body: JSON.stringify({
+          order_number: orderNumber,
+          items: addedItems,
+          merge_context,
+        }),
       });
     } catch {
       // fail silently

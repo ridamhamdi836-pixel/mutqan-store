@@ -6,7 +6,7 @@
 import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
-export const SHEETS_BUILD = "google-sheets-order-number-col-v3";
+export const SHEETS_BUILD = "google-sheets-upsell-merge-v4";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 const WEBHOOK_TIMEOUT_MS = 25_000;
@@ -16,6 +16,8 @@ export interface GoogleSheetsPayload {
   date: string;
   orderid: string;
   order_number: string;
+  /** create = new checkout row; merge = upsell — update existing row, never duplicate */
+  action: "create" | "merge";
   country: string;
   name: string;
   phone: string;
@@ -39,6 +41,8 @@ export interface GoogleSheetsOrderInput {
   }>;
   totalSar: number;
   address?: string;
+  /** Defaults to create; use merge for post-purchase upsell */
+  action?: "create" | "merge";
 }
 
 /** @deprecated Use allocateOrderNumber — kept for debug test label only */
@@ -103,6 +107,7 @@ export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload
     date: formatDateSaudi(),
     orderid: orderId,
     order_number: orderId,
+    action: order.action === "merge" ? "merge" : "create",
     country: "KSA",
     name: order.customerName.trim(),
     phone: formatSaudiPhone(order.phoneE164),
@@ -282,7 +287,7 @@ export async function sendOrderToGoogleSheets(
 export async function mergeUpsellIntoGoogleSheets(
   order: GoogleSheetsOrderInput,
 ): Promise<SheetsSendResult> {
-  return sendOrderToGoogleSheets(order);
+  return sendOrderToGoogleSheets({ ...order, action: "merge" });
 }
 
 /** Re-sync full order to Sheets (e.g. after post-purchase upsell). Updates row if orderid exists. */

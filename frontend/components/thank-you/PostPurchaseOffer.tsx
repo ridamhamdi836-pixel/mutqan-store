@@ -138,7 +138,7 @@ export function PostPurchaseOffer({
 
     const lineItems: LastOrderLineItem[] = addedProducts.map((p) => ({
       productSlug: p.slug,
-      productNameAr: p.name_ar,
+      productNameAr: `${p.name_ar} (إضافة لنفس الطلب)`,
       bundleLabelAr: "إضافة لنفس الطلب",
       quantity: 1,
       priceSar: p.upsell_price_sar,
