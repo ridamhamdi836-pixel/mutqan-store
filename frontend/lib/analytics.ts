@@ -51,9 +51,19 @@ function getCookie(name: string): string | undefined {
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
-    ttq?: { track: (event: string, data: object, opts?: object) => void };
-    snaptr?: (cmd: string, event: string, data?: object) => void;
+    ttq?: {
+      track: (event: string, data?: object, opts?: object) => void;
+      page: () => void;
+      load: (id: string) => void;
+      push: (args: unknown[]) => void;
+    };
+    snaptr?: (cmd: string, event?: string, data?: object) => void;
   }
+}
+
+function getTtq() {
+  if (typeof window === "undefined") return undefined;
+  return window.ttq;
 }
 
 export function firePixelEvent(event: MutqanAnalyticsEvent): void {
@@ -80,7 +90,8 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
   } catch {}
 
   try {
-    if (window.ttq) {
+    const ttq = getTtq();
+    if (ttq?.track) {
       const ttqEventMap: Record<string, string> = {
         ViewContent: "ViewContent",
         AddToCart: "AddToCart",
@@ -88,11 +99,26 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
         Purchase: "CompletePayment",
       };
       const ttqEvent = ttqEventMap[event.eventName] || event.eventName;
-      window.ttq.track(ttqEvent, {
-        contents: event.contents || (event.productSlug ? [{ content_id: event.productSlug, content_name: event.productName, quantity: event.quantity || 1, price: event.value }] : []),
-        value: event.value,
-        currency: "SAR",
-      }, { event_id: event.eventId });
+      ttq.track(
+        ttqEvent,
+        {
+          contents:
+            event.contents ||
+            (event.productSlug
+              ? [
+                  {
+                    content_id: event.productSlug,
+                    content_name: event.productName,
+                    quantity: event.quantity || 1,
+                    price: event.value,
+                  },
+                ]
+              : []),
+          value: event.value,
+          currency: "SAR",
+        },
+        { event_id: event.eventId },
+      );
     }
   } catch {}
 

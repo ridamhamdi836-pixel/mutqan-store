@@ -31,6 +31,31 @@ Check: `https://mutqan.online/api/health-deploy` → `admin.ready` should be `tr
 
 **مهم:** بعد تغيير Repository إلى `mutqan-store` أعد إدخال `GOOGLE_SHEETS_WEBHOOK_URL` يدوياً — المتغيرات القديمة لا تنتقل تلقائياً.
 
+### Pixels (Meta / TikTok / Snapchat) — FRONTEND فقط
+
+ضع المتغيرات على خدمة **frontend** (ليس backend). احذف الأسطر الفارغة المكررة.
+
+```
+NEXT_PUBLIC_META_PIXEL_ID=معرف_ميتا
+NEXT_PUBLIC_TIKTOK_PIXEL_ID=D4GVCMBC77UAP3H8QDS0
+NEXT_PUBLIC_SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
+NEXT_PUBLIC_ENABLE_PIXELS=true
+```
+
+أو بدون `NEXT_PUBLIC_` (يُقرأ وقت التشغيل أيضاً):
+
+```
+TIKTOK_PIXEL_CODE=...
+SNAPCHAT_PIXEL_ID=...
+META_PIXEL_ID=...
+```
+
+**Backend** يحتفظ فقط بـ `TIKTOK_ACCESS_TOKEN`, `SNAPCHAT_ACCESS_TOKEN`, `META_ACCESS_TOKEN` لـ CAPI عند إنشاء الطلب — لا يشغّل البكسل في المتصفح.
+
+بعد الحفظ: **Deploy frontend بدون cache** ثم افتح `https://mutqan.online/api/debug/pixels` — يجب `tiktok: true`, `snapchat: true`.
+
+**لا تضع** `NEXT_PUBLIC_*` فارغة فوق نفس المفتاح بقيمة — Easypanel قد يأخذ الأول الفارغ.
+
 ### Google Apps Script (مرة واحدة)
 
 1. افتح `google-sheets-webhook.js` من المستودع

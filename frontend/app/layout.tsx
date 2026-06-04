@@ -3,6 +3,7 @@ import "./globals.css";
 import { CartProvider } from "@/providers/cart-provider";
 import { AnalyticsProvider } from "@/providers/analytics-provider";
 import { fontArabic, fontLatin } from "@/lib/fonts";
+import { getPixelConfig } from "@/lib/pixel-config";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 
@@ -40,6 +41,8 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pixels = getPixelConfig();
+
   return (
     <html
       lang="ar"
@@ -47,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${fontArabic.variable} ${fontLatin.variable}`}
     >
       <body className="font-sans antialiased">
-        <AnalyticsProvider>
+        <AnalyticsProvider pixels={pixels}>
           <CartProvider>{children}</CartProvider>
         </AnalyticsProvider>
       </body>

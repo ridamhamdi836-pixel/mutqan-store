@@ -3,6 +3,7 @@ import path from "path";
 import { NextResponse } from "next/server";
 import { getAdminConfigStatus } from "@/lib/admin-auth";
 import { SHEETS_BUILD, getSheetsConfigStatus } from "@/lib/google-sheets";
+import { getPixelConfig, getPixelConfigStatus } from "@/lib/pixel-config";
 import { getProduct } from "@/config/catalog";
 
 export const dynamic = "force-dynamic";
@@ -59,6 +60,8 @@ export async function GET() {
   const sheetsConfig = getSheetsConfigStatus();
   const adminConfig = getAdminConfigStatus();
   const buildInfo = await readBuildInfo();
+  const pixelConfig = getPixelConfig();
+  const pixels = getPixelConfigStatus(pixelConfig);
 
   return NextResponse.json({
     ok: true,
@@ -73,6 +76,8 @@ export async function GET() {
       sheetsConfig.configured &&
       sheetsConfig.validExecUrl,
     sheets_test_url: "/api/debug/google-sheets",
+    pixels,
+    pixels_debug_url: "/api/debug/pixels",
     product_image_api: "/api/product-image/magic-under-sink-organizer",
     sink_image_on_disk: sinkImageOk,
     sink_image_bytes: sinkImageBytes,
