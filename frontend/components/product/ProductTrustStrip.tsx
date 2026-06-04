@@ -35,14 +35,14 @@ export function ProductTrustStrip({ variant = "hero" }: ProductTrustStripProps) 
   }
 
   return (
-    <div className="flex flex-wrap gap-2 md:gap-3">
+    <div className="grid grid-cols-2 gap-2 max-md:w-full md:flex md:flex-wrap md:gap-3">
       {ITEMS.map((item) => (
         <span
           key={item.label}
-          className="inline-flex items-center gap-1.5 text-[11px] md:text-xs font-bold text-brand-espresso bg-brand-beige/80 border border-brand-border/50 px-2.5 py-1.5 rounded-lg"
+          className="inline-flex items-center gap-1.5 min-h-[40px] w-full text-[10px] leading-snug md:text-xs font-bold text-brand-espresso bg-brand-beige/80 border border-brand-border/50 px-2.5 py-2 md:py-1.5 rounded-lg"
         >
           <item.icon className="w-3.5 h-3.5 text-brand-trust shrink-0" />
-          {item.label}
+          <span className="min-w-0">{item.label}</span>
         </span>
       ))}
     </div>

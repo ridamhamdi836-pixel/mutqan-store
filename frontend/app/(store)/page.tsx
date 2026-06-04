@@ -91,8 +91,8 @@ export default function HomePage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
 
-              {/* Trust Chips */}
-              <div className="grid grid-cols-2 gap-3 md:flex md:flex-wrap md:gap-3">
+              {/* Trust Chips — 2×2 grid on mobile (no flex-wrap ghosting) */}
+              <div className="grid grid-cols-2 gap-2.5 md:flex md:flex-wrap md:gap-3">
                 {[
                   { icon: ShieldCheck, label: "ضمان 30 يوم" },
                   { icon: CreditCard, label: "الدفع عند الاستلام" },
@@ -101,10 +101,10 @@ export default function HomePage() {
                 ].map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center gap-2.5 text-xs md:text-sm text-brand-espresso font-bold bg-white px-4 py-2.5 rounded-xl md:shadow-sm border border-brand-border/60"
+                    className="flex items-center gap-2 min-h-[44px] w-full text-[11px] leading-snug md:text-sm text-brand-espresso font-bold bg-white px-3 py-2.5 md:px-4 rounded-xl border border-brand-border/60 max-md:shadow-none md:shadow-sm"
                   >
                     <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <span>{item.label}</span>
+                    <span className="min-w-0">{item.label}</span>
                   </div>
                 ))}
               </div>
