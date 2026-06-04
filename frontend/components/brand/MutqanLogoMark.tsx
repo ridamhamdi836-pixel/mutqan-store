@@ -31,7 +31,7 @@ export function MutqanLogoMark({
 
   return (
     <svg
-      viewBox="0 0 100 118"
+      viewBox="0 8 100 88"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       role="img"
@@ -39,17 +39,17 @@ export function MutqanLogoMark({
       className={cn("block h-full w-full", className)}
     >
       <title>{title}</title>
-      <circle cx="50" cy="17" r="7.5" fill={c.dot} />
+      <circle cx="50" cy="24" r="7" fill={c.dot} />
       <text
         x="50"
-        y="50"
+        y="42"
         textAnchor="middle"
         dominantBaseline="middle"
         fill={c.arabic}
         style={{
           fontFamily:
             "'IBM Plex Sans Arabic', 'Tajawal', 'Noto Sans Arabic', sans-serif",
-          fontSize: "30px",
+          fontSize: "28px",
           fontWeight: 700,
         }}
       >
@@ -57,15 +57,15 @@ export function MutqanLogoMark({
       </text>
       <text
         x="50"
-        y="88"
+        y="64"
         textAnchor="middle"
         dominantBaseline="middle"
         fill={c.latin}
         style={{
           fontFamily: "'Inter', system-ui, sans-serif",
-          fontSize: "10.5px",
+          fontSize: "10px",
           fontWeight: 600,
-          letterSpacing: "0.28em",
+          letterSpacing: "0.26em",
         }}
       >
         MUTQAN
