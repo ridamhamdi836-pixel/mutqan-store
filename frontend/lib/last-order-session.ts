@@ -11,6 +11,8 @@ export type LastOrderSession = {
   totalSar: number;
   items: LastOrderLineItem[];
   orderedSlugs: string[];
+  /** Same id as order tracking.client_event_id — dedupes browser pixel with CAPI */
+  purchaseEventId?: string;
   /** For merging upsell into the same Google Sheets row when DB sync is delayed */
   customerName?: string;
   phoneE164?: string;

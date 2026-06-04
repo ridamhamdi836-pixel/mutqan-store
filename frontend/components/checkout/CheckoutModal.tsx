@@ -9,7 +9,7 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { useCart } from "@/providers/cart-provider";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
-import { getSessionTracking, generateEventId, firePixelEvent } from "@/lib/analytics";
+import { getSessionTracking, generateEventId } from "@/lib/analytics";
 import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
@@ -83,7 +83,6 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
     }
     if (!validatePhone(phone)) {
       setPhoneError("فضلاً أدخل رقم جوال صحيح.");
-      firePixelEvent({ eventId: generateEventId("phone_validation_failed"), eventName: "phone_validation_failed" });
       valid = false;
     }
     return valid;
@@ -138,18 +137,10 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
       const response = await apiClient.createOrder(orderPayload);
 
-      firePixelEvent({
-        eventId,
-        eventName: "Purchase",
-        value: response.order.total_sar,
-        currency: "SAR",
-        contents: items.map((i) => ({ id: i.productSlug, quantity: i.quantity, item_price: i.priceSar })),
-        orderNumber: response.order.public_order_number,
-      });
-
       const { e164: phoneE164 } = normalizePhone(phone);
 
       saveLastOrderSession({
+        purchaseEventId: eventId,
         orderNumber: response.order.public_order_number,
         totalSar: response.order.total_sar,
         customerName: name.trim(),

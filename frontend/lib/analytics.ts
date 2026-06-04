@@ -66,8 +66,128 @@ function getTtq() {
   return window.ttq;
 }
 
+const AD_PLATFORM_EVENTS = new Set([
+  "ViewContent",
+  "AddToCart",
+  "InitiateCheckout",
+  "Purchase",
+]);
+
+function mapContentsForTikTok(
+  event: MutqanAnalyticsEvent,
+): Array<{ content_id: string; content_name?: string; quantity: number; price?: number }> {
+  if (event.contents?.length) {
+    return event.contents.map((c) => ({
+      content_id: c.id,
+      quantity: c.quantity || 1,
+      price: c.item_price,
+    }));
+  }
+  if (event.productSlug) {
+    return [
+      {
+        content_id: event.productSlug,
+        content_name: event.productName,
+        quantity: event.quantity || 1,
+        price: event.value,
+      },
+    ];
+  }
+  return [];
+}
+
+const PURCHASE_FIRED_PREFIX = "mutqan_purchase_px_fired:";
+
+function buildPurchaseEvent(params: {
+  orderNumber: string;
+  eventId: string;
+  value: number;
+  contents?: MutqanAnalyticsEvent["contents"];
+}): MutqanAnalyticsEvent {
+  return {
+    eventId: params.eventId,
+    eventName: "Purchase",
+    value: params.value,
+    currency: "SAR",
+    orderNumber: params.orderNumber,
+    contents: params.contents,
+  };
+}
+
+function trackTikTokCompletePayment(event: MutqanAnalyticsEvent): void {
+  const ttq = getTtq();
+  if (!ttq?.track) return;
+
+  let contents = mapContentsForTikTok(event);
+  if (!contents.length && event.orderNumber) {
+    contents = [
+      {
+        content_id: event.orderNumber,
+        quantity: 1,
+        price: event.value,
+      },
+    ];
+  }
+
+  ttq.track(
+    "CompletePayment",
+    {
+      content_type: "product",
+      contents,
+      value: event.value ?? 0,
+      currency: "SAR",
+      order_id: event.orderNumber,
+    },
+    { event_id: event.eventId },
+  );
+}
+
+function whenTikTokReady(run: () => void): void {
+  const ttq = getTtq();
+  if (ttq?.track) {
+    run();
+    return;
+  }
+  const readyFn = (ttq as { ready?: (cb: () => void) => void } | undefined)?.ready;
+  if (typeof readyFn === "function") {
+    readyFn.call(ttq, run);
+    return;
+  }
+  let attempts = 0;
+  const timer = window.setInterval(() => {
+    attempts += 1;
+    if (getTtq()?.track || attempts >= 30) {
+      window.clearInterval(timer);
+      run();
+    }
+  }, 200);
+}
+
+/** Fire Purchase / TikTok CompletePayment once per order (thank-you page). */
+export function firePurchasePixelOnce(params: {
+  orderNumber: string;
+  eventId: string;
+  value: number;
+  contents?: MutqanAnalyticsEvent["contents"];
+}): void {
+  if (typeof window === "undefined") return;
+  const dedupeKey = `${PURCHASE_FIRED_PREFIX}${params.orderNumber}`;
+  if (sessionStorage.getItem(dedupeKey)) return;
+
+  const event = buildPurchaseEvent(params);
+
+  const send = () => {
+    if (sessionStorage.getItem(dedupeKey)) return;
+    firePixelEvent(event);
+    sessionStorage.setItem(dedupeKey, params.eventId);
+  };
+
+  whenTikTokReady(send);
+}
+
 export function firePixelEvent(event: MutqanAnalyticsEvent): void {
   if (typeof window === "undefined") return;
+  if (!AD_PLATFORM_EVENTS.has(event.eventName)) return;
 
   try {
     if (window.fbq) {
@@ -90,35 +210,27 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
   } catch {}
 
   try {
-    const ttq = getTtq();
-    if (ttq?.track) {
-      const ttqEventMap: Record<string, string> = {
-        ViewContent: "ViewContent",
-        AddToCart: "AddToCart",
-        InitiateCheckout: "InitiateCheckout",
-        Purchase: "CompletePayment",
-      };
-      const ttqEvent = ttqEventMap[event.eventName] || event.eventName;
-      ttq.track(
-        ttqEvent,
-        {
-          contents:
-            event.contents ||
-            (event.productSlug
-              ? [
-                  {
-                    content_id: event.productSlug,
-                    content_name: event.productName,
-                    quantity: event.quantity || 1,
-                    price: event.value,
-                  },
-                ]
-              : []),
-          value: event.value,
-          currency: "SAR",
-        },
-        { event_id: event.eventId },
-      );
+    if (event.eventName === "Purchase") {
+      trackTikTokCompletePayment(event);
+    } else {
+      const ttq = getTtq();
+      if (ttq?.track) {
+        const ttqEventMap: Record<string, string> = {
+          ViewContent: "ViewContent",
+          AddToCart: "AddToCart",
+          InitiateCheckout: "InitiateCheckout",
+        };
+        const ttqEvent = ttqEventMap[event.eventName] || event.eventName;
+        ttq.track(
+          ttqEvent,
+          {
+            contents: mapContentsForTikTok(event),
+            value: event.value,
+            currency: "SAR",
+          },
+          { event_id: event.eventId },
+        );
+      }
     }
   } catch {}
 

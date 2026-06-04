@@ -19,7 +19,7 @@ import {
 import { hasPostPurchaseUpsell } from "@/lib/thank-you-product";
 import { useRouter } from "next/navigation";
 import { formatDisplayPhone } from "@/lib/format-display-phone";
-import { firePixelEvent, generateEventId } from "@/lib/analytics";
+import { firePurchasePixelOnce, generateEventId } from "@/lib/analytics";
 import { WHATSAPP_URL } from "@/config/brand";
 
 function ThankYouContent() {
@@ -68,12 +68,40 @@ function ThankYouContent() {
 
   useEffect(() => {
     if (!orderNumber) return;
-    firePixelEvent({
-      eventId: generateEventId("thank_you_view"),
-      eventName: "thank_you_view",
+
+    const session = loadLastOrderSession();
+    if (
+      session &&
+      !session.upsellOfferCompleted &&
+      hasPostPurchaseUpsell(session.orderedSlugs)
+    ) {
+      return;
+    }
+
+    const value =
+      displayTotalSar > 0
+        ? displayTotalSar
+        : initialTotalSar > 0
+          ? initialTotalSar
+          : 0;
+    if (value <= 0) return;
+
+    const eventId =
+      session?.purchaseEventId ?? generateEventId("purchase");
+    const contents =
+      session?.items?.map((i) => ({
+        id: i.productSlug,
+        quantity: i.quantity,
+        item_price: i.priceSar,
+      })) ?? [];
+
+    firePurchasePixelOnce({
       orderNumber,
+      eventId,
+      value,
+      contents: contents.length ? contents : undefined,
     });
-  }, [orderNumber]);
+  }, [orderNumber, displayTotalSar, initialTotalSar]);
 
   if (!ready) {
     return <ThankYouPageSkeleton />;
