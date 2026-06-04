@@ -150,13 +150,6 @@ h1, h2, h3, h4, h5, h6 {
  * (Honor): duplicated cards/text at section boundaries. Disabled entirely.
  */
 
-/** Infinite transform animations corrupt layers on some Android GPUs */
-@media (max-width: 1023px) {
-  .animate-float {
-    animation: none !important;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

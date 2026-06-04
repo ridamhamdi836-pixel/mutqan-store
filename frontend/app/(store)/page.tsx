@@ -122,7 +122,7 @@ export default function HomePage() {
               />
 
               {/* Floating Social Proof — overlay on hero (mobile + desktop) */}
-              <div className="absolute -bottom-4 start-2 md:-bottom-5 md:-start-6 z-10 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-3 md:animate-float">
+              <div className="absolute -bottom-4 start-2 md:-bottom-5 md:-start-6 z-10 bg-white p-3 md:p-4 rounded-xl shadow-xl border border-gray-100 flex items-center gap-3 animate-float">
                 <div className="flex -space-x-2 rtl:space-x-reverse">
                   {[1, 2, 3, 4].map((id) => (
                     <div key={id} className="w-9 h-9 rounded-full bg-brand-beige border-2 border-white overflow-hidden relative">
