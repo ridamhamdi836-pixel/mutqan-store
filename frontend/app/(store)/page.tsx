@@ -19,7 +19,6 @@ import {
   Users,
   Sparkles,
   Heart,
-  Phone,
   Clock,
   BadgeCheck,
   Gift,
@@ -85,28 +84,34 @@ export default function HomePage() {
 
               <Link
                 href="/collections"
-                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg mb-8"
+                className="btn-primary inline-flex items-center justify-center gap-3 w-full sm:w-auto py-4 px-8 text-base md:text-lg font-extrabold shadow-lg mb-6"
               >
                 <span>تسوق الآن · الدفع عند الاستلام</span>
                 <ArrowLeft className="w-5 h-5" />
               </Link>
 
-              {/* Trust Chips — 2×2 grid on mobile (no flex-wrap ghosting) */}
-              <div className="grid grid-cols-2 gap-2.5 md:flex md:flex-wrap md:gap-3">
-                {[
-                  { icon: ShieldCheck, label: "ضمان 30 يوم" },
-                  { icon: CreditCard, label: "الدفع عند الاستلام" },
-                  { icon: Phone, label: "تأكيد هاتفي" },
-                  { icon: Truck, label: "توصيل سريع" },
-                ].map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex items-center gap-2 min-h-[44px] w-full text-[11px] leading-snug md:text-sm text-brand-espresso font-bold bg-white px-3 py-2.5 md:px-4 rounded-xl border border-brand-border/60 max-md:shadow-none md:shadow-sm"
-                  >
-                    <item.icon className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                    <span className="min-w-0">{item.label}</span>
-                  </div>
-                ))}
+              {/* بديل بطاقات الثقة — خطوات واحدة بدون طبقات (تجنّب التشوه على الهاتف) */}
+              <div className="rounded-2xl border border-brand-border/70 bg-gradient-to-l from-brand-beige/90 to-white px-4 py-3.5">
+                <p className="text-xs font-bold text-brand-bronze mb-2.5">
+                  طلبك في 3 خطوات — بدون بطاقة بنكية
+                </p>
+                <ol className="space-y-2">
+                  {[
+                    "اختر المنتج واضغط تسوق الآن",
+                    "نؤكد معك هاتفياً قبل الشحن",
+                    "ادفع نقداً عند استلام طلبك",
+                  ].map((step, i) => (
+                    <li
+                      key={step}
+                      className="flex items-start gap-2.5 text-xs md:text-sm text-brand-espresso font-medium leading-snug"
+                    >
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-brand-bronze/10 text-brand-bronze text-[11px] font-bold flex items-center justify-center">
+                        {i + 1}
+                      </span>
+                      <span>{step}</span>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
 
@@ -115,7 +120,7 @@ export default function HomePage() {
               <StoreImageFrame
                 src="/images/hero/saudi-family.png"
                 alt="عائلة سعودية سعيدة في بيت مرتب — حلول مُتقن لراحة الجميع"
-                className="rounded-2xl md:shadow-xl border-4 border-white"
+                className="rounded-2xl overflow-hidden shadow-xl border-4 border-white"
                 variant="hero"
                 priority
                 sizes={STORE_IMAGE_SIZES.hero}

@@ -34,6 +34,7 @@ export function ProductCard({ product }: ProductCardProps) {
             src={productImageSrc}
             alt={product.name_ar}
             fill
+            fit="contain"
             variant="default"
             sizes={STORE_IMAGE_SIZES.card}
             className="md:group-hover:scale-[1.02] md:transition-transform md:duration-300"

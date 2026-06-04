@@ -42,7 +42,7 @@ function SectionImage({
       alt={alt}
       aspect={aspect}
       className={cn(
-        "rounded-2xl shadow-md border border-brand-border",
+        "rounded-2xl overflow-hidden shadow-md border border-brand-border",
         className,
       )}
       variant={priority ? "hero" : "default"}
@@ -231,7 +231,7 @@ export function ProductPageClient({
               src={heroImageSrc}
               alt={config.heroSectionImageAlt ?? config.heroImageAlt}
               aspect={config.heroSectionAspect}
-              className="rounded-2xl md:shadow-md"
+              className="rounded-2xl overflow-hidden shadow-md"
               variant="hero"
               priority
               sizes={STORE_IMAGE_SIZES.hero}

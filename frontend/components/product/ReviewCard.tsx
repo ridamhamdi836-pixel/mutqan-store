@@ -32,6 +32,7 @@ export function ReviewCard({
           src={photo}
           alt={photoAlt ?? `صورة من ${name} بعد استلام المنتج`}
           aspect={photoAspect}
+          className="rounded-t-2xl overflow-hidden"
           sizes={STORE_IMAGE_SIZES.section}
         />
       ) : null}

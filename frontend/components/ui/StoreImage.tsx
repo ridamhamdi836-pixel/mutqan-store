@@ -148,7 +148,7 @@ export function StoreImageFrame({
     return (
       <div
         className={cn(
-          "w-full bg-brand-beige store-image-frame max-md:overflow-visible md:overflow-hidden",
+          "w-full overflow-hidden bg-brand-beige store-image-frame",
           className,
         )}
       >
@@ -160,7 +160,8 @@ export function StoreImageFrame({
           variant={variant}
           priority={priority}
           sizes={sizes}
-          className={imageClassName}
+          fit="contain"
+          className={cn("w-full h-auto max-w-full", imageClassName)}
         />
       </div>
     );
@@ -169,7 +170,7 @@ export function StoreImageFrame({
   return (
     <div
       className={cn(
-        "relative w-full bg-brand-beige store-image-frame max-md:overflow-visible md:overflow-hidden",
+        "relative w-full overflow-hidden bg-brand-beige store-image-frame",
         !aspect && "aspect-[4/3]",
         className,
       )}
@@ -183,7 +184,7 @@ export function StoreImageFrame({
         decoding={priority ? "sync" : "async"}
         className={cn(
           STORE_IMAGE_CONTAIN_CLASS,
-          "absolute inset-0",
+          "absolute inset-0 h-full w-full",
           imageClassName,
         )}
       />

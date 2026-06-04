@@ -47,6 +47,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
             src={productImageSrc}
             alt={catalog.name_ar}
             fill
+            fit="contain"
             sizes={STORE_IMAGE_SIZES.card}
             variant="thumbnail"
             onError={() => setImgError(true)}
