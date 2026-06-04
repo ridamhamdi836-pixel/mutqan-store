@@ -8,6 +8,7 @@ import { BundleSelector } from "@/components/product/BundleSelector";
 import { ReviewCard } from "@/components/product/ReviewCard";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { ProductComparisonTable } from "@/components/product/ProductComparisonTable";
+import { ProductTrustStrip } from "@/components/product/ProductTrustStrip";
 import { ProductCard } from "@/components/commerce/ProductCard";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
@@ -286,6 +287,8 @@ export function ProductPageClient({
           </div>
         </div>
       </section>
+
+      <ProductTrustStrip variant="bar" />
 
       {/* 2. Problem */}
       <section className="cv-section product-section-pad page-x bg-white">
