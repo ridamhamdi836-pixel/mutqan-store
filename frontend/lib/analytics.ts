@@ -131,11 +131,15 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
         Purchase: "PURCHASE",
       };
       const scEvent = scEventMap[event.eventName] || event.eventName;
+      const itemIds =
+        event.contents?.map((c) => c.id) ||
+        (event.productSlug ? [event.productSlug] : []);
       window.snaptr("track", scEvent, {
         price: event.value,
         currency: "SAR",
         transaction_id: event.orderNumber,
-        item_ids: event.productSlug ? [event.productSlug] : [],
+        item_ids: itemIds,
+        client_dedup_id: event.eventId,
       });
     }
   } catch {}
