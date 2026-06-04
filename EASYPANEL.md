@@ -17,7 +17,7 @@
 ```
 GOOGLE_SHEETS_WEBHOOK_URL=https://script.google.com/macros/s/XXXX/exec
 NEXT_PUBLIC_SITE_URL=https://mutqan.online
-DATABASE_URL=postgresql://...
+DATABASE_URL=postgresql://... (أو `postgres://` من Easypanel — يُحوَّل تلقائياً)
 
 # Admin /admin — required on FRONTEND (not backend-only)
 ADMIN_SESSION_SECRET=long-random-string

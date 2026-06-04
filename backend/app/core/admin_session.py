@@ -6,13 +6,14 @@ import time
 from typing import Optional
 
 from app.core.config import settings
+from app.db.url import normalize_database_url
 
 MAX_AGE_SEC = 60 * 60 * 24 * 7
 SESSION_SALT = b"mutqan-admin-session-v1"
 
 
-def _normalize_database_url(url: str) -> str:
-    return url.strip().replace("postgresql+psycopg://", "postgresql://")
+def _db_url_for_hmac(url: str) -> str:
+    return normalize_database_url(url).replace("postgresql+psycopg://", "postgresql://")
 
 
 def _session_secret() -> str:
@@ -23,7 +24,7 @@ def _session_secret() -> str:
     if db:
         return hmac.new(
             SESSION_SALT,
-            _normalize_database_url(db).encode(),
+            _db_url_for_hmac(db).encode(),
             hashlib.sha256,
         ).hexdigest()
     return ""

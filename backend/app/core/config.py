@@ -1,5 +1,8 @@
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
+
+from app.db.url import normalize_database_url
 
 
 class Settings(BaseSettings):
@@ -10,6 +13,13 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
 
     DATABASE_URL: str = "postgresql+psycopg://mutqan:mutqan@mutqan_database:5432/mutqan"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def _normalize_database_url(cls, value: object) -> object:
+        if value is None:
+            return value
+        return normalize_database_url(str(value))
 
     CORS_ORIGINS: str = "http://localhost:3000"
     SECRET_KEY: str = "dev-secret-key"
