@@ -27,41 +27,10 @@ const STEPS = [
 ] as const;
 
 type HomeEasyOrderStepsProps = {
-  variant?: "hero" | "featured";
   className?: string;
 };
 
-export function HomeEasyOrderSteps({
-  variant = "featured",
-  className,
-}: HomeEasyOrderStepsProps) {
-  if (variant === "hero") {
-    return (
-      <div
-        className={cn(
-          "rounded-2xl border border-brand-border/70 bg-gradient-to-l from-brand-beige/90 to-white p-4 md:p-5",
-          className,
-        )}
-      >
-        <p className="text-xs md:text-sm font-bold text-brand-bronze mb-3">
-          طلبك في 3 خطوات — بدون بطاقة بنكية
-        </p>
-        <ol className="space-y-2.5">
-          {STEPS.map((step, i) => (
-            <li key={step.title} className="flex items-start gap-2.5">
-              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-brand-bronze text-white text-xs font-black flex items-center justify-center">
-                {i + 1}
-              </span>
-              <span className="text-xs md:text-sm text-brand-espresso font-medium leading-snug pt-0.5">
-                {step.text.split(" — ")[0]}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    );
-  }
-
+export function HomeEasyOrderSteps({ className }: HomeEasyOrderStepsProps) {
   return (
     <section
       className={cn(

@@ -91,7 +91,6 @@ export default function HomePage() {
                 <ArrowLeft className="w-5 h-5" />
               </Link>
 
-              <HomeEasyOrderSteps variant="hero" />
             </div>
 
             {/* Image Column */}
@@ -138,7 +137,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <HomeEasyOrderSteps variant="featured" />
+      <HomeEasyOrderSteps />
 
       {/* ════════════════════════════════════════════
           2. STATS BAR — Dark authority strip
