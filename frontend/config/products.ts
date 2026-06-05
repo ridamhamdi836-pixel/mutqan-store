@@ -77,7 +77,7 @@ export const PRODUCTS_CONFIG: Record<string, {
       "أدر المكنسة على المنطقة المراد تنظيفها",
       "فرّغ الحاوية ونظف الفلتر بانتظام",
     ],
-    crossSellSlugs: ["pull-out-cabinet-drawer", "magic-under-sink-organizer"],
+    crossSellSlugs: ["pull-out-cabinet-drawer", "sink-organizer"],
     reviews: [
       {
         name: "سارة أحمد",
@@ -174,7 +174,7 @@ export const PRODUCTS_CONFIG: Record<string, {
       "أضف القطع العلوية بسهولة",
       "رتب أغراضك وامتع بالنظام الجديد",
     ],
-    crossSellSlugs: ["pull-out-cabinet-drawer", "magic-under-sink-organizer"],
+    crossSellSlugs: ["pull-out-cabinet-drawer", "sink-organizer"],
     reviews: [
       {
         name: "هنوف القحطاني",
@@ -261,7 +261,7 @@ export const PRODUCTS_CONFIG: Record<string, {
       "ضع الدرج على القاعدة المخصصة",
       "اسحب ببساطة للوصول لأغراضك",
     ],
-    crossSellSlugs: ["magic-under-sink-organizer", "smart-stackable-cabinet"],
+    crossSellSlugs: ["sink-organizer", "smart-stackable-cabinet"],
     reviews: [
       {
         name: "نورة العنزي",
@@ -328,7 +328,7 @@ export const PRODUCTS_CONFIG: Record<string, {
     seoTitle: "درج الخزانة المنزلق | متقن",
     seoDescription: "حل ذكي لتنظيم الخزائن المزدحمة والوصول لأغراضك بسهولة. اطلب الآن من متقن مع الدفع عند الاستلام.",
   },
-  "magic-under-sink-organizer": {
+  "sink-organizer": {
     heroImageAlt: "منظّم المغسلة السحري — تنظيم أنيق تحت المغسلة",
     heroSectionImage: "/images/products/magic-under-sink-organizer-hero.png?v=3",
     heroSectionImageAlt: "امرأة برداء بيج تستخدم منظّم المغسلة السحري تحت الحوض — تخزين ذكي ومرتب",
@@ -468,7 +468,7 @@ export const PRODUCTS_CONFIG: Record<string, {
       "ثبّت الفلتر على الصنبور",
       "افتح الماء واستمتع بتجربة أفضل",
     ],
-    crossSellSlugs: ["magic-under-sink-organizer", "smart-table-warmer"],
+    crossSellSlugs: ["sink-organizer", "smart-table-warmer"],
     reviews: [
       {
         name: "أسماء العمري",

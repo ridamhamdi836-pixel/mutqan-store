@@ -3,9 +3,9 @@ import { PRODUCTS_CONFIG } from "@/config/products";
 
 /** Bump when replacing product image (cache bust) */
 const IMAGE_VERSION: Record<string, number> = {
-  "magic-under-sink-organizer": 5,
-  "magic-under-sink-organizer:main": 3,
-  "magic-under-sink-organizer:card": 1,
+  "sink-organizer": 5,
+  "sink-organizer:main": 3,
+  "sink-organizer:card": 1,
   "powerful-cordless-vacuum:main": 1,
   "powerful-cordless-vacuum:card": 1,
   "smart-stackable-cabinet": 3,

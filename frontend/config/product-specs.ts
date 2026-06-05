@@ -25,7 +25,7 @@ export const PRODUCT_SPECS: Record<string, ProductSpecRow[]> = {
     { label: "الفائدة", value: "وصول سريع لآخر الرف بدون عناء" },
     { label: "الضمان", value: "30 يوماً استرجاع أو استبدال" },
   ],
-  "magic-under-sink-organizer": [
+  "sink-organizer": [
     { label: "المكان", value: "تحت المغسلة — استغلال المساحة المهدورة" },
     { label: "التنظيم", value: "أرفف للزجاجات والمنظفات" },
     { label: "التركيب", value: "تثبيت عملي دون تعقيد" },

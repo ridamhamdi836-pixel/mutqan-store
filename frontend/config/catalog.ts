@@ -125,7 +125,7 @@ export const CATALOG: CatalogProduct[] = [
   },
   {
     id: "p4",
-    slug: "magic-under-sink-organizer",
+    slug: "sink-organizer",
     name_ar: "منظّم المغسلة السحري",
     name_en: "Magic Under-Sink Organizer",
     short_description_ar: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة.",
@@ -248,7 +248,7 @@ export const PRODUCT_SLUGS = CATALOG.map((p) => p.slug);
 export const FEATURED_SLUGS = [
   "pull-out-cabinet-drawer",
   "smart-table-warmer",
-  "magic-under-sink-organizer",
+  "sink-organizer",
   "powerful-cordless-vacuum",
 ] as const;
 

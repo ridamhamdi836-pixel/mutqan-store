@@ -36,7 +36,7 @@ async function readBuildInfo(): Promise<{
 
 /** GET https://mutqan.online/api/health-deploy */
 export async function GET() {
-  const sink = getProduct("magic-under-sink-organizer");
+  const sink = getProduct("sink-organizer");
   let sinkImageOk = false;
   let sinkImageBytes = 0;
 
@@ -78,7 +78,7 @@ export async function GET() {
     sheets_test_url: "/api/debug/google-sheets",
     pixels,
     pixels_debug_url: "/api/debug/pixels",
-    product_image_api: "/api/product-image/magic-under-sink-organizer",
+    product_image_api: "/api/product-image/sink-organizer",
     sink_image_on_disk: sinkImageOk,
     sink_image_bytes: sinkImageBytes,
   });

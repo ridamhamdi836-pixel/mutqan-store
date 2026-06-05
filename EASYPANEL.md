@@ -108,7 +108,7 @@ Deploy **frontend + backend** بدون cache بعد أي تغيير env.
 ### بعد النشر — تحقق
 
 1. `https://mutqan.online/api/health-deploy` → `git_commit_short` يطابق آخر push على `main`
-2. `https://mutqan.online/api/product-image/magic-under-sink-organizer` → صورة المنتج
+2. `https://mutqan.online/api/product-image/sink-organizer` → صورة المنتج
 3. Redeploy **بدون cache** بعد كل push على `main`
 
 ## خدمة Backend

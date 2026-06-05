@@ -51,7 +51,7 @@ PRODUCTS = [
         ],
     },
     {
-        "slug": "magic-under-sink-organizer",
+        "slug": "sink-organizer",
         "sku": "MTQ-ORG-004",
         "name_ar": "منظّم المغسلة السحري",
         "name_en": "Magic Under-Sink Organizer",

@@ -3,13 +3,13 @@ export const COLLECTIONS = [
     slug: "home-organization",
     nameAr: "تنظيم المنزل",
     descriptionAr: "حلول عملية وأنيقة تحوّل مساحاتك من الفوضى إلى الترتيب بكل سهولة.",
-    productSlugs: ["smart-stackable-cabinet", "pull-out-cabinet-drawer", "magic-under-sink-organizer"],
+    productSlugs: ["smart-stackable-cabinet", "pull-out-cabinet-drawer", "sink-organizer"],
   },
   {
     slug: "modern-kitchen",
     nameAr: "المطبخ العصري",
     descriptionAr: "منتجات مختارة لمطبخ أكثر أناقة وعملية في استخدامه اليومي.",
-    productSlugs: ["pure-faucet-filter", "magic-under-sink-organizer", "pull-out-cabinet-drawer"],
+    productSlugs: ["pure-faucet-filter", "sink-organizer", "pull-out-cabinet-drawer"],
   },
   {
     slug: "cleaning-care",

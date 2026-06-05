@@ -16,17 +16,17 @@ UPSELL_MATRIX: dict[str, dict] = {
         "offer_id": "pull-out-drawer-after-cabinet",
     },
     "pull-out-cabinet-drawer": {
-        "product_slug": "magic-under-sink-organizer",
+        "product_slug": "sink-organizer",
         "offered_price_sar": 179,
         "offer_id": "under-sink-after-pull-out",
     },
-    "magic-under-sink-organizer": {
+    "sink-organizer": {
         "product_slug": "pull-out-cabinet-drawer",
         "offered_price_sar": 269,
         "offer_id": "pull-out-drawer-after-under-sink",
     },
     "pure-faucet-filter": {
-        "product_slug": "magic-under-sink-organizer",
+        "product_slug": "sink-organizer",
         "offered_price_sar": 179,
         "offer_id": "under-sink-after-faucet-filter",
     },
