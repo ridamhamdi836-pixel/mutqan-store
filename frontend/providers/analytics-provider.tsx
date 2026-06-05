@@ -1,21 +1,50 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Script from "next/script";
 import { captureUTMAndClickIds } from "@/lib/analytics";
+import {
+  getBundledPixelConfig,
+  mergePixelConfig,
+} from "@/lib/browser-pixel-config";
 import type { PixelConfig } from "@/lib/pixel-config";
 
 type AnalyticsProviderProps = {
   children: React.ReactNode;
-  pixels: PixelConfig;
+  pixels?: PixelConfig;
 };
 
-export function AnalyticsProvider({ children, pixels }: AnalyticsProviderProps) {
-  const { metaId, tiktokId, snapchatId } = pixels;
+export function AnalyticsProvider({
+  children,
+  pixels: serverPixels,
+}: AnalyticsProviderProps) {
+  const bundled = getBundledPixelConfig();
+  const [pixels, setPixels] = useState<PixelConfig>(() =>
+    mergePixelConfig(bundled, serverPixels),
+  );
 
   useEffect(() => {
     captureUTMAndClickIds();
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const defaults = getBundledPixelConfig();
+    fetch("/api/pixels/browser", { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data?.pixels) return;
+        setPixels(mergePixelConfig(defaults, data.pixels));
+      })
+      .catch(() => {
+        /* bundled defaults remain */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const { metaId, tiktokId, snapchatId } = pixels;
 
   return (
     <>

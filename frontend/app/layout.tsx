@@ -3,7 +3,9 @@ import "./globals.css";
 import { CartProvider } from "@/providers/cart-provider";
 import { AnalyticsProvider } from "@/providers/analytics-provider";
 import { fontArabic, fontLatin } from "@/lib/fonts";
-import { getPixelConfig } from "@/lib/pixel-config";
+import { getBundledPixelConfig } from "@/lib/browser-pixel-config";
+
+export const dynamic = "force-dynamic";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://mutqan.online";
 
@@ -41,7 +43,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const pixels = getPixelConfig();
+  const pixels = getBundledPixelConfig();
 
   return (
     <html
