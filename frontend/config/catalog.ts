@@ -256,6 +256,13 @@ export function getProduct(slug: string): CatalogProduct | undefined {
   return CATALOG_BY_SLUG[slug];
 }
 
+/** First bundle by sort_order — same «العرض الأول» shown on the product page. */
+export function getFirstOfferBundle(product: CatalogProduct): ProductBundle {
+  return [...product.bundles].sort(
+    (a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99),
+  )[0];
+}
+
 export function getProductsBySlugs(slugs: string[]): CatalogProduct[] {
   return slugs.map((s) => CATALOG_BY_SLUG[s]).filter(Boolean);
 }

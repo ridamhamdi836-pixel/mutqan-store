@@ -6,7 +6,7 @@ import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
-import { getProduct } from "@/config/catalog";
+import { getProduct, getFirstOfferBundle } from "@/config/catalog";
 import { getProductCardImageSrc } from "@/lib/product-image";
 
 interface CrossSellCardProps {
@@ -20,8 +20,9 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
 
   if (!catalog?.crossSell) return null;
   const crossSell = catalog.crossSell;
+  const firstOffer = getFirstOfferBundle(catalog);
+  const displayPriceSar = firstOffer.price_sar;
 
-  const defaultBundle = catalog.bundles.find((b) => b.is_default) || catalog.bundles[0];
   const alreadyInCart = items.some((i) => i.productSlug === productSlug);
 
   const handleAdd = () => {
@@ -29,10 +30,10 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     addItem({
       productSlug,
       productNameAr: catalog.name_ar,
-      bundleId: `cross-${productSlug}-1`,
-      bundleLabelAr: defaultBundle.label_ar,
+      bundleId: firstOffer.id,
+      bundleLabelAr: firstOffer.label_ar,
       quantity: 1,
-      priceSar: crossSell.singleUnitPriceSar,
+      priceSar: displayPriceSar,
       itemType: "cross_sell",
     });
   };
@@ -64,7 +65,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
           <p className="text-sm font-bold text-gray-900 leading-snug">{catalog.name_ar}</p>
           <p className="text-xs text-gray-500 mt-0.5">{crossSell.shortDesc}</p>
           <p className="text-sm font-bold text-[#1B4DDB] mt-1">
-            {crossSell.singleUnitPriceSar} ر.س
+            {displayPriceSar} ر.س
           </p>
         </div>
 
