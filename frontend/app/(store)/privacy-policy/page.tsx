@@ -28,7 +28,7 @@ export default function PrivacyPolicyPage() {
 
           <div className="card p-6">
             <h2 className="text-xl font-bold text-brand-espresso mb-3">ملفات تتبع الأداء</h2>
-            <p>نستخدم أدوات تحليل مثل Meta Pixel وTikTok Pixel وSnapchat Pixel لتحسين حملاتنا الإعلانية وفهم سلوك المستخدمين على الموقع. هذه الأدوات قد تجمع بيانات تقنية مجهولة الهوية.</p>
+            <p>نستخدم أدوات تحليل مثل Meta Pixel وTikTok Pixel وSnapchat Pixel وHotjar (تسجيلات الجلسات وخرائط الحرارة) لتحسين حملاتنا الإعلانية وفهم سلوك المستخدمين على الموقع. هذه الأدوات قد تجمع بيانات تقنية مجهولة الهوية.</p>
           </div>
 
           <div className="card p-6">

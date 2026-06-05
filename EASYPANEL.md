@@ -56,6 +56,16 @@ SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
 
 `META_PIXEL_ID` على الـ frontend يكفي لتحميل البكسل في المتصفح (PageView + Purchase).
 
+**Hotjar** (تسجيلات الجلسات وخرائط الحرارة — frontend فقط):
+
+```
+HOTJAR_SITE_ID=رقم_الموقع_من_Hotjar
+```
+
+أو الصق الرقم في `frontend/config/web-analytics.ts` → `hotjarSiteId`.  
+تحقق: `https://mutqan.online/api/debug/pixels` → `hotjar.enabled: true`.  
+لا يُحمَّل على `/admin`.
+
 احذف كل أسطر `NEXT_PUBLIC_*` **الفارغة** المكررة.
 
 **Backend** (توكنات CAPI فقط — لا حاجة لـ NEXT_PUBLIC_* هنا):

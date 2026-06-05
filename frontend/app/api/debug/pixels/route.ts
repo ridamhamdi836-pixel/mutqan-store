@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getBundledPixelConfig, mergePixelConfig } from "@/lib/browser-pixel-config";
+import { getHotjarSiteId, getHotjarStatus } from "@/lib/hotjar-config";
 import { getPixelConfig, getPixelConfigStatus } from "@/lib/pixel-config";
 
 export const dynamic = "force-dynamic";
@@ -12,9 +13,12 @@ export async function GET() {
   const apiUrl = Boolean(process.env.NEXT_PUBLIC_API_URL?.trim());
   const secretKey = Boolean(process.env.SECRET_KEY?.trim());
 
+  const hotjarSiteId = getHotjarSiteId();
+
   return NextResponse.json({
     ok: true,
     browser_pixels: pixels,
+    hotjar: getHotjarStatus(hotjarSiteId),
     capi: {
       api_url_set: apiUrl,
       secret_key_on_frontend: secretKey,

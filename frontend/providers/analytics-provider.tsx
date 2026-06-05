@@ -7,20 +7,27 @@ import {
   getBundledPixelConfig,
   mergePixelConfig,
 } from "@/lib/browser-pixel-config";
+import { HotjarTracker } from "@/components/analytics/HotjarTracker";
+import { getHotjarSiteId } from "@/lib/hotjar-config";
 import type { PixelConfig } from "@/lib/pixel-config";
 
 type AnalyticsProviderProps = {
   children: React.ReactNode;
   pixels?: PixelConfig;
+  hotjarSiteId?: string;
 };
 
 export function AnalyticsProvider({
   children,
   pixels: serverPixels,
+  hotjarSiteId: serverHotjarId,
 }: AnalyticsProviderProps) {
   const bundled = getBundledPixelConfig();
   const [pixels, setPixels] = useState<PixelConfig>(() =>
     mergePixelConfig(bundled, serverPixels),
+  );
+  const [hotjarSiteId, setHotjarSiteId] = useState(
+    () => serverHotjarId || getHotjarSiteId() || "",
   );
 
   useEffect(() => {
@@ -33,8 +40,13 @@ export function AnalyticsProvider({
     fetch("/api/pixels/browser", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        if (cancelled || !data?.pixels) return;
-        setPixels(mergePixelConfig(defaults, data.pixels));
+        if (cancelled) return;
+        if (data?.pixels) {
+          setPixels(mergePixelConfig(defaults, data.pixels));
+        }
+        if (data?.hotjarSiteId) {
+          setHotjarSiteId(data.hotjarSiteId);
+        }
       })
       .catch(() => {
         /* bundled defaults remain */
@@ -88,6 +100,8 @@ export function AnalyticsProvider({
           `}
         </Script>
       ) : null}
+
+      <HotjarTracker siteId={hotjarSiteId} />
 
       {children}
     </>

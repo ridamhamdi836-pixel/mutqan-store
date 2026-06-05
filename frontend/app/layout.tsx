@@ -4,6 +4,7 @@ import { CartProvider } from "@/providers/cart-provider";
 import { AnalyticsProvider } from "@/providers/analytics-provider";
 import { fontArabic, fontLatin } from "@/lib/fonts";
 import { getBundledPixelConfig } from "@/lib/browser-pixel-config";
+import { getHotjarSiteId } from "@/lib/hotjar-config";
 
 export const dynamic = "force-dynamic";
 
@@ -44,6 +45,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pixels = getBundledPixelConfig();
+  const hotjarSiteId = getHotjarSiteId();
 
   return (
     <html
@@ -52,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${fontArabic.variable} ${fontLatin.variable}`}
     >
       <body className="font-sans antialiased">
-        <AnalyticsProvider pixels={pixels}>
+        <AnalyticsProvider pixels={pixels} hotjarSiteId={hotjarSiteId}>
           <CartProvider>{children}</CartProvider>
         </AnalyticsProvider>
       </body>
