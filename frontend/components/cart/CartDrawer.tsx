@@ -201,30 +201,30 @@ export function CartDrawer() {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="border-t border-gray-200 p-6 space-y-4 bg-white">
+              <div className="border-t border-gray-200 px-4 py-3.5 space-y-2 bg-white shrink-0">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600 font-medium text-base">الإجمالي</span>
-                  <span className="font-bold text-2xl text-gray-900">
+                  <span className="text-gray-600 font-medium text-sm">الإجمالي</span>
+                  <span className="font-bold text-xl text-gray-900">
                     {formatSARCompact(totalSar)}
                   </span>
                 </div>
 
-                <p className="text-xs text-[#10B981] font-medium">
+                <p className="text-[11px] text-[#10B981] font-medium">
                   ✓ الشحن مجاني لجميع الطلبات
                 </p>
 
                 <button
                   onClick={handleCheckout}
                   className={cn(
-                    "w-full h-14 rounded-2xl font-bold text-base text-white",
+                    "w-full h-11 rounded-xl font-semibold text-sm text-white",
                     "bg-[#1B4DDB] hover:bg-[#1640b8] active:scale-[0.98]",
-                    "transition-all duration-150 shadow-lg shadow-[#1B4DDB]/25"
+                    "transition-all duration-150 shadow-md shadow-[#1B4DDB]/20",
                   )}
                 >
                   أكمل الطلب · الدفع عند الاستلام
                 </button>
 
-                <p className="text-[11px] text-center text-gray-400">
+                <p className="text-[10px] text-center text-gray-400 leading-snug">
                   لا حاجة لبطاقة دفع — ادفع نقدًا عند استلام طلبك
                 </p>
               </div>

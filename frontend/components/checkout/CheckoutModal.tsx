@@ -184,35 +184,35 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
             onClick={closeCheckout}
           />
 
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 md:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6 sm:px-6 sm:py-8 pointer-events-none">
             <motion.div
               role="dialog"
               aria-modal="true"
               aria-label="إتمام الطلب"
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
               transition={{ type: "spring", duration: 0.4, bounce: 0.1 }}
-              className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+              className="pointer-events-auto w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[min(82dvh,680px)] sm:max-h-[min(88dvh,720px)]"
             >
               {/* Header */}
-              <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                <h2 className="font-bold text-lg text-gray-900">إتمام الطلب</h2>
+              <div className="flex items-center justify-between px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-100 shrink-0">
+                <h2 className="font-bold text-base sm:text-lg text-gray-900">إتمام الطلب</h2>
                 <button onClick={closeCheckout} aria-label="إغلاق" className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
                   <X className="w-5 h-5 text-gray-400" />
                 </button>
               </div>
 
               {/* Urgency bar */}
-              <div className="px-5 py-2.5 bg-amber-50 border-b border-amber-100">
-                <div className="flex items-center gap-2 text-xs font-semibold text-amber-700">
+              <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-amber-50 border-b border-amber-100 shrink-0">
+                <div className="flex items-center gap-2 text-[11px] sm:text-xs font-semibold text-amber-700">
                   <Clock className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>آخر 48 ساعة على عرض الشحن المجاني</span>
                 </div>
               </div>
 
               {/* Social proof */}
-              <div className="px-5 py-2 border-b border-gray-100 flex items-center justify-between">
+              <div className="px-4 py-1.5 sm:px-5 sm:py-2 border-b border-gray-100 flex items-center justify-between shrink-0">
                 <span className="text-xs text-gray-500">+1,200 عميل طلبوا هذا الأسبوع</span>
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-gray-700">4.9</span>
@@ -222,15 +222,15 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                 </div>
               </div>
 
-              <div className="overflow-y-auto flex-1">
-                <form onSubmit={handleSubmit} noValidate className="p-5 space-y-5">
+              <div className="overflow-y-auto flex-1 min-h-0 overscroll-contain">
+                <form onSubmit={handleSubmit} noValidate className="p-4 sm:p-5 space-y-4">
                   {/* Continue shopping */}
                   <Link
                     href="/collections"
                     onClick={closeCheckout}
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border-2 border-dashed border-gray-200 text-sm font-bold text-gray-700 hover:border-[#1B4DDB]/40 hover:text-[#1B4DDB] hover:bg-[#1B4DDB]/5 transition-colors"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-xs sm:text-sm font-bold text-gray-700 hover:border-[#1B4DDB]/40 hover:text-[#1B4DDB] hover:bg-[#1B4DDB]/5 transition-colors"
                   >
-                    <Store className="w-5 h-5 shrink-0" />
+                    <Store className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
                     الاستمرار في التسوق — اختر منتجات أخرى
                   </Link>
 
@@ -252,9 +252,9 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                   </div>
 
                   {/* Total */}
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <span className="font-medium text-gray-600">الإجمالي</span>
-                    <span className="font-black text-2xl text-gray-900">{totalSar} <span className="text-sm font-bold">ر.س</span></span>
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <span className="font-medium text-sm text-gray-600">الإجمالي</span>
+                    <span className="font-black text-xl sm:text-2xl text-gray-900">{totalSar} <span className="text-xs sm:text-sm font-bold">ر.س</span></span>
                   </div>
 
                   {/* Free shipping + COD */}
@@ -265,7 +265,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
                   {/* Name field */}
                   <div>
-                    <label htmlFor="checkout-name" className="block text-sm font-bold text-gray-900 mb-2">
+                    <label htmlFor="checkout-name" className="block text-sm font-bold text-gray-900 mb-1.5">
                       الاسم الكامل
                     </label>
                     <input
@@ -278,16 +278,16 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                       placeholder="مثال: سارة محمد"
                       aria-invalid={!!nameError}
                       className={cn(
-                        "w-full h-12 rounded-xl border bg-white px-4 text-gray-900 placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
+                        "w-full h-11 sm:h-12 rounded-xl border bg-white px-4 text-gray-900 placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
                         nameError ? "border-red-400" : "border-gray-200"
                       )}
                     />
-                    {nameError && <p role="alert" className="text-xs text-red-500 mt-1.5 font-medium">{nameError}</p>}
+                    {nameError && <p role="alert" className="text-xs text-red-500 mt-1 font-medium">{nameError}</p>}
                   </div>
 
                   {/* Phone field */}
                   <div>
-                    <label htmlFor="checkout-phone" className="block text-sm font-bold text-gray-900 mb-2">
+                    <label htmlFor="checkout-phone" className="block text-sm font-bold text-gray-900 mb-1.5">
                       رقم الجوال
                     </label>
                     <input
@@ -301,7 +301,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                       placeholder="05XXXXXXXX أو 01XXXXXXX"
                       aria-invalid={!!phoneError}
                       className={cn(
-                        "w-full h-12 rounded-xl border bg-white px-4 text-gray-900 text-right placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
+                        "w-full h-11 sm:h-12 rounded-xl border bg-white px-4 text-gray-900 text-right placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
                         phoneError ? "border-red-400" : "border-gray-200"
                       )}
                     />
@@ -322,9 +322,9 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     type="submit"
                     disabled={submitting || items.length === 0}
                     className={cn(
-                      "w-full h-14 rounded-2xl font-bold text-base text-white flex items-center justify-center gap-2",
+                      "w-full h-11 sm:h-12 rounded-xl font-bold text-sm sm:text-base text-white flex items-center justify-center gap-2",
                       "bg-[#10B981] hover:bg-[#059669] active:scale-[0.98]",
-                      "transition-all duration-150 shadow-lg shadow-[#10B981]/25",
+                      "transition-all duration-150 shadow-md shadow-[#10B981]/20",
                       "disabled:opacity-60 disabled:cursor-not-allowed"
                     )}
                   >
