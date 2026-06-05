@@ -48,9 +48,13 @@ TikTok + Snapchat browser pixel IDs are also in `frontend/config/web-pixels.ts` 
 Optional (only if you want to override the file):
 
 ```
+SECRET_KEY=نفس_قيمة_الـ_باكند
+META_PIXEL_ID=معرف_ميتا_من_Events_Manager
 TIKTOK_PIXEL_CODE=D4GVCMBC77UAP3H8QDS0
 SNAPCHAT_PIXEL_ID=d8f90588-0a07-41a3-87ed-0c829150b41a
 ```
+
+`META_PIXEL_ID` على الـ frontend يكفي لتحميل البكسل في المتصفح (PageView + Purchase).
 
 احذف كل أسطر `NEXT_PUBLIC_*` **الفارغة** المكررة.
 

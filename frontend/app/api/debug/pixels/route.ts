@@ -16,7 +16,7 @@ export async function GET() {
       api_url_set: apiUrl,
       secret_key_on_frontend: secretKey,
       ready: apiUrl && secretKey,
-      note: "CAPI tokens stay on BACKEND; frontend calls /api/v1/conversions/purchase after checkout",
+      note: "Set SECRET_KEY on frontend (same as backend) + META_ACCESS_TOKEN on backend for Meta CAPI Purchase",
     },
     backend_tokens_expected: {
       meta: "META_PIXEL_ID + META_ACCESS_TOKEN (both required for Meta CAPI)",

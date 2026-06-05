@@ -34,7 +34,11 @@ export function getSessionTracking() {
     utm_content: sessionStorage.getItem("utm_content") || undefined,
     utm_term: sessionStorage.getItem("utm_term") || undefined,
     meta_fbp: getCookie("_fbp") || undefined,
-    meta_fbc: getCookie("_fbc") || sessionStorage.getItem("fbclid") ? `fb.1.${Date.now()}.${sessionStorage.getItem("fbclid")}` : undefined,
+    meta_fbc:
+      getCookie("_fbc") ||
+      (sessionStorage.getItem("fbclid")
+        ? `fb.1.${Date.now()}.${sessionStorage.getItem("fbclid")}`
+        : undefined),
     tiktok_click_id: sessionStorage.getItem("ttclid") || undefined,
     snapchat_click_id: sessionStorage.getItem("sc_click_id") || undefined,
     landing_page: sessionStorage.getItem("landing_page") || window.location.href,
@@ -72,6 +76,46 @@ const AD_PLATFORM_EVENTS = new Set([
   "InitiateCheckout",
   "Purchase",
 ]);
+
+function mapContentsForMeta(event: MutqanAnalyticsEvent): {
+  contents: Array<{ id: string; quantity: number; item_price?: number }>;
+  content_ids: string[];
+  num_items: number;
+} {
+  if (event.contents?.length) {
+    const contents = event.contents.map((c) => ({
+      id: c.id,
+      quantity: c.quantity || 1,
+      item_price: c.item_price,
+    }));
+    return {
+      contents,
+      content_ids: contents.map((c) => c.id),
+      num_items: contents.reduce((sum, c) => sum + c.quantity, 0),
+    };
+  }
+  if (event.productSlug) {
+    return {
+      contents: [
+        {
+          id: event.productSlug,
+          quantity: event.quantity || 1,
+          item_price: event.value,
+        },
+      ],
+      content_ids: [event.productSlug],
+      num_items: event.quantity || 1,
+    };
+  }
+  if (event.orderNumber) {
+    return {
+      contents: [{ id: event.orderNumber, quantity: 1, item_price: event.value }],
+      content_ids: [event.orderNumber],
+      num_items: 1,
+    };
+  }
+  return { contents: [], content_ids: [], num_items: 0 };
+}
 
 function mapContentsForTikTok(
   event: MutqanAnalyticsEvent,
@@ -114,6 +158,25 @@ function buildPurchaseEvent(params: {
   };
 }
 
+function trackMetaPurchase(event: MutqanAnalyticsEvent): void {
+  if (!window.fbq) return;
+  const { contents, content_ids, num_items } = mapContentsForMeta(event);
+  window.fbq(
+    "track",
+    "Purchase",
+    {
+      currency: "SAR",
+      value: event.value ?? 0,
+      content_type: "product",
+      contents,
+      content_ids,
+      num_items,
+      order_id: event.orderNumber,
+    },
+    { eventID: event.eventId },
+  );
+}
+
 function trackTikTokCompletePayment(event: MutqanAnalyticsEvent): void {
   const ttq = getTtq();
   if (!ttq?.track) return;
@@ -142,28 +205,33 @@ function trackTikTokCompletePayment(event: MutqanAnalyticsEvent): void {
   );
 }
 
-function whenTikTokReady(run: () => void): void {
-  const ttq = getTtq();
-  if (ttq?.track) {
+function purchasePixelsReady(): boolean {
+  return Boolean(window.fbq && getTtq()?.track);
+}
+
+function whenPurchasePixelsReady(run: () => void): void {
+  if (purchasePixelsReady()) {
     run();
     return;
   }
+  const ttq = getTtq();
   const readyFn = (ttq as { ready?: (cb: () => void) => void } | undefined)?.ready;
   if (typeof readyFn === "function") {
-    readyFn.call(ttq, run);
-    return;
+    readyFn.call(ttq, () => {
+      if (window.fbq) run();
+    });
   }
   let attempts = 0;
   const timer = window.setInterval(() => {
     attempts += 1;
-    if (getTtq()?.track || attempts >= 30) {
+    if (purchasePixelsReady() || attempts >= 30) {
       window.clearInterval(timer);
       run();
     }
   }, 200);
 }
 
-/** Fire Purchase / TikTok CompletePayment once per order (thank-you page). */
+/** Fire Purchase (Meta + TikTok CompletePayment + Snapchat) once per order. */
 export function firePurchasePixelOnce(params: {
   orderNumber: string;
   eventId: string;
@@ -182,7 +250,7 @@ export function firePurchasePixelOnce(params: {
     sessionStorage.setItem(dedupeKey, params.eventId);
   };
 
-  whenTikTokReady(send);
+  whenPurchasePixelsReady(send);
 }
 
 export function firePixelEvent(event: MutqanAnalyticsEvent): void {
@@ -190,21 +258,26 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
   if (!AD_PLATFORM_EVENTS.has(event.eventName)) return;
 
   try {
-    if (window.fbq) {
-      const { eventName, value, productSlug, productName, quantity, bundleId, contents, eventId } = event;
+    if (event.eventName === "Purchase") {
+      trackMetaPurchase(event);
+    } else if (window.fbq) {
+      const { eventName, value, productName, eventId } = event;
       const pixelEventMap: Record<string, string> = {
         ViewContent: "ViewContent",
         AddToCart: "AddToCart",
         InitiateCheckout: "InitiateCheckout",
-        Purchase: "Purchase",
       };
       const mappedEvent = pixelEventMap[eventName] || eventName;
-      const data: Record<string, unknown> = { currency: "SAR" };
-      if (value) data.value = value;
-      if (productSlug) { data.content_ids = [productSlug]; data.content_type = "product"; }
+      const { contents, content_ids, num_items } = mapContentsForMeta(event);
+      const data: Record<string, unknown> = {
+        currency: "SAR",
+        content_type: "product",
+        contents,
+        content_ids,
+        num_items,
+      };
+      if (value != null) data.value = value;
       if (productName) data.content_name = productName;
-      if (quantity) data.num_items = quantity;
-      if (contents) data.contents = contents;
       window.fbq("track", mappedEvent, data, { eventID: eventId });
     }
   } catch {}
