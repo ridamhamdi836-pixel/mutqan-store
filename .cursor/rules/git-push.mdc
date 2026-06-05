@@ -1,0 +1,14 @@
+---
+description: Push completed code changes to GitHub without asking
+alwaysApply: true
+---
+
+# Git push policy (mutqan)
+
+After completing implementation work that changes the repo:
+
+1. **Always commit and push to `origin main`** when changes are ready — do not ask the user for permission each time.
+2. Write a clear commit message (1–2 sentences, focus on why).
+3. Do **not** push secrets (`.env`, tokens, credentials).
+4. Do **not** force-push to `main`.
+5. If the user explicitly says not to push in a message, skip push for that turn only.
