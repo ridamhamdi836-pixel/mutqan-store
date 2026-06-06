@@ -25,6 +25,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   afterSectionImage?: string;
   afterSectionImageAlt?: string;
   afterSectionAspect?: string;
+  /** Optional image for "sliding drawers" proof block on the product page */
+  slidingDrawersSectionImage?: string;
+  slidingDrawersSectionImageAlt?: string;
+  slidingDrawersSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -348,6 +352,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     afterSectionImage: "/images/products/magic-under-sink-organizer-after.png",
     afterSectionImageAlt: "منظّم رمادي تحت المغسلة — ترتيب ذكي يسهّل يومك",
     afterSectionAspect: "576/718",
+    slidingDrawersSectionImage:
+      "/images/products/magic-under-sink-organizer-sliding-drawers.png",
+    slidingDrawersSectionImageAlt:
+      "يد تسحب درج منظّم متقن تحت المغسلة — وصول سريع لأدوات التنظيف",
+    slidingDrawersSectionAspect: "575/714",
     shortPromise: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة",
     heroAngle: "المساحة المخفية تحت المغسلة يمكن أن تكون أكثر مساحاتك ترتيبًا",
     problemStatement: "زجاجات التنظيف مكوّمة، والمواسير تحتل نصف المساحة. المنظّم السحري يحوّل هذه الفوضى إلى تخزين ذكي ومرتب.",

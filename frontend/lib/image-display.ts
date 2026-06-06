@@ -52,6 +52,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 717,
     height: 1024,
   },
+  "/images/products/magic-under-sink-organizer-sliding-drawers.png": {
+    width: 575,
+    height: 714,
+  },
 };
 
 export function stripImagePath(src: string): string {

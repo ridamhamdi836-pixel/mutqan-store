@@ -401,11 +401,21 @@ export function SinkOrganizerPageClient({
                     i === 0
                       ? config.solutionSectionImage
                       : i === 1
-                        ? config.afterSectionImage
+                        ? config.slidingDrawersSectionImage
                         : undefined
                   }
-                  alt={item.title}
-                  aspect="4/3"
+                  alt={
+                    i === 1
+                      ? (config.slidingDrawersSectionImageAlt ?? item.title)
+                      : item.title
+                  }
+                  aspect={
+                    i === 0
+                      ? config.solutionSectionAspect
+                      : i === 1
+                        ? config.slidingDrawersSectionAspect
+                        : "4/3"
+                  }
                   placeholder={item.placeholder}
                 />
                 <p className="text-sm font-extrabold text-brand-espresso">{item.title}</p>
