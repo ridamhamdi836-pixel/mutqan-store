@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductPageClient } from "./ProductPageClient";
+import { SinkOrganizerPageClient } from "./SinkOrganizerPageClient";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { getProduct, PRODUCT_SLUGS } from "@/config/catalog";
 import { getProductOgImageUrl } from "@/lib/product-image";
@@ -49,16 +50,22 @@ export default async function ProductPage({
 
   if (!product || !config) notFound();
 
+  const productPayload = {
+    id: product.id,
+    slug: product.slug,
+    name_ar: product.name_ar,
+    short_description_ar: product.short_description_ar,
+    category_slug: product.category_slug,
+    bundles: product.bundles,
+  };
+
+  if (slug === "sink-organizer") {
+    return <SinkOrganizerPageClient product={productPayload} />;
+  }
+
   return (
     <ProductPageClient
-      product={{
-        id: product.id,
-        slug: product.slug,
-        name_ar: product.name_ar,
-        short_description_ar: product.short_description_ar,
-        category_slug: product.category_slug,
-        bundles: product.bundles,
-      }}
+      product={productPayload}
       config={config}
     />
   );
