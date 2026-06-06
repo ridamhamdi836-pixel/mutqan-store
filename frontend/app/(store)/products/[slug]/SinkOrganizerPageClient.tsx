@@ -132,7 +132,7 @@ export function SinkOrganizerPageClient({
   }, [addItem, isUpsellPreview, openCheckout, product, selectedBundle]);
 
   return (
-    <div className="bg-brand-background pb-24 md:pb-6">
+    <div className="bg-brand-background">
       {/* Sticky CTA */}
       {!isUpsellPreview && showSticky ? (
         <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
@@ -643,7 +643,7 @@ export function SinkOrganizerPageClient({
 
       {/* 17. Final CTA */}
       {!isUpsellPreview ? (
-        <section className="cv-section page-x py-8 md:py-10 bg-brand-espresso">
+        <section className="cv-section page-x pt-8 md:pt-10 pb-24 md:pb-10 bg-brand-espresso">
           <div className="max-w-content mx-auto max-w-lg text-center space-y-4">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white leading-snug">
               {PAGE.finalCta.title}
@@ -664,8 +664,6 @@ export function SinkOrganizerPageClient({
           </div>
         </section>
       ) : null}
-
-      <div className="h-4" aria-hidden />
     </div>
   );
 }

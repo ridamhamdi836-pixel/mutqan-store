@@ -4,10 +4,15 @@ import Link from "next/link";
 import { BRAND, WHATSAPP_URL } from "@/config/brand";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { Shield, Truck, Banknote } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function Footer() {
+type FooterProps = {
+  className?: string;
+};
+
+export function Footer({ className }: FooterProps) {
   return (
-    <footer className="bg-brand-espresso text-brand-sand mt-20">
+    <footer className={cn("bg-brand-espresso text-brand-sand mt-20", className)}>
       <div className="max-w-content mx-auto page-x py-14">
         {/* Trust Badges */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 pb-10 border-b border-white/10">

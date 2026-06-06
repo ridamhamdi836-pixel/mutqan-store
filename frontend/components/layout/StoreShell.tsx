@@ -30,6 +30,7 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const isProductPage = pathname?.startsWith("/products/");
+  const isSinkOrganizerPage = pathname === "/products/sink-organizer";
 
   const handleOrderSuccess = useCallback(
     (response: CreateOrderResponse) => {
@@ -55,7 +56,7 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
       {!isProductPage ? <TrustBar /> : null}
       <Header />
       <main>{children}</main>
-      <Footer />
+      <Footer className={isSinkOrganizerPage ? "mt-0" : undefined} />
       <CartDrawer />
       <CheckoutModal onOrderSuccess={handleOrderSuccess} />
     </div>
