@@ -402,27 +402,33 @@ export function SinkOrganizerPageClient({
                       ? config.metalStructureSectionImage
                       : i === 1
                         ? config.slidingDrawersSectionImage
-                        : i === 3
-                          ? config.stabilitySectionImage
-                          : undefined
+                        : i === 2
+                          ? config.pipeFitSectionImage
+                          : i === 3
+                            ? config.stabilitySectionImage
+                            : undefined
                   }
                   alt={
                     i === 0
                       ? (config.metalStructureSectionImageAlt ?? item.title)
                       : i === 1
                         ? (config.slidingDrawersSectionImageAlt ?? item.title)
-                        : i === 3
-                          ? (config.stabilitySectionImageAlt ?? item.title)
-                          : item.title
+                        : i === 2
+                          ? (config.pipeFitSectionImageAlt ?? item.title)
+                          : i === 3
+                            ? (config.stabilitySectionImageAlt ?? item.title)
+                            : item.title
                   }
                   aspect={
                     i === 0
                       ? config.metalStructureSectionAspect
                       : i === 1
                         ? config.slidingDrawersSectionAspect
-                        : i === 3
-                          ? config.stabilitySectionAspect
-                          : "4/3"
+                        : i === 2
+                          ? config.pipeFitSectionAspect
+                          : i === 3
+                            ? config.stabilitySectionAspect
+                            : "4/3"
                   }
                   placeholder={item.placeholder}
                 />

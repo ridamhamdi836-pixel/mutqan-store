@@ -37,6 +37,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   stabilitySectionImage?: string;
   stabilitySectionImageAlt?: string;
   stabilitySectionAspect?: string;
+  /** Optional image for "pipe fit" proof block on the product page */
+  pipeFitSectionImage?: string;
+  pipeFitSectionImageAlt?: string;
+  pipeFitSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -375,6 +379,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     stabilitySectionImageAlt:
       "منظّم متقن ثابت تحت المغسلة — أدراج منزلقة ومواسير في الخلف",
     stabilitySectionAspect: "574/807",
+    pipeFitSectionImage:
+      "/images/products/magic-under-sink-organizer-pipe-fit.png",
+    pipeFitSectionImageAlt:
+      "منظّمان متقن تحت المغسلة — تصميم يستغل المساحة حول المواسير",
+    pipeFitSectionAspect: "1024/931",
     shortPromise: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة",
     heroAngle: "المساحة المخفية تحت المغسلة يمكن أن تكون أكثر مساحاتك ترتيبًا",
     problemStatement: "زجاجات التنظيف مكوّمة، والمواسير تحتل نصف المساحة. المنظّم السحري يحوّل هذه الفوضى إلى تخزين ذكي ومرتب.",

@@ -64,6 +64,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 574,
     height: 807,
   },
+  "/images/products/magic-under-sink-organizer-pipe-fit.png": {
+    width: 1024,
+    height: 931,
+  },
 };
 
 export function stripImagePath(src: string): string {
