@@ -399,19 +399,21 @@ export function SinkOrganizerPageClient({
                 <SinkOrganizerMedia
                   src={
                     i === 0
-                      ? config.solutionSectionImage
+                      ? config.metalStructureSectionImage
                       : i === 1
                         ? config.slidingDrawersSectionImage
                         : undefined
                   }
                   alt={
-                    i === 1
-                      ? (config.slidingDrawersSectionImageAlt ?? item.title)
-                      : item.title
+                    i === 0
+                      ? (config.metalStructureSectionImageAlt ?? item.title)
+                      : i === 1
+                        ? (config.slidingDrawersSectionImageAlt ?? item.title)
+                        : item.title
                   }
                   aspect={
                     i === 0
-                      ? config.solutionSectionAspect
+                      ? config.metalStructureSectionAspect
                       : i === 1
                         ? config.slidingDrawersSectionAspect
                         : "4/3"

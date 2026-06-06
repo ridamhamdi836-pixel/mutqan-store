@@ -29,6 +29,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   slidingDrawersSectionImage?: string;
   slidingDrawersSectionImageAlt?: string;
   slidingDrawersSectionAspect?: string;
+  /** Optional image for "metal structure" proof block on the product page */
+  metalStructureSectionImage?: string;
+  metalStructureSectionImageAlt?: string;
+  metalStructureSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -357,6 +361,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     slidingDrawersSectionImageAlt:
       "يد تسحب درج منظّم متقن تحت المغسلة — وصول سريع لأدوات التنظيف",
     slidingDrawersSectionAspect: "575/714",
+    metalStructureSectionImage:
+      "/images/products/magic-under-sink-organizer-countertop.png",
+    metalStructureSectionImageAlt:
+      "منظّم متقن على طاولة المطبخ — هيكل معدني متين يتحمل زجاجات ومنظفات",
+    metalStructureSectionAspect: "575/769",
     shortPromise: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة",
     heroAngle: "المساحة المخفية تحت المغسلة يمكن أن تكون أكثر مساحاتك ترتيبًا",
     problemStatement: "زجاجات التنظيف مكوّمة، والمواسير تحتل نصف المساحة. المنظّم السحري يحوّل هذه الفوضى إلى تخزين ذكي ومرتب.",

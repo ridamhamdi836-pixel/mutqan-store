@@ -56,6 +56,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 575,
     height: 714,
   },
+  "/images/products/magic-under-sink-organizer-countertop.png": {
+    width: 575,
+    height: 769,
+  },
 };
 
 export function stripImagePath(src: string): string {
