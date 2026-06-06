@@ -98,23 +98,6 @@ export const SINK_ORGANIZER_PAGE = {
     title: "آراء من اشتروا المنظّم",
     subtitle: "صور حقيقية من عملاء متقن",
   },
-  customerGallery: {
-    title: "صور من عملائنا",
-    placeholders: [
-      "[CUSTOMER PHOTO PLACEHOLDER 1]",
-      "[CUSTOMER PHOTO PLACEHOLDER 2]",
-      "[CUSTOMER PHOTO PLACEHOLDER 3]",
-      "[CUSTOMER PHOTO PLACEHOLDER 4]",
-    ],
-  },
-  ugcVideos: {
-    title: "فيديوهات من العملاء",
-    placeholders: [
-      "[UGC VIDEO PLACEHOLDER 1]",
-      "[UGC VIDEO PLACEHOLDER 2]",
-      "[UGC VIDEO PLACEHOLDER 3]",
-    ],
-  },
   comparison: {
     title: "لماذا متقن وليس البدائل؟",
     subtitle: "مقارنة سريعة قبل أن تقرر",

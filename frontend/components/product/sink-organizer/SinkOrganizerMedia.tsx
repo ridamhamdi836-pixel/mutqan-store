@@ -55,14 +55,3 @@ export function SinkOrganizerMedia({
     </div>
   );
 }
-
-export function SinkOrganizerVideoPlaceholder({ label }: { label: string }) {
-  return (
-    <div className="rounded-2xl border-2 border-dashed border-brand-border/80 bg-brand-espresso/5 aspect-[9/16] sm:aspect-video flex flex-col items-center justify-center gap-2 px-3 text-center">
-      <div className="w-12 h-12 rounded-full bg-brand-bronze/15 flex items-center justify-center">
-        <span className="text-brand-bronze text-lg">▶</span>
-      </div>
-      <span className="text-[11px] sm:text-xs font-bold text-brand-muted">{label}</span>
-    </div>
-  );
-}

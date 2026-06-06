@@ -7,7 +7,6 @@ import { BundleSelector } from "@/components/product/BundleSelector";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import {
   SinkOrganizerMedia,
-  SinkOrganizerVideoPlaceholder,
 } from "@/components/product/sink-organizer/SinkOrganizerMedia";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
@@ -529,40 +528,6 @@ export function SinkOrganizerPageClient({
                   </p>
                 </div>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 12. Customer photo gallery */}
-      <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto space-y-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
-            {PAGE.customerGallery.title}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {PAGE.customerGallery.placeholders.map((label, i) => (
-              <SinkOrganizerMedia
-                key={label}
-                src={config.reviews[i]?.photo}
-                alt={config.reviews[i]?.photoAlt}
-                aspect="1/1"
-                placeholder={label}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 13. UGC videos */}
-      <section className="cv-section product-section-pad page-x bg-white">
-        <div className="max-w-content mx-auto space-y-4">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
-            {PAGE.ugcVideos.title}
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 max-w-3xl mx-auto">
-            {PAGE.ugcVideos.placeholders.map((label) => (
-              <SinkOrganizerVideoPlaceholder key={label} label={label} />
             ))}
           </div>
         </div>
