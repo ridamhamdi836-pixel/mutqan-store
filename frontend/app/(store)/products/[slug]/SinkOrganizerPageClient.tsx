@@ -8,6 +8,7 @@ import { FAQAccordion } from "@/components/product/FAQAccordion";
 import {
   SinkOrganizerMedia,
 } from "@/components/product/sink-organizer/SinkOrganizerMedia";
+import { SinkOrganizerValueJustification } from "@/components/product/sink-organizer/SinkOrganizerValueJustification";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
 import { PRODUCT_COD_FAQS } from "@/lib/product-cod-faqs";
@@ -459,6 +460,9 @@ export function SinkOrganizerPageClient({
           </ul>
         </div>
       </section>
+
+      {/* 9b. Value justification — before pricing */}
+      <SinkOrganizerValueJustification />
 
       {/* 10. Offer selector — after value */}
       <section
