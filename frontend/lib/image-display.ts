@@ -60,6 +60,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 575,
     height: 769,
   },
+  "/images/products/magic-under-sink-organizer-stability.png": {
+    width: 574,
+    height: 807,
+  },
 };
 
 export function stripImagePath(src: string): string {

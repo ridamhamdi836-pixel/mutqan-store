@@ -402,21 +402,27 @@ export function SinkOrganizerPageClient({
                       ? config.metalStructureSectionImage
                       : i === 1
                         ? config.slidingDrawersSectionImage
-                        : undefined
+                        : i === 3
+                          ? config.stabilitySectionImage
+                          : undefined
                   }
                   alt={
                     i === 0
                       ? (config.metalStructureSectionImageAlt ?? item.title)
                       : i === 1
                         ? (config.slidingDrawersSectionImageAlt ?? item.title)
-                        : item.title
+                        : i === 3
+                          ? (config.stabilitySectionImageAlt ?? item.title)
+                          : item.title
                   }
                   aspect={
                     i === 0
                       ? config.metalStructureSectionAspect
                       : i === 1
                         ? config.slidingDrawersSectionAspect
-                        : "4/3"
+                        : i === 3
+                          ? config.stabilitySectionAspect
+                          : "4/3"
                   }
                   placeholder={item.placeholder}
                 />

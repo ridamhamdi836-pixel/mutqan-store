@@ -33,6 +33,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   metalStructureSectionImage?: string;
   metalStructureSectionImageAlt?: string;
   metalStructureSectionAspect?: string;
+  /** Optional image for "stability" proof block on the product page */
+  stabilitySectionImage?: string;
+  stabilitySectionImageAlt?: string;
+  stabilitySectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -366,6 +370,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     metalStructureSectionImageAlt:
       "منظّم متقن على طاولة المطبخ — هيكل معدني متين يتحمل زجاجات ومنظفات",
     metalStructureSectionAspect: "575/769",
+    stabilitySectionImage:
+      "/images/products/magic-under-sink-organizer-stability.png",
+    stabilitySectionImageAlt:
+      "منظّم متقن ثابت تحت المغسلة — أدراج منزلقة ومواسير في الخلف",
+    stabilitySectionAspect: "574/807",
     shortPromise: "تصميم عملي يساعدك على استغلال مساحة المغسلة بشكل أكثر ترتيبًا وراحة",
     heroAngle: "المساحة المخفية تحت المغسلة يمكن أن تكون أكثر مساحاتك ترتيبًا",
     problemStatement: "زجاجات التنظيف مكوّمة، والمواسير تحتل نصف المساحة. المنظّم السحري يحوّل هذه الفوضى إلى تخزين ذكي ومرتب.",
