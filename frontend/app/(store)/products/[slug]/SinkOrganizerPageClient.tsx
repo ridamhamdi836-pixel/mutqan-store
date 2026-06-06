@@ -53,14 +53,12 @@ export function SinkOrganizerPageClient({
 
   const cardImageSrc = getProductCardImageSrc(product.slug);
   const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
-
-  const savingsSar = useMemo(() => {
-    const b = selectedBundle;
-    if (b.compare_at_price_sar && b.compare_at_price_sar > b.price_sar) {
-      return b.compare_at_price_sar - b.price_sar;
-    }
-    return null;
-  }, [selectedBundle]);
+  const firstOfferPrice = useMemo(() => {
+    const sorted = [...product.bundles].sort(
+      (a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99),
+    );
+    return sorted[0]?.price_sar ?? minBundlePrice;
+  }, [product.bundles, minBundlePrice]);
 
   const reviewStats = useMemo(() => {
     const n = config.reviews.length;
@@ -138,35 +136,33 @@ export function SinkOrganizerPageClient({
     <div className="bg-brand-background pb-24 md:pb-6">
       {/* Sticky CTA */}
       {!isUpsellPreview && showSticky ? (
-        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-brand-border p-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
-          <div className="max-w-content mx-auto flex items-center gap-2.5">
-            <div className="relative w-10 h-10 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
-              <StoreImage
-                src={cardImageSrc}
-                alt={product.name_ar}
-                fill
-                variant="thumbnail"
-                sizes={STORE_IMAGE_SIZES.tiny}
-              />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="font-bold text-xs text-brand-espresso truncate">
-                {selectedBundle.price_sar} ر.س
-              </p>
-              {savingsSar ? (
-                <p className="text-[10px] text-brand-trust font-bold">
-                  وفّر {savingsSar} ر.س
+        <div className="fixed bottom-0 inset-x-0 z-40 bg-white border-t border-brand-border p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+          <div className="max-w-content mx-auto flex items-center gap-3">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
+                <StoreImage
+                  src={cardImageSrc}
+                  alt={product.name_ar}
+                  fill
+                  variant="thumbnail"
+                  sizes={STORE_IMAGE_SIZES.tiny}
+                />
+              </div>
+              <div className="min-w-0">
+                <p className="font-bold text-sm text-brand-espresso truncate">
+                  {product.name_ar}
                 </p>
-              ) : (
-                <p className="text-[10px] text-brand-muted">دفع عند الاستلام</p>
-              )}
+                <p className="text-xs text-brand-muted tabular-nums">
+                  ابتداءً من {firstOfferPrice} ر.س
+                </p>
+              </div>
             </div>
             <button
               type="button"
               onClick={scrollToOffers}
-              className="btn-primary shrink-0 px-4 py-2.5 text-sm font-bold whitespace-nowrap min-h-[44px]"
+              className="btn-primary shrink-0 px-4 py-3 text-sm font-bold whitespace-nowrap"
             >
-              اختر عرضك
+              اختر عرضك الآن
             </button>
           </div>
         </div>
