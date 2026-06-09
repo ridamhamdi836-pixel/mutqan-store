@@ -1,8 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { ProductPageClient } from "@/app/(store)/products/[slug]/ProductPageClient";
-import { SinkOrganizerPageClient } from "@/app/(store)/products/[slug]/SinkOrganizerPageClient";
+import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
 import { getProduct } from "@/config/catalog";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { formatSARCompact } from "@/lib/currency";
@@ -67,32 +66,17 @@ export function UpsellProductPagePreview({
             "[&_.max-w-content]:max-w-full",
           )}
         >
-          {product.slug === "sink-organizer" ? (
-            <SinkOrganizerPageClient
-              embedMode="upsell-preview"
-              product={{
-                id: catalog.id,
-                slug: catalog.slug,
-                name_ar: catalog.name_ar,
-                short_description_ar: catalog.short_description_ar,
-                category_slug: catalog.category_slug,
-                bundles: catalog.bundles,
-              }}
-            />
-          ) : (
-            <ProductPageClient
-              embedMode="upsell-preview"
-              product={{
-                id: catalog.id,
-                slug: catalog.slug,
-                name_ar: catalog.name_ar,
-                short_description_ar: catalog.short_description_ar,
-                category_slug: catalog.category_slug,
-                bundles: catalog.bundles,
-              }}
-              config={config}
-            />
-          )}
+          <CroProductPageClient
+            embedMode="upsell-preview"
+            product={{
+              id: catalog.id,
+              slug: catalog.slug,
+              name_ar: catalog.name_ar,
+              short_description_ar: catalog.short_description_ar,
+              category_slug: catalog.category_slug,
+              bundles: catalog.bundles,
+            }}
+          />
         </div>
       </div>
 

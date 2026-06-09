@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductPageClient } from "./ProductPageClient";
-import { SinkOrganizerPageClient } from "./SinkOrganizerPageClient";
+import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { getProduct, PRODUCT_SLUGS } from "@/config/catalog";
 import { getProductOgImageUrl } from "@/lib/product-image";
@@ -59,14 +58,5 @@ export default async function ProductPage({
     bundles: product.bundles,
   };
 
-  if (slug === "sink-organizer") {
-    return <SinkOrganizerPageClient product={productPayload} />;
-  }
-
-  return (
-    <ProductPageClient
-      product={productPayload}
-      config={config}
-    />
-  );
+  return <CroProductPageClient product={productPayload} />;
 }
