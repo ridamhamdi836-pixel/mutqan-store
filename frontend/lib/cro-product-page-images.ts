@@ -52,9 +52,9 @@ export function getWhyItWorksImage(
   if (slug === "smart-stackable-cabinet") {
     const slots: ImageSlot[] = [
       slot(
-        config.solutionSectionImage,
-        config.solutionSectionImageAlt,
-        config.solutionSectionAspect,
+        config.stackableDesignSectionImage,
+        config.stackableDesignSectionImageAlt,
+        config.stackableDesignSectionAspect,
       ),
       slot(
         config.noToolsAssemblySectionImage,
