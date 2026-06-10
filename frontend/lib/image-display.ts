@@ -64,6 +64,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 572,
     height: 760,
   },
+  "/images/products/smart-stackable-cabinet-durable-structure.png": {
+    width: 572,
+    height: 721,
+  },
   "/images/products/magic-under-sink-organizer-sliding-drawers.png": {
     width: 575,
     height: 714,

@@ -62,9 +62,9 @@ export function getWhyItWorksImage(
         config.noToolsAssemblySectionAspect,
       ),
       slot(
-        config.afterSectionImage,
-        config.afterSectionImageAlt,
-        config.afterSectionAspect,
+        config.durableStructureSectionImage,
+        config.durableStructureSectionImageAlt,
+        config.durableStructureSectionAspect,
       ),
       slot(
         config.elegantDesignSectionImage,

@@ -53,6 +53,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   elegantDesignSectionImage?: string;
   elegantDesignSectionImageAlt?: string;
   elegantDesignSectionAspect?: string;
+  /** Optional image for "durable structure" proof block on the product page */
+  durableStructureSectionImage?: string;
+  durableStructureSectionImageAlt?: string;
+  durableStructureSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -196,6 +200,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     elegantDesignSectionImageAlt:
       "الخزانة التراكمية في غرفة المعيشة — تصميم أنيق يليق بأي غرفة",
     elegantDesignSectionAspect: "572/760",
+    durableStructureSectionImage:
+      "/images/products/smart-stackable-cabinet-durable-structure.png",
+    durableStructureSectionImageAlt:
+      "امرأة بجانب الخزانة التراكمية في المدخل — هيكل متين مع أدراج عملية",
+    durableStructureSectionAspect: "572/721",
     afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
     afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
     afterSectionAspect: "898/1024",
