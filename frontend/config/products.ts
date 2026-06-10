@@ -49,6 +49,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   stackableDesignSectionImage?: string;
   stackableDesignSectionImageAlt?: string;
   stackableDesignSectionAspect?: string;
+  /** Optional image for "elegant design" proof block on the product page */
+  elegantDesignSectionImage?: string;
+  elegantDesignSectionImageAlt?: string;
+  elegantDesignSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -187,6 +191,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     stackableDesignSectionImageAlt:
       "امرأة ترتّب مناشف في الخزانة التراكمية بجانب المغسلة — تخزين عمودي أنيق",
     stackableDesignSectionAspect: "572/733",
+    elegantDesignSectionImage:
+      "/images/products/smart-stackable-cabinet-elegant-design.png",
+    elegantDesignSectionImageAlt:
+      "الخزانة التراكمية في غرفة المعيشة — تصميم أنيق يليق بأي غرفة",
+    elegantDesignSectionAspect: "572/760",
     afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
     afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
     afterSectionAspect: "898/1024",

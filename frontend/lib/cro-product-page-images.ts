@@ -67,9 +67,9 @@ export function getWhyItWorksImage(
         config.afterSectionAspect,
       ),
       slot(
-        config.beforeSectionImage,
-        config.beforeSectionImageAlt,
-        config.beforeSectionAspect,
+        config.elegantDesignSectionImage,
+        config.elegantDesignSectionImageAlt,
+        config.elegantDesignSectionAspect,
       ),
     ];
     return slots[index] ?? {};
