@@ -41,6 +41,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   pipeFitSectionImage?: string;
   pipeFitSectionImageAlt?: string;
   pipeFitSectionAspect?: string;
+  /** Optional image for "no-tools assembly" proof block on the product page */
+  noToolsAssemblySectionImage?: string;
+  noToolsAssemblySectionImageAlt?: string;
+  noToolsAssemblySectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -169,6 +173,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     lifestyleSectionImage: "/images/products/smart-stackable-cabinet-woman.png",
     lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
     lifestyleSectionAspect: "960/1007",
+    noToolsAssemblySectionImage:
+      "/images/products/smart-stackable-cabinet-no-tools-assembly.png",
+    noToolsAssemblySectionImageAlt:
+      "رجل يركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
+    noToolsAssemblySectionAspect: "572/796",
     afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
     afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
     afterSectionAspect: "898/1024",

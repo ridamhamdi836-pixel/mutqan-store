@@ -49,6 +49,32 @@ export function getWhyItWorksImage(
     return slots[index] ?? {};
   }
 
+  if (slug === "smart-stackable-cabinet") {
+    const slots: ImageSlot[] = [
+      slot(
+        config.solutionSectionImage,
+        config.solutionSectionImageAlt,
+        config.solutionSectionAspect,
+      ),
+      slot(
+        config.noToolsAssemblySectionImage,
+        config.noToolsAssemblySectionImageAlt,
+        config.noToolsAssemblySectionAspect,
+      ),
+      slot(
+        config.afterSectionImage,
+        config.afterSectionImageAlt,
+        config.afterSectionAspect,
+      ),
+      slot(
+        config.beforeSectionImage,
+        config.beforeSectionImageAlt,
+        config.beforeSectionAspect,
+      ),
+    ];
+    return slots[index] ?? {};
+  }
+
   const pool: ImageSlot[] = [
     slot(
       config.solutionSectionImage,

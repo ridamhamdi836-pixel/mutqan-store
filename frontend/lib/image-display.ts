@@ -52,6 +52,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 717,
     height: 1024,
   },
+  "/images/products/smart-stackable-cabinet-no-tools-assembly.png": {
+    width: 572,
+    height: 796,
+  },
   "/images/products/magic-under-sink-organizer-sliding-drawers.png": {
     width: 575,
     height: 714,
