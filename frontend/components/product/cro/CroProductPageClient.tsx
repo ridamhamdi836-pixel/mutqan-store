@@ -496,13 +496,13 @@ export function CroProductPageClient({
                     aspect={review.photoAspect ?? "3/4"}
                     placeholder="[CUSTOMER PHOTO PLACEHOLDER]"
                   />
-                ) : (
-                  <CroProductMedia
-                    placeholder="[CUSTOMER PHOTO PLACEHOLDER]"
-                    aspect="3/4"
-                  />
-                )}
-                <div className="p-2.5 md:p-3 space-y-1">
+                ) : null}
+                <div
+                  className={cn(
+                    "space-y-1",
+                    review.photo ? "p-2.5 md:p-3" : "p-3.5 md:p-4",
+                  )}
+                >
                   <div className="flex items-center gap-0.5">
                     {Array.from({ length: 5 }).map((_, si) => (
                       <Star
