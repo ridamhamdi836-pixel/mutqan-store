@@ -1,4 +1,5 @@
 import { Product } from "@/types";
+import { withImageVersion } from "@/lib/image-display";
 
 export const PRODUCTS_CONFIG: Record<string, {
   heroImageAlt: string;
@@ -170,45 +171,71 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "smart-stackable-cabinet": {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
-    heroSectionImage: "/images/products/smart-stackable-cabinet-couple-hero.png?v=3",
+    heroSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-couple-hero.png",
+      5,
+    ),
     heroSectionImageAlt: "رجل وامرأة مع الخزانة التراكمية الذكية — حل تنظيم يناسب كل البيت",
     heroSectionAspect: "884/1015",
     shortPromise: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق",
     heroAngle: "حوّل الزوايا المهملة إلى مساحة تخزين أنيقة ومنظمة",
     problemStatement: "المساحة ليست المشكلة، بل طريقة استخدامها. الخزانة التراكمية تستغل المساحة العمودية وتحوّل أي ركن إلى مخزن منظم وجميل.",
-    painSectionImage: "/images/products/smart-stackable-cabinet-chaos.png",
+    painSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-chaos.png",
+      5,
+    ),
     painSectionImageAlt: "زوجان متعبان من فوضى البيت — المشكلة التي تحلها الخزانة التراكمية",
     painSectionAspect: "1024/682",
-    solutionSectionImage: "/images/products/smart-stackable-cabinet-assembly.png",
+    solutionSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-assembly.png",
+      5,
+    ),
     solutionSectionImageAlt: "رجل يركّب الخزانة التراكمية الذكية بسهولة في البيت",
     solutionSectionAspect: "960/1023",
-    lifestyleSectionImage: "/images/products/smart-stackable-cabinet-woman.png",
+    lifestyleSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-woman.png",
+      5,
+    ),
     lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
     lifestyleSectionAspect: "960/1007",
-    noToolsAssemblySectionImage:
-      "/images/products/smart-stackable-cabinet-no-tools-assembly.png?v=4",
+    noToolsAssemblySectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-no-tools-assembly.png",
+      5,
+    ),
     noToolsAssemblySectionImageAlt:
       "امرأة تركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
     noToolsAssemblySectionAspect: "778/1024",
-    stackableDesignSectionImage:
-      "/images/products/smart-stackable-cabinet-stackable-design.png?v=4",
+    stackableDesignSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-stackable-design.png",
+      5,
+    ),
     stackableDesignSectionImageAlt:
       "امرأة بالعباءة السوداء بجانب الخزانة التراكمية في غرفة المعيشة — تصميم تراكمي عمودي",
     stackableDesignSectionAspect: "825/1024",
-    elegantDesignSectionImage:
-      "/images/products/smart-stackable-cabinet-elegant-design.png?v=4",
+    elegantDesignSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-elegant-design.png",
+      5,
+    ),
     elegantDesignSectionImageAlt:
       "الخزانة التراكمية في غرفة المعيشة والطعام — تصميم أنيق يليق بأي غرفة",
     elegantDesignSectionAspect: "903/1024",
-    durableStructureSectionImage:
-      "/images/products/smart-stackable-cabinet-durable-structure.png?v=4",
+    durableStructureSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-durable-structure.png",
+      5,
+    ),
     durableStructureSectionImageAlt:
       "امرأة بجانب الخزانة التراكمية في المدخل — هيكل متين مع أدراج عملية",
     durableStructureSectionAspect: "572/721",
-    afterSectionImage: "/images/products/smart-stackable-cabinet-laundry-sink.png",
+    afterSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-laundry-sink.png",
+      5,
+    ),
     afterSectionImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين أنيق ومرتب",
     afterSectionAspect: "898/1024",
-    beforeSectionImage: "/images/products/smart-stackable-cabinet-laundry-mess.png",
+    beforeSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-laundry-mess.png",
+      5,
+    ),
     beforeSectionImageAlt: "زاوية مغسلة مزدحمة وغير منظمة — قبل استخدام الخزانة التراكمية",
     beforeSectionAspect: "717/1024",
     benefits: [

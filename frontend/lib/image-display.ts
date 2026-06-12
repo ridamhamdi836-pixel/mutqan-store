@@ -90,6 +90,11 @@ export function stripImagePath(src: string): string {
   return src.split("?")[0];
 }
 
+/** Same asset URL on every device; bump version when replacing a file. */
+export function withImageVersion(src: string, version: number): string {
+  return `${stripImagePath(src)}?v=${version}`;
+}
+
 export function getImageIntrinsic(
   src: string,
 ): { width: number; height: number } | null {

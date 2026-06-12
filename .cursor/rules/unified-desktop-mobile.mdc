@@ -1,0 +1,23 @@
+---
+description: Product/content changes must apply identically on desktop and mobile
+alwaysApply: true
+---
+
+# Desktop + mobile parity (mutqan)
+
+Any store change (images, copy, prices, sections) must appear **the same on desktop and phone**.
+
+## Product page images
+
+1. **One source of truth** — set images in `frontend/config/products.ts` only. Never use `md:hidden`, `hidden md:`, `useMediaQuery`, or `<picture>` with different assets per breakpoint for PDP section images.
+2. **Same component everywhere** — `CroProductMedia` + `StoreImageFrame` render all devices from the same `src`.
+3. **When replacing an image file:**
+   - Update `frontend/public/images/products/...`
+   - Add/update entry in `STORE_IMAGE_INTRINSIC` (`frontend/lib/image-display.ts`)
+   - Bump cache with `withImageVersion(path, N)` in `products.ts`
+   - Never strip `?v=` from the displayed URL (`StoreImage` must keep query string on `src`)
+4. **Do not change page layout** to “fix” image parity (no forcing single-column desktop). Fix the image URL/rendering only.
+
+## After push
+
+Redeploy frontend on EasyPanel **without cache** so desktop and mobile both get the new build.
