@@ -72,12 +72,17 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "smart-stackable-cabinet.png",
     storeCardImageFile: "smart-stackable-cabinet-wall.png",
     bundles: [
-      bundle("cabinet-1", "قطعة واحدة - لمساحة واحدة", 1, 349, { sort_order: 1 }),
-      bundle("cabinet-2", "قطعتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", 2, 599, {
+      bundle("cabinet-1", "خزانة - لمساحة واحدة", 1, 349, { sort_order: 1 }),
+      bundle("cabinet-2", "خزانتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", 2, 599, {
         compare_at_price_sar: 698,
         savings_label_ar: "وفر 99 ريال",
         is_default: true,
         sort_order: 2,
+      }),
+      bundle("cabinet-3", "3 خزائن - أفضل قيمة للبيت | وفر 298 ريال", 3, 749, {
+        compare_at_price_sar: 1047,
+        savings_label_ar: "وفر 298 ريال",
+        sort_order: 3,
       }),
     ],
     upsell: {

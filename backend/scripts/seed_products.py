@@ -32,8 +32,9 @@ PRODUCTS = [
         "positioning": "Modern stackable storage system designed to maximize space and organization elegantly.",
         "category_slug": "home-organization",
         "bundles": [
-            {"label_ar": "قطعة واحدة - لمساحة واحدة", "quantity": 1, "price_sar": 349, "is_default": False, "sort_order": 1},
-            {"label_ar": "قطعتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", "quantity": 2, "price_sar": 599, "compare_at_price_sar": 698, "savings_label_ar": "وفر 99 ريال", "is_default": True, "sort_order": 2},
+            {"label_ar": "خزانة - لمساحة واحدة", "quantity": 1, "price_sar": 349, "is_default": False, "sort_order": 1},
+            {"label_ar": "خزانتين - لترتيب أوضح ومساحة أكبر | وفر 99 ريال", "quantity": 2, "price_sar": 599, "compare_at_price_sar": 698, "savings_label_ar": "وفر 99 ريال", "is_default": True, "sort_order": 2},
+            {"label_ar": "3 خزائن - أفضل قيمة للبيت | وفر 298 ريال", "quantity": 3, "price_sar": 749, "compare_at_price_sar": 1047, "savings_label_ar": "وفر 298 ريال", "is_default": False, "sort_order": 3},
         ],
     },
     {
