@@ -57,8 +57,8 @@ export const STORE_IMAGE_INTRINSIC: Record<
     height: 1024,
   },
   "/images/products/smart-stackable-cabinet-stackable-design.png": {
-    width: 572,
-    height: 733,
+    width: 825,
+    height: 1024,
   },
   "/images/products/smart-stackable-cabinet-elegant-design.png": {
     width: 572,

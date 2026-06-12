@@ -193,8 +193,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     stackableDesignSectionImage:
       "/images/products/smart-stackable-cabinet-stackable-design.png",
     stackableDesignSectionImageAlt:
-      "امرأة ترتّب مناشف في الخزانة التراكمية بجانب المغسلة — تخزين عمودي أنيق",
-    stackableDesignSectionAspect: "572/733",
+      "امرأة بجانب الخزانة التراكمية في غرفة المعيشة — تصميم تراكمي عمودي",
+    stackableDesignSectionAspect: "825/1024",
     elegantDesignSectionImage:
       "/images/products/smart-stackable-cabinet-elegant-design.png",
     elegantDesignSectionImageAlt:
