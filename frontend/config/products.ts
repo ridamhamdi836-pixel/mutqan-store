@@ -198,8 +198,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     elegantDesignSectionImage:
       "/images/products/smart-stackable-cabinet-elegant-design.png",
     elegantDesignSectionImageAlt:
-      "الخزانة التراكمية في غرفة المعيشة — تصميم أنيق يليق بأي غرفة",
-    elegantDesignSectionAspect: "572/760",
+      "الخزانة التراكمية في غرفة المعيشة والطعام — تصميم أنيق يليق بأي غرفة",
+    elegantDesignSectionAspect: "903/1024",
     durableStructureSectionImage:
       "/images/products/smart-stackable-cabinet-durable-structure.png",
     durableStructureSectionImageAlt:
