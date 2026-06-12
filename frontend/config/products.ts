@@ -221,11 +221,11 @@ export const PRODUCTS_CONFIG: Record<string, {
     elegantDesignSectionAspect: "903/1024",
     durableStructureSectionImage: withImageVersion(
       "/images/products/smart-stackable-cabinet-durable-structure.png",
-      5,
+      6,
     ),
     durableStructureSectionImageAlt:
-      "امرأة بجانب الخزانة التراكمية في المدخل — هيكل متين مع أدراج عملية",
-    durableStructureSectionAspect: "572/721",
+      "الخزانة التراكمية في غرفة الغسيل — هيكل متين مع أدراج عملية",
+    durableStructureSectionAspect: "637/1024",
     afterSectionImage: withImageVersion(
       "/images/products/smart-stackable-cabinet-laundry-sink.png",
       5,
