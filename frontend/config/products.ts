@@ -191,9 +191,9 @@ export const PRODUCTS_CONFIG: Record<string, {
       "امرأة تركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
     noToolsAssemblySectionAspect: "778/1024",
     stackableDesignSectionImage:
-      "/images/products/smart-stackable-cabinet-stackable-design.png?v=2",
+      "/images/products/smart-stackable-cabinet-stackable-design.png?v=3",
     stackableDesignSectionImageAlt:
-      "امرأة بجانب الخزانة التراكمية في غرفة المعيشة — تصميم تراكمي عمودي",
+      "امرأة بالعباءة السوداء بجانب الخزانة التراكمية في غرفة المعيشة — تصميم تراكمي عمودي",
     stackableDesignSectionAspect: "825/1024",
     elegantDesignSectionImage:
       "/images/products/smart-stackable-cabinet-elegant-design.png?v=2",
