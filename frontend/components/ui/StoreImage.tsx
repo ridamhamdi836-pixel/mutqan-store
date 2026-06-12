@@ -155,13 +155,10 @@ export function StoreImageFrame({
         <StoreImage
           src={src}
           alt={alt}
-          width={intrinsic.width}
-          height={intrinsic.height}
           variant={variant}
           priority={priority}
           sizes={sizes}
-          fit="contain"
-          className={cn("w-full h-auto max-w-full", imageClassName)}
+          className={cn("w-full h-auto max-w-full block", imageClassName)}
         />
       </div>
     );
