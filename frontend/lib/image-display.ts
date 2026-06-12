@@ -9,13 +9,9 @@ export const STORE_IMAGE_CONTAIN_CLASS =
 export const STORE_IMAGE_COVER_CLASS =
   "object-cover object-center w-full h-full" as const;
 
-/** Matches typical phone content width — same visual on desktop */
-export const PRODUCT_SECTION_IMAGE_FRAME_CLASS =
-  "w-full max-w-md mx-auto" as const;
-
 export const STORE_IMAGE_SIZES = {
   hero: "100vw",
-  section: "(max-width: 768px) 100vw, 448px",
+  section: "100vw",
   card: "(max-width: 1280px) 100vw, 1200px",
   thumbnail: "480px",
   tiny: "240px",

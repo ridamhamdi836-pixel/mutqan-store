@@ -169,18 +169,8 @@ export function CroProductPageClient({
       {/* 1. Hero — outcome, no price */}
       <section className="page-x pt-3 pb-5 md:pt-5 md:pb-8">
         <div className="max-w-content mx-auto">
-          <div className="grid grid-cols-1 gap-4 md:gap-6 max-w-md mx-auto">
-            <div>
-              <CroProductMedia
-                src={config.heroSectionImage}
-                alt={config.heroSectionImageAlt}
-                aspect={config.heroSectionAspect}
-                placeholder="[HERO BEFORE/AFTER PLACEHOLDER]"
-                priority
-              />
-            </div>
-
-            <div className="space-y-3 md:space-y-4">
+          <div className="grid md:grid-cols-2 gap-4 md:gap-10 items-center">
+            <div className="order-2 md:order-1 space-y-3 md:space-y-4">
               <div className="flex items-center gap-2 flex-wrap">
                 <div className="flex items-center" aria-hidden>
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -233,6 +223,16 @@ export function CroProductPageClient({
                 </button>
               ) : null}
             </div>
+
+            <div className="order-1 md:order-2">
+              <CroProductMedia
+                src={config.heroSectionImage}
+                alt={config.heroSectionImageAlt}
+                aspect={config.heroSectionAspect}
+                placeholder="[HERO BEFORE/AFTER PLACEHOLDER]"
+                priority
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -262,7 +262,7 @@ export function CroProductPageClient({
             </h2>
             <p className="text-sm text-brand-muted mt-1">{PAGE.beforeAfter.subtitle}</p>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:gap-5 max-w-md mx-auto">
+          <div className="grid sm:grid-cols-2 gap-3 md:gap-6 max-w-4xl mx-auto">
             <div className="card overflow-hidden border border-brand-border">
               <CroProductMedia
                 src={config.beforeSectionImage}
@@ -302,57 +302,55 @@ export function CroProductPageClient({
 
       {/* 4. Problem */}
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-content mx-auto">
-          <div className="grid grid-cols-1 gap-4 md:gap-6 max-w-md mx-auto">
-            <CroProductMedia
-              src={config.painSectionImage}
-              alt={config.painSectionImageAlt}
-              aspect={config.painSectionAspect}
-              placeholder="[PROBLEM UNDER-SINK PLACEHOLDER]"
-            />
-            <div className="space-y-2 text-start">
-              <p className="text-xs font-bold text-brand-bronze uppercase tracking-wide">
-                المشكلة
-              </p>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
-                {PAGE.problem.title}
-              </h2>
-              <p className="text-sm md:text-base text-brand-muted font-medium">
-                {PAGE.problem.copy}
-              </p>
-            </div>
+        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-4 md:gap-8 items-center">
+          <CroProductMedia
+            src={config.painSectionImage}
+            alt={config.painSectionImageAlt}
+            aspect={config.painSectionAspect}
+            placeholder="[PROBLEM UNDER-SINK PLACEHOLDER]"
+          />
+          <div className="space-y-2 text-start">
+            <p className="text-xs font-bold text-brand-bronze uppercase tracking-wide">
+              المشكلة
+            </p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
+              {PAGE.problem.title}
+            </h2>
+            <p className="text-sm md:text-base text-brand-muted font-medium">
+              {PAGE.problem.copy}
+            </p>
           </div>
         </div>
       </section>
 
       {/* 5. Solution */}
       <section className="cv-section product-section-pad page-x bg-white">
-        <div className="max-w-content mx-auto">
-          <div className="grid grid-cols-1 gap-4 md:gap-6 max-w-md mx-auto">
+        <div className="max-w-content mx-auto grid md:grid-cols-2 gap-4 md:gap-8 items-center">
+          <div className="space-y-2 text-start md:order-2">
+            <p className="text-xs font-bold text-brand-trust uppercase tracking-wide">
+              الحل
+            </p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
+              {PAGE.solution.title}
+            </h2>
+            <p className="text-sm md:text-base text-brand-muted font-medium">
+              {PAGE.solution.copy}
+            </p>
+          </div>
+          <div className="md:order-1">
             <CroProductMedia
               src={config.solutionSectionImage}
               alt={config.solutionSectionImageAlt}
               aspect={config.solutionSectionAspect}
               placeholder="[SOLUTION PLACEHOLDER]"
             />
-            <div className="space-y-2 text-start">
-              <p className="text-xs font-bold text-brand-trust uppercase tracking-wide">
-                الحل
-              </p>
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
-                {PAGE.solution.title}
-              </h2>
-              <p className="text-sm md:text-base text-brand-muted font-medium">
-                {PAGE.solution.copy}
-              </p>
-            </div>
           </div>
         </div>
       </section>
 
       {/* 6. Pipe compatibility */}
       <section className="cv-section product-section-pad page-x bg-brand-surface">
-        <div className="max-w-md mx-auto space-y-3 md:space-y-4 text-center">
+        <div className="max-w-content mx-auto max-w-3xl space-y-3 md:space-y-4 text-center">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
             {PAGE.highlight.title}
           </h2>
@@ -394,7 +392,7 @@ export function CroProductPageClient({
           <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
             {PAGE.whyItWorks.title}
           </h2>
-          <div className="grid grid-cols-1 gap-4 md:gap-5 max-w-md mx-auto">
+          <div className="grid sm:grid-cols-2 gap-4 md:gap-5 max-w-4xl mx-auto">
             {PAGE.whyItWorks.items.map((item, i) => {
               const proof = getWhyItWorksImage(product.slug, i, config);
               return (
@@ -485,7 +483,7 @@ export function CroProductPageClient({
             </h2>
             <p className="text-sm text-brand-muted mt-1">{PAGE.reviews.subtitle}</p>
           </div>
-          <div className="columns-2 gap-3 md:gap-4 space-y-3 md:space-y-4">
+          <div className="columns-2 lg:columns-3 gap-3 md:gap-4 space-y-3 md:space-y-4">
             {config.reviews.map((review, i) => (
               <article
                 key={`${review.name}-${i}`}

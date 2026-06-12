@@ -2,10 +2,7 @@
 
 import { StoreImageFrame } from "@/components/ui/StoreImage";
 import { cn } from "@/lib/utils";
-import {
-  PRODUCT_SECTION_IMAGE_FRAME_CLASS,
-  STORE_IMAGE_SIZES,
-} from "@/lib/image-display";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 
 type MediaProps = {
   src?: string;
@@ -34,7 +31,6 @@ export function CroProductMedia({
         aspect={aspect}
         className={cn(
           "rounded-2xl overflow-hidden shadow-md border border-brand-border",
-          PRODUCT_SECTION_IMAGE_FRAME_CLASS,
           className,
         )}
         variant={priority ? "hero" : "default"}
