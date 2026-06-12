@@ -53,8 +53,8 @@ export const STORE_IMAGE_INTRINSIC: Record<
     height: 1024,
   },
   "/images/products/smart-stackable-cabinet-no-tools-assembly.png": {
-    width: 572,
-    height: 796,
+    width: 778,
+    height: 1024,
   },
   "/images/products/smart-stackable-cabinet-stackable-design.png": {
     width: 572,

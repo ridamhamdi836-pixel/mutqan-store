@@ -188,8 +188,8 @@ export const PRODUCTS_CONFIG: Record<string, {
     noToolsAssemblySectionImage:
       "/images/products/smart-stackable-cabinet-no-tools-assembly.png",
     noToolsAssemblySectionImageAlt:
-      "رجل يركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
-    noToolsAssemblySectionAspect: "572/796",
+      "امرأة تركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
+    noToolsAssemblySectionAspect: "778/1024",
     stackableDesignSectionImage:
       "/images/products/smart-stackable-cabinet-stackable-design.png",
     stackableDesignSectionImageAlt:
