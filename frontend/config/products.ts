@@ -186,22 +186,22 @@ export const PRODUCTS_CONFIG: Record<string, {
     lifestyleSectionImageAlt: "امرأة بجانب الخزانة التراكمية الذكية — تناسب كل غرفة في البيت",
     lifestyleSectionAspect: "960/1007",
     noToolsAssemblySectionImage:
-      "/images/products/smart-stackable-cabinet-no-tools-assembly.png?v=2",
+      "/images/products/smart-stackable-cabinet-no-tools-assembly.png?v=4",
     noToolsAssemblySectionImageAlt:
       "امرأة تركّب الخزانة التراكمية الذكية — تركيب بسيط بدون أدوات",
     noToolsAssemblySectionAspect: "778/1024",
     stackableDesignSectionImage:
-      "/images/products/smart-stackable-cabinet-stackable-design.png?v=3",
+      "/images/products/smart-stackable-cabinet-stackable-design.png?v=4",
     stackableDesignSectionImageAlt:
       "امرأة بالعباءة السوداء بجانب الخزانة التراكمية في غرفة المعيشة — تصميم تراكمي عمودي",
     stackableDesignSectionAspect: "825/1024",
     elegantDesignSectionImage:
-      "/images/products/smart-stackable-cabinet-elegant-design.png?v=2",
+      "/images/products/smart-stackable-cabinet-elegant-design.png?v=4",
     elegantDesignSectionImageAlt:
       "الخزانة التراكمية في غرفة المعيشة والطعام — تصميم أنيق يليق بأي غرفة",
     elegantDesignSectionAspect: "903/1024",
     durableStructureSectionImage:
-      "/images/products/smart-stackable-cabinet-durable-structure.png?v=2",
+      "/images/products/smart-stackable-cabinet-durable-structure.png?v=4",
     durableStructureSectionImageAlt:
       "امرأة بجانب الخزانة التراكمية في المدخل — هيكل متين مع أدراج عملية",
     durableStructureSectionAspect: "572/721",

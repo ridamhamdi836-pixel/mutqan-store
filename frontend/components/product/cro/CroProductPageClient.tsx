@@ -392,11 +392,11 @@ export function CroProductPageClient({
           <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
             {PAGE.whyItWorks.title}
           </h2>
-          <div className="grid sm:grid-cols-2 gap-4 md:gap-5 max-w-4xl mx-auto">
+          <div className="grid sm:grid-cols-2 gap-4 md:gap-5 max-w-4xl mx-auto items-start">
             {PAGE.whyItWorks.items.map((item, i) => {
               const proof = getWhyItWorksImage(product.slug, i, config);
               return (
-                <div key={item.title} className="space-y-2">
+                <div key={item.title} className="space-y-2 min-w-0">
                   <CroProductMedia
                     src={proof.src}
                     alt={proof.alt ?? item.title}

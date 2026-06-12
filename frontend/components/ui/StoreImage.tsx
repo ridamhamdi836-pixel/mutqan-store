@@ -43,13 +43,10 @@ export function StoreImage({
   height,
   ...props
 }: StoreImageProps) {
-  const normalizedSrc =
-    typeof src === "string" ? stripImageQuery(src) : src;
+  const displaySrc = src;
+  const lookupSrc = typeof src === "string" ? stripImagePath(src) : null;
 
-  const intrinsic =
-    typeof normalizedSrc === "string"
-      ? getImageIntrinsic(normalizedSrc)
-      : null;
+  const intrinsic = lookupSrc ? getImageIntrinsic(lookupSrc) : null;
 
   const useFill = fill === true;
   const useNaturalIntrinsic =
@@ -73,11 +70,11 @@ export function StoreImage({
   );
 
   /** Native img avoids Next/Image compositor bugs on some Android GPUs (Honor) */
-  if (useNaturalIntrinsic && typeof normalizedSrc === "string") {
+  if (useNaturalIntrinsic && typeof displaySrc === "string") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={normalizedSrc}
+        src={displaySrc}
         alt={alt}
         width={intrinsic!.width}
         height={intrinsic!.height}
@@ -88,11 +85,11 @@ export function StoreImage({
     );
   }
 
-  if (useSizedNative && typeof normalizedSrc === "string") {
+  if (useSizedNative && typeof displaySrc === "string") {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={normalizedSrc}
+        src={displaySrc}
         alt={alt}
         width={width}
         height={height}
@@ -105,7 +102,7 @@ export function StoreImage({
 
   return (
     <Image
-      src={normalizedSrc}
+      src={displaySrc}
       alt={alt}
       quality={resolvedQuality}
       unoptimized={unoptimizedProp ?? true}
@@ -175,7 +172,7 @@ export function StoreImageFrame({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={stripImagePath(src)}
+        src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}
         decoding={priority ? "sync" : "async"}
