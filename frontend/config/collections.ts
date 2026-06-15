@@ -3,7 +3,7 @@ export const COLLECTIONS = [
     slug: "home-organization",
     nameAr: "تنظيم المنزل",
     descriptionAr: "حلول عملية وأنيقة تحوّل مساحاتك من الفوضى إلى الترتيب بكل سهولة.",
-    productSlugs: ["smart-stackable-cabinet", "pull-out-cabinet-drawer", "sink-organizer"],
+    productSlugs: ["storage", "pull-out-cabinet-drawer", "sink-organizer"],
   },
   {
     slug: "modern-kitchen",

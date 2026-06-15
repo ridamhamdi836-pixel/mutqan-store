@@ -1,4 +1,4 @@
-import { CATALOG_BY_SLUG } from "@/config/catalog";
+import { CATALOG_BY_SLUG, resolveProductSlug } from "@/config/catalog";
 import { PRODUCTS_CONFIG } from "@/config/products";
 
 /** Bump when replacing product image (cache bust) */
@@ -8,9 +8,9 @@ const IMAGE_VERSION: Record<string, number> = {
   "sink-organizer:card": 1,
   "powerful-cordless-vacuum:main": 1,
   "powerful-cordless-vacuum:card": 1,
-  "smart-stackable-cabinet": 3,
-  "smart-stackable-cabinet:card": 1,
-  "smart-stackable-cabinet:main": 3,
+  storage: 3,
+  "storage:card": 1,
+  "storage:main": 3,
   "pull-out-cabinet-drawer:card": 1,
   "pull-out-cabinet-drawer:main": 1,
   "smart-table-warmer:card": 1,
@@ -24,7 +24,7 @@ const IMAGE_VERSION: Record<string, number> = {
 type ImageVariant = "card" | "main";
 
 function heroImageFile(slug: string): string | undefined {
-  const path = PRODUCTS_CONFIG[slug]?.heroSectionImage;
+  const path = PRODUCTS_CONFIG[resolveProductSlug(slug)]?.heroSectionImage;
   if (!path) return undefined;
   const withoutQuery = path.split("?")[0];
   const name = withoutQuery.split("/").pop();
@@ -44,11 +44,12 @@ function staticProductImage(filename: string): string {
 
 /** Prefer static /images/ so Next.js can serve WebP/AVIF at responsive widths */
 export function getProductImageSrc(slug: string): string {
-  const product = CATALOG_BY_SLUG[slug];
+  const resolved = resolveProductSlug(slug);
+  const product = CATALOG_BY_SLUG[resolved];
   if (product?.imageFile) {
     return staticProductImage(product.imageFile);
   }
-  return `/api/product-image/${slug}${imageQuery(slug)}`;
+  return `/api/product-image/${resolved}${imageQuery(resolved)}`;
 }
 
 /** Cart, checkout, and sticky bar — product page hero when configured */
@@ -60,7 +61,8 @@ export function getProductMainImageSrc(slug: string): string {
 
 /** Store listing cards — may use a different photo than the product page */
 export function getProductCardImageSrc(slug: string): string {
-  const product = CATALOG_BY_SLUG[slug];
+  const resolved = resolveProductSlug(slug);
+  const product = CATALOG_BY_SLUG[resolved];
   if (product?.storeCardImageFile) {
     return staticProductImage(product.storeCardImageFile);
   }
@@ -74,6 +76,7 @@ export function getProductOgImageUrl(slug: string, siteUrl?: string): string {
 
 /** Legacy path for static files (rewritten to API) */
 export function getLegacyStaticImagePath(slug: string): string {
-  const file = CATALOG_BY_SLUG[slug]?.imageFile ?? `${slug}.jpg`;
+  const resolved = resolveProductSlug(slug);
+  const file = CATALOG_BY_SLUG[resolved]?.imageFile ?? `${resolved}.jpg`;
   return `/images/products/${file}`;
 }

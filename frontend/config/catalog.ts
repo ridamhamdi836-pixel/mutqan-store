@@ -63,7 +63,7 @@ export const CATALOG: CatalogProduct[] = [
   },
   {
     id: "p2",
-    slug: "smart-stackable-cabinet",
+    slug: "storage",
     name_ar: "الخزانة التراكمية الذكية",
     name_en: "Smart Stackable Cabinet",
     short_description_ar: "نظام تخزين فاخر يمنحك مساحة إضافية وترتيبًا أنيقًا خلال دقائق.",
@@ -250,6 +250,15 @@ export const CATALOG_BY_SLUG: Record<string, CatalogProduct> = Object.fromEntrie
 
 export const PRODUCT_SLUGS = CATALOG.map((p) => p.slug);
 
+/** Legacy URLs → canonical slug */
+const PRODUCT_SLUG_ALIASES: Record<string, string> = {
+  "smart-stackable-cabinet": "storage",
+};
+
+export function resolveProductSlug(slug: string): string {
+  return PRODUCT_SLUG_ALIASES[slug] ?? slug;
+}
+
 export const FEATURED_SLUGS = [
   "pull-out-cabinet-drawer",
   "smart-table-warmer",
@@ -258,7 +267,7 @@ export const FEATURED_SLUGS = [
 ] as const;
 
 export function getProduct(slug: string): CatalogProduct | undefined {
-  return CATALOG_BY_SLUG[slug];
+  return CATALOG_BY_SLUG[resolveProductSlug(slug)];
 }
 
 /** First bundle by sort_order — same «العرض الأول» shown on the product page. */
@@ -286,9 +295,11 @@ export function toProduct(p: CatalogProduct): Product {
 }
 
 export function getCatalogSku(slug: string): string {
-  return CATALOG_BY_SLUG[slug]?.sku ?? `MTQ-${slug.slice(0, 6).toUpperCase()}`;
+  const resolved = resolveProductSlug(slug);
+  return CATALOG_BY_SLUG[resolved]?.sku ?? `MTQ-${resolved.slice(0, 6).toUpperCase()}`;
 }
 
 export function getCatalogNameAr(slug: string): string {
-  return CATALOG_BY_SLUG[slug]?.name_ar ?? slug;
+  const resolved = resolveProductSlug(slug);
+  return CATALOG_BY_SLUG[resolved]?.name_ar ?? resolved;
 }

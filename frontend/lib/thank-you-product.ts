@@ -1,4 +1,4 @@
-import { CATALOG, getProduct } from "@/config/catalog";
+import { CATALOG, getProduct, resolveProductSlug } from "@/config/catalog";
 import { THANK_YOU_BESTSELLER_SLUGS } from "@/config/thank-you";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { getProductCardImageSrc } from "@/lib/product-image";
@@ -30,7 +30,7 @@ export function getUpsellProductDetail(slug: string): UpsellProductDetail | null
   const catalog = getProduct(slug);
   if (!catalog?.upsell) return null;
 
-  const page = PRODUCTS_CONFIG[slug];
+  const page = PRODUCTS_CONFIG[resolveProductSlug(slug)];
   const u = catalog.upsell;
 
   return {

@@ -24,7 +24,7 @@ PRODUCTS = [
         ],
     },
     {
-        "slug": "smart-stackable-cabinet",
+        "slug": "storage",
         "sku": "MTQ-CAB-002",
         "name_ar": "الخزانة التراكمية الذكية",
         "name_en": "Smart Stackable Cabinet",

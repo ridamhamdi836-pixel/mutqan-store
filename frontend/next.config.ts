@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         destination: "/products/sink-organizer",
         permanent: true,
       },
+      {
+        source: "/products/smart-stackable-cabinet",
+        destination: "/products/storage",
+        permanent: true,
+      },
     ];
   },
   images: {

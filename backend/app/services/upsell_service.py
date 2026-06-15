@@ -10,7 +10,7 @@ UPSELL_MATRIX: dict[str, dict] = {
         "offered_price_sar": 149,
         "offer_id": "faucet-filter-after-vacuum",
     },
-    "smart-stackable-cabinet": {
+    "storage": {
         "product_slug": "pull-out-cabinet-drawer",
         "offered_price_sar": 269,
         "offer_id": "pull-out-drawer-after-cabinet",

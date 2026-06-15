@@ -49,7 +49,7 @@ export function getWhyItWorksImage(
     return slots[index] ?? {};
   }
 
-  if (slug === "smart-stackable-cabinet") {
+  if (slug === "storage") {
     const slots: ImageSlot[] = [
       slot(
         config.stackableDesignSectionImage,

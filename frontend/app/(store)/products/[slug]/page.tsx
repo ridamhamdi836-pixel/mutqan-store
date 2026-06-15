@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
 import { PRODUCTS_CONFIG } from "@/config/products";
-import { getProduct, PRODUCT_SLUGS } from "@/config/catalog";
+import { getProduct, PRODUCT_SLUGS, resolveProductSlug } from "@/config/catalog";
 import { getProductOgImageUrl } from "@/lib/product-image";
 
 export async function generateStaticParams() {
@@ -16,7 +16,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const product = getProduct(slug);
-  const config = PRODUCTS_CONFIG[slug];
+  const config = PRODUCTS_CONFIG[resolveProductSlug(slug)];
 
   if (!product || !config) return { title: "منتج | متقن" };
 
@@ -45,7 +45,7 @@ export default async function ProductPage({
 }) {
   const { slug } = await params;
   const product = getProduct(slug);
-  const config = PRODUCTS_CONFIG[slug];
+  const config = PRODUCTS_CONFIG[resolveProductSlug(slug)];
 
   if (!product || !config) notFound();
 

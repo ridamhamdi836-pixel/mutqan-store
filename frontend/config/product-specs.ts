@@ -11,7 +11,7 @@ export const PRODUCT_SPECS: Record<string, ProductSpecRow[]> = {
     { label: "الملحقات", value: "فوهات متعددة للأركان والمقاعد" },
     { label: "الضمان", value: "30 يوماً استرجاع أو استبدال" },
   ],
-  "smart-stackable-cabinet": [
+  "storage": [
     { label: "التصميم", value: "خزانة تراكمية — تستغل المساحة العمودية" },
     { label: "التركيب", value: "بدون حفر — تجميع بسيط في المنزل" },
     { label: "الاستخدام", value: "مطبخ، غسيل، ركن تخزين" },

@@ -169,7 +169,7 @@ export const PRODUCTS_CONFIG: Record<string, {
     seoTitle: "المكنسة اللاسلكية القوية | متقن",
     seoDescription: "تنظيف سريع وفعّال يمنح منزلك وسيارتك مظهرًا أنظف خلال دقائق. اطلب الآن من متقن مع الدفع عند الاستلام والتوصيل داخل السعودية.",
   },
-  "smart-stackable-cabinet": {
+  "storage": {
     heroImageAlt: "الخزانة التراكمية الذكية بجانب المغسلة — تخزين منظم للمنزل",
     heroSectionImage: withImageVersion(
       "/images/products/smart-stackable-cabinet-couple-hero.png",
@@ -340,7 +340,7 @@ export const PRODUCTS_CONFIG: Record<string, {
       "ضع الدرج على القاعدة المخصصة",
       "اسحب ببساطة للوصول لأغراضك",
     ],
-    crossSellSlugs: ["sink-organizer", "smart-stackable-cabinet"],
+    crossSellSlugs: ["sink-organizer", "storage"],
     reviews: [
       {
         name: "نورة العنزي",
