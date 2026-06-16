@@ -432,6 +432,38 @@ export function CroProductPageClient({
         </div>
       </section>
 
+      {/* 9a. Dimensions — before pricing, when configured */}
+      {PAGE.dimensionsSection && config.dimensionsSectionImage ? (
+        <section className="cv-section product-section-pad page-x bg-brand-surface">
+          <div className="max-w-content mx-auto max-w-3xl space-y-4 md:space-y-5">
+            <div className="text-center space-y-2">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
+                {PAGE.dimensionsSection.title}
+              </h2>
+              <p className="text-sm text-brand-muted font-medium max-w-xl mx-auto">
+                {PAGE.dimensionsSection.subtitle}
+              </p>
+            </div>
+            <CroProductMedia
+              src={config.dimensionsSectionImage}
+              alt={config.dimensionsSectionImageAlt}
+              aspect={config.dimensionsSectionAspect ?? "3/2"}
+              placeholder="[DIMENSIONS DIAGRAM PLACEHOLDER]"
+            />
+            <ul className="grid sm:grid-cols-3 gap-2 md:gap-3">
+              {PAGE.dimensionsSection.bullets.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-xl border border-brand-border/60 bg-white px-3 py-2.5 text-center text-xs sm:text-sm font-bold text-brand-espresso leading-snug"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
       {/* 9b. Value justification — before pricing */}
       <CroProductValueJustification section={PAGE.valueJustification} />
 

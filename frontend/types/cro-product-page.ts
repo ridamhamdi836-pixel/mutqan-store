@@ -57,6 +57,12 @@ export type CroProductPageConfig = {
     title: string;
     items: string[];
   };
+  /** Optional product dimensions block (image + copy) — storage cabinet only */
+  dimensionsSection?: {
+    title: string;
+    subtitle: string;
+    bullets: string[];
+  };
   valueJustification: {
     eyebrow: string;
     title: string;

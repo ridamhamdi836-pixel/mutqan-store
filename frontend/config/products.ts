@@ -62,6 +62,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
   beforeSectionAspect?: string;
+  /** Optional dimensions diagram on the product page */
+  dimensionsSectionImage?: string;
+  dimensionsSectionImageAlt?: string;
+  dimensionsSectionAspect?: string;
   benefits: string[];
   beforeLabel: string;
   afterLabel: string;
@@ -238,6 +242,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     ),
     beforeSectionImageAlt: "زاوية مغسلة مزدحمة وغير منظمة — قبل استخدام الخزانة التراكمية",
     beforeSectionAspect: "717/1024",
+    dimensionsSectionImage: withImageVersion(
+      "/images/products/smart-stackable-cabinet-dimensions.png",
+      1,
+    ),
+    dimensionsSectionImageAlt:
+      "مخطط أبعاد الخزانة التراكمية — عرض 70 سم وعمق 37 سم وارتفاع 33 سم لكل طبقة",
+    dimensionsSectionAspect: "1024/682",
     benefits: [
       "تركيب سريع بدون أدوات",
       "تراكمية وقابلة للتوسع",

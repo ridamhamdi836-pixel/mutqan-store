@@ -243,6 +243,16 @@ export const smartStackableCabinetCroPage: CroProductPageConfig = {
       "ضمان 30 يوم",
     ],
   },
+  dimensionsSection: {
+    title: "أبعاد الخزانة بالسنتيمتر",
+    subtitle:
+      "تأكد أن المساحة عندك تناسب الخزانة قبل الطلب — كل طبقة مستقلة وقابلة للتراكم",
+    bullets: [
+      "عرض 70 سم · عمق 37 سم",
+      "ارتفاع كل طبقة 33 سم",
+      "حتى 195 سم ارتفاعاً كاملاً عند تركيب 5 طبقات",
+    ],
+  },
   valueJustification: {
     eyebrow: "قبل أن ترى السعر",
     title: "لماذا يعتبره العملاء استثماراً وليس مجرد خزانة؟",
