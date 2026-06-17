@@ -470,9 +470,9 @@ export function CroProductPageClient({
       {/* 10. Offer selector — after value */}
       <section
         ref={offerRef}
-        className="cv-section product-section-pad page-x bg-brand-surface border-y border-brand-border/40"
+        className="cv-section product-section-pad page-x bg-white border-y border-brand-border/30"
       >
-        <div className="max-w-content mx-auto max-w-lg space-y-4">
+        <div className="mx-auto max-w-2xl space-y-5">
           <div className="text-center">
             <h2
               id={OFFER_HEADING_ID}
@@ -487,6 +487,7 @@ export function CroProductPageClient({
             bundles={product.bundles}
             selectedId={selectedBundle.id}
             onSelect={setSelectedBundle}
+            productSlug={product.slug}
           />
 
           {!isUpsellPreview ? (
@@ -494,7 +495,7 @@ export function CroProductPageClient({
               <button
                 type="button"
                 onClick={handlePlaceOrder}
-                className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-[#1B4DDB]/20"
+                className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
               >
                 اطلب الآن · {selectedBundle.price_sar} ر.س
               </button>

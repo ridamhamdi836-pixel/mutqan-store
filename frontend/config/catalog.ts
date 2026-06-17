@@ -253,9 +253,18 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "beauty-vanity-cabinet.png",
     storeCardImageFile: "beauty-vanity-cabinet.png",
     bundles: [
-      bundle("beauty-cabinet-1", "قطعة واحدة", 1, 199, { is_default: true, sort_order: 1 }),
+      bundle("beauty-cabinet-1", "العرض الرئيسي - الأكثر طلباً", 1, 229, {
+        compare_at_price_sar: 299,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("beauty-cabinet-2", "قطعتان - مثالية لك ولشخص تحبينه", 2, 349, {
+        compare_at_price_sar: 598,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
     ],
-    crossSell: { shortDesc: "تنظيم فاخر لمستحضراتك", singleUnitPriceSar: 199 },
+    crossSell: { shortDesc: "تنظيم فاخر لمستحضراتك", singleUnitPriceSar: 229 },
   },
   {
     id: "p9",
@@ -268,9 +277,18 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "led-makeup-bag.png",
     storeCardImageFile: "led-makeup-bag.png",
     bundles: [
-      bundle("led-bag-1", "قطعة واحدة", 1, 149, { is_default: true, sort_order: 1 }),
+      bundle("led-bag-1", "العرض الرئيسي - الأكثر طلباً", 1, 249, {
+        compare_at_price_sar: 349,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("led-bag-2", "قطعتان - وفري أكثر عند طلب قطعتين", 2, 429, {
+        compare_at_price_sar: 698,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
     ],
-    crossSell: { shortDesc: "إضاءة LED فاخرة للمكياج", singleUnitPriceSar: 149 },
+    crossSell: { shortDesc: "إضاءة LED فاخرة للمكياج", singleUnitPriceSar: 249 },
   },
   {
     id: "p10",
@@ -283,9 +301,18 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "makeup-brush-cleaner.png",
     storeCardImageFile: "makeup-brush-cleaner.png",
     bundles: [
-      bundle("brush-cleaner-1", "قطعة واحدة", 1, 179, { is_default: true, sort_order: 1 }),
+      bundle("brush-cleaner-1", "العرض الرئيسي - الأكثر طلباً", 1, 249, {
+        compare_at_price_sar: 329,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("brush-cleaner-2", "قطعتان - مثالي للاستخدام الشخصي أو كهدية", 2, 429, {
+        compare_at_price_sar: 658,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
     ],
-    crossSell: { shortDesc: "تنظيف ذكي لفرش المكياج", singleUnitPriceSar: 179 },
+    crossSell: { shortDesc: "تنظيف ذكي لفرش المكياج", singleUnitPriceSar: 249 },
   },
   {
     id: "p11",
@@ -298,9 +325,18 @@ export const CATALOG: CatalogProduct[] = [
     imageFile: "rotating-brush-organizer.png",
     storeCardImageFile: "rotating-brush-organizer.png",
     bundles: [
-      bundle("brush-org-1", "قطعة واحدة", 1, 129, { is_default: true, sort_order: 1 }),
+      bundle("brush-org-1", "العرض الرئيسي - الأكثر طلباً", 1, 199, {
+        compare_at_price_sar: 239,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("brush-org-2", "قطعتان - اختيار رائع لإكمال ركن الجمال", 2, 299, {
+        compare_at_price_sar: 478,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
     ],
-    crossSell: { shortDesc: "ترتيب دوار لفرش المكياج", singleUnitPriceSar: 129 },
+    crossSell: { shortDesc: "ترتيب دوار لفرش المكياج", singleUnitPriceSar: 199 },
   },
 ];
 
