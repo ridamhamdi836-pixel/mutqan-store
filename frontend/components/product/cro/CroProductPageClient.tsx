@@ -470,9 +470,9 @@ export function CroProductPageClient({
       {/* 10. Offer selector — after value */}
       <section
         ref={offerRef}
-        className="cv-section product-section-pad page-x bg-white border-y border-brand-border/30"
+        className="cv-section product-section-pad page-x bg-brand-surface border-y border-brand-border/40"
       >
-        <div className="mx-auto max-w-2xl space-y-5">
+        <div className="max-w-content mx-auto max-w-lg space-y-4">
           <div className="text-center">
             <h2
               id={OFFER_HEADING_ID}
