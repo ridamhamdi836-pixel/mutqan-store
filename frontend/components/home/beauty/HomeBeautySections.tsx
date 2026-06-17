@@ -237,13 +237,13 @@ export function HomeBeautyWhyMutqan() {
       />
 
       <div className="max-w-content mx-auto">
-        <div className="text-center section-title-gap max-w-xl mx-auto mb-10 md:mb-14">
+        <div className="text-center section-title-gap max-w-xl mx-auto mb-6 md:mb-10">
           <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso leading-snug tracking-tight">
             {whyMutqan.headline}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {whyMutqan.cards.map((card) => {
             const theme = WHY_MUTQAN_THEMES[card.id];
             const { Icon, accent, iconGradient, glowColor, borderHover } = theme;
@@ -252,12 +252,12 @@ export function HomeBeautyWhyMutqan() {
               <div
                 key={card.id}
                 className={cn(
-                  "group relative rounded-[28px] p-9 md:p-10 text-center",
+                  "group relative rounded-[28px] p-5 sm:p-6 md:p-7 text-center",
                   "bg-white/75 backdrop-blur-xl",
                   "border border-white/90",
                   "shadow-[0_4px_28px_rgba(15,23,42,0.05)]",
                   "transition-all duration-500 ease-out",
-                  "hover:-translate-y-2 hover:shadow-[0_24px_56px_rgba(15,23,42,0.10)]",
+                  "hover:-translate-y-1 hover:shadow-[0_20px_48px_rgba(15,23,42,0.09)]",
                   borderHover,
                 )}
               >
@@ -273,29 +273,25 @@ export function HomeBeautyWhyMutqan() {
 
                 <div
                   className={cn(
-                    "relative w-[5.5rem] h-[5.5rem] md:w-24 md:h-24 rounded-[1.35rem] mx-auto mb-8",
+                    "relative w-14 h-14 md:w-16 md:h-16 rounded-2xl mx-auto mb-4",
                     "bg-gradient-to-br flex items-center justify-center",
-                    "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_8px_24px_rgba(15,23,42,0.06)]",
+                    "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_6px_18px_rgba(15,23,42,0.05)]",
                     "transition-transform duration-500 ease-out group-hover:rotate-6 group-hover:scale-105",
                     iconGradient,
                   )}
                 >
                   <Icon
-                    className="w-10 h-10 md:w-11 md:h-11"
+                    className="w-7 h-7 md:w-8 md:h-8"
                     style={{ color: accent }}
                     strokeWidth={1.5}
                   />
                 </div>
 
-                <h3 className="flex items-center justify-center gap-2 text-2xl md:text-[32px] font-bold text-brand-espresso mb-5 leading-tight tracking-tight">
-                  <span>{card.title}</span>
-                  <Sparkles
-                    className="w-4 h-4 md:w-[18px] md:h-[18px] text-brand-gold shrink-0 opacity-90"
-                    strokeWidth={2}
-                  />
+                <h3 className="text-lg md:text-xl font-bold text-brand-espresso mb-2 md:mb-3 leading-snug tracking-tight">
+                  {card.title}
                 </h3>
 
-                <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] max-w-[17rem] mx-auto">
+                <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed max-w-[17rem] mx-auto">
                   {card.desc}
                 </p>
               </div>
