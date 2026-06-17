@@ -3,12 +3,17 @@ import { cn } from "@/lib/utils";
 
 type BrandLogoProps = {
   /** default = dark text (header). light = for dark backgrounds */
-  variant?: "default" | "light";
+  variant?: "default" | "light" | "gold";
+  orientation?: "horizontal" | "stacked" | "icon";
   className?: string;
 };
 
 /** Consistent store logo — SVG only, fills its box (set h + w on className). */
-export function BrandLogo({ variant = "default", className }: BrandLogoProps) {
+export function BrandLogo({
+  variant = "default",
+  orientation = "horizontal",
+  className,
+}: BrandLogoProps) {
   return (
     <span
       className={cn(
@@ -16,7 +21,7 @@ export function BrandLogo({ variant = "default", className }: BrandLogoProps) {
         className,
       )}
     >
-      <MutqanLogoMark variant={variant} />
+      <MutqanLogoMark variant={variant} orientation={orientation} />
     </span>
   );
 }

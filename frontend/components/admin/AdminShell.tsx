@@ -26,7 +26,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <aside className="admin-sidebar">
         <div className="mb-8 px-1">
           <Link href="/admin" className="block">
-            <BrandLogo className="h-14 w-[50px] mb-2" />
+            <BrandLogo className="h-12 w-[150px] mb-2" />
           </Link>
           <p className="text-xs text-brand-muted font-medium">عمليات الدفع عند الاستلام</p>
         </div>

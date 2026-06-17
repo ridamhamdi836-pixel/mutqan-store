@@ -50,10 +50,14 @@ export function Footer({ className }: FooterProps) {
           {/* Brand */}
           <div>
             <Link href="/" className="inline-block mb-4">
-              <BrandLogo variant="light" className="h-16 w-[58px]" />
+              <BrandLogo
+                variant="light"
+                orientation="horizontal"
+                className="h-14 w-[170px]"
+              />
             </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
-              تفاصيل عملية ومُتقنة تجعل البيت أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية لبيوت الخليج.
+              تفاصيل أجمل لروتين جمال أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية للمرأة السعودية.
             </p>
           </div>
 

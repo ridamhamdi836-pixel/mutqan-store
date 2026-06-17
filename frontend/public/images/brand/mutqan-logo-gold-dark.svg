@@ -1,0 +1,17 @@
+<svg width="340" height="128" viewBox="0 0 340 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mutqan gold logo on dark background">
+  <rect width="340" height="128" rx="28" fill="#07152F"/>
+  <defs>
+    <linearGradient id="g" x1="248" y1="30" x2="296" y2="84" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8C7B7"/>
+      <stop offset="0.48" stop-color="#D4AF37"/>
+      <stop offset="1" stop-color="#B89124"/>
+    </linearGradient>
+  </defs>
+  <path d="M272 25L299 41V73L272 89L245 73V41L272 25Z" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M255 62C260 49 267 43 272 43C277 43 284 49 289 62" stroke="#D4AF37" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M259 69V53L272 66L285 53V69" stroke="#D4AF37" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M272 38C269 44 269 50 272 56C275 50 275 44 272 38Z" fill="#E8C7B7" opacity="0.95"/>
+  <path d="M292 34L294 38L298 40L294 42L292 46L290 42L286 40L290 38L292 34Z" fill="#D4AF37"/>
+  <text x="148" y="58" text-anchor="middle" dominant-baseline="middle" fill="#D4AF37" style="font-family:'IBM Plex Sans Arabic','Tajawal','Noto Sans Arabic',sans-serif;font-size:36px;font-weight:800;letter-spacing:-0.035em">&#1605;&#1578;&#1602;&#1606;</text>
+  <text x="147" y="84" text-anchor="middle" dominant-baseline="middle" fill="rgba(212,175,55,0.72)" style="font-family:'Inter',system-ui,sans-serif;font-size:10px;font-weight:600;letter-spacing:0.42em">MUTQAN</text>
+</svg>

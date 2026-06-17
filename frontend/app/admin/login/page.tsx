@@ -44,7 +44,7 @@ function AdminLoginForm() {
     <div className="min-h-screen flex items-center justify-center p-6 bg-brand-background">
       <div className="w-full max-w-md admin-panel p-8 shadow-lg">
         <div className="flex flex-col items-center text-center mb-2">
-          <BrandLogo className="h-[72px] w-[64px] mb-3" />
+          <BrandLogo className="h-14 w-[170px] mb-3" />
           <h1 className="text-xl font-bold text-brand-espresso">لوحة متقن</h1>
           <p className="text-sm text-brand-muted mt-1">إدارة الطلبات والمؤشرات</p>
         </div>

@@ -1,0 +1,15 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mutqan favicon">
+  <rect width="96" height="96" rx="24" fill="#07152F"/>
+  <defs>
+    <linearGradient id="g" x1="18" y1="14" x2="78" y2="82" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8C7B7"/>
+      <stop offset="0.48" stop-color="#D4AF37"/>
+      <stop offset="1" stop-color="#B89124"/>
+    </linearGradient>
+  </defs>
+  <path d="M48 11L79 29V67L48 85L17 67V29L48 11Z" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M28 54C34 38 42 31 48 31C54 31 62 38 68 54" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M33 62V43L48 58L63 43V62" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M48 24C44 32 44 39 48 46C52 39 52 32 48 24Z" fill="#E8C7B7" opacity="0.95"/>
+  <path d="M72 18L74 23L79 25L74 27L72 32L70 27L65 25L70 23L72 18Z" fill="#D4AF37"/>
+</svg>

@@ -94,7 +94,8 @@ export function Header() {
           >
             <BrandLogo
               variant="default"
-              className="h-14 w-[50px] sm:h-[60px] sm:w-[54px] transition-opacity duration-300 group-hover:opacity-85"
+              orientation="horizontal"
+              className="h-11 w-[138px] sm:h-12 sm:w-[150px] transition-opacity duration-300 group-hover:opacity-85"
             />
           </Link>
 
