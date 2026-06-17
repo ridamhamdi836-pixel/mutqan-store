@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { StoreImage } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { getProduct } from "@/config/catalog";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { Star, ArrowLeft, Sparkles } from "lucide-react";
@@ -17,6 +17,7 @@ type BeautyProductCardProps = {
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
   const [imgError, setImgError] = useState(false);
   const catalogProduct = getProduct(product.slug);
+  const isBeautyVanityCabinet = product.slug === "beauty-vanity-cabinet";
   const minPrice = catalogProduct
     ? [...catalogProduct.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar
     : null;
@@ -38,8 +39,9 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
       <div
         className={cn(
           "relative bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden",
-          product.imageFrameClassName ?? "aspect-[4/5]",
-          STORE_IMAGE_FRAME.cardMinHeight,
+          isBeautyVanityCabinet
+            ? "aspect-square min-h-[260px] sm:min-h-[300px]"
+            : "aspect-[4/5] min-h-[220px] sm:min-h-[260px]",
         )}
       >
         {!imgError ? (
@@ -51,7 +53,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             variant="default"
             sizes={STORE_IMAGE_SIZES.card}
             className={cn(
-              product.imageClassName ?? "p-6",
+              isBeautyVanityCabinet ? "p-0" : "p-6",
               "md:group-hover:scale-[1.03] transition-transform duration-500 ease-out",
             )}
             onError={() => setImgError(true)}
