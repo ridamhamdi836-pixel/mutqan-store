@@ -9,6 +9,10 @@ import {
   Users,
   Sparkles,
   Check,
+  Gift,
+  Gem,
+  Headset,
+  type LucideIcon,
 } from "lucide-react";
 import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
@@ -24,6 +28,45 @@ const TRUST_ICONS = {
   message: MessageCircle,
   truck: Truck,
 } as const;
+
+type WhyCardTheme = {
+  Icon: LucideIcon;
+  accent: string;
+  iconGradient: string;
+  glowColor: string;
+  borderHover: string;
+};
+
+const WHY_MUTQAN_THEMES: Record<string, WhyCardTheme> = {
+  curated: {
+    Icon: Gift,
+    accent: "#D4AF37",
+    iconGradient: "from-[#D4AF37]/30 via-[#D4AF37]/12 to-[#FAF8F6]",
+    glowColor: "rgba(212,175,55,0.12)",
+    borderHover: "group-hover:border-[#D4AF37]/25",
+  },
+  quality: {
+    Icon: Gem,
+    accent: "#10B981",
+    iconGradient: "from-[#10B981]/28 via-[#10B981]/10 to-[#FAF8F6]",
+    glowColor: "rgba(16,185,129,0.12)",
+    borderHover: "group-hover:border-[#10B981]/25",
+  },
+  guarantee: {
+    Icon: ShieldCheck,
+    accent: "#2563EB",
+    iconGradient: "from-[#2563EB]/28 via-[#2563EB]/10 to-[#FAF8F6]",
+    glowColor: "rgba(37,99,235,0.12)",
+    borderHover: "group-hover:border-[#2563EB]/25",
+  },
+  support: {
+    Icon: Headset,
+    accent: "#E8A4A4",
+    iconGradient: "from-[#E8A4A4]/35 via-[#E8A4A4]/12 to-[#FAF8F6]",
+    glowColor: "rgba(232,164,164,0.14)",
+    borderHover: "group-hover:border-[#E8A4A4]/30",
+  },
+};
 
 export function HomeBeautyHero() {
   const { hero } = HOMEPAGE_BEAUTY;
@@ -194,27 +237,70 @@ export function HomeBeautyWhyMutqan() {
       />
 
       <div className="max-w-content mx-auto">
-        <div className="text-center section-title-gap max-w-xl mx-auto">
+        <div className="text-center section-title-gap max-w-xl mx-auto mb-10 md:mb-14">
           <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso leading-snug tracking-tight">
             {whyMutqan.headline}
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7">
-          {whyMutqan.cards.map((card) => (
-            <div
-              key={card.title}
-              className="group bg-white rounded-[1.25rem] p-8 md:p-9 text-center border border-brand-border/50 shadow-[0_2px_16px_rgba(15,23,42,0.04)] card-lift"
-            >
-              <div className="w-14 h-14 rounded-2xl bg-brand-gold/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
-                <Sparkles className="w-6 h-6 text-brand-gold" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 md:gap-8">
+          {whyMutqan.cards.map((card) => {
+            const theme = WHY_MUTQAN_THEMES[card.id];
+            const { Icon, accent, iconGradient, glowColor, borderHover } = theme;
+
+            return (
+              <div
+                key={card.id}
+                className={cn(
+                  "group relative rounded-[28px] p-9 md:p-10 text-center",
+                  "bg-white/75 backdrop-blur-xl",
+                  "border border-white/90",
+                  "shadow-[0_4px_28px_rgba(15,23,42,0.05)]",
+                  "transition-all duration-500 ease-out",
+                  "hover:-translate-y-2 hover:shadow-[0_24px_56px_rgba(15,23,42,0.10)]",
+                  borderHover,
+                )}
+              >
+                <div
+                  className="absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-80 pointer-events-none"
+                  aria-hidden
+                />
+                <div
+                  className="absolute -top-12 start-1/2 -translate-x-1/2 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ backgroundColor: glowColor }}
+                  aria-hidden
+                />
+
+                <div
+                  className={cn(
+                    "relative w-[5.5rem] h-[5.5rem] md:w-24 md:h-24 rounded-[1.35rem] mx-auto mb-8",
+                    "bg-gradient-to-br flex items-center justify-center",
+                    "shadow-[inset_0_1px_0_rgba(255,255,255,0.7),0_8px_24px_rgba(15,23,42,0.06)]",
+                    "transition-transform duration-500 ease-out group-hover:rotate-6 group-hover:scale-105",
+                    iconGradient,
+                  )}
+                >
+                  <Icon
+                    className="w-10 h-10 md:w-11 md:h-11"
+                    style={{ color: accent }}
+                    strokeWidth={1.5}
+                  />
+                </div>
+
+                <h3 className="flex items-center justify-center gap-2 text-2xl md:text-[32px] font-bold text-brand-espresso mb-5 leading-tight tracking-tight">
+                  <span>{card.title}</span>
+                  <Sparkles
+                    className="w-4 h-4 md:w-[18px] md:h-[18px] text-brand-gold shrink-0 opacity-90"
+                    strokeWidth={2}
+                  />
+                </h3>
+
+                <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] max-w-[17rem] mx-auto">
+                  {card.desc}
+                </p>
               </div>
-              <h3 className="font-bold text-brand-espresso mb-3 text-lg leading-snug">
-                ✨ {card.title}
-              </h3>
-              <p className="text-[15px] text-brand-muted leading-[1.85]">{card.desc}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
