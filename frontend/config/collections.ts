@@ -34,6 +34,24 @@ export const COLLECTIONS = [
       "rotating-brush-organizer",
     ],
   },
+  {
+    slug: "makeup-tools",
+    nameAr: "أدوات المكياج",
+    descriptionAr: "حقائب مكياج، مرايا وإكسسوارات فاخرة لروتين أكثر أناقة أينما كنت.",
+    productSlugs: ["led-makeup-bag"],
+  },
+  {
+    slug: "beauty-organization",
+    nameAr: "تنظيم الجمال",
+    descriptionAr: "منظمات وخزائن vanity أنيقة تحافظ على مستحضراتك مرتبة ومحمية.",
+    productSlugs: ["beauty-vanity-cabinet", "rotating-brush-organizer"],
+  },
+  {
+    slug: "brush-care",
+    nameAr: "العناية بالفرش",
+    descriptionAr: "أجهزة تنظيف ومنظمات فرش لعناية أعمق ببشرتك وروتينك اليومي.",
+    productSlugs: ["makeup-brush-cleaner", "rotating-brush-organizer"],
+  },
 ];
 
 export const getCollectionBySlug = (slug: string) =>

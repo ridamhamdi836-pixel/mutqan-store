@@ -3,24 +3,90 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "@/providers/cart-provider";
 import { BRAND } from "@/config/brand";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { COLLECTIONS } from "@/config/collections";
+import { STORE_NAV_ITEMS, isNavItemActive } from "@/config/navigation";
 import { cn } from "@/lib/utils";
+
+const NAV_LINK_CLASS =
+  "relative py-2 text-[15px] font-medium text-brand-espresso tracking-wide transition-colors duration-300 ease-out after:absolute after:bottom-0 after:inset-x-0 after:h-[2px] after:rounded-full after:bg-brand-gold after:scale-x-0 after:transition-transform after:duration-300 after:ease-out after:origin-center hover:text-brand-gold hover:after:scale-x-100";
+
+function NavLink({
+  href,
+  label,
+  active,
+  primary,
+  onClick,
+  className,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+  primary?: boolean;
+  onClick?: () => void;
+  className?: string;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={cn(
+        NAV_LINK_CLASS,
+        active && "text-brand-gold after:scale-x-100",
+        primary && !active && "font-semibold",
+        className,
+      )}
+      aria-current={active ? "page" : undefined}
+    >
+      {label}
+      {active && (
+        <span
+          className="absolute -bottom-0.5 start-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand-gold md:hidden"
+          aria-hidden
+        />
+      )}
+    </Link>
+  );
+}
 
 export function Header() {
   const { itemCount, openCart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname();
-  const isProductPage = pathname?.startsWith("/products/");
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname() ?? "/";
+  const isProductPage = pathname.startsWith("/products/");
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-brand-border/60 shadow-sm">
+    <header
+      className={cn(
+        "sticky top-0 z-30 transition-all duration-500 ease-out",
+        scrolled
+          ? "bg-white/75 backdrop-blur-xl border-b border-brand-border/30 shadow-[0_1px_20px_rgba(15,23,42,0.05)]"
+          : "bg-white/50 backdrop-blur-lg border-b border-transparent",
+      )}
+    >
       <div className="max-w-content mx-auto page-x">
-        <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-16")}>
-          {/* Logo */}
+        <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-[4.25rem] md:h-[4.75rem]")}>
           <Link
             href="/"
             className="flex items-center shrink-0 group py-1"
@@ -28,44 +94,37 @@ export function Header() {
           >
             <BrandLogo
               variant="default"
-              className="h-14 w-[50px] sm:h-[60px] sm:w-[54px] transition-opacity group-hover:opacity-90"
+              className="h-14 w-[50px] sm:h-[60px] sm:w-[54px] transition-opacity duration-300 group-hover:opacity-85"
             />
           </Link>
 
-          {/* Desktop Nav — hidden on product pages to reduce exit clicks */}
           <nav
             className={cn(
-              "hidden md:flex items-center gap-7 text-sm font-medium text-brand-muted",
+              "hidden lg:flex items-center gap-8 xl:gap-10",
               isProductPage && "!hidden",
             )}
+            aria-label="التنقل الرئيسي"
           >
-            {COLLECTIONS.map((col) => (
-              <Link
-                key={col.slug}
-                href={`/collections/${col.slug}`}
-                className="relative py-1 hover:text-brand-espresso transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-brand-bronze after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-center"
-              >
-                {col.nameAr}
-              </Link>
+            {STORE_NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                label={item.label}
+                active={isNavItemActive(item, pathname)}
+                primary={item.isPrimary}
+              />
             ))}
-            <Link
-              href="/about"
-              className="relative py-1 hover:text-brand-espresso transition-colors after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-brand-bronze after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-center"
-            >
-              عن مُتقن
-            </Link>
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={openCart}
               aria-label={`سلة الشراء - ${itemCount} منتج`}
-              className="relative p-2.5 rounded-xl hover:bg-brand-beige transition-colors"
+              className="relative p-2.5 rounded-xl text-brand-espresso hover:text-brand-gold hover:bg-brand-gold/8 transition-all duration-200"
             >
-              <ShoppingBag className="w-5 h-5 text-brand-espresso" />
+              <ShoppingBag className="w-5 h-5" strokeWidth={1.75} />
               {itemCount > 0 && (
-                <span className="absolute -top-0.5 -start-0.5 bg-brand-bronze text-white text-[10px] font-bold rounded-full w-[18px] h-[18px] flex items-center justify-center shadow-sm">
+                <span className="absolute -top-0.5 -start-0.5 bg-brand-espresso text-white text-[10px] font-bold rounded-full w-[18px] h-[18px] flex items-center justify-center shadow-sm">
                   {itemCount}
                 </span>
               )}
@@ -73,43 +132,75 @@ export function Header() {
 
             {!isProductPage ? (
               <button
-                className="md:hidden p-2.5 rounded-xl hover:bg-brand-beige transition-colors"
+                className="lg:hidden p-2.5 rounded-xl text-brand-espresso hover:text-brand-gold hover:bg-brand-gold/8 transition-all duration-200"
                 onClick={() => setMenuOpen(!menuOpen)}
                 aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+                aria-expanded={menuOpen}
               >
-                {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                {menuOpen ? <X className="w-5 h-5" strokeWidth={1.75} /> : <Menu className="w-5 h-5" strokeWidth={1.75} />}
               </button>
             ) : null}
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && !isProductPage && (
-        <div className="md:hidden bg-white border-t border-brand-border/60 animate-fade-in">
-          <nav className="max-w-content mx-auto page-x py-4 flex flex-col gap-1">
-            {COLLECTIONS.map((col) => (
+        <>
+          <button
+            type="button"
+            className="lg:hidden fixed inset-0 top-[4.25rem] bg-brand-espresso/20 backdrop-blur-sm z-20 animate-fade-in"
+            aria-label="إغلاق القائمة"
+            onClick={() => setMenuOpen(false)}
+          />
+
+          <div className="lg:hidden relative z-30 bg-white/95 backdrop-blur-xl border-t border-brand-border/30 animate-slide-up shadow-[0_16px_48px_rgba(15,23,42,0.08)]">
+            <nav className="max-w-content mx-auto page-x py-6 flex flex-col gap-1" aria-label="قائمة الجوال">
+              {STORE_NAV_ITEMS.map((item) => {
+                const active = isNavItemActive(item, pathname);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={cn(
+                      "relative py-3.5 px-4 rounded-xl text-[16px] font-medium text-brand-espresso transition-all duration-200",
+                      "border border-transparent",
+                      active
+                        ? "bg-brand-gold/8 text-brand-gold border-brand-gold/20"
+                        : "hover:bg-brand-background hover:text-brand-gold",
+                      item.isPrimary && !active && "font-semibold",
+                    )}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    <span className="flex items-center gap-3">
+                      {active && (
+                        <span className="w-1 h-5 rounded-full bg-brand-gold shrink-0" aria-hidden />
+                      )}
+                      {item.label}
+                    </span>
+                  </Link>
+                );
+              })}
+
+              <div className="border-t border-brand-border/40 my-4" />
+
               <Link
-                key={col.slug}
-                href={`/collections/${col.slug}`}
-                className="py-2.5 px-3 rounded-xl text-brand-espresso font-medium hover:bg-brand-beige hover:text-brand-bronze transition-colors"
+                href="/faq"
+                className="py-3 px-4 rounded-xl text-[15px] text-brand-muted font-medium hover:text-brand-gold hover:bg-brand-background transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
-                {col.nameAr}
+                الأسئلة الشائعة
               </Link>
-            ))}
-            <div className="border-t border-brand-border/60 my-2" />
-            <Link href="/about" className="py-2.5 px-3 rounded-xl text-brand-muted hover:bg-brand-beige hover:text-brand-espresso transition-colors" onClick={() => setMenuOpen(false)}>
-              عن مُتقن
-            </Link>
-            <Link href="/faq" className="py-2.5 px-3 rounded-xl text-brand-muted hover:bg-brand-beige hover:text-brand-espresso transition-colors" onClick={() => setMenuOpen(false)}>
-              الأسئلة الشائعة
-            </Link>
-            <Link href="/track-order" className="py-2.5 px-3 rounded-xl text-brand-muted hover:bg-brand-beige hover:text-brand-espresso transition-colors" onClick={() => setMenuOpen(false)}>
-              تتبع الطلب
-            </Link>
-          </nav>
-        </div>
+              <Link
+                href="/track-order"
+                className="py-3 px-4 rounded-xl text-[15px] text-brand-muted font-medium hover:text-brand-gold hover:bg-brand-background transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                تتبع الطلب
+              </Link>
+            </nav>
+          </div>
+        </>
       )}
     </header>
   );
