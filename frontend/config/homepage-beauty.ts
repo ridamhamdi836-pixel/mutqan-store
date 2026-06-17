@@ -107,7 +107,7 @@ export const HOMEPAGE_BEAUTY = {
     headline: "روتين عناية أكثر جمالاً وراحة",
     description:
       "صممنا مجموعة متقن لتجعل كل لحظة أمام مرآتك أكثر ترتيباً، راحة وأناقة.",
-    image: "/images/hero/beauty-lifestyle.png",
+    image: withImageVersion("/images/hero/beauty-lifestyle.png", 2),
     imageAlt: "روتين عناية أنيق أمام المرآة — متقن",
   },
 
