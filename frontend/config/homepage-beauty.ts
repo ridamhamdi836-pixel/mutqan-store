@@ -64,7 +64,7 @@ export const HOMEPAGE_BEAUTY = {
         slug: "makeup-brush-cleaner",
         nameAr: "جهاز تنظيف فرش المكياج الذكي",
         subtitle: "تنظيف وتجفيف سريع لفرش أكثر نظافة وعناية.",
-        image: "/images/products/makeup-brush-cleaner.png",
+        image: withImageVersion("/images/products/makeup-brush-cleaner.png", 2),
         imageAlt: "جهاز تنظيف فرش المكياج الذكي — متقن",
       },
       {

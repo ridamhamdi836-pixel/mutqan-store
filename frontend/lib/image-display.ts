@@ -32,6 +32,7 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/hero/beauty-lifestyle.png": { width: 1024, height: 682 },
   "/images/products/beauty-vanity-cabinet.png": { width: 1024, height: 1024 },
   "/images/products/led-makeup-bag.png": { width: 1024, height: 1024 },
+  "/images/products/makeup-brush-cleaner.png": { width: 1024, height: 1024 },
   "/images/products/smart-stackable-cabinet-couple-hero.png": {
     width: 884,
     height: 1015,

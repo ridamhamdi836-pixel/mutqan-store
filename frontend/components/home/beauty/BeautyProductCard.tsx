@@ -17,6 +17,7 @@ type BeautyProductCardProps = {
 const SQUARE_FILL_IMAGE_SLUGS = new Set([
   "beauty-vanity-cabinet",
   "led-makeup-bag",
+  "makeup-brush-cleaner",
 ]);
 
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
