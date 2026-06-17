@@ -14,6 +14,8 @@ export type HomepageBeautyProduct = {
   subtitle: string;
   image: string;
   imageAlt: string;
+  imageFrameClassName?: string;
+  imageClassName?: string;
 };
 
 export const HOMEPAGE_BEAUTY = {
@@ -50,8 +52,10 @@ export const HOMEPAGE_BEAUTY = {
         slug: "beauty-vanity-cabinet",
         nameAr: "خزانة الجمال الفاخرة المضادة للغبار",
         subtitle: "تنظيم أنيق يحافظ على مستحضراتك بأفضل صورة.",
-        image: "/images/products/beauty-vanity-cabinet.png",
+        image: withImageVersion("/images/products/beauty-vanity-cabinet.png", 2),
         imageAlt: "خزانة الجمال الفاخرة المضادة للغبار — متقن",
+        imageFrameClassName: "aspect-square",
+        imageClassName: "p-0",
       },
       {
         slug: "led-makeup-bag",
