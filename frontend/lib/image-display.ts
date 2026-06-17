@@ -28,6 +28,7 @@ export const STORE_IMAGE_INTRINSIC: Record<
   { width: number; height: number }
 > = {
   "/images/hero/saudi-family.png": { width: 1024, height: 950 },
+  "/images/hero/beauty-vanity-hero.png": { width: 1024, height: 819 },
   "/images/products/smart-stackable-cabinet-couple-hero.png": {
     width: 884,
     height: 1015,

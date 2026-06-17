@@ -1,4 +1,5 @@
 /** Homepage copy & presentation — premium beauty / vanity brand */
+import { withImageVersion } from "@/lib/image-display";
 
 export const HOMEPAGE_FEATURED_SLUGS = [
   "beauty-vanity-cabinet",
@@ -30,7 +31,7 @@ export const HOMEPAGE_BEAUTY = {
     ],
     primaryCta: "اكتشفي المجموعة",
     secondaryCta: "لماذا متقن؟",
-    image: "/images/hero/beauty-vanity-hero.png",
+    image: withImageVersion("/images/hero/beauty-vanity-hero.png", 2),
     imageAlt: "إعداد فاخر للتجميل — مجموعة متقن الأربعة على طاولة الزينة",
   },
 
