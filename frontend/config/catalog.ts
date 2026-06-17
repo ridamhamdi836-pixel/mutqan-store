@@ -242,6 +242,66 @@ export const CATALOG: CatalogProduct[] = [
     },
     crossSell: { shortDesc: "وجبة دافئة أينما كنت", singleUnitPriceSar: 229 },
   },
+  {
+    id: "p8",
+    slug: "beauty-vanity-cabinet",
+    name_ar: "خزانة الجمال الفاخرة المضادة للغبار",
+    name_en: "Dustproof Cosmetic Organizer",
+    short_description_ar: "تنظيم أنيق يحافظ على مستحضراتك بأفضل صورة.",
+    category_slug: "beauty-vanity",
+    sku: "MTQ-BTY-008",
+    imageFile: "beauty-vanity-cabinet.png",
+    storeCardImageFile: "beauty-vanity-cabinet.png",
+    bundles: [
+      bundle("beauty-cabinet-1", "قطعة واحدة", 1, 199, { is_default: true, sort_order: 1 }),
+    ],
+    crossSell: { shortDesc: "تنظيم فاخر لمستحضراتك", singleUnitPriceSar: 199 },
+  },
+  {
+    id: "p9",
+    slug: "led-makeup-bag",
+    name_ar: "حقيبة المكياج الفاخرة بإضاءة LED",
+    name_en: "LED Makeup Bag",
+    short_description_ar: "إضاءة مثالية وأناقة ترافقك أينما كنت.",
+    category_slug: "beauty-vanity",
+    sku: "MTQ-BTY-009",
+    imageFile: "led-makeup-bag.png",
+    storeCardImageFile: "led-makeup-bag.png",
+    bundles: [
+      bundle("led-bag-1", "قطعة واحدة", 1, 149, { is_default: true, sort_order: 1 }),
+    ],
+    crossSell: { shortDesc: "إضاءة LED فاخرة للمكياج", singleUnitPriceSar: 149 },
+  },
+  {
+    id: "p10",
+    slug: "makeup-brush-cleaner",
+    name_ar: "جهاز تنظيف فرش المكياج الذكي",
+    name_en: "Electric Makeup Brush Cleaner",
+    short_description_ar: "تنظيف وتجفيف سريع لفرش أكثر نظافة وعناية.",
+    category_slug: "beauty-vanity",
+    sku: "MTQ-BTY-010",
+    imageFile: "makeup-brush-cleaner.png",
+    storeCardImageFile: "makeup-brush-cleaner.png",
+    bundles: [
+      bundle("brush-cleaner-1", "قطعة واحدة", 1, 179, { is_default: true, sort_order: 1 }),
+    ],
+    crossSell: { shortDesc: "تنظيف ذكي لفرش المكياج", singleUnitPriceSar: 179 },
+  },
+  {
+    id: "p11",
+    slug: "rotating-brush-organizer",
+    name_ar: "منظم الفرش الدوار الفاخر",
+    name_en: "Rotating Makeup Brush Organizer",
+    short_description_ar: "ترتيب أنيق يحافظ على فرشك بعيداً عن الغبار.",
+    category_slug: "beauty-vanity",
+    sku: "MTQ-BTY-011",
+    imageFile: "rotating-brush-organizer.png",
+    storeCardImageFile: "rotating-brush-organizer.png",
+    bundles: [
+      bundle("brush-org-1", "قطعة واحدة", 1, 129, { is_default: true, sort_order: 1 }),
+    ],
+    crossSell: { shortDesc: "ترتيب دوار لفرش المكياج", singleUnitPriceSar: 129 },
+  },
 ];
 
 export const CATALOG_BY_SLUG: Record<string, CatalogProduct> = Object.fromEntries(
@@ -260,10 +320,10 @@ export function resolveProductSlug(slug: string): string {
 }
 
 export const FEATURED_SLUGS = [
-  "pull-out-cabinet-drawer",
-  "smart-table-warmer",
-  "sink-organizer",
-  "powerful-cordless-vacuum",
+  "beauty-vanity-cabinet",
+  "led-makeup-bag",
+  "makeup-brush-cleaner",
+  "rotating-brush-organizer",
 ] as const;
 
 export function getProduct(slug: string): CatalogProduct | undefined {

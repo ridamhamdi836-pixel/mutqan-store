@@ -9,6 +9,12 @@ import {
   thermalLunchBoxCroPage,
 } from "./catalog";
 import { sinkOrganizerCroPage } from "./sink-organizer";
+import {
+  beautyVanityCabinetCroPage,
+  ledMakeupBagCroPage,
+  makeupBrushCleanerCroPage,
+  rotatingBrushOrganizerCroPage,
+} from "./beauty-products";
 
 const CRO_PRODUCT_PAGES: Record<string, CroProductPageConfig> = {
   "sink-organizer": sinkOrganizerCroPage,
@@ -18,6 +24,10 @@ const CRO_PRODUCT_PAGES: Record<string, CroProductPageConfig> = {
   "pure-faucet-filter": pureFaucetFilterCroPage,
   "smart-table-warmer": smartTableWarmerCroPage,
   "thermal-lunch-box": thermalLunchBoxCroPage,
+  "beauty-vanity-cabinet": beautyVanityCabinetCroPage,
+  "led-makeup-bag": ledMakeupBagCroPage,
+  "makeup-brush-cleaner": makeupBrushCleanerCroPage,
+  "rotating-brush-organizer": rotatingBrushOrganizerCroPage,
 };
 
 export function getCroProductPage(slug: string): CroProductPageConfig {

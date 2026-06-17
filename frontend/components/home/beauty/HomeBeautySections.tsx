@@ -1,0 +1,395 @@
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Star,
+  ShieldCheck,
+  Truck,
+  CreditCard,
+  MessageCircle,
+  Users,
+  Sparkles,
+  Check,
+} from "lucide-react";
+import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { FAQAccordion } from "@/components/product/FAQAccordion";
+import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
+import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { cn } from "@/lib/utils";
+
+const TRUST_ICONS = {
+  users: Users,
+  shield: ShieldCheck,
+  "credit-card": CreditCard,
+  message: MessageCircle,
+  truck: Truck,
+} as const;
+
+export function HomeBeautyHero() {
+  const { hero } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="relative pt-8 pb-12 md:pt-14 md:pb-20 page-x overflow-hidden">
+      <div
+        className="absolute top-0 end-0 w-[420px] h-[420px] bg-brand-gold/5 rounded-full blur-3xl -z-10 pointer-events-none"
+        aria-hidden
+      />
+      <div
+        className="absolute bottom-0 start-0 w-[360px] h-[360px] bg-brand-secondary/50 rounded-full blur-3xl -z-10 pointer-events-none"
+        aria-hidden
+      />
+
+      <div className="max-w-content mx-auto relative z-10">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+          <div className="order-2 md:order-1 animate-slide-up">
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm text-brand-espresso rounded-pill px-5 py-2.5 text-sm font-semibold mb-8 border border-brand-gold/25 shadow-sm">
+              <span>{hero.badge}</span>
+            </div>
+
+            <h1 className="text-[2rem] md:text-5xl lg:text-[3.25rem] font-extrabold text-brand-espresso leading-[1.25] mb-6 tracking-tight">
+              {hero.headline}
+            </h1>
+
+            <p className="text-base md:text-xl text-brand-muted leading-[1.85] mb-8 max-w-lg">
+              {hero.subheadline}
+            </p>
+
+            <ul className="space-y-3 mb-10">
+              {hero.trustBullets.map((bullet) => (
+                <li
+                  key={bullet}
+                  className="flex items-center gap-2.5 text-sm md:text-base font-medium text-brand-espresso/80"
+                >
+                  <Check className="w-4 h-4 text-brand-gold flex-shrink-0" strokeWidth={2.5} />
+                  <span>{bullet.replace("✓ ", "")}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                href="#best-sellers"
+                className="btn-primary inline-flex items-center justify-center gap-2.5 w-full sm:w-auto py-4 px-9 text-base md:text-lg"
+              >
+                <span>{hero.primaryCta}</span>
+                <ArrowLeft className="w-5 h-5" />
+              </Link>
+              <Link
+                href="#why-mutqan"
+                className="btn-secondary inline-flex items-center justify-center gap-2 w-full sm:w-auto py-4 px-9 text-base"
+              >
+                {hero.secondaryCta}
+              </Link>
+            </div>
+          </div>
+
+          <div className="order-1 md:order-2 relative">
+            <StoreImageFrame
+              src={hero.image}
+              alt={hero.imageAlt}
+              className="rounded-[1.75rem] overflow-hidden shadow-[0_24px_64px_rgba(15,23,42,0.12)] border border-white/80 bg-gradient-to-br from-brand-secondary/30 to-white"
+              variant="hero"
+              priority
+              sizes={STORE_IMAGE_SIZES.hero}
+            />
+
+            <div className="absolute -bottom-5 start-4 md:-bottom-6 md:-start-6 z-10 bg-white p-4 rounded-2xl shadow-xl border border-brand-border/40 flex items-center gap-3 animate-float">
+              <div className="flex -space-x-2 rtl:space-x-reverse">
+                {[1, 2, 3, 4].map((id) => (
+                  <div
+                    key={id}
+                    className="w-9 h-9 rounded-full bg-brand-secondary border-2 border-white overflow-hidden relative"
+                  >
+                    <StoreImage
+                      src={`/images/customers/customer-${id}.png`}
+                      alt="عميلة سعيدة"
+                      fill
+                      variant="thumbnail"
+                      sizes={STORE_IMAGE_SIZES.tiny}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div className="flex text-brand-gold gap-0.5">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star key={i} className="w-3 h-3 fill-current" />
+                  ))}
+                </div>
+                <p className="text-xs font-bold text-brand-espresso mt-1">+50,000 عميلة</p>
+              </div>
+            </div>
+
+            <div className="absolute top-4 end-4 bg-brand-espresso text-white px-4 py-2.5 rounded-xl shadow-lg border border-brand-gold/30">
+              <ShieldCheck className="w-5 h-5 mx-auto text-brand-gold" />
+              <p className="text-[10px] font-bold mt-1 text-center leading-tight">ضمان 30 يوم</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyTrustBar() {
+  return (
+    <section className="py-5 md:py-6 bg-brand-espresso text-white border-y border-brand-gold/20">
+      <div className="max-w-content mx-auto page-x">
+        <div className="flex flex-wrap justify-center md:justify-between items-center gap-x-6 gap-y-4">
+          {HOMEPAGE_BEAUTY.trustBar.map((item) => {
+            const Icon = TRUST_ICONS[item.icon];
+            return (
+              <div
+                key={item.label}
+                className="flex items-center gap-2.5 text-sm md:text-[15px] font-medium text-white/90"
+              >
+                <Icon className="w-4 h-4 text-brand-gold flex-shrink-0" />
+                <span>{item.label}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyBestSellers() {
+  const { bestSellers } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section id="best-sellers" className="section-pad page-x bg-white scroll-mt-24">
+      <div className="max-w-content mx-auto">
+        <div className="text-center section-title-gap max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 text-brand-gold font-semibold text-sm mb-4 tracking-wide">
+            <Sparkles className="w-4 h-4" />
+            <span>مجموعة متقن</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso leading-snug tracking-tight">
+            {bestSellers.title}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          {bestSellers.products.map((product) => (
+            <BeautyProductCard key={product.slug} product={product} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyWhyMutqan() {
+  const { whyMutqan } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section
+      id="why-mutqan"
+      className="section-pad page-x bg-brand-background scroll-mt-24 relative overflow-hidden"
+    >
+      <div
+        className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-gold/5 rounded-full blur-3xl -z-10"
+        aria-hidden
+      />
+
+      <div className="max-w-content mx-auto">
+        <div className="text-center section-title-gap max-w-xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso leading-snug tracking-tight">
+            {whyMutqan.headline}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7">
+          {whyMutqan.cards.map((card) => (
+            <div
+              key={card.title}
+              className="group bg-white rounded-[1.25rem] p-8 md:p-9 text-center border border-brand-border/50 shadow-[0_2px_16px_rgba(15,23,42,0.04)] card-lift"
+            >
+              <div className="w-14 h-14 rounded-2xl bg-brand-gold/10 flex items-center justify-center mx-auto mb-6 group-hover:scale-105 transition-transform duration-300">
+                <Sparkles className="w-6 h-6 text-brand-gold" />
+              </div>
+              <h3 className="font-bold text-brand-espresso mb-3 text-lg leading-snug">
+                ✨ {card.title}
+              </h3>
+              <p className="text-[15px] text-brand-muted leading-[1.85]">{card.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyLifestyle() {
+  const { lifestyle } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x relative overflow-hidden">
+      <div className="max-w-content mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center rounded-[2rem] bg-gradient-to-br from-brand-secondary/60 via-white to-brand-background p-8 md:p-14 border border-brand-border/40 shadow-[0_8px_40px_rgba(15,23,42,0.06)]">
+          <div className="order-2 md:order-1">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso leading-snug mb-6 tracking-tight">
+              {lifestyle.headline}
+            </h2>
+            <p className="text-lg text-brand-muted leading-[1.9] max-w-md">
+              {lifestyle.description}
+            </p>
+            <Link
+              href="#best-sellers"
+              className="btn-primary inline-flex items-center gap-2 mt-8 py-3.5 px-8"
+            >
+              <span>اكتشفي المجموعة</span>
+              <ArrowLeft className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="order-1 md:order-2 relative">
+            <StoreImageFrame
+              src={lifestyle.image}
+              alt={lifestyle.imageAlt}
+              className="rounded-[1.5rem] overflow-hidden shadow-xl border border-white/60"
+              variant="hero"
+              sizes={STORE_IMAGE_SIZES.hero}
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyTestimonials() {
+  const { testimonials } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-white">
+      <div className="max-w-content mx-auto">
+        <div className="text-center section-title-gap max-w-xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso leading-snug tracking-tight">
+            {testimonials.headline}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {testimonials.items.map((review) => (
+            <article
+              key={review.name}
+              className="bg-brand-background rounded-[1.25rem] p-8 border border-brand-border/50 shadow-sm card-lift"
+            >
+              <div className="flex text-brand-gold gap-0.5 mb-5">
+                {Array.from({ length: review.rating }).map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
+              </div>
+              <p className="text-[15px] text-brand-espresso/85 leading-[1.9] mb-6">
+                &ldquo;{review.text}&rdquo;
+              </p>
+              <div className="pt-5 border-t border-brand-border/50">
+                <p className="font-bold text-brand-espresso">{review.name}</p>
+                <p className="text-sm text-brand-muted mt-0.5">{review.city}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyOrderSteps() {
+  const { orderSteps } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-brand-espresso text-white relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(212,175,55,0.08),transparent_60%)]" />
+
+      <div className="max-w-content mx-auto relative z-10">
+        <div className="text-center section-title-gap">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white leading-snug tracking-tight">
+            {orderSteps.headline}
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+          {orderSteps.steps.map((step, index) => (
+            <div key={step.title} className="text-center relative group">
+              {index < orderSteps.steps.length - 1 && (
+                <div className="hidden lg:block absolute top-10 start-0 w-full h-px bg-gradient-to-l from-brand-gold/40 to-transparent -z-10" />
+              )}
+              <div
+                className={cn(
+                  "w-16 h-16 md:w-[4.5rem] md:h-[4.5rem] rounded-full flex items-center justify-center mx-auto mb-6",
+                  "bg-brand-gold/15 border border-brand-gold/40 text-brand-gold font-extrabold text-xl",
+                  "group-hover:scale-105 transition-transform duration-300",
+                )}
+              >
+                {index + 1}
+              </div>
+              <h3 className="font-bold text-white text-lg mb-2">{step.title}</h3>
+              <p className="text-sm text-white/65 leading-relaxed max-w-[14rem] mx-auto">
+                {step.desc}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyFaq() {
+  return (
+    <section className="section-pad page-x bg-brand-background">
+      <div className="max-w-3xl mx-auto">
+        <div className="text-center section-title-gap">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso leading-snug">
+            أسئلتك الشائعة
+          </h2>
+        </div>
+        <FAQAccordion items={[...HOMEPAGE_BEAUTY.faq]} />
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyFinalCta() {
+  const { finalCta } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x">
+      <div className="max-w-content mx-auto">
+        <div className="relative text-center rounded-[2rem] overflow-hidden p-10 md:p-16 lg:p-20 bg-gradient-to-br from-brand-espresso via-[#1a2744] to-brand-espresso shadow-[0_24px_64px_rgba(15,23,42,0.2)]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(212,175,55,0.12),transparent_50%)]" />
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-l from-brand-gold via-brand-gold/50 to-transparent" />
+
+          <div className="relative z-10">
+            <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-white mb-6 leading-snug tracking-tight">
+              {finalCta.headline}
+            </h2>
+            <p className="text-white/75 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-[1.85]">
+              {finalCta.description}
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-5 mb-10 text-sm font-medium text-white/80">
+              {finalCta.trustBadges.map((badge) => (
+                <span key={badge} className="flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-brand-gold" strokeWidth={2.5} />
+                  {badge.replace("✓ ", "")}
+                </span>
+              ))}
+            </div>
+
+            <Link
+              href="#best-sellers"
+              className="inline-flex items-center justify-center gap-3 px-12 py-5 rounded-2xl bg-white text-brand-espresso font-extrabold text-lg shadow-xl hover:bg-brand-secondary transition-colors duration-200"
+            >
+              <span>{finalCta.button}</span>
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

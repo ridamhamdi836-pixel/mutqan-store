@@ -4,7 +4,7 @@ export const BRAND = {
   /** Raster fallbacks optional; UI uses SVG via BrandLogo */
   logoSrc: "/icon.svg",
   logoSrcLight: "/icon.svg",
-  taglineAr: "تفاصيل متقنة لبيت أكثر ترتيبًا وراحة",
+  taglineAr: "تفاصيل أجمل… لأنك تستحقين الأفضل",
   domain: "mutqan.online",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212717783042",
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@mutqan.online",

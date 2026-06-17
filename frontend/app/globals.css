@@ -3,17 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --brand-background: #FAFBFC;
+  --brand-background: #FAF8F6;
   --brand-surface: #FFFFFF;
-  --brand-beige: #F1F5F9;
-  --brand-sand: #CBD5E1;
+  --brand-beige: #EADBC8;
+  --brand-sand: #D4C4B0;
   --brand-espresso: #0F172A;
   --brand-olive: #475569;
-  --brand-bronze: #1B4DDB;
+  --brand-bronze: #D4AF37;
+  --brand-gold: #D4AF37;
+  --brand-secondary: #EADBC8;
   --brand-text: #0F172A;
   --brand-muted: #64748B;
-  --brand-border: #E2E8F0;
-  --brand-trust: #10B981;
+  --brand-border: #E8E0D8;
+  --brand-trust: #0F172A;
   --brand-error: #EF4444;
 }
 
@@ -41,7 +43,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background-color: rgba(27, 77, 219, 0.15);
+  background-color: rgba(212, 175, 55, 0.2);
   color: var(--brand-espresso);
 }
 
@@ -66,23 +68,23 @@ h1, h2, h3, h4, h5, h6 {
 
 @layer components {
   .btn-primary {
-    @apply bg-[#1B4DDB] text-white font-bold rounded-xl px-8 py-3.5 text-base
-      transition-colors duration-150 ease-out
-      hover:bg-[#1640B8]
+    @apply bg-brand-espresso text-white font-bold rounded-2xl px-8 py-3.5 text-base
+      shadow-btn transition-all duration-200 ease-out
+      hover:bg-[#1a2744] hover:shadow-btn-lg
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-[#1B4DDB] text-[#1B4DDB] font-semibold rounded-xl px-7 py-3 text-base
-      transition-colors duration-150 ease-out
-      hover:bg-[#1B4DDB] hover:text-white
+    @apply bg-transparent border-2 border-brand-espresso/20 text-brand-espresso font-semibold rounded-2xl px-7 py-3 text-base
+      transition-all duration-200 ease-out
+      hover:border-brand-espresso hover:bg-brand-espresso/5
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .btn-cta {
-    @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] text-white font-bold rounded-2xl px-10 py-4 text-lg
-      shadow-btn-lg transition-colors duration-150 ease-out
-      hover:brightness-110
+    @apply bg-brand-espresso text-white font-bold rounded-2xl px-10 py-4 text-lg
+      shadow-btn-lg transition-all duration-200 ease-out
+      hover:bg-[#1a2744] hover:shadow-btn-lg
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -144,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .gradient-text {
-    @apply bg-gradient-to-l from-[#1B4DDB] to-[#2563EB] bg-clip-text text-transparent;
+    @apply bg-gradient-to-l from-brand-gold to-[#C9A227] bg-clip-text text-transparent;
   }
 
   /* Admin — white + blue (matches storefront) */
@@ -174,11 +176,11 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .admin-btn-primary {
-    @apply rounded-lg bg-brand-bronze hover:bg-[#1640B8] disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white transition-colors;
+    @apply rounded-lg bg-brand-espresso hover:bg-[#1a2744] disabled:opacity-50 px-5 py-2.5 text-sm font-semibold text-white transition-colors;
   }
 
   .admin-link {
-    @apply text-brand-bronze hover:text-[#1640B8] font-medium transition-colors;
+    @apply text-brand-espresso hover:text-brand-gold font-medium transition-colors;
   }
 
   .admin-metric-card {

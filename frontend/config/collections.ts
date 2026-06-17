@@ -23,6 +23,17 @@ export const COLLECTIONS = [
     descriptionAr: "حلول ضيافة تجعل كل جلسة عائلية أدفأ وأجمل.",
     productSlugs: ["smart-table-warmer", "thermal-lunch-box"],
   },
+  {
+    slug: "beauty-vanity",
+    nameAr: "الجمال والعناية",
+    descriptionAr: "مجموعة متقن المختارة بعناية لتنظيم مستحضراتك وإضاءة روتينك اليومي بأناقة.",
+    productSlugs: [
+      "beauty-vanity-cabinet",
+      "led-makeup-bag",
+      "makeup-brush-cleaner",
+      "rotating-brush-organizer",
+    ],
+  },
 ];
 
 export const getCollectionBySlug = (slug: string) =>
