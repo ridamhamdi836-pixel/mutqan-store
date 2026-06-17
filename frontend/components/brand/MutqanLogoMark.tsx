@@ -9,21 +9,21 @@ type MutqanLogoMarkProps = {
 
 const COLORS = {
   default: {
-    primary: "#07152F",
+    primary: "#08152D",
     gold: "#D4AF37",
-    rose: "#E8C7B7",
-    latin: "#64748B",
+    ivory: "#FAF8F1",
+    latin: "#5F6675",
   },
   light: {
     primary: "#FFFFFF",
     gold: "#D4AF37",
-    rose: "#E8C7B7",
+    ivory: "#FAF8F1",
     latin: "rgba(255,255,255,0.72)",
   },
   gold: {
     primary: "#D4AF37",
     gold: "#D4AF37",
-    rose: "#E8C7B7",
+    ivory: "#FAF8F1",
     latin: "rgba(212,175,55,0.72)",
   },
 } as const;
@@ -38,13 +38,22 @@ export function MutqanLogoMark({
   title = "متقن — Mutqan",
 }: MutqanLogoMarkProps) {
   const c = COLORS[variant];
-  const gradientId = `mutqan-icon-gold-${variant}-${orientation}`;
   const viewBox =
     orientation === "icon"
       ? "0 0 96 96"
       : orientation === "stacked"
-        ? "0 0 148 164"
-        : "0 0 300 96";
+        ? "0 0 148 172"
+        : "0 0 320 96";
+  const iconTransform =
+    orientation === "horizontal"
+      ? "translate(236 18)"
+      : orientation === "stacked"
+        ? "translate(50 12)"
+        : "translate(18 18)";
+  const arabicX = orientation === "horizontal" ? "145" : "74";
+  const arabicY = orientation === "horizontal" ? "42" : "116";
+  const latinX = orientation === "horizontal" ? "144" : "74";
+  const latinY = orientation === "horizontal" ? "69" : "146";
 
   return (
     <svg
@@ -56,83 +65,69 @@ export function MutqanLogoMark({
       className={cn("block h-full w-full", className)}
     >
       <title>{title}</title>
-      <defs>
-        <linearGradient id={gradientId} x1="18" y1="14" x2="78" y2="82" gradientUnits="userSpaceOnUse">
-          <stop stopColor={c.rose} />
-          <stop offset="0.48" stopColor={c.gold} />
-          <stop offset="1" stopColor="#B89124" />
-        </linearGradient>
-      </defs>
 
-      <g
-        transform={
-          orientation === "horizontal"
-            ? "translate(204 0)"
-            : orientation === "stacked"
-              ? "translate(26 0)"
-              : "translate(0 0)"
-        }
-      >
+      <g transform={iconTransform}>
         <path
-          d="M48 8L82 28V68L48 88L14 68V28L48 8Z"
-          stroke={`url(#${gradientId})`}
-          strokeWidth="3"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M27 54C33 37 42 29 48 29C54 29 63 37 69 54"
-          stroke={c.primary}
-          strokeWidth="4"
+          d="M30 2C33 18 42 27 58 30C42 33 33 42 30 58C27 42 18 33 2 30C18 27 27 18 30 2Z"
+          stroke={c.gold}
+          strokeWidth="2.6"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
-          d="M32 62V42L48 58L64 42V62"
+          d="M30 20L40 30L30 40L20 30L30 20Z"
           stroke={c.primary}
-          strokeWidth="4"
+          strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
         />
         <path
-          d="M48 23C44 31 44 38 48 45C52 38 52 31 48 23Z"
-          fill={c.rose}
-          opacity="0.9"
-        />
-        <path
-          d="M73 18L75 23L80 25L75 27L73 32L71 27L66 25L71 23L73 18Z"
+          d="M46 8L47.5 12.5L52 14L47.5 15.5L46 20L44.5 15.5L40 14L44.5 12.5L46 8Z"
           fill={c.gold}
+        />
+        <path
+          d="M12 44L13.2 47.8L17 49L13.2 50.2L12 54L10.8 50.2L7 49L10.8 47.8L12 44Z"
+          fill={c.gold}
+          opacity="0.72"
+        />
+        <path
+          d="M30 2C30 16 30 44 30 58"
+          stroke={c.ivory}
+          strokeWidth="1"
+          strokeLinecap="round"
+          opacity="0.65"
         />
       </g>
 
       {orientation !== "icon" && (
-        <g transform={orientation === "horizontal" ? "translate(0 0)" : "translate(0 94)"}>
+        <g>
           <text
-            x={orientation === "horizontal" ? "138" : "74"}
-            y={orientation === "horizontal" ? "43" : "28"}
+            x={arabicX}
+            y={arabicY}
             textAnchor="middle"
             dominantBaseline="middle"
             fill={c.primary}
             style={{
               fontFamily:
-                "'IBM Plex Sans Arabic', 'Tajawal', 'Noto Sans Arabic', sans-serif",
-              fontSize: orientation === "horizontal" ? "34px" : "32px",
-              fontWeight: 800,
-              letterSpacing: "-0.035em",
+                "'Aref Ruqaa', 'Noto Nastaliq Urdu', 'IBM Plex Sans Arabic', 'Tajawal', 'Noto Sans Arabic', sans-serif",
+              fontSize: orientation === "horizontal" ? "38px" : "40px",
+              fontWeight: 700,
+              letterSpacing: "-0.055em",
             }}
           >
             متقن
           </text>
           <text
-            x={orientation === "horizontal" ? "137" : "74"}
-            y={orientation === "horizontal" ? "69" : "54"}
+            x={latinX}
+            y={latinY}
             textAnchor="middle"
             dominantBaseline="middle"
             fill={c.latin}
             style={{
               fontFamily: "'Inter', system-ui, sans-serif",
-              fontSize: orientation === "horizontal" ? "10px" : "9px",
-              fontWeight: 600,
-              letterSpacing: "0.42em",
+              fontSize: orientation === "horizontal" ? "9.5px" : "9px",
+              fontWeight: 400,
+              letterSpacing: "0.5em",
             }}
           >
             MUTQAN

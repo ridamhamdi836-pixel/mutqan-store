@@ -1,16 +1,11 @@
-<svg width="148" height="164" viewBox="0 0 148 164" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mutqan main logo">
-  <defs>
-    <linearGradient id="g" x1="44" y1="14" x2="104" y2="82" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#E8C7B7"/>
-      <stop offset="0.48" stop-color="#D4AF37"/>
-      <stop offset="1" stop-color="#B89124"/>
-    </linearGradient>
-  </defs>
-  <path d="M74 8L108 28V68L74 88L40 68V28L74 8Z" stroke="url(#g)" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M53 54C59 37 68 29 74 29C80 29 89 37 95 54" stroke="#07152F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M58 62V42L74 58L90 42V62" stroke="#07152F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M74 23C70 31 70 38 74 45C78 38 78 31 74 23Z" fill="#E8C7B7" opacity="0.9"/>
-  <path d="M99 18L101 23L106 25L101 27L99 32L97 27L92 25L97 23L99 18Z" fill="#D4AF37"/>
-  <text x="74" y="122" text-anchor="middle" dominant-baseline="middle" fill="#07152F" style="font-family:'IBM Plex Sans Arabic','Tajawal','Noto Sans Arabic',sans-serif;font-size:32px;font-weight:800;letter-spacing:-0.035em">&#1605;&#1578;&#1602;&#1606;</text>
-  <text x="74" y="148" text-anchor="middle" dominant-baseline="middle" fill="#64748B" style="font-family:'Inter',system-ui,sans-serif;font-size:9px;font-weight:600;letter-spacing:0.42em">MUTQAN</text>
+<svg width="148" height="172" viewBox="0 0 148 172" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mutqan stacked logo">
+  <g transform="translate(50 12)">
+    <path d="M30 2C33 18 42 27 58 30C42 33 33 42 30 58C27 42 18 33 2 30C18 27 27 18 30 2Z" stroke="#D4AF37" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M30 20L40 30L30 40L20 30L30 20Z" stroke="#08152D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M46 8L47.5 12.5L52 14L47.5 15.5L46 20L44.5 15.5L40 14L44.5 12.5L46 8Z" fill="#D4AF37"/>
+    <path d="M12 44L13.2 47.8L17 49L13.2 50.2L12 54L10.8 50.2L7 49L10.8 47.8L12 44Z" fill="#D4AF37" opacity="0.72"/>
+    <path d="M30 2C30 16 30 44 30 58" stroke="#FAF8F1" stroke-width="1" stroke-linecap="round" opacity="0.65"/>
+  </g>
+  <text x="74" y="116" text-anchor="middle" dominant-baseline="middle" fill="#08152D" style="font-family:'Aref Ruqaa','Noto Nastaliq Urdu','IBM Plex Sans Arabic','Tajawal','Noto Sans Arabic',sans-serif;font-size:40px;font-weight:700;letter-spacing:-0.055em">&#1605;&#1578;&#1602;&#1606;</text>
+  <text x="74" y="146" text-anchor="middle" dominant-baseline="middle" fill="#5F6675" style="font-family:'Inter',system-ui,sans-serif;font-size:9px;font-weight:400;letter-spacing:0.5em">MUTQAN</text>
 </svg>
