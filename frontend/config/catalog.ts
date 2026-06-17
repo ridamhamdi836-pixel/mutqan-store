@@ -264,6 +264,11 @@ export const CATALOG: CatalogProduct[] = [
         sort_order: 2,
       }),
     ],
+    upsell: {
+      hook_ar: "أضيفيها لنفس الشحنة لتحصلي على ركن جمال مرتب ومحمي من الغبار",
+      original_price_sar: 299,
+      upsell_price_sar: 199,
+    },
     crossSell: { shortDesc: "تنظيم فاخر لمستحضراتك", singleUnitPriceSar: 229 },
   },
   {
@@ -288,6 +293,11 @@ export const CATALOG: CatalogProduct[] = [
         sort_order: 2,
       }),
     ],
+    upsell: {
+      hook_ar: "إضافة مثالية لروتينك اليومي والسفر مع إضاءة واضحة أينما كنتِ",
+      original_price_sar: 349,
+      upsell_price_sar: 219,
+    },
     crossSell: { shortDesc: "إضاءة LED فاخرة للمكياج", singleUnitPriceSar: 249 },
   },
   {
@@ -312,6 +322,11 @@ export const CATALOG: CatalogProduct[] = [
         sort_order: 2,
       }),
     ],
+    upsell: {
+      hook_ar: "حافظي على فرشك نظيفة وناعمة بإضافة صغيرة تحدث فرقاً يومياً",
+      original_price_sar: 329,
+      upsell_price_sar: 219,
+    },
     crossSell: { shortDesc: "تنظيف ذكي لفرش المكياج", singleUnitPriceSar: 249 },
   },
   {
@@ -336,6 +351,11 @@ export const CATALOG: CatalogProduct[] = [
         sort_order: 2,
       }),
     ],
+    upsell: {
+      hook_ar: "أكملي ترتيب ركن الجمال بمنظم دوار يحمي الفرش ويسهّل الوصول لها",
+      original_price_sar: 239,
+      upsell_price_sar: 169,
+    },
     crossSell: { shortDesc: "ترتيب دوار لفرش المكياج", singleUnitPriceSar: 199 },
   },
 ];

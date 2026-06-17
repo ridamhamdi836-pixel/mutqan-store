@@ -7,7 +7,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
-import { CATALOG } from "@/config/catalog";
+import { FEATURED_SLUGS, getProduct } from "@/config/catalog";
 import {
   buildOrderMergeContext,
   loadLastOrderSession,
@@ -30,7 +30,9 @@ interface PostPurchaseUpsellProps {
   onComplete: (addedItems: Array<{ slug: string; name_ar: string; price_sar: number }>) => void;
 }
 
-const ALL_UPSELL_PRODUCTS: UpsellProduct[] = CATALOG.filter((p) => p.upsell).map((p) => {
+const ALL_UPSELL_PRODUCTS: UpsellProduct[] = FEATURED_SLUGS.map((slug) => getProduct(slug))
+  .filter((p): p is NonNullable<typeof p> => Boolean(p?.upsell))
+  .map((p) => {
   const u = p.upsell!;
   const savings = Math.round(
     ((u.original_price_sar - u.upsell_price_sar) / u.original_price_sar) * 100,

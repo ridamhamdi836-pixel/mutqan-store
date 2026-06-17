@@ -67,6 +67,6 @@ export const THANK_YOU_LIVE_ORDERS = [
 
 /** Upsell cards: show «الأكثر مبيعاً» */
 export const THANK_YOU_BESTSELLER_SLUGS = new Set([
-  "storage",
-  "pull-out-cabinet-drawer",
+  "beauty-vanity-cabinet",
+  "led-makeup-bag",
 ]);

@@ -1,4 +1,4 @@
-import { CATALOG, getProduct, resolveProductSlug } from "@/config/catalog";
+import { FEATURED_SLUGS, getProduct, resolveProductSlug } from "@/config/catalog";
 import { THANK_YOU_BESTSELLER_SLUGS } from "@/config/thank-you";
 import { PRODUCTS_CONFIG } from "@/config/products";
 import { getProductCardImageSrc } from "@/lib/product-image";
@@ -52,9 +52,9 @@ export function getUpsellProductDetail(slug: string): UpsellProductDetail | null
 }
 
 export function listThankYouUpsellProducts(orderedSlugs: string[]): UpsellProductDetail[] {
-  return CATALOG.filter((p) => p.upsell && !orderedSlugs.includes(p.slug))
+  return FEATURED_SLUGS.filter((slug) => !orderedSlugs.includes(slug))
     .slice(0, 3)
-    .map((p) => getUpsellProductDetail(p.slug)!)
+    .map((slug) => getUpsellProductDetail(slug)!)
     .filter(Boolean);
 }
 
