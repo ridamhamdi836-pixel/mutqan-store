@@ -40,8 +40,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
   icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg", type: "image/svg+xml" }],
+    icon: [{ url: "/icon.svg?v=3", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg?v=3", type: "image/svg+xml" }],
   },
 };
 
