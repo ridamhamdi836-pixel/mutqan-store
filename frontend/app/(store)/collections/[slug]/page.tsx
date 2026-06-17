@@ -1,10 +1,27 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
-import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
+import { ProductCard } from "@/components/commerce/ProductCard";
+import { TrustBadges } from "@/components/trust/TrustBadges";
+import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { COLLECTIONS, getCollectionBySlug } from "@/config/collections";
-import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { getProductsBySlugs, toProduct } from "@/config/catalog";
+
+const COLLECTION_FAQ: Record<string, Array<{ question: string; answer: string }>> = {
+  "home-organization": [
+    { question: "هل منتجات التنظيم سهلة التركيب؟", answer: "نعم، جميع منتجات التنظيم لا تحتاج لأدوات ويمكن تركيبها في دقائق." },
+    { question: "هل تناسب مقاسات الخزائن السعودية؟", answer: "صُممت لتناسب معظم أحجام الخزائن الشائعة. فريقنا يساعدك للتأكد قبل الشحن." },
+  ],
+  "modern-kitchen": [
+    { question: "هل فلتر الصنبور يناسب جميع الصنابير؟", answer: "يأتي بمجموعة محولات تناسب معظم أحجام الصنابير الشائعة في المنازل." },
+  ],
+  "cleaning-care": [
+    { question: "هل المكنسة مناسبة للاستخدام في السيارة؟", answer: "نعم، تأتي بملحقات مخصصة للمقاعد وداخل السيارات." },
+  ],
+  "dining-hosting": [
+    { question: "هل سخّان المائدة آمن للاستخدام اليومي؟", answer: "نعم، مصمم للاستخدام المنزلي الآمن مع حماية من الحرارة الزائدة." },
+  ],
+};
 
 export async function generateStaticParams() {
   return COLLECTIONS.map((c) => ({ slug: c.slug }));
@@ -33,19 +50,14 @@ export default async function CollectionPage({
   const collection = getCollectionBySlug(slug);
   if (!collection) notFound();
 
-  const productCards = collection.productSlugs
-    .map((productSlug) =>
-      HOMEPAGE_BEAUTY.bestSellers.products.find((p) => p.slug === productSlug),
-    )
-    .filter((product): product is (typeof HOMEPAGE_BEAUTY.bestSellers.products)[number] =>
-      Boolean(product),
-    );
+  const products = getProductsBySlugs(collection.productSlugs).map(toProduct);
+  const faqs = COLLECTION_FAQ[collection.slug] || [];
 
   return (
     <div className="bg-brand-background min-h-screen">
-      <section className="page-x pt-8 pb-6 md:pt-12 md:pb-10">
+      <section className="section-pad page-x">
         <div className="max-w-content mx-auto">
-          <nav className="text-sm text-brand-muted mb-8">
+          <nav className="text-sm text-brand-muted mb-6">
             <Link href="/" className="hover:text-brand-espresso">
               الرئيسية
             </Link>
@@ -57,27 +69,26 @@ export default async function CollectionPage({
             <span className="text-brand-espresso font-medium">{collection.nameAr}</span>
           </nav>
 
-          <div className="text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand-gold/25 bg-white/80 px-4 py-2 text-xs md:text-sm font-bold text-brand-espresso shadow-sm">
-              <Sparkles className="h-4 w-4 text-brand-gold" />
-              {collection.badge}
-            </div>
-            <h1 className="mt-5 text-3xl md:text-5xl font-extrabold text-brand-espresso leading-tight">
-              {collection.nameAr}
-            </h1>
-            <p className="mt-4 text-sm md:text-lg text-brand-muted leading-relaxed">
-              {collection.descriptionAr}
-            </p>
-          </div>
-        </div>
-      </section>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-brand-espresso mb-3">
+            {collection.nameAr}
+          </h1>
+          <p className="text-lg text-brand-muted max-w-2xl mb-10">{collection.descriptionAr}</p>
 
-      <section className="page-x pb-14 md:pb-20">
-        <div className="max-w-content mx-auto">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {productCards.map((product) => (
-              <BeautyProductCard key={product.slug} product={product} />
+            {products.map((product) => (
+              <ProductCard key={product.slug} product={product} />
             ))}
+          </div>
+
+          {faqs.length > 0 && (
+            <div className="mt-16">
+              <h2 className="text-2xl font-bold text-brand-espresso mb-6">أسئلة شائعة</h2>
+              <FAQAccordion items={faqs} />
+            </div>
+          )}
+
+          <div className="mt-12">
+            <TrustBadges />
           </div>
         </div>
       </section>

@@ -115,7 +115,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             )}
           </div>
           <span className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-[#1a2744] transition-colors">
-            <span>اكتشفي المنتج</span>
+            <span>اكتشفي</span>
             <ArrowLeft className="w-4 h-4" />
           </span>
         </div>
