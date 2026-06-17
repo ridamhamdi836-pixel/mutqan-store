@@ -57,7 +57,7 @@ export const HOMEPAGE_BEAUTY = {
         slug: "led-makeup-bag",
         nameAr: "حقيبة المكياج الفاخرة بإضاءة LED",
         subtitle: "إضاءة مثالية وأناقة ترافقك أينما كنت.",
-        image: "/images/products/led-makeup-bag.png",
+        image: withImageVersion("/images/products/led-makeup-bag.png", 2),
         imageAlt: "حقيبة المكياج الفاخرة بإضاءة LED — متقن",
       },
       {

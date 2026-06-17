@@ -14,10 +14,15 @@ type BeautyProductCardProps = {
   className?: string;
 };
 
+const SQUARE_FILL_IMAGE_SLUGS = new Set([
+  "beauty-vanity-cabinet",
+  "led-makeup-bag",
+]);
+
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
   const [imgError, setImgError] = useState(false);
   const catalogProduct = getProduct(product.slug);
-  const isBeautyVanityCabinet = product.slug === "beauty-vanity-cabinet";
+  const usesSquareFillImage = SQUARE_FILL_IMAGE_SLUGS.has(product.slug);
   const minPrice = catalogProduct
     ? [...catalogProduct.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar
     : null;
@@ -39,7 +44,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
       <div
         className={cn(
           "relative bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden",
-          isBeautyVanityCabinet
+          usesSquareFillImage
             ? "aspect-square min-h-[260px] sm:min-h-[300px]"
             : "aspect-[4/5] min-h-[220px] sm:min-h-[260px]",
         )}
@@ -53,7 +58,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             variant="default"
             sizes={STORE_IMAGE_SIZES.card}
             className={cn(
-              isBeautyVanityCabinet ? "p-0" : "p-6",
+              usesSquareFillImage ? "p-0" : "p-6",
               "md:group-hover:scale-[1.03] transition-transform duration-500 ease-out",
             )}
             onError={() => setImgError(true)}
