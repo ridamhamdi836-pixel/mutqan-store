@@ -6,6 +6,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { getProduct } from "@/config/catalog";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
+import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { Star, ArrowLeft, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -29,9 +30,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
     ? [...catalogProduct.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar
     : null;
 
-  const reviewCount =
-    1200 +
-    (product.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % 800);
+  const reviewCount = getProductReviewDisplayCount(product.slug);
 
   return (
     <Link
