@@ -37,8 +37,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
     >
       <div
         className={cn(
-          "relative bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden",
-          product.imageFrameClassName ?? "aspect-[4/5]",
+          "relative aspect-[4/5] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden",
           STORE_IMAGE_FRAME.cardMinHeight,
         )}
       >
@@ -50,10 +49,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             fit="contain"
             variant="default"
             sizes={STORE_IMAGE_SIZES.card}
-            className={cn(
-              product.imageClassName ?? "p-6",
-              "md:group-hover:scale-[1.03] transition-transform duration-500 ease-out",
-            )}
+            className="p-6 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
             onError={() => setImgError(true)}
           />
         ) : (

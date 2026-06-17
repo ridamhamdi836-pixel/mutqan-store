@@ -30,7 +30,6 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/hero/saudi-family.png": { width: 1024, height: 950 },
   "/images/hero/beauty-vanity-hero.png": { width: 1024, height: 819 },
   "/images/hero/beauty-lifestyle.png": { width: 1024, height: 682 },
-  "/images/products/beauty-vanity-cabinet.png": { width: 1024, height: 1024 },
   "/images/products/smart-stackable-cabinet-couple-hero.png": {
     width: 884,
     height: 1015,
