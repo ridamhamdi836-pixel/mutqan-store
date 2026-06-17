@@ -71,7 +71,7 @@ export const HOMEPAGE_BEAUTY = {
         slug: "rotating-brush-organizer",
         nameAr: "منظم الفرش الدوار الفاخر",
         subtitle: "ترتيب أنيق يحافظ على فرشك بعيداً عن الغبار.",
-        image: "/images/products/rotating-brush-organizer.png",
+        image: withImageVersion("/images/products/rotating-brush-organizer.png", 2),
         imageAlt: "منظم الفرش الدوار الفاخر — متقن",
       },
     ] satisfies HomepageBeautyProduct[],
