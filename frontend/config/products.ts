@@ -87,7 +87,7 @@ export const PRODUCTS_CONFIG: Record<string, {
   afterLabel: string;
   howToUse: string[];
   crossSellSlugs: string[];
-  reviews: Array<{ name: string; city: string; rating: number; text: string; photo?: string; photoAlt?: string; photoAspect?: string }>;
+  reviews: Array<{ name: string; city: string; rating: number; text: string; dateLabel?: string; photo?: string; photoAlt?: string; photoAspect?: string }>;
   faqs: Array<{ question: string; answer: string }>;
   seoTitle: string;
   seoDescription: string;
@@ -869,9 +869,86 @@ export const PRODUCTS_CONFIG: Record<string, {
     ],
     crossSellSlugs: ["led-makeup-bag", "rotating-brush-organizer"],
     reviews: [
-      { name: "نورة المطيري", city: "الرياض", rating: 5, text: "خزانة أنيقة جداً وعملية. مكياجي صار مرتب ومحمي من الغبار." },
-      { name: "ريم الحربي", city: "جدة", rating: 5, text: "تستحق كل ريال. تصميم فاخر يليق بزاوية جمالي." },
-      { name: "دانة القحطاني", city: "الدمام", rating: 5, text: "توصيل سريع وجودة ممتازة. أنصح فيها لكل بنت تحب الترتيب." },
+      {
+        name: "نورة المطيري",
+        city: "الرياض",
+        rating: 5,
+        dateLabel: "قبل 3 أسابيع",
+        text: "والله ما توقعت تطلع بهالجودة كنت كل يوم أدور أغراضي وما ألاقي شي، الحين كل شي مرتب وقدامي. أكثر شي عجبني إنها مقفلة وتحمي المكياج من الغبار.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-01.png",
+        photoAlt: "صورة مراجعة نورة لخزانة الجمال الفاخرة",
+        photoAspect: "768/1024",
+      },
+      {
+        name: "ريم الحربي",
+        city: "جدة",
+        rating: 5,
+        dateLabel: "قبل شهر",
+        text: "وصلتني أمس ورتبت كل أغراضي فيها على طول صراحة شكل التسريحة صار أفخم بكثير، وحتى زوجي سألني إذا غيرت الطاولة.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-02.png",
+        photoAlt: "صورة مراجعة ريم لخزانة الجمال الفاخرة",
+        photoAspect: "768/1024",
+      },
+      {
+        name: "دانة القحطاني",
+        city: "الدمام",
+        rating: 5,
+        dateLabel: "قبل شهر ونصف",
+        text: "كنت أحسبها صغيرة، بس شالت أشياء أكثر من اللي توقعت. الأدراج مرة عملية والخامة مو رخيصة أبداً.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-03.png",
+        photoAlt: "صورة مراجعة دانة لخزانة الجمال الفاخرة",
+        photoAspect: "768/1024",
+      },
+      {
+        name: "سارة الشهري",
+        city: "الخبر",
+        rating: 5,
+        dateLabel: "قبل أسبوعين",
+        text: "أكثر شي كنت أخاف منه يكون البلاستيك ضعيف، بس يوم وصلتني انصدمت من الجودة. صراحة تستاهل كل ريال.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-04.png",
+        photoAlt: "صورة مراجعة سارة لخزانة الجمال الفاخرة",
+        photoAspect: "576/1024",
+      },
+      {
+        name: "جوهرة العنزي",
+        city: "حائل",
+        rating: 5,
+        dateLabel: "قبل شهرين",
+        text: "أنا عندي مشكلة الغبار دايم على المكياج، وهذي أكثر ميزة خلتني أطلبها. كل شي صار نظيف ومرتب.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-05.png",
+        photoAlt: "صورة مراجعة جوهرة لخزانة الجمال الفاخرة",
+        photoAspect: "768/1024",
+      },
+      {
+        name: "هند العتيبي",
+        city: "الرياض",
+        rating: 5,
+        dateLabel: "قبل شهر",
+        text: "أقسم بالله إن شكل زاوية المكياج تغير 180 درجة حتى صرت أستمتع وأنا أرتب أغراضي، والخزانة شكلها فخم مرة.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-06.png",
+        photoAlt: "صورة مراجعة هند لخزانة الجمال الفاخرة",
+        photoAspect: "768/1024",
+      },
+      {
+        name: "مشاعل الزهراني",
+        city: "أبها",
+        rating: 5,
+        dateLabel: "قبل 20 يوم",
+        text: "شريتها وأنا مترددة شوي، بس بعد ما وصلتني ندمت إني ما طلبتها من زمان مرررة مريحة وكل شي صار له مكان.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-07.png",
+        photoAlt: "صورة مراجعة مشاعل لخزانة الجمال الفاخرة",
+        photoAspect: "460/1024",
+      },
+      {
+        name: "أريج الغامدي",
+        city: "مكة",
+        rating: 5,
+        dateLabel: "قبل 6 أسابيع",
+        text: "أنا من الناس اللي أحب كل شي يكون مرتب، والخزانة فعلاً فرقت معي. شكلها يعطي إحساس كأنها من براندات غالية.",
+        photo: "/images/reviews/beauty-vanity-cabinet/review-08.png",
+        photoAlt: "صورة مراجعة أريج لخزانة الجمال الفاخرة",
+        photoAspect: "693/649",
+      },
     ],
     faqs: [
       { question: "هل تحمي من الغبار؟", answer: "نعم، التصميم المغلق يحمي مستحضراتك من الغبار والرطوبة." },

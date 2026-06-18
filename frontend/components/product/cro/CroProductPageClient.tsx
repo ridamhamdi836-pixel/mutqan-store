@@ -517,50 +517,57 @@ export function CroProductPageClient({
             <p className="text-sm text-brand-muted mt-1">{PAGE.reviews.subtitle}</p>
           </div>
           <div className="columns-2 lg:columns-3 gap-3 md:gap-4 space-y-3 md:space-y-4">
-            {config.reviews.map((review, i) => (
-              <article
-                key={`${review.name}-${i}`}
-                className="break-inside-avoid card overflow-hidden"
-              >
-                {review.photo ? (
-                  <CroProductMedia
-                    src={review.photo}
-                    alt={review.photoAlt ?? review.name}
-                    aspect={review.photoAspect ?? "3/4"}
-                    placeholder="[CUSTOMER PHOTO PLACEHOLDER]"
-                  />
-                ) : null}
-                <div
-                  className={cn(
-                    "space-y-1",
-                    review.photo ? "p-2.5 md:p-3" : "p-3.5 md:p-4",
-                  )}
+            {config.reviews.map((review, i) => {
+              const dateLabel = review.dateLabel ?? reviewDateLabel(product.slug, i);
+              const shouldShowFullReview = product.slug === "beauty-vanity-cabinet";
+              return (
+                <article
+                  key={`${review.name}-${i}`}
+                  className="break-inside-avoid card overflow-hidden"
                 >
-                  <div className="flex items-center gap-0.5">
-                    {Array.from({ length: 5 }).map((_, si) => (
-                      <Star
-                        key={si}
-                        className={cn(
-                          "w-3 h-3",
-                          si < review.rating
-                            ? "text-amber-400 fill-amber-400"
-                            : "text-brand-border",
-                        )}
-                      />
-                    ))}
+                  {review.photo ? (
+                    <CroProductMedia
+                      src={review.photo}
+                      alt={review.photoAlt ?? review.name}
+                      aspect={review.photoAspect ?? "3/4"}
+                      placeholder="[CUSTOMER PHOTO PLACEHOLDER]"
+                    />
+                  ) : null}
+                  <div
+                    className={cn(
+                      "space-y-1",
+                      review.photo ? "p-2.5 md:p-3" : "p-3.5 md:p-4",
+                    )}
+                  >
+                    <div className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, si) => (
+                        <Star
+                          key={si}
+                          className={cn(
+                            "w-3 h-3",
+                            si < review.rating
+                              ? "text-amber-400 fill-amber-400"
+                              : "text-brand-border",
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <p
+                      className={cn(
+                        "text-[11px] md:text-xs text-brand-text leading-relaxed",
+                        shouldShowFullReview ? "" : "line-clamp-3",
+                      )}
+                    >
+                      &ldquo;{review.text}&rdquo;
+                    </p>
+                    <p className="text-[10px] text-brand-muted font-medium">
+                      {review.name} · {review.city}
+                      {dateLabel ? ` · ${dateLabel}` : ""}
+                    </p>
                   </div>
-                  <p className="text-[11px] md:text-xs text-brand-text leading-relaxed line-clamp-3">
-                    &ldquo;{review.text}&rdquo;
-                  </p>
-                  <p className="text-[10px] text-brand-muted font-medium">
-                    {review.name} · {review.city}
-                    {reviewDateLabel(product.slug, i)
-                      ? ` · ${reviewDateLabel(product.slug, i)}`
-                      : ""}
-                  </p>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>

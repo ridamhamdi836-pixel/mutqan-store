@@ -71,6 +71,38 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 1024,
     height: 768,
   },
+  "/images/reviews/beauty-vanity-cabinet/review-01.png": {
+    width: 768,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-02.png": {
+    width: 768,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-03.png": {
+    width: 768,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-04.png": {
+    width: 576,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-05.png": {
+    width: 768,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-06.png": {
+    width: 768,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-07.png": {
+    width: 460,
+    height: 1024,
+  },
+  "/images/reviews/beauty-vanity-cabinet/review-08.png": {
+    width: 693,
+    height: 649,
+  },
   "/images/products/led-makeup-bag.png": { width: 1024, height: 1024 },
   "/images/products/makeup-brush-cleaner.png": { width: 1024, height: 1024 },
   "/images/products/rotating-brush-organizer.png": { width: 1024, height: 1024 },
