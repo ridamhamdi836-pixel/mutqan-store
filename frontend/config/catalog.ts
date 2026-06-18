@@ -287,7 +287,7 @@ export const CATALOG: CatalogProduct[] = [
         is_default: true,
         sort_order: 1,
       }),
-      bundle("led-bag-2", "قطعتان - وفري أكثر عند طلب قطعتين", 2, 429, {
+      bundle("led-bag-2", "قطعتان - وفري أكثر عند طلب قطعتين", 2, 399, {
         compare_at_price_sar: 698,
         savings_label_ar: "وفر أكثر",
         sort_order: 2,
@@ -316,7 +316,7 @@ export const CATALOG: CatalogProduct[] = [
         is_default: true,
         sort_order: 1,
       }),
-      bundle("brush-cleaner-2", "قطعتان - مثالي للاستخدام الشخصي أو كهدية", 2, 429, {
+      bundle("brush-cleaner-2", "قطعتان - مثالي للاستخدام الشخصي أو كهدية", 2, 399, {
         compare_at_price_sar: 658,
         savings_label_ar: "وفر أكثر",
         sort_order: 2,
