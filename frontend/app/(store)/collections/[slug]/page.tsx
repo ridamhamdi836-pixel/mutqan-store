@@ -1,11 +1,13 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+"use client";
+
+import { use } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Star } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES, withImageVersion } from "@/lib/image-display";
 import { getProduct } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
+import { useCart } from "@/providers/cart-provider";
 
 type BeautyProductSlug =
   | "beauty-vanity-cabinet"
@@ -96,36 +98,20 @@ const BEAUTY_COLLECTIONS: BeautyCollection[] = [
   },
 ];
 
-function getBeautyCollectionBySlug(slug: string) {
+function getBeautyCollectionBySlug(slug: string | undefined) {
   return BEAUTY_COLLECTIONS.find((collection) => collection.slug === slug);
 }
 
-export async function generateStaticParams() {
-  return BEAUTY_COLLECTIONS.map((collection) => ({ slug: collection.slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const collection = getBeautyCollectionBySlug(slug);
-  if (!collection) return { title: "مجموعة | متقن" };
-  return {
-    title: `${collection.nameAr} | متقن`,
-    description: collection.descriptionAr,
-  };
-}
-
-export default async function CollectionPage({
+export default function CollectionPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
+  const { slug } = use(params);
   const collection = getBeautyCollectionBySlug(slug);
-  if (!collection) notFound();
+  if (!collection) {
+    return null;
+  }
 
   return (
     <div className="bg-brand-background min-h-screen">
@@ -242,10 +228,45 @@ function BeautyProductCard({ slug }: { slug: BeautyProductSlug }) {
 
 function CompleteBundleCard() {
   const reviewCount = getProductReviewDisplayCount("beauty-vanity-cabinet");
+  const { clearCart, addItem, openCheckout } = useCart();
+
+  const handleOrderBundle = () => {
+    clearCart();
+    [
+      {
+        productSlug: "beauty-vanity-cabinet",
+        productNameAr: "خزانة الجمال الفاخرة المضادة للغبار",
+        priceSar: 173,
+      },
+      {
+        productSlug: "led-makeup-bag",
+        productNameAr: "حقيبة المكياج الفاخرة بإضاءة LED",
+        priceSar: 188,
+      },
+      {
+        productSlug: "makeup-brush-cleaner",
+        productNameAr: "جهاز تنظيف فرش المكياج الذكي",
+        priceSar: 188,
+      },
+      {
+        productSlug: "rotating-brush-organizer",
+        productNameAr: "منظم الفرش الدوار الفاخر",
+        priceSar: 150,
+      },
+    ].forEach((item) =>
+      addItem({
+        ...item,
+        bundleId: `mutqan-complete-set-${item.productSlug}`,
+        bundleLabelAr: "مجموعة متقن الكاملة",
+        quantity: 1,
+        itemType: "main",
+      }),
+    );
+    openCheckout();
+  };
 
   return (
-    <Link
-      href="/collections/beauty-vanity"
+    <article
       className="group block rounded-[1.25rem] bg-white border border-brand-border/60 overflow-hidden shadow-[0_2px_12px_rgba(15,23,42,0.04)] card-lift transition-all duration-300 hover:border-brand-gold/30 sm:col-span-2 lg:col-span-1"
     >
       <div className="relative aspect-square min-h-[260px] sm:min-h-[300px] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden">
@@ -291,13 +312,17 @@ function CompleteBundleCard() {
               699 <span className="text-sm font-bold text-brand-muted">ر.س</span>
             </p>
           </div>
-          <span className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-[#1a2744] transition-colors">
+          <button
+            type="button"
+            onClick={handleOrderBundle}
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-[#1a2744] transition-colors"
+          >
             <span>احصلي على المجموعة كاملة</span>
             <ArrowLeft className="w-4 h-4" />
-          </span>
+          </button>
         </div>
       </div>
-    </Link>
+    </article>
   );
 }
 
