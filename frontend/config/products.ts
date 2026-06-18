@@ -764,6 +764,13 @@ export const PRODUCTS_CONFIG: Record<string, {
   },
   "beauty-vanity-cabinet": {
     heroImageAlt: "خزانة الجمال الفاخرة المضادة للغبار — متقن",
+    heroSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-before-after.png",
+      1,
+    ),
+    heroSectionImageAlt:
+      "قبل وبعد تنظيم مستحضرات التجميل باستخدام خزانة الجمال الفاخرة المضادة للغبار",
+    heroSectionAspect: "1024/759",
     shortPromise: "تنظيم أنيق يحافظ على مستحضراتك بأفضل صورة.",
     heroAngle: "زاوية جمال مرتبة ومحمية من الغبار",
     problemStatement: "مستحضراتك مبعثرة ومعرضة للغبار؟ خزانة الجمال الفاخرة تحافظ على كل شيء نظيفاً ومرتباً.",
