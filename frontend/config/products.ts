@@ -66,6 +66,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   organizedShelvesSectionImage?: string;
   organizedShelvesSectionImageAlt?: string;
   organizedShelvesSectionAspect?: string;
+  /** Optional image for quality materials proof block on the product page */
+  qualityMaterialsSectionImage?: string;
+  qualityMaterialsSectionImageAlt?: string;
+  qualityMaterialsSectionAspect?: string;
   /** Optional image for practical size proof block on the product page */
   practicalSizeSectionImage?: string;
   practicalSizeSectionImageAlt?: string;
@@ -828,6 +832,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     practicalSizeSectionImageAlt:
       "خزانة الجمال الفاخرة بحجم عملي على طاولة زينة أنيقة",
     practicalSizeSectionAspect: "1024/768",
+    qualityMaterialsSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-quality-materials.png",
+      1,
+    ),
+    qualityMaterialsSectionImageAlt:
+      "درج خزانة الجمال الفاخرة بخامات شفافة متينة وتفاصيل أنيقة",
+    qualityMaterialsSectionAspect: "1024/768",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",

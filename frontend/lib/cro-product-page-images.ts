@@ -88,9 +88,9 @@ export function getWhyItWorksImage(
         config.organizedShelvesSectionAspect,
       ),
       slot(
-        config.afterSectionImage,
-        config.afterSectionImageAlt,
-        config.afterSectionAspect,
+        config.qualityMaterialsSectionImage,
+        config.qualityMaterialsSectionImageAlt,
+        config.qualityMaterialsSectionAspect,
       ),
       slot(
         config.practicalSizeSectionImage,

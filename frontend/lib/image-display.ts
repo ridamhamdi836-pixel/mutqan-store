@@ -67,6 +67,10 @@ export const STORE_IMAGE_INTRINSIC: Record<
     width: 1024,
     height: 768,
   },
+  "/images/products/beauty-vanity-cabinet-quality-materials.png": {
+    width: 1024,
+    height: 768,
+  },
   "/images/products/led-makeup-bag.png": { width: 1024, height: 1024 },
   "/images/products/makeup-brush-cleaner.png": { width: 1024, height: 1024 },
   "/images/products/rotating-brush-organizer.png": { width: 1024, height: 1024 },
