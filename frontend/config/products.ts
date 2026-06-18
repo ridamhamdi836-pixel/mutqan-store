@@ -782,6 +782,13 @@ export const PRODUCTS_CONFIG: Record<string, {
       "ضمان 30 يوم",
     ],
     beforeLabel: "قبل: مستحضرات مبعثرة ومعرضة للغبار",
+    beforeSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-before.png",
+      1,
+    ),
+    beforeSectionImageAlt:
+      "مستحضرات تجميل مبعثرة على طاولة الزينة قبل استخدام خزانة الجمال الفاخرة",
+    beforeSectionAspect: "1024/939",
     afterLabel: "بعد متقن: ترتيب فاخر ومحمي",
     afterSectionImage: withImageVersion(
       "/images/products/beauty-vanity-cabinet-after.png",
