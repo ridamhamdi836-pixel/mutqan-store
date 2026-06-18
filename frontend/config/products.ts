@@ -781,6 +781,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     painSectionImageAlt:
       "عميلة أمام مستحضرات تجميل مبعثرة على طاولة الزينة قبل تنظيمها",
     painSectionAspect: "1024/768",
+    solutionSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-solution.png",
+      1,
+    ),
+    solutionSectionImageAlt:
+      "عميلة ترتب مستحضرات التجميل داخل خزانة الجمال الفاخرة المضادة للغبار",
+    solutionSectionAspect: "1024/953",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",
