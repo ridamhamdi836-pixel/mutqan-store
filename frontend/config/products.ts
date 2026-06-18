@@ -58,6 +58,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   durableStructureSectionImage?: string;
   durableStructureSectionImageAlt?: string;
   durableStructureSectionAspect?: string;
+  /** Optional image for organized shelves proof block on the product page */
+  organizedShelvesSectionImage?: string;
+  organizedShelvesSectionImageAlt?: string;
+  organizedShelvesSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -795,6 +799,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     lifestyleSectionImageAlt:
       "خزانة الجمال الفاخرة مفتوحة ومنظمة بمستحضرات التجميل على طاولة الزينة",
     lifestyleSectionAspect: "1024/774",
+    organizedShelvesSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-shelves.png",
+      1,
+    ),
+    organizedShelvesSectionImageAlt:
+      "تفاصيل أرفف خزانة الجمال الفاخرة وهي تنظم أحمر الشفاه والمستحضرات",
+    organizedShelvesSectionAspect: "768/1024",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",

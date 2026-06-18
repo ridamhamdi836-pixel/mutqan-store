@@ -75,6 +75,32 @@ export function getWhyItWorksImage(
     return slots[index] ?? {};
   }
 
+  if (slug === "beauty-vanity-cabinet") {
+    const slots: ImageSlot[] = [
+      slot(
+        config.solutionSectionImage,
+        config.solutionSectionImageAlt,
+        config.solutionSectionAspect,
+      ),
+      slot(
+        config.organizedShelvesSectionImage,
+        config.organizedShelvesSectionImageAlt,
+        config.organizedShelvesSectionAspect,
+      ),
+      slot(
+        config.afterSectionImage,
+        config.afterSectionImageAlt,
+        config.afterSectionAspect,
+      ),
+      slot(
+        config.beforeSectionImage,
+        config.beforeSectionImageAlt,
+        config.beforeSectionAspect,
+      ),
+    ].filter((s) => s.src);
+    return slots[index] ?? {};
+  }
+
   const pool: ImageSlot[] = [
     slot(
       config.solutionSectionImage,
