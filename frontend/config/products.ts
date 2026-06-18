@@ -788,6 +788,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     solutionSectionImageAlt:
       "عميلة ترتب مستحضرات التجميل داخل خزانة الجمال الفاخرة المضادة للغبار",
     solutionSectionAspect: "1024/953",
+    lifestyleSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-product.png",
+      1,
+    ),
+    lifestyleSectionImageAlt:
+      "خزانة الجمال الفاخرة مفتوحة ومنظمة بمستحضرات التجميل على طاولة الزينة",
+    lifestyleSectionAspect: "1024/774",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",
