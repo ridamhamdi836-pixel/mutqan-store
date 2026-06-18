@@ -66,6 +66,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   organizedShelvesSectionImage?: string;
   organizedShelvesSectionImageAlt?: string;
   organizedShelvesSectionAspect?: string;
+  /** Optional image for practical size proof block on the product page */
+  practicalSizeSectionImage?: string;
+  practicalSizeSectionImageAlt?: string;
+  practicalSizeSectionAspect?: string;
   /** Optional image used only in the before/after "before" card on the product page */
   beforeSectionImage?: string;
   beforeSectionImageAlt?: string;
@@ -817,6 +821,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     dustproofDesignSectionImageAlt:
       "خزانة الجمال الفاخرة بتصميم مغلق مضاد للغبار على طاولة الزينة",
     dustproofDesignSectionAspect: "1024/819",
+    practicalSizeSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-practical-size.png",
+      1,
+    ),
+    practicalSizeSectionImageAlt:
+      "خزانة الجمال الفاخرة بحجم عملي على طاولة زينة أنيقة",
+    practicalSizeSectionAspect: "1024/768",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",

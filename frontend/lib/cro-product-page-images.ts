@@ -93,9 +93,9 @@ export function getWhyItWorksImage(
         config.afterSectionAspect,
       ),
       slot(
-        config.beforeSectionImage,
-        config.beforeSectionImageAlt,
-        config.beforeSectionAspect,
+        config.practicalSizeSectionImage,
+        config.practicalSizeSectionImageAlt,
+        config.practicalSizeSectionAspect,
       ),
     ].filter((s) => s.src);
     return slots[index] ?? {};
