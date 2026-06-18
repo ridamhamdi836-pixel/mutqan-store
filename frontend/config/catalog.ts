@@ -345,7 +345,7 @@ export const CATALOG: CatalogProduct[] = [
         is_default: true,
         sort_order: 1,
       }),
-      bundle("brush-org-2", "قطعتان - اختيار رائع لإكمال ركن الجمال", 2, 299, {
+      bundle("brush-org-2", "قطعتان - اختيار رائع لإكمال ركن الجمال", 2, 279, {
         compare_at_price_sar: 478,
         savings_label_ar: "وفر أكثر",
         sort_order: 2,
