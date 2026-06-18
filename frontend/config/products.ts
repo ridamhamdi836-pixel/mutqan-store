@@ -58,6 +58,10 @@ export const PRODUCTS_CONFIG: Record<string, {
   durableStructureSectionImage?: string;
   durableStructureSectionImageAlt?: string;
   durableStructureSectionAspect?: string;
+  /** Optional image for dustproof design proof block on the product page */
+  dustproofDesignSectionImage?: string;
+  dustproofDesignSectionImageAlt?: string;
+  dustproofDesignSectionAspect?: string;
   /** Optional image for organized shelves proof block on the product page */
   organizedShelvesSectionImage?: string;
   organizedShelvesSectionImageAlt?: string;
@@ -806,6 +810,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     organizedShelvesSectionImageAlt:
       "تفاصيل أرفف خزانة الجمال الفاخرة وهي تنظم أحمر الشفاه والمستحضرات",
     organizedShelvesSectionAspect: "768/1024",
+    dustproofDesignSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-dustproof.png",
+      1,
+    ),
+    dustproofDesignSectionImageAlt:
+      "خزانة الجمال الفاخرة بتصميم مغلق مضاد للغبار على طاولة الزينة",
+    dustproofDesignSectionAspect: "1024/819",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",

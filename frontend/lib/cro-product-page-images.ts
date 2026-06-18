@@ -78,9 +78,9 @@ export function getWhyItWorksImage(
   if (slug === "beauty-vanity-cabinet") {
     const slots: ImageSlot[] = [
       slot(
-        config.solutionSectionImage,
-        config.solutionSectionImageAlt,
-        config.solutionSectionAspect,
+        config.dustproofDesignSectionImage,
+        config.dustproofDesignSectionImageAlt,
+        config.dustproofDesignSectionAspect,
       ),
       slot(
         config.organizedShelvesSectionImage,
