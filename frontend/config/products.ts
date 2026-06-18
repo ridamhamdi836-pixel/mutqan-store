@@ -783,6 +783,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     ],
     beforeLabel: "قبل: مستحضرات مبعثرة ومعرضة للغبار",
     afterLabel: "بعد متقن: ترتيب فاخر ومحمي",
+    afterSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-after.png",
+      1,
+    ),
+    afterSectionImageAlt:
+      "خزانة الجمال الفاخرة بعد ترتيب مستحضرات التجميل على طاولة الزينة",
+    afterSectionAspect: "1024/778",
     howToUse: [
       "رتّبي مستحضراتك على الأرفف",
       "أغلقي الخزانة للحماية من الغبار",
