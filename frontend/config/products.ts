@@ -774,6 +774,13 @@ export const PRODUCTS_CONFIG: Record<string, {
     shortPromise: "تنظيم أنيق يحافظ على مستحضراتك بأفضل صورة.",
     heroAngle: "زاوية جمال مرتبة ومحمية من الغبار",
     problemStatement: "مستحضراتك مبعثرة ومعرضة للغبار؟ خزانة الجمال الفاخرة تحافظ على كل شيء نظيفاً ومرتباً.",
+    painSectionImage: withImageVersion(
+      "/images/products/beauty-vanity-cabinet-problem.png",
+      1,
+    ),
+    painSectionImageAlt:
+      "عميلة أمام مستحضرات تجميل مبعثرة على طاولة الزينة قبل تنظيمها",
+    painSectionAspect: "1024/768",
     benefits: [
       "حماية من الغبار والرطوبة",
       "تصميم شفاف أنيق",
