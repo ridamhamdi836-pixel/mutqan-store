@@ -33,6 +33,14 @@ type CroProductPageClientProps = {
   };
 };
 
+const BEAUTY_CABINET_PRE_OFFER_PROOF = [
+  "🚚 شحن سريع لجميع مناطق المملكة",
+  "💳 الدفع عند الاستلام",
+  "🛡️ ضمان ذهبي لمدة 30 يوم",
+  "🎁 خصم حصري على منتجات متقن بعد إتمام الطلب",
+  "⭐ آلاف العميلات بدأن رحلتهن مع متقن من هذه الخزانة",
+] as const;
+
 export function CroProductPageClient({
   product,
   embedMode = "store",
@@ -466,6 +474,37 @@ export function CroProductPageClient({
 
       {/* 9b. Value justification — before pricing */}
       <CroProductValueJustification section={PAGE.valueJustification} />
+
+      {product.slug === "beauty-vanity-cabinet" ? (
+        <section className="cv-section page-x py-5 md:py-7 bg-white">
+          <div className="max-w-content mx-auto max-w-3xl">
+            <div className="relative overflow-hidden rounded-[28px] border border-brand-gold/30 bg-gradient-to-br from-white via-brand-surface to-brand-beige/70 px-4 py-5 md:px-7 md:py-6 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
+              <div className="absolute -top-16 -left-16 h-36 w-36 rounded-full bg-brand-gold/15 blur-3xl" />
+              <div className="absolute -bottom-20 -right-12 h-40 w-40 rounded-full bg-brand-espresso/10 blur-3xl" />
+              <div className="relative space-y-4">
+                <div className="text-center space-y-2">
+                  <p className="inline-flex items-center justify-center rounded-full border border-brand-gold/35 bg-white/80 px-3 py-1 text-[11px] font-extrabold text-brand-gold shadow-sm">
+                    ثقة وتجربة أجمل
+                  </p>
+                  <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold leading-snug text-brand-espresso">
+                    ✨ أكثر من 3000 عميلة اختارت خزانة متقن لتجربة أكثر ترتيباً وأناقة
+                  </h2>
+                </div>
+                <div className="grid gap-2.5 sm:grid-cols-2">
+                  {BEAUTY_CABINET_PRE_OFFER_PROOF.map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-2xl border border-white/80 bg-white/85 px-3.5 py-3 text-sm font-bold leading-relaxed text-brand-espresso shadow-sm"
+                    >
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
 
       {/* 10. Offer selector — after value */}
       <section
