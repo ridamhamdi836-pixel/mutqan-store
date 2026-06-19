@@ -7,6 +7,10 @@ import {
   Check,
   X,
   Users,
+  Sparkles,
+  ShieldCheck,
+  Clock3,
+  BadgeCheck,
 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { BundleSelector } from "@/components/product/BundleSelector";
@@ -38,6 +42,25 @@ type CroProductPageClientProps = {
     bundles: ProductBundle[];
   };
 };
+
+const BENEFIT_ICON_STYLES = [
+  {
+    Icon: Sparkles,
+    ring: "border-brand-gold/30 bg-brand-gold/10 text-brand-gold",
+  },
+  {
+    Icon: ShieldCheck,
+    ring: "border-emerald-200 bg-emerald-50 text-emerald-600",
+  },
+  {
+    Icon: BadgeCheck,
+    ring: "border-blue-200 bg-blue-50 text-blue-600",
+  },
+  {
+    Icon: Clock3,
+    ring: "border-rose-200 bg-rose-50 text-rose-500",
+  },
+] as const;
 
 export function CroProductPageClient({
   product,
@@ -372,22 +395,45 @@ export function CroProductPageClient({
 
       {/* 7. Benefits */}
       <section className="cv-section product-section-pad page-x bg-white">
-        <div className="max-w-content mx-auto space-y-4 md:space-y-6">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso text-center">
-            {PAGE.benefits.title}
-          </h2>
-          <div className="grid sm:grid-cols-2 gap-3 md:gap-4 max-w-3xl mx-auto">
-            {PAGE.benefits.items.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-brand-border/60 bg-brand-surface p-4"
-              >
-                <p className="text-sm md:text-base font-extrabold text-brand-espresso leading-snug">
-                  {item.title}
-                </p>
-                <p className="text-xs md:text-sm text-brand-muted mt-1">{item.desc}</p>
-              </div>
-            ))}
+        <div className="max-w-content mx-auto max-w-4xl space-y-4 md:space-y-6">
+          <div className="text-center space-y-2">
+            <p className="text-xs font-extrabold tracking-wide text-brand-gold">
+              النتيجة بعد الاستخدام
+            </p>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
+              {PAGE.benefits.title}
+            </h2>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {PAGE.benefits.items.map((item, index) => {
+              const { Icon, ring } =
+                BENEFIT_ICON_STYLES[index % BENEFIT_ICON_STYLES.length];
+              return (
+                <div
+                  key={item.title}
+                  className="group rounded-[24px] border border-brand-border/55 bg-gradient-to-br from-white to-brand-surface/80 p-4 shadow-sm transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(15,23,42,0.08)]"
+                >
+                  <div className="flex items-start gap-3">
+                    <span
+                      className={cn(
+                        "flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border transition duration-300 group-hover:rotate-3",
+                        ring,
+                      )}
+                    >
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-base font-extrabold leading-snug text-brand-espresso">
+                        {item.title}
+                      </p>
+                      <p className="text-sm font-medium leading-relaxed text-brand-muted">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -420,21 +466,35 @@ export function CroProductPageClient({
 
       {/* 9. Features */}
       <section className="cv-section page-x py-5 md:py-8 bg-white">
-        <div className="max-w-content mx-auto max-w-2xl">
-          <h2 className="text-xl sm:text-2xl font-extrabold text-brand-espresso text-center mb-4">
-            {PAGE.features.title}
-          </h2>
-          <ul className="grid sm:grid-cols-2 gap-2">
-            {PAGE.features.items.map((f) => (
-              <li
-                key={f}
-                className="flex items-center gap-2 rounded-xl bg-brand-surface border border-brand-border/50 px-3 py-2.5 text-sm font-bold text-brand-espresso"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-trust shrink-0" />
-                {f}
-              </li>
-            ))}
-          </ul>
+        <div className="max-w-content mx-auto max-w-3xl">
+          <div className="rounded-[26px] border border-brand-border/55 bg-gradient-to-br from-white via-brand-surface/60 to-white p-4 md:p-5 shadow-sm">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-extrabold tracking-wide text-brand-gold">
+                  قبل الطلب
+                </p>
+                <h2 className="text-lg sm:text-xl font-extrabold text-brand-espresso">
+                  {PAGE.features.title}
+                </h2>
+              </div>
+              <span className="hidden sm:inline-flex rounded-full bg-brand-espresso px-3 py-1 text-[11px] font-bold text-white">
+                مختصر وواضح
+              </span>
+            </div>
+            <ul className="grid gap-2 sm:grid-cols-2">
+              {PAGE.features.items.map((f) => (
+                <li
+                  key={f}
+                  className="flex items-center gap-2.5 rounded-2xl border border-white bg-white px-3 py-2.5 text-sm font-extrabold text-brand-espresso shadow-sm"
+                >
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-brand-gold/10 text-brand-gold">
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
