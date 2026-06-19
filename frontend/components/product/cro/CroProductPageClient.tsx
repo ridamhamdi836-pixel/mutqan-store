@@ -1,7 +1,18 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { Star, ShoppingBag, Check, X } from "lucide-react";
+import {
+  Star,
+  ShoppingBag,
+  Check,
+  X,
+  Truck,
+  CreditCard,
+  ShieldCheck,
+  Gift,
+  Sparkles,
+  Users,
+} from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { BundleSelector } from "@/components/product/BundleSelector";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
@@ -34,11 +45,11 @@ type CroProductPageClientProps = {
 };
 
 const BEAUTY_CABINET_PRE_OFFER_PROOF = [
-  "🚚 شحن سريع لجميع مناطق المملكة",
-  "💳 الدفع عند الاستلام",
-  "🛡️ ضمان ذهبي لمدة 30 يوم",
-  "🎁 خصم حصري على منتجات متقن بعد إتمام الطلب",
-  "⭐ آلاف العميلات بدأن رحلتهن مع متقن من هذه الخزانة",
+  { icon: Truck, text: "شحن سريع لجميع مناطق المملكة" },
+  { icon: CreditCard, text: "الدفع عند الاستلام" },
+  { icon: ShieldCheck, text: "ضمان ذهبي لمدة 30 يوم" },
+  { icon: Gift, text: "خصم حصري على منتجات متقن بعد إتمام الطلب" },
+  { icon: Users, text: "آلاف العميلات بدأن رحلتهن مع متقن من هذه الخزانة" },
 ] as const;
 
 export function CroProductPageClient({
@@ -476,29 +487,46 @@ export function CroProductPageClient({
       <CroProductValueJustification section={PAGE.valueJustification} />
 
       {product.slug === "beauty-vanity-cabinet" ? (
-        <section className="cv-section page-x py-5 md:py-7 bg-white">
-          <div className="max-w-content mx-auto max-w-3xl">
-            <div className="relative overflow-hidden rounded-[28px] border border-brand-gold/30 bg-gradient-to-br from-white via-brand-surface to-brand-beige/70 px-4 py-5 md:px-7 md:py-6 shadow-[0_18px_45px_rgba(15,23,42,0.08)]">
-              <div className="absolute -top-16 -left-16 h-36 w-36 rounded-full bg-brand-gold/15 blur-3xl" />
-              <div className="absolute -bottom-20 -right-12 h-40 w-40 rounded-full bg-brand-espresso/10 blur-3xl" />
+        <section className="cv-section page-x py-4 md:py-7 bg-white">
+          <div className="max-w-content mx-auto max-w-2xl">
+            <div className="relative overflow-hidden rounded-[26px] border border-brand-gold/25 bg-gradient-to-br from-white via-[#FFFCF7] to-brand-beige/60 p-4 md:p-6 shadow-[0_18px_42px_rgba(15,23,42,0.07)]">
+              <div className="absolute -top-20 -left-16 h-40 w-40 rounded-full bg-brand-gold/10 blur-3xl" />
+              <div className="absolute -bottom-24 -right-14 h-44 w-44 rounded-full bg-brand-espresso/10 blur-3xl" />
               <div className="relative space-y-4">
-                <div className="text-center space-y-2">
-                  <p className="inline-flex items-center justify-center rounded-full border border-brand-gold/35 bg-white/80 px-3 py-1 text-[11px] font-extrabold text-brand-gold shadow-sm">
+                <div className="space-y-2 text-center">
+                  <p className="inline-flex items-center justify-center gap-1.5 rounded-full border border-brand-gold/30 bg-white/85 px-3 py-1 text-[11px] font-extrabold text-brand-gold shadow-sm">
+                    <Sparkles className="h-3.5 w-3.5" />
                     ثقة وتجربة أجمل
                   </p>
-                  <h2 className="text-lg sm:text-xl md:text-2xl font-extrabold leading-snug text-brand-espresso">
-                    ✨ أكثر من 3000 عميلة اختارت خزانة متقن لتجربة أكثر ترتيباً وأناقة
+                  <h2 className="mx-auto max-w-xl text-lg sm:text-xl md:text-2xl font-extrabold leading-snug text-brand-espresso">
+                    أكثر من 3000 عميلة اختارت خزانة متقن
                   </h2>
+                  <p className="text-sm font-bold leading-relaxed text-brand-muted">
+                    لتجربة أكثر ترتيباً وأناقة قبل اختيار العرض المناسب.
+                  </p>
                 </div>
-                <div className="grid gap-2.5 sm:grid-cols-2">
-                  {BEAUTY_CABINET_PRE_OFFER_PROOF.map((item) => (
-                    <div
-                      key={item}
-                      className="rounded-2xl border border-white/80 bg-white/85 px-3.5 py-3 text-sm font-bold leading-relaxed text-brand-espresso shadow-sm"
-                    >
-                      {item}
-                    </div>
-                  ))}
+                <div className="grid gap-2.5 md:grid-cols-2">
+                  {BEAUTY_CABINET_PRE_OFFER_PROOF.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <div
+                        key={item.text}
+                        className={cn(
+                          "flex items-center gap-3 rounded-2xl border border-brand-border/45 bg-white/90 p-3 text-start shadow-sm",
+                          index === BEAUTY_CABINET_PRE_OFFER_PROOF.length - 1
+                            ? "md:col-span-2"
+                            : "",
+                        )}
+                      >
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/10 text-brand-gold">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <span className="text-sm font-extrabold leading-relaxed text-brand-espresso">
+                          {item.text}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             </div>
