@@ -315,10 +315,10 @@ function UpsellProductRow({
   return (
     <div
       className={cn(
-        "rounded-2xl border-2 p-3 md:p-4 transition-colors",
+        "rounded-[24px] border-2 bg-white p-3.5 md:p-4 shadow-sm transition-all",
         isSelected
-          ? "border-brand-trust bg-brand-trust/5 shadow-sm"
-          : "border-brand-border hover:border-brand-bronze/30",
+          ? "border-brand-gold bg-brand-gold/5 shadow-md shadow-brand-gold/10"
+          : "border-brand-border hover:border-brand-gold/45 hover:shadow-md",
       )}
     >
       <div className="flex items-start gap-3">
@@ -331,9 +331,9 @@ function UpsellProductRow({
           aria-pressed={isSelected}
           aria-label={isSelected ? "إلغاء الاختيار" : "اختيار المنتج"}
           className={cn(
-            "mt-2 w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+            "mt-2 w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-colors",
             isSelected
-              ? "bg-brand-trust border-brand-trust"
+              ? "bg-brand-gold border-brand-gold"
               : "border-brand-muted/40 hover:border-brand-bronze",
           )}
         >
@@ -345,23 +345,24 @@ function UpsellProductRow({
           onClick={onOpenPreview}
           className="flex flex-1 items-start gap-3 min-w-0 text-start group"
         >
-          <div className="relative w-20 aspect-[4/3] md:w-24 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0 border border-brand-border/50">
+          <div className="relative w-24 aspect-square md:w-28 rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
             <StoreImage
               src={product.image}
               alt={product.name_ar}
               fill
               sizes={STORE_IMAGE_SIZES.thumbnail}
-              className="md:group-hover:scale-[1.02] md:transition-transform md:duration-200"
+              fit="contain"
+              className="p-1.5 md:group-hover:scale-[1.02] md:transition-transform md:duration-200"
             />
             {product.isBestseller ? (
-              <span className="absolute top-1 start-1 text-[9px] font-bold bg-brand-bronze text-white px-1.5 py-0.5 rounded shadow-sm">
+              <span className="absolute top-1.5 start-1.5 text-[9px] font-bold bg-brand-gold text-white px-1.5 py-0.5 rounded-full shadow-sm">
                 الأكثر مبيعاً
               </span>
             ) : null}
           </div>
 
           <div className="flex-1 min-w-0 space-y-1.5">
-            <p className="font-bold text-sm md:text-base text-brand-espresso group-hover:text-brand-bronze transition-colors leading-snug">
+            <p className="font-extrabold text-sm md:text-base text-brand-espresso group-hover:text-brand-gold transition-colors leading-snug">
               {product.name_ar}
             </p>
             <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
@@ -386,7 +387,7 @@ function UpsellProductRow({
                 وفّر {product.savings_percent}%
               </span>
             </div>
-            <span className="text-[10px] text-brand-bronze font-bold block">
+            <span className="text-[10px] text-brand-gold font-bold block">
               اضغط لمعرفة المزيد والمراجعات
             </span>
           </div>

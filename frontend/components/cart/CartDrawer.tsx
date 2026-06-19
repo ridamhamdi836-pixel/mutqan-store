@@ -16,18 +16,20 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
   return (
-    <div className="relative w-20 aspect-[4/3] rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
+    <div className="relative w-20 aspect-square rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
       {!err ? (
         <StoreImage
           src={getProductCardImageSrc(slug)}
           alt={name}
           fill
+          fit="contain"
           variant="thumbnail"
           sizes={STORE_IMAGE_SIZES.thumbnail}
+          className="p-1.5"
           onError={() => setErr(true)}
         />
       ) : (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-[10px] text-gray-400 px-1 text-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-brand-surface text-[10px] text-brand-muted px-1 text-center">
           {name}
         </div>
       )}
@@ -103,33 +105,33 @@ export function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-y-0 start-0 z-[70] w-full max-w-[420px] bg-white shadow-2xl flex flex-col outline-none"
+            className="fixed inset-y-0 start-0 z-[70] w-full max-w-[430px] bg-[#FAF8F6] shadow-2xl flex flex-col outline-none"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100">
+            <div className="flex items-center justify-between px-5 py-5 border-b border-brand-gold/15 bg-white/95">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#1B4DDB]/10 flex items-center justify-center">
-                  <ShoppingBag className="w-5 h-5 text-[#1B4DDB]" />
+                <div className="w-11 h-11 rounded-2xl bg-brand-gold/10 flex items-center justify-center border border-brand-gold/20">
+                  <ShoppingBag className="w-5 h-5 text-brand-gold" />
                 </div>
                 <div>
-                  <h2 className="font-bold text-lg text-gray-900">سلة المشتريات</h2>
+                  <h2 className="font-extrabold text-lg text-brand-espresso">سلة المشتريات</h2>
                   {itemCount > 0 && (
-                    <p className="text-xs text-gray-500">{itemCount} منتج</p>
+                    <p className="text-xs font-medium text-brand-muted">{itemCount} منتج</p>
                   )}
                 </div>
               </div>
               <button
                 onClick={closeCart}
                 aria-label="إغلاق السلة"
-                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"
+                className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-brand-surface transition-colors"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-brand-muted" />
               </button>
             </div>
 
             {/* Trust Bar */}
-            <div className="px-6 py-3 bg-[#10B981]/8 border-b border-[#10B981]/15">
-              <div className="flex items-center gap-2 text-[13px] text-[#10B981] font-semibold">
+            <div className="px-5 py-3 bg-white border-b border-brand-gold/10">
+              <div className="flex items-center gap-2 rounded-2xl border border-emerald-100 bg-emerald-50 px-3 py-2 text-[13px] text-emerald-700 font-bold">
                 <CreditCard className="w-4 h-4 flex-shrink-0" />
                 <span>الدفع عند الاستلام · نؤكد قبل الشحن · ضمان 30 يوم</span>
               </div>
@@ -139,46 +141,46 @@ export function CartDrawer() {
             <div className="flex-1 overflow-y-auto overscroll-contain">
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-5 text-center px-8">
-                  <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center">
-                    <ShoppingBag className="w-10 h-10 text-gray-300" />
+                  <div className="w-20 h-20 rounded-full bg-white border border-brand-gold/15 flex items-center justify-center shadow-sm">
+                    <ShoppingBag className="w-10 h-10 text-brand-gold" />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-gray-900 mb-1">سلتك فارغة</p>
-                    <p className="text-sm text-gray-500">تصفح منتجاتنا وأضف ما يناسبك</p>
+                    <p className="text-lg font-extrabold text-brand-espresso mb-1">سلتك فارغة</p>
+                    <p className="text-sm text-brand-muted">تصفح منتجات متقن وأضف ما يناسبك</p>
                   </div>
                   <button
                     onClick={closeCart}
-                    className="px-6 py-3 rounded-xl bg-[#1B4DDB] text-white font-semibold text-sm hover:bg-[#1B4DDB]/90 transition-colors"
+                    className="px-6 py-3 rounded-2xl bg-brand-espresso text-white font-bold text-sm hover:bg-brand-espresso/90 transition-colors shadow-md shadow-brand-espresso/15"
                   >
                     تصفح المنتجات
                   </button>
                 </div>
               ) : (
-                <div className="p-6 space-y-4">
+                <div className="p-4 md:p-5 space-y-4">
                   {items.map((item) => (
                     <div
                       key={item.bundleId}
-                      className="flex items-center gap-3 p-3 rounded-2xl bg-gray-50 border border-gray-100"
+                      className="flex items-center gap-3 p-3 rounded-[22px] bg-white border border-brand-gold/10 shadow-sm"
                     >
                       <CartItemImage slug={item.productSlug} name={item.productNameAr} />
                       <div className="flex-1 min-w-0">
-                        <p className="font-bold text-sm text-gray-900 leading-snug">
+                        <p className="font-extrabold text-sm text-brand-espresso leading-snug">
                           {item.productNameAr}
                         </p>
-                        <p className="text-xs text-gray-500 mt-0.5">{item.bundleLabelAr}</p>
+                        <p className="text-xs text-brand-muted mt-0.5">{item.bundleLabelAr}</p>
                         <div className="flex items-center gap-2 mt-1.5">
-                          <span className="font-bold text-[#1B4DDB] text-base">
+                          <span className="font-black text-brand-gold text-base">
                             {formatSARCompact(item.priceSar)}
                           </span>
                           {item.quantity > 1 && (
-                            <span className="text-xs text-gray-400">× {item.quantity}</span>
+                            <span className="text-xs text-brand-muted">× {item.quantity}</span>
                           )}
                         </div>
                       </div>
                       <button
                         onClick={() => removeItem(item.bundleId)}
                         aria-label={`إزالة ${item.productNameAr}`}
-                        className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                        className="w-8 h-8 rounded-xl flex items-center justify-center text-brand-muted hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -186,8 +188,8 @@ export function CartDrawer() {
                   ))}
 
                   {crossSellSlugs.length > 0 && (
-                    <div className="pt-4 border-t border-gray-100">
-                      <h3 className="font-bold text-sm text-gray-900 mb-3">أكمل تجربتك</h3>
+                    <div className="pt-4 border-t border-brand-gold/15">
+                      <h3 className="font-extrabold text-sm text-brand-espresso mb-3">أكملي تجربة متقن</h3>
                       <div className="space-y-3">
                         {crossSellSlugs.map((slug) => (
                           <CrossSellCard key={slug} productSlug={slug} />
@@ -201,30 +203,30 @@ export function CartDrawer() {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="border-t border-gray-200 px-4 py-3.5 space-y-2 bg-white shrink-0">
+              <div className="border-t border-brand-gold/15 px-4 py-3.5 space-y-2 bg-white shrink-0 shadow-[0_-10px_30px_rgba(15,23,42,0.06)]">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600 font-medium text-sm">الإجمالي</span>
-                  <span className="font-bold text-xl text-gray-900">
+                  <span className="text-brand-muted font-bold text-sm">الإجمالي</span>
+                  <span className="font-black text-2xl text-brand-espresso">
                     {formatSARCompact(totalSar)}
                   </span>
                 </div>
 
-                <p className="text-[11px] text-[#10B981] font-medium">
+                <p className="text-[11px] text-emerald-700 font-bold">
                   ✓ الشحن مجاني لجميع الطلبات
                 </p>
 
                 <button
                   onClick={handleCheckout}
                   className={cn(
-                    "w-full h-11 rounded-xl font-semibold text-sm text-white",
-                    "bg-[#1B4DDB] hover:bg-[#1640b8] active:scale-[0.98]",
-                    "transition-all duration-150 shadow-md shadow-[#1B4DDB]/20",
+                    "w-full h-12 rounded-2xl font-extrabold text-sm text-white",
+                    "bg-brand-espresso hover:bg-brand-espresso/90 active:scale-[0.98]",
+                    "transition-all duration-150 shadow-md shadow-brand-espresso/20",
                   )}
                 >
                   أكمل الطلب · الدفع عند الاستلام
                 </button>
 
-                <p className="text-[10px] text-center text-gray-400 leading-snug">
+                <p className="text-[10px] text-center text-brand-muted leading-snug">
                   لا حاجة لبطاقة دفع — ادفع نقدًا عند استلام طلبك
                 </p>
               </div>

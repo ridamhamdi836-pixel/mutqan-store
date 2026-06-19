@@ -560,44 +560,42 @@ export function CroProductPageClient({
       ) : null}
 
       {/* 10. Offer selector — after value */}
-      <section
-        ref={offerRef}
-        className="cv-section product-section-pad page-x bg-brand-surface border-y border-brand-border/40"
-      >
-        <div className="max-w-content mx-auto max-w-lg space-y-4">
-          <div className="text-center">
-            <h2
-              id={OFFER_HEADING_ID}
-              className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
-            >
-              {PAGE.offer.title}
-            </h2>
-            <p className="text-sm text-brand-muted mt-1">{PAGE.offer.subtitle}</p>
-          </div>
-
-          <BundleSelector
-            bundles={product.bundles}
-            selectedId={selectedBundle.id}
-            onSelect={setSelectedBundle}
-            productSlug={product.slug}
-          />
-
-          {!isUpsellPreview ? (
-            <>
-              <button
-                type="button"
-                onClick={handlePlaceOrder}
-                className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
+      {!isUpsellPreview ? (
+        <section
+          ref={offerRef}
+          className="cv-section product-section-pad page-x bg-brand-surface border-y border-brand-border/40"
+        >
+          <div className="max-w-content mx-auto max-w-lg space-y-4">
+            <div className="text-center">
+              <h2
+                id={OFFER_HEADING_ID}
+                className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
               >
-                اطلب الآن · {selectedBundle.price_sar} ر.س
-              </button>
-              <p className="text-center text-xs text-brand-muted font-medium">
-                بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
-              </p>
-            </>
-          ) : null}
-        </div>
-      </section>
+                {PAGE.offer.title}
+              </h2>
+              <p className="text-sm text-brand-muted mt-1">{PAGE.offer.subtitle}</p>
+            </div>
+
+            <BundleSelector
+              bundles={product.bundles}
+              selectedId={selectedBundle.id}
+              onSelect={setSelectedBundle}
+              productSlug={product.slug}
+            />
+
+            <button
+              type="button"
+              onClick={handlePlaceOrder}
+              className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
+            >
+              اطلب الآن · {selectedBundle.price_sar} ر.س
+            </button>
+            <p className="text-center text-xs text-brand-muted font-medium">
+              بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
+            </p>
+          </div>
+        </section>
+      ) : null}
 
       {/* 11. Reviews — image-first masonry */}
       <section className="cv-section product-section-pad page-x bg-white">

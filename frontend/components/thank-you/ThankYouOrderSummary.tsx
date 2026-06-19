@@ -3,7 +3,7 @@
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
-import { getProductMainImageSrc } from "@/lib/product-image";
+import { getProductCardImageSrc } from "@/lib/product-image";
 import type { LastOrderLineItem } from "@/lib/last-order-session";
 import { CreditCard, Package, User } from "lucide-react";
 
@@ -70,11 +70,13 @@ export function ThankYouOrderSummary({
             >
               <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-xl overflow-hidden bg-brand-beige flex-shrink-0">
                 <StoreImage
-                  src={getProductMainImageSrc(item.productSlug)}
+                  src={getProductCardImageSrc(item.productSlug)}
                   alt={item.productNameAr}
                   fill
+                  fit="contain"
                   sizes={STORE_IMAGE_SIZES.thumbnail}
                   variant="thumbnail"
+                  className="p-1"
                 />
               </div>
               <div className="flex-1 min-w-0">

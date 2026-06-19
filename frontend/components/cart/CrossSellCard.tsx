@@ -41,8 +41,8 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
   const productImageSrc = getProductCardImageSrc(productSlug);
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white overflow-hidden shadow-sm">
-      <div className={cn("relative aspect-[4/3] bg-gray-50 overflow-hidden", STORE_IMAGE_FRAME.cardMinHeight)}>
+    <div className="rounded-[22px] border border-brand-gold/10 bg-white overflow-hidden shadow-sm">
+      <div className={cn("relative aspect-[4/3] bg-brand-surface overflow-hidden", STORE_IMAGE_FRAME.cardMinHeight)}>
         {!imgError ? (
           <StoreImage
             src={productImageSrc}
@@ -62,9 +62,9 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
 
       <div className="flex items-center gap-3 p-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-gray-900 leading-snug">{catalog.name_ar}</p>
-          <p className="text-xs text-gray-500 mt-0.5">{crossSell.shortDesc}</p>
-          <p className="text-sm font-bold text-[#1B4DDB] mt-1">
+          <p className="text-sm font-extrabold text-brand-espresso leading-snug">{catalog.name_ar}</p>
+          <p className="text-xs text-brand-muted mt-0.5">{crossSell.shortDesc}</p>
+          <p className="text-sm font-black text-brand-gold mt-1">
             {displayPriceSar} ر.س
           </p>
         </div>
@@ -76,8 +76,8 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
           className={cn(
             "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all",
             alreadyInCart
-              ? "bg-[#10B981]/15 text-[#10B981] cursor-default"
-              : "bg-[#1B4DDB] text-white hover:bg-[#1640b8]",
+              ? "bg-emerald-50 text-emerald-600 cursor-default"
+              : "bg-brand-espresso text-white hover:bg-brand-espresso/90 shadow-sm shadow-brand-espresso/15",
           )}
         >
           {alreadyInCart ? "✓" : <Plus className="w-4 h-4" />}

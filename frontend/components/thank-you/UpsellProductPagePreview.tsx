@@ -57,15 +57,10 @@ export function UpsellProductPagePreview({
       </div>
 
       <div
-        className="rounded-2xl border-2 border-brand-border/80 bg-brand-background overflow-hidden shadow-inner"
+        className="rounded-2xl border border-brand-border/80 bg-brand-background overflow-hidden shadow-sm"
         aria-label={`تفاصيل ${product.name_ar}`}
       >
-        <div
-          className={cn(
-            "max-h-[min(70vh,36rem)] md:max-h-[min(72vh,40rem)] overflow-y-auto overscroll-contain",
-            "[&_.max-w-content]:max-w-full",
-          )}
-        >
+        <div className={cn("[&_.max-w-content]:max-w-full")}>
           <CroProductPageClient
             embedMode="upsell-preview"
             product={{
@@ -79,10 +74,6 @@ export function UpsellProductPagePreview({
           />
         </div>
       </div>
-
-      <p className="text-[11px] text-center text-brand-muted">
-        مرّر لأسفل داخل الإطار لقراءة المزيد
-      </p>
 
       <div className="flex flex-col sm:flex-row gap-2">
         <button
