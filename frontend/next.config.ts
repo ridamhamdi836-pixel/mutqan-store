@@ -6,8 +6,58 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: "/products/powerful-cordless-vacuum",
+        destination: "/products/vacuum",
+        permanent: true,
+      },
+      {
+        source: "/products/pull-out-cabinet-drawer",
+        destination: "/products/drawer",
+        permanent: true,
+      },
+      {
         source: "/products/magic-under-sink-organizer",
-        destination: "/products/sink-organizer",
+        destination: "/products/sink",
+        permanent: true,
+      },
+      {
+        source: "/products/sink-organizer",
+        destination: "/products/sink",
+        permanent: true,
+      },
+      {
+        source: "/products/pure-faucet-filter",
+        destination: "/products/filter",
+        permanent: true,
+      },
+      {
+        source: "/products/smart-table-warmer",
+        destination: "/products/warmer",
+        permanent: true,
+      },
+      {
+        source: "/products/thermal-lunch-box",
+        destination: "/products/lunch",
+        permanent: true,
+      },
+      {
+        source: "/products/beauty-vanity-cabinet",
+        destination: "/products/vanity",
+        permanent: true,
+      },
+      {
+        source: "/products/led-makeup-bag",
+        destination: "/products/led",
+        permanent: true,
+      },
+      {
+        source: "/products/makeup-brush-cleaner",
+        destination: "/products/cleaner",
+        permanent: true,
+      },
+      {
+        source: "/products/rotating-brush-organizer",
+        destination: "/products/brush",
         permanent: true,
       },
       {

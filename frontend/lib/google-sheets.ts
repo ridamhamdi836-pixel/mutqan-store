@@ -3,7 +3,7 @@
  * Primary destination for every checkout order (frontend only).
  */
 
-import { getCatalogNameAr, getCatalogSku } from "@/config/catalog";
+import { getCatalogNameAr, getCatalogSku, getProductPath } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
 export const SHEETS_BUILD = "google-sheets-order-number-visible-v5";
@@ -74,7 +74,7 @@ function productSku(slug: string): string {
 }
 
 function productUrl(slug: string): string {
-  return `${SITE_URL}/products/${slug}`;
+  return `${SITE_URL}${getProductPath(slug)}`;
 }
 
 /** Readable line for Sheets quantity column — avoids 1/1/1 being parsed as a date */

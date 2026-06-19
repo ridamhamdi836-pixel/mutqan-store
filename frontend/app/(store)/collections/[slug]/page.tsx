@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Sparkles, Star } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES, withImageVersion } from "@/lib/image-display";
-import { getProduct } from "@/config/catalog";
+import { getProduct, getProductPath } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { useCart } from "@/providers/cart-provider";
 
@@ -172,7 +172,7 @@ function BeautyProductCard({ slug }: { slug: BeautyProductSlug }) {
 
   return (
     <Link
-      href={`/products/${slug}`}
+      href={getProductPath(slug)}
       className="group block rounded-[1.25rem] bg-white border border-brand-border/60 overflow-hidden shadow-[0_2px_12px_rgba(15,23,42,0.04)] card-lift transition-all duration-300 hover:border-brand-gold/30"
     >
       <div className="relative aspect-square min-h-[260px] sm:min-h-[300px] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden">

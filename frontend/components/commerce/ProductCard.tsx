@@ -8,6 +8,7 @@ import type { Product } from "@/types";
 import { getProductCardImageSrc } from "@/lib/product-image";
 import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
 import { cn } from "@/lib/utils";
+import { getProductPath } from "@/config/catalog";
 
 interface ProductCardProps {
   product: Product;
@@ -24,7 +25,7 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={getProductPath(product.slug)}
       className="group block rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm card-lift"
     >
       {/* Product Image */}

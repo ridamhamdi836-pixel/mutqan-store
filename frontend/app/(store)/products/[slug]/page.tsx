@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
 import { PRODUCTS_CONFIG } from "@/config/products";
-import { getProduct, PRODUCT_SLUGS, resolveProductSlug } from "@/config/catalog";
+import { getProduct, PRODUCT_PAGE_SLUGS, resolveProductSlug } from "@/config/catalog";
 import { getProductOgImageUrl } from "@/lib/product-image";
 
 export async function generateStaticParams() {
-  return PRODUCT_SLUGS.map((slug) => ({ slug }));
+  return PRODUCT_PAGE_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { getProductPath } from "@/config/catalog";
 import { Phone, ExternalLink, Calendar, Tag } from "lucide-react";
 
 export type AdminOrderRow = {
@@ -196,7 +197,7 @@ export function OrderPreview({ order, items, compact }: OrderPreviewProps) {
         <div className="px-6 pb-6 flex flex-wrap gap-2">
           {mainItems[0]?.product_slug && (
             <Link
-              href={`/products/${mainItems[0].product_slug}`}
+              href={getProductPath(mainItems[0].product_slug)}
               target="_blank"
               className="inline-flex items-center gap-1.5 text-xs admin-link hover:underline"
             >

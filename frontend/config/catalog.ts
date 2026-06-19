@@ -366,13 +366,50 @@ export const CATALOG_BY_SLUG: Record<string, CatalogProduct> = Object.fromEntrie
 
 export const PRODUCT_SLUGS = CATALOG.map((p) => p.slug);
 
-/** Legacy URLs → canonical slug */
+/** Short storefront URLs stay separate from internal slugs used by orders/config. */
+export const PRODUCT_SHORT_SLUGS: Record<string, string> = {
+  "powerful-cordless-vacuum": "vacuum",
+  storage: "storage",
+  "pull-out-cabinet-drawer": "drawer",
+  "sink-organizer": "sink",
+  "pure-faucet-filter": "filter",
+  "smart-table-warmer": "warmer",
+  "thermal-lunch-box": "lunch",
+  "beauty-vanity-cabinet": "vanity",
+  "led-makeup-bag": "led",
+  "makeup-brush-cleaner": "cleaner",
+  "rotating-brush-organizer": "brush",
+};
+
+export const PRODUCT_PAGE_SLUGS = Object.values(PRODUCT_SHORT_SLUGS);
+
+/** Legacy/short URLs → canonical slug */
 const PRODUCT_SLUG_ALIASES: Record<string, string> = {
+  vacuum: "powerful-cordless-vacuum",
+  drawer: "pull-out-cabinet-drawer",
+  sink: "sink-organizer",
+  filter: "pure-faucet-filter",
+  warmer: "smart-table-warmer",
+  lunch: "thermal-lunch-box",
+  vanity: "beauty-vanity-cabinet",
+  led: "led-makeup-bag",
+  cleaner: "makeup-brush-cleaner",
+  brush: "rotating-brush-organizer",
   "smart-stackable-cabinet": "storage",
+  "magic-under-sink-organizer": "sink-organizer",
 };
 
 export function resolveProductSlug(slug: string): string {
   return PRODUCT_SLUG_ALIASES[slug] ?? slug;
+}
+
+export function getProductPageSlug(slug: string): string {
+  const resolved = resolveProductSlug(slug);
+  return PRODUCT_SHORT_SLUGS[resolved] ?? resolved;
+}
+
+export function getProductPath(slug: string): string {
+  return `/products/${getProductPageSlug(slug)}`;
 }
 
 export const FEATURED_SLUGS = [
@@ -394,7 +431,7 @@ export function getFirstOfferBundle(product: CatalogProduct): ProductBundle {
 }
 
 export function getProductsBySlugs(slugs: string[]): CatalogProduct[] {
-  return slugs.map((s) => CATALOG_BY_SLUG[s]).filter(Boolean);
+  return slugs.map((s) => CATALOG_BY_SLUG[resolveProductSlug(s)]).filter(Boolean);
 }
 
 export function toProduct(p: CatalogProduct): Product {

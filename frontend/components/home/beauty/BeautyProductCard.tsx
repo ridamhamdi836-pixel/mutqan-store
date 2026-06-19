@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
-import { getProduct } from "@/config/catalog";
+import { getProduct, getProductPath } from "@/config/catalog";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { Star, ArrowLeft, Sparkles } from "lucide-react";
@@ -34,7 +34,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
 
   return (
     <Link
-      href={`/products/${product.slug}`}
+      href={getProductPath(product.slug)}
       className={cn(
         "group block rounded-[1.25rem] bg-white border border-brand-border/60 overflow-hidden",
         "shadow-[0_2px_12px_rgba(15,23,42,0.04)] card-lift transition-all duration-300",
