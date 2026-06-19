@@ -6,11 +6,6 @@ import {
   ShoppingBag,
   Check,
   X,
-  Truck,
-  CreditCard,
-  ShieldCheck,
-  Gift,
-  Sparkles,
   Users,
 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
@@ -43,14 +38,6 @@ type CroProductPageClientProps = {
     bundles: ProductBundle[];
   };
 };
-
-const BEAUTY_CABINET_PRE_OFFER_PROOF = [
-  { icon: Truck, text: "شحن سريع لجميع مناطق المملكة" },
-  { icon: CreditCard, text: "الدفع عند الاستلام" },
-  { icon: ShieldCheck, text: "ضمان ذهبي لمدة 30 يوم" },
-  { icon: Gift, text: "خصم حصري على منتجات متقن بعد إتمام الطلب" },
-  { icon: Users, text: "آلاف العميلات بدأن رحلتهن مع متقن من هذه الخزانة" },
-] as const;
 
 export function CroProductPageClient({
   product,
@@ -487,46 +474,24 @@ export function CroProductPageClient({
       <CroProductValueJustification section={PAGE.valueJustification} />
 
       {product.slug === "beauty-vanity-cabinet" ? (
-        <section className="cv-section page-x py-4 md:py-7 bg-white">
-          <div className="max-w-content mx-auto max-w-2xl">
-            <div className="relative overflow-hidden rounded-[26px] border border-brand-gold/25 bg-gradient-to-br from-white via-[#FFFCF7] to-brand-beige/60 p-4 md:p-6 shadow-[0_18px_42px_rgba(15,23,42,0.07)]">
-              <div className="absolute -top-20 -left-16 h-40 w-40 rounded-full bg-brand-gold/10 blur-3xl" />
-              <div className="absolute -bottom-24 -right-14 h-44 w-44 rounded-full bg-brand-espresso/10 blur-3xl" />
-              <div className="relative space-y-4">
-                <div className="space-y-2 text-center">
-                  <p className="inline-flex items-center justify-center gap-1.5 rounded-full border border-brand-gold/30 bg-white/85 px-3 py-1 text-[11px] font-extrabold text-brand-gold shadow-sm">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    ثقة وتجربة أجمل
+        <section className="cv-section page-x py-3 md:py-5 bg-white">
+          <div className="max-w-content mx-auto max-w-xl">
+            <div className="relative overflow-hidden rounded-[24px] border border-brand-gold/25 bg-gradient-to-br from-white via-[#FFFCF7] to-brand-beige/50 p-4 shadow-[0_14px_34px_rgba(15,23,42,0.07)]">
+              <div className="absolute -top-14 -left-12 h-28 w-28 rounded-full bg-brand-gold/10 blur-3xl" />
+              <div className="relative flex items-center gap-3 text-start">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-gold/10 text-brand-gold">
+                  <Users className="h-6 w-6" />
+                </span>
+                <div className="min-w-0 space-y-1">
+                  <p className="text-[11px] font-extrabold text-brand-gold">
+                    المنتج الأكثر بداية لعميلات متقن
                   </p>
-                  <h2 className="mx-auto max-w-xl text-lg sm:text-xl md:text-2xl font-extrabold leading-snug text-brand-espresso">
+                  <h2 className="text-base sm:text-lg md:text-xl font-extrabold leading-snug text-brand-espresso">
                     أكثر من 3000 عميلة اختارت خزانة متقن
                   </h2>
-                  <p className="text-sm font-bold leading-relaxed text-brand-muted">
-                    لتجربة أكثر ترتيباً وأناقة قبل اختيار العرض المناسب.
+                  <p className="text-xs sm:text-sm font-bold leading-relaxed text-brand-muted">
+                    طلب آمن مع الدفع عند الاستلام، شحن سريع، وضمان 30 يوم.
                   </p>
-                </div>
-                <div className="grid gap-2.5 md:grid-cols-2">
-                  {BEAUTY_CABINET_PRE_OFFER_PROOF.map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <div
-                        key={item.text}
-                        className={cn(
-                          "flex items-center gap-3 rounded-2xl border border-brand-border/45 bg-white/90 p-3 text-start shadow-sm",
-                          index === BEAUTY_CABINET_PRE_OFFER_PROOF.length - 1
-                            ? "md:col-span-2"
-                            : "",
-                        )}
-                      >
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-gold/10 text-brand-gold">
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <span className="text-sm font-extrabold leading-relaxed text-brand-espresso">
-                          {item.text}
-                        </span>
-                      </div>
-                    );
-                  })}
                 </div>
               </div>
             </div>
