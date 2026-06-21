@@ -62,6 +62,16 @@ const BENEFIT_ICON_STYLES = [
   },
 ] as const;
 
+const BEAUTY_CABINET_SLUG = "beauty-vanity-cabinet";
+const BRUSH_ORGANIZER_ADDON = {
+  slug: "rotating-brush-organizer",
+  nameAr: "منظم الفرش الدوار الفاخر",
+  regularTotalSar: 428,
+  bundleTotalSar: 299,
+  addonPriceSar: 70,
+  savingsSar: 129,
+} as const;
+
 export function CroProductPageClient({
   product,
   embedMode = "store",
@@ -70,15 +80,24 @@ export function CroProductPageClient({
   const PAGE = getCroProductPage(product.slug);
   const config = PRODUCTS_CONFIG[product.slug];
   const OFFER_HEADING_ID = `${product.slug}-offer-heading`;
-  const { addItem, openCheckout } = useCart();
+  const { addItem, removeItem, openCheckout } = useCart();
   const defaultBundle =
     product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] =
     useState<ProductBundle>(defaultBundle);
+  const [addBrushOrganizer, setAddBrushOrganizer] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
   const offerRef = useRef<HTMLDivElement>(null);
 
+  const isBeautyCabinet = product.slug === BEAUTY_CABINET_SLUG;
   const cardImageSrc = getProductCardImageSrc(product.slug);
+  const brushOrganizerImageSrc = getProductCardImageSrc(BRUSH_ORGANIZER_ADDON.slug);
+  const beautyCabinetMainBundle = product.bundles.find(
+    (bundle) => bundle.id === "beauty-cabinet-1",
+  ) ?? defaultBundle;
+  const beautyCabinetCheckoutTotal = addBrushOrganizer
+    ? BRUSH_ORGANIZER_ADDON.bundleTotalSar
+    : beautyCabinetMainBundle.price_sar;
   const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
   const firstOfferPrice = useMemo(() => {
     const sorted = [...product.bundles].sort(
@@ -136,6 +155,48 @@ export function CroProductPageClient({
 
   const handlePlaceOrder = useCallback(() => {
     if (isUpsellPreview) return;
+    if (isBeautyCabinet) {
+      addItem({
+        productSlug: product.slug,
+        productNameAr: product.name_ar,
+        bundleId: beautyCabinetMainBundle.id,
+        bundleLabelAr: beautyCabinetMainBundle.label_ar,
+        quantity: 1,
+        priceSar: beautyCabinetMainBundle.price_sar,
+        itemType: "main",
+      });
+
+      if (addBrushOrganizer) {
+        addItem({
+          productSlug: BRUSH_ORGANIZER_ADDON.slug,
+          productNameAr: BRUSH_ORGANIZER_ADDON.nameAr,
+          bundleId: "brush-org-addon-with-cabinet",
+          bundleLabelAr: "ترقية مع الخزانة - سعر خاص",
+          quantity: 1,
+          priceSar: BRUSH_ORGANIZER_ADDON.addonPriceSar,
+          itemType: "cross_sell",
+        });
+      } else {
+        removeItem("brush-org-addon-with-cabinet");
+      }
+
+      trackStoreEvent({ event_type: "add_to_cart", product_slug: product.slug });
+      firePixelEvent({
+        eventId: generateEventId("add_to_cart"),
+        eventName: "AddToCart",
+        value: beautyCabinetCheckoutTotal,
+        currency: "SAR",
+        productSlug: product.slug,
+        productName: product.name_ar,
+        bundleId: addBrushOrganizer
+          ? "beauty-cabinet-with-brush-organizer"
+          : beautyCabinetMainBundle.id,
+        quantity: addBrushOrganizer ? 2 : 1,
+      });
+      openCheckout();
+      return;
+    }
+
     addItem({
       productSlug: product.slug,
       productNameAr: product.name_ar,
@@ -157,7 +218,18 @@ export function CroProductPageClient({
       quantity: selectedBundle.quantity,
     });
     openCheckout();
-  }, [addItem, isUpsellPreview, openCheckout, product, selectedBundle]);
+  }, [
+    addBrushOrganizer,
+    addItem,
+    beautyCabinetCheckoutTotal,
+    beautyCabinetMainBundle,
+    isBeautyCabinet,
+    isUpsellPreview,
+    openCheckout,
+    product,
+    removeItem,
+    selectedBundle,
+  ]);
 
   return (
     <div className="bg-brand-background">
@@ -565,35 +637,140 @@ export function CroProductPageClient({
           ref={offerRef}
           className="cv-section product-section-pad page-x bg-brand-surface border-y border-brand-border/40"
         >
-          <div className="max-w-content mx-auto max-w-lg space-y-4">
-            <div className="text-center">
-              <h2
-                id={OFFER_HEADING_ID}
-                className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
+          {isBeautyCabinet ? (
+            <div className="max-w-content mx-auto max-w-lg space-y-4">
+              <div className="text-center space-y-2">
+                <p className="inline-flex rounded-full bg-brand-gold px-3 py-1 text-[11px] font-extrabold text-white shadow-sm shadow-brand-gold/20">
+                  الأكثر طلباً
+                </p>
+                <h2
+                  id={OFFER_HEADING_ID}
+                  className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
+                >
+                  العرض الرئيسي
+                </h2>
+                <div className="flex items-end justify-center gap-2 pt-1">
+                  <span className="text-4xl md:text-5xl font-black text-brand-espresso tabular-nums">
+                    {beautyCabinetMainBundle.price_sar}
+                  </span>
+                  <span className="pb-1 text-lg font-extrabold text-brand-espresso">ر.س</span>
+                  <span className="pb-1 text-base font-bold text-brand-muted line-through">
+                    299 ر.س
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-1">
+                <h3 className="text-base font-extrabold text-brand-espresso">
+                  ✨ أكملي زاوية جمالك
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setAddBrushOrganizer((value) => !value)}
+                  aria-pressed={addBrushOrganizer}
+                  className={cn(
+                    "w-full rounded-[22px] border bg-[#FAF8F5] p-3 text-start shadow-sm transition-all",
+                    addBrushOrganizer
+                      ? "border-brand-gold shadow-brand-gold/10"
+                      : "border-brand-border/70 hover:border-brand-gold/45",
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-brand-gold/10 bg-white">
+                      <StoreImage
+                        src={brushOrganizerImageSrc}
+                        alt={BRUSH_ORGANIZER_ADDON.nameAr}
+                        fill
+                        fit="contain"
+                        sizes={STORE_IMAGE_SIZES.thumbnail}
+                        className="p-1"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <p className="text-sm font-extrabold leading-snug text-brand-espresso">
+                        {BRUSH_ORGANIZER_ADDON.nameAr}
+                      </p>
+                      <p className="text-xs font-medium leading-relaxed text-brand-muted">
+                        رتبي فرشك بطريقة أنيقة وسهلة.
+                      </p>
+                      <p className="text-xs text-brand-muted">
+                        بدلاً من{" "}
+                        <span className="line-through">
+                          {BRUSH_ORGANIZER_ADDON.regularTotalSar} ر.س
+                        </span>
+                      </p>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-lg font-black text-brand-espresso">
+                          {BRUSH_ORGANIZER_ADDON.bundleTotalSar} ر.س فقط
+                        </span>
+                        <span className="rounded-full bg-brand-gold/10 px-2 py-0.5 text-[11px] font-extrabold text-brand-gold">
+                          وفري {BRUSH_ORGANIZER_ADDON.savingsSar} ريال
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2 rounded-2xl bg-white px-3 py-2">
+                    <span
+                      className={cn(
+                        "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
+                        addBrushOrganizer
+                          ? "border-brand-gold bg-brand-gold text-white"
+                          : "border-brand-muted/40 bg-white",
+                      )}
+                    >
+                      {addBrushOrganizer ? <Check className="h-3.5 w-3.5" /> : null}
+                    </span>
+                    <span className="text-sm font-extrabold text-brand-espresso">
+                      أضيفي منظم الفرش الدوار مع الخزانة
+                    </span>
+                  </div>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                onClick={handlePlaceOrder}
+                className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
               >
-                {PAGE.offer.title}
-              </h2>
-              <p className="text-sm text-brand-muted mt-1">{PAGE.offer.subtitle}</p>
+                {addBrushOrganizer
+                  ? `اطلبي المجموعة الكاملة - ${BRUSH_ORGANIZER_ADDON.bundleTotalSar} ر.س`
+                  : `اطلبي الآن - ${beautyCabinetMainBundle.price_sar} ر.س`}
+              </button>
+              <p className="text-center text-xs text-brand-muted font-medium">
+                بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
+              </p>
             </div>
+          ) : (
+            <div className="max-w-content mx-auto max-w-lg space-y-4">
+              <div className="text-center">
+                <h2
+                  id={OFFER_HEADING_ID}
+                  className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
+                >
+                  {PAGE.offer.title}
+                </h2>
+                <p className="text-sm text-brand-muted mt-1">{PAGE.offer.subtitle}</p>
+              </div>
 
-            <BundleSelector
-              bundles={product.bundles}
-              selectedId={selectedBundle.id}
-              onSelect={setSelectedBundle}
-              productSlug={product.slug}
-            />
+              <BundleSelector
+                bundles={product.bundles}
+                selectedId={selectedBundle.id}
+                onSelect={setSelectedBundle}
+                productSlug={product.slug}
+              />
 
-            <button
-              type="button"
-              onClick={handlePlaceOrder}
-              className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
-            >
-              اطلب الآن · {selectedBundle.price_sar} ر.س
-            </button>
-            <p className="text-center text-xs text-brand-muted font-medium">
-              بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
-            </p>
-          </div>
+              <button
+                type="button"
+                onClick={handlePlaceOrder}
+                className="btn-primary w-full min-h-[52px] rounded-2xl text-base md:text-lg font-bold shadow-lg shadow-brand-gold/20"
+              >
+                اطلب الآن · {selectedBundle.price_sar} ر.س
+              </button>
+              <p className="text-center text-xs text-brand-muted font-medium">
+                بدون دفع الآن — نؤكد هاتفياً ثم تدفع عند الاستلام
+              </p>
+            </div>
+          )}
         </section>
       ) : null}
 
