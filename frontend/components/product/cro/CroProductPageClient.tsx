@@ -653,6 +653,9 @@ export function CroProductPageClient({
               </div>
 
               <div className="space-y-2">
+                <h3 className="text-base font-extrabold text-brand-espresso">
+                  العرض الأول: الخزانة وحدها
+                </h3>
                 <button
                   type="button"
                   onClick={() => setBeautyCabinetOfferChoice("cabinet")}
@@ -665,6 +668,16 @@ export function CroProductPageClient({
                   )}
                 >
                   <div className="flex items-center gap-3">
+                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-brand-gold/10 bg-[#FAF8F5]">
+                      <StoreImage
+                        src={cardImageSrc}
+                        alt={product.name_ar}
+                        fill
+                        fit="contain"
+                        sizes={STORE_IMAGE_SIZES.thumbnail}
+                        className="p-1"
+                      />
+                    </div>
                     <span
                       className={cn(
                         "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
@@ -702,7 +715,7 @@ export function CroProductPageClient({
                 </button>
 
                 <h3 className="text-base font-extrabold text-brand-espresso">
-                  ✨ أكملي زاوية جمالك
+                  العرض الثاني: الخزانة + منظم الفرش
                 </h3>
                 <button
                   type="button"
