@@ -10,12 +10,12 @@ import { useCart } from "@/providers/cart-provider";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
 import { getSessionTracking, generateEventId } from "@/lib/analytics";
-import { formatSARCompact } from "@/lib/currency";
 import type { CreateOrderResponse } from "@/types";
 import { cn } from "@/lib/utils";
 import { getProductCardImageSrc } from "@/lib/product-image";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
 import { saveLastOrderSession } from "@/lib/last-order-session";
+import { buildCartDisplayLines } from "@/lib/cart-bundles";
 
 interface CheckoutModalProps {
   onOrderSuccess: (response: CreateOrderResponse) => void;
@@ -39,6 +39,7 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
 
 export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
   const { isCheckoutOpen, closeCheckout, items, totalSar, clearCart } = useCart();
+  const cartDisplayLines = buildCartDisplayLines(items);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [nameError, setNameError] = useState("");
@@ -238,16 +239,48 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                   <div>
                     <p className="text-sm font-bold text-gray-900 mb-3">طلبك</p>
                     <div className="space-y-3">
-                      {items.map((item) => (
-                        <div key={item.bundleId} className="flex items-center gap-3">
-                          <ItemImage slug={item.productSlug} name={item.productNameAr} />
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-bold text-gray-900 leading-snug truncate">{item.productNameAr}</p>
-                            <p className="text-xs text-gray-500 mt-0.5">{item.bundleLabelAr}</p>
+                      {cartDisplayLines.map((line) =>
+                        line.kind === "bundle" ? (
+                          <div
+                            key={line.id}
+                            className="rounded-2xl border border-amber-200 bg-amber-50/45 p-3"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="flex -space-x-3 space-x-reverse shrink-0">
+                                {line.items.map((item) => (
+                                  <ItemImage
+                                    key={item.bundleId}
+                                    slug={item.productSlug}
+                                    name={item.productNameAr}
+                                  />
+                                ))}
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-sm font-black text-gray-900 leading-snug">
+                                  {line.title}
+                                </p>
+                                <ul className="mt-2 space-y-1 text-xs font-semibold text-gray-600">
+                                  {line.items.map((item) => (
+                                    <li key={item.bundleId}>• {item.productNameAr}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <span className="text-sm font-black text-gray-900 shrink-0">
+                                {line.totalSar} ر.س
+                              </span>
+                            </div>
                           </div>
-                          <span className="text-sm font-bold text-gray-900 flex-shrink-0">{item.priceSar} ر.س</span>
-                        </div>
-                      ))}
+                        ) : (
+                          <div key={line.id} className="flex items-center gap-3">
+                            <ItemImage slug={line.item.productSlug} name={line.item.productNameAr} />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-bold text-gray-900 leading-snug truncate">{line.item.productNameAr}</p>
+                              <p className="text-xs text-gray-500 mt-0.5">{line.item.bundleLabelAr}</p>
+                            </div>
+                            <span className="text-sm font-bold text-gray-900 flex-shrink-0">{line.totalSar} ر.س</span>
+                          </div>
+                        ),
+                      )}
                     </div>
                   </div>
 

@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { getProductCardImageSrc } from "@/lib/product-image";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { buildCartDisplayLines } from "@/lib/cart-bundles";
 
 function CartItemImage({ slug, name }: { slug: string; name: string }) {
   const [err, setErr] = useState(false);
@@ -40,6 +41,7 @@ function CartItemImage({ slug, name }: { slug: string; name: string }) {
 export function CartDrawer() {
   const { isOpen, closeCart, items, removeItem, totalSar, itemCount, openCheckout } = useCart();
   const drawerRef = useRef<HTMLDivElement>(null);
+  const cartDisplayLines = buildCartDisplayLines(items);
 
   useEffect(() => {
     if (isOpen && drawerRef.current) {
@@ -157,35 +159,77 @@ export function CartDrawer() {
                 </div>
               ) : (
                 <div className="p-4 md:p-5 space-y-4">
-                  {items.map((item) => (
-                    <div
-                      key={item.bundleId}
-                      className="flex items-center gap-3 p-3 rounded-[22px] bg-white border border-brand-gold/10 shadow-sm"
-                    >
-                      <CartItemImage slug={item.productSlug} name={item.productNameAr} />
-                      <div className="flex-1 min-w-0">
-                        <p className="font-extrabold text-sm text-brand-espresso leading-snug">
-                          {item.productNameAr}
-                        </p>
-                        <p className="text-xs text-brand-muted mt-0.5">{item.bundleLabelAr}</p>
-                        <div className="flex items-center gap-2 mt-1.5">
-                          <span className="font-black text-brand-gold text-base">
-                            {formatSARCompact(item.priceSar)}
-                          </span>
-                          {item.quantity > 1 && (
-                            <span className="text-xs text-brand-muted">× {item.quantity}</span>
-                          )}
+                  {cartDisplayLines.map((line) =>
+                    line.kind === "bundle" ? (
+                      <div
+                        key={line.id}
+                        className="rounded-[24px] bg-white border border-brand-gold/20 shadow-sm p-3"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex -space-x-5 space-x-reverse shrink-0">
+                            {line.items.map((item) => (
+                              <CartItemImage
+                                key={item.bundleId}
+                                slug={item.productSlug}
+                                name={item.productNameAr}
+                              />
+                            ))}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-black text-sm text-brand-espresso leading-snug">
+                              {line.title}
+                            </p>
+                            <p className="text-xs font-semibold text-brand-gold mt-0.5">
+                              {line.subtitle}
+                            </p>
+                            <ul className="mt-2 space-y-1 text-xs font-medium text-brand-muted">
+                              {line.items.map((item) => (
+                                <li key={item.bundleId}>• {item.productNameAr}</li>
+                              ))}
+                            </ul>
+                            <p className="font-black text-brand-gold text-base mt-2">
+                              {formatSARCompact(line.totalSar)}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => line.items.forEach((item) => removeItem(item.bundleId))}
+                            aria-label="إزالة المجموعة الكاملة من متقن"
+                            className="w-8 h-8 rounded-xl flex items-center justify-center text-brand-muted hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-                      <button
-                        onClick={() => removeItem(item.bundleId)}
-                        aria-label={`إزالة ${item.productNameAr}`}
-                        className="w-8 h-8 rounded-xl flex items-center justify-center text-brand-muted hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                    ) : (
+                      <div
+                        key={line.id}
+                        className="flex items-center gap-3 p-3 rounded-[22px] bg-white border border-brand-gold/10 shadow-sm"
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+                        <CartItemImage slug={line.item.productSlug} name={line.item.productNameAr} />
+                        <div className="flex-1 min-w-0">
+                          <p className="font-extrabold text-sm text-brand-espresso leading-snug">
+                            {line.item.productNameAr}
+                          </p>
+                          <p className="text-xs text-brand-muted mt-0.5">{line.item.bundleLabelAr}</p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <span className="font-black text-brand-gold text-base">
+                              {formatSARCompact(line.totalSar)}
+                            </span>
+                            {line.item.quantity > 1 && (
+                              <span className="text-xs text-brand-muted">× {line.item.quantity}</span>
+                            )}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeItem(line.item.bundleId)}
+                          aria-label={`إزالة ${line.item.productNameAr}`}
+                          className="w-8 h-8 rounded-xl flex items-center justify-center text-brand-muted hover:text-red-500 hover:bg-red-50 transition-colors flex-shrink-0"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ),
+                  )}
 
                   {crossSellSlugs.length > 0 && (
                     <div className="pt-4 border-t border-brand-gold/15">

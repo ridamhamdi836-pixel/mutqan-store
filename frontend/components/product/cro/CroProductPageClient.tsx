@@ -175,10 +175,10 @@ export function CroProductPageClient({
           productSlug: BRUSH_ORGANIZER_ADDON.slug,
           productNameAr: BRUSH_ORGANIZER_ADDON.nameAr,
           bundleId: "brush-org-addon-with-cabinet",
-          bundleLabelAr: "ترقية مع الخزانة - سعر خاص",
+          bundleLabelAr: "جزء من المجموعة الكاملة من متقن",
           quantity: 1,
           priceSar: BRUSH_ORGANIZER_ADDON.addonPriceSar,
-          itemType: "cross_sell",
+          itemType: "main",
         });
       } else {
         removeItem("brush-org-addon-with-cabinet");
