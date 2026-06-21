@@ -72,6 +72,8 @@ const BRUSH_ORGANIZER_ADDON = {
   savingsSar: 129,
 } as const;
 
+type BeautyCabinetOfferChoice = "cabinet" | "bundle";
+
 export function CroProductPageClient({
   product,
   embedMode = "store",
@@ -85,7 +87,8 @@ export function CroProductPageClient({
     product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] =
     useState<ProductBundle>(defaultBundle);
-  const [addBrushOrganizer, setAddBrushOrganizer] = useState(false);
+  const [beautyCabinetOfferChoice, setBeautyCabinetOfferChoice] =
+    useState<BeautyCabinetOfferChoice>("cabinet");
   const [showSticky, setShowSticky] = useState(false);
   const offerRef = useRef<HTMLDivElement>(null);
 
@@ -95,6 +98,7 @@ export function CroProductPageClient({
   const beautyCabinetMainBundle = product.bundles.find(
     (bundle) => bundle.id === "beauty-cabinet-1",
   ) ?? defaultBundle;
+  const addBrushOrganizer = beautyCabinetOfferChoice === "bundle";
   const beautyCabinetCheckoutTotal = addBrushOrganizer
     ? BRUSH_ORGANIZER_ADDON.bundleTotalSar
     : beautyCabinetMainBundle.price_sar;
@@ -639,34 +643,70 @@ export function CroProductPageClient({
         >
           {isBeautyCabinet ? (
             <div className="max-w-content mx-auto max-w-lg space-y-4">
-              <div className="text-center space-y-2">
-                <p className="inline-flex rounded-full bg-brand-gold px-3 py-1 text-[11px] font-extrabold text-white shadow-sm shadow-brand-gold/20">
-                  الأكثر طلباً
-                </p>
+              <div className="text-center">
                 <h2
                   id={OFFER_HEADING_ID}
                   className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso scroll-mt-[4.75rem] md:scroll-mt-20"
                 >
-                  العرض الرئيسي
+                  اختاري العرض المناسب
                 </h2>
-                <div className="flex items-end justify-center gap-2 pt-1">
-                  <span className="text-4xl md:text-5xl font-black text-brand-espresso tabular-nums">
-                    {beautyCabinetMainBundle.price_sar}
-                  </span>
-                  <span className="pb-1 text-lg font-extrabold text-brand-espresso">ر.س</span>
-                  <span className="pb-1 text-base font-bold text-brand-muted line-through">
-                    299 ر.س
-                  </span>
-                </div>
               </div>
 
-              <div className="space-y-2 pt-1">
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => setBeautyCabinetOfferChoice("cabinet")}
+                  aria-pressed={beautyCabinetOfferChoice === "cabinet"}
+                  className={cn(
+                    "w-full rounded-[22px] border bg-white p-3 text-start shadow-sm transition-all",
+                    beautyCabinetOfferChoice === "cabinet"
+                      ? "border-brand-gold shadow-brand-gold/10"
+                      : "border-brand-border/70 hover:border-brand-gold/45",
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                        beautyCabinetOfferChoice === "cabinet"
+                          ? "border-brand-gold bg-brand-gold text-white"
+                          : "border-brand-muted/40 bg-white",
+                      )}
+                    >
+                      {beautyCabinetOfferChoice === "cabinet" ? (
+                        <Check className="h-3.5 w-3.5" />
+                      ) : null}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-extrabold text-brand-espresso">
+                          خزانة الجمال الفاخرة وحدها
+                        </p>
+                        <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-extrabold text-white">
+                          الأكثر طلباً
+                        </span>
+                      </div>
+                      <p className="mt-1 text-xs font-medium text-brand-muted">
+                        العرض الرئيسي لتنظيم وحماية مستحضراتك.
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-end">
+                      <p className="text-xl font-black text-brand-espresso">
+                        {beautyCabinetMainBundle.price_sar} ر.س
+                      </p>
+                      <p className="text-xs font-bold text-brand-muted line-through">
+                        299 ر.س
+                      </p>
+                    </div>
+                  </div>
+                </button>
+
                 <h3 className="text-base font-extrabold text-brand-espresso">
                   ✨ أكملي زاوية جمالك
                 </h3>
                 <button
                   type="button"
-                  onClick={() => setAddBrushOrganizer((value) => !value)}
+                  onClick={() => setBeautyCabinetOfferChoice("bundle")}
                   aria-pressed={addBrushOrganizer}
                   className={cn(
                     "w-full rounded-[22px] border bg-[#FAF8F5] p-3 text-start shadow-sm transition-all",
@@ -721,7 +761,7 @@ export function CroProductPageClient({
                       {addBrushOrganizer ? <Check className="h-3.5 w-3.5" /> : null}
                     </span>
                     <span className="text-sm font-extrabold text-brand-espresso">
-                      أضيفي منظم الفرش الدوار مع الخزانة
+                      اختاري المجموعة: الخزانة + منظم الفرش
                     </span>
                   </div>
                 </button>
