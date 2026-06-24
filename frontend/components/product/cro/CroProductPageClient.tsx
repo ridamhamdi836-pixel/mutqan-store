@@ -324,7 +324,7 @@ export function CroProductPageClient({
                   onClick={scrollToOffers}
                   className="btn-primary w-full min-h-[48px] md:min-h-[52px] rounded-2xl text-base font-bold"
                 >
-                  شوف العروض والأسعار
+                  اختاري عرضك الآن
                 </button>
               ) : null}
             </div>
@@ -416,7 +416,7 @@ export function CroProductPageClient({
           />
           <div className="space-y-2 text-start">
             <p className="text-xs font-bold text-brand-bronze uppercase tracking-wide">
-              المشكلة
+              قبل متقن
             </p>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
               {PAGE.problem.title}
@@ -433,7 +433,7 @@ export function CroProductPageClient({
         <div className="max-w-content mx-auto grid md:grid-cols-2 gap-4 md:gap-8 items-center">
           <div className="space-y-2 text-start md:order-2">
             <p className="text-xs font-bold text-brand-trust uppercase tracking-wide">
-              الحل
+              بعد متقن
             </p>
             <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-brand-espresso">
               {PAGE.solution.title}
@@ -547,7 +547,7 @@ export function CroProductPageClient({
             <div className="mb-4 flex items-center justify-between gap-3">
               <div>
                 <p className="text-[11px] font-extrabold tracking-wide text-brand-gold">
-                  قبل الطلب
+                  تفاصيل تطمّنك قبل الطلب
                 </p>
                 <h2 className="text-lg sm:text-xl font-extrabold text-brand-espresso">
                   {PAGE.features.title}
