@@ -5,16 +5,75 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import type { ProductBundle } from "@/types";
 import type { ProductOverride, StorefrontProduct } from "@/types/store-dashboard";
+import type { ProductPageConfig } from "@/config/products";
+import type { CroProductPageConfig } from "@/types/cro-product-page";
 
 type ProductApiResponse = {
   product: StorefrontProduct;
+  config: ProductPageConfig;
+  croPage: CroProductPageConfig;
   override: ProductOverride;
 };
+
+type MediaKey = "cardImage" | "heroImage" | "painImage" | "solutionImage" | "lifestyleImage";
+type MediaAspectKey = "heroAspect" | "painAspect" | "solutionAspect" | "lifestyleAspect";
+
+const MEDIA_ASPECT_KEY: Partial<Record<MediaKey, MediaAspectKey>> = {
+  heroImage: "heroAspect",
+  painImage: "painAspect",
+  solutionImage: "solutionAspect",
+  lifestyleImage: "lifestyleAspect",
+};
+
+const MEDIA_FIELDS: Array<{ key: MediaKey; label: string; help: string }> = [
+  {
+    key: "cardImage",
+    label: "صورة البطاقة",
+    help: "تظهر في الصفحة الرئيسية والمجموعات.",
+  },
+  {
+    key: "heroImage",
+    label: "صورة الهيرو",
+    help: "تظهر أعلى صفحة المنتج.",
+  },
+  {
+    key: "painImage",
+    label: "صورة المشكلة",
+    help: "تظهر في قسم قبل متقن.",
+  },
+  {
+    key: "solutionImage",
+    label: "صورة الحل",
+    help: "تظهر في قسم بعد متقن.",
+  },
+  {
+    key: "lifestyleImage",
+    label: "صورة اللايفستايل",
+    help: "تظهر في قسم أسلوب الحياة/الفوائد.",
+  },
+];
+
+const COPY_FIELDS: Array<{ key: keyof NonNullable<ProductOverride["copy"]>; label: string }> = [
+  { key: "homepageSubtitle", label: "وصف بطاقة الصفحة الرئيسية" },
+  { key: "heroHeadline", label: "عنوان الهيرو" },
+  { key: "heroSubheadline", label: "وصف الهيرو" },
+  { key: "problemTitle", label: "عنوان المشكلة" },
+  { key: "problemCopy", label: "نص المشكلة" },
+  { key: "solutionTitle", label: "عنوان الحل" },
+  { key: "solutionCopy", label: "نص الحل" },
+  { key: "highlightCopy", label: "النص البارز" },
+  { key: "finalCtaTitle", label: "عنوان CTA النهائي" },
+];
 
 const toNumber = (value: unknown, fallback = 0) => {
   const number = Number(value);
   return Number.isFinite(number) ? number : fallback;
 };
+
+function productImagePath(file?: string) {
+  if (!file) return "";
+  return file.startsWith("/") ? file : `/images/products/${file}`;
+}
 
 export default function AdminProductDetailPage() {
   const params = useParams<{ slug: string }>();
@@ -23,6 +82,7 @@ export default function AdminProductDetailPage() {
   const [override, setOverride] = useState<ProductOverride>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingKey, setUploadingKey] = useState<MediaKey | null>(null);
   const [message, setMessage] = useState("");
 
   const load = useCallback(async () => {
@@ -30,6 +90,9 @@ export default function AdminProductDetailPage() {
     const res = await fetch(`/api/admin/products/${slug}`, { cache: "no-store" });
     if (res.ok) {
       const data = (await res.json()) as ProductApiResponse;
+      const defaultCardImage = productImagePath(
+        data.product.storeCardImageFile ?? data.product.imageFile,
+      );
       setProduct(data.product);
       setOverride({
         ...(data.override ?? {}),
@@ -44,9 +107,31 @@ export default function AdminProductDetailPage() {
           storeCardImageFile: data.product.storeCardImageFile,
         },
         copy: {
-          ...(data.override?.copy ?? {}),
+          homepageSubtitle: data.product.short_description_ar,
+          heroHeadline: data.croPage.hero.headline,
+          heroSubheadline: data.croPage.hero.subheadline,
+          problemTitle: data.croPage.problem.title,
+          problemCopy: data.croPage.problem.copy,
+          solutionTitle: data.croPage.solution.title,
+          solutionCopy: data.croPage.solution.copy,
+          highlightCopy: data.croPage.highlight.copy,
+          finalCtaTitle: data.croPage.finalCta.title,
           nameAr: data.product.name_ar,
           shortDescriptionAr: data.product.short_description_ar,
+          ...(data.override?.copy ?? {}),
+        },
+        media: {
+          cardImage: defaultCardImage,
+          heroImage: data.config.heroSectionImage ?? defaultCardImage,
+          heroAspect: data.config.heroSectionAspect,
+          heroImageAlt: data.config.heroSectionImageAlt ?? data.product.name_ar,
+          painImage: data.config.painSectionImage ?? "",
+          painAspect: data.config.painSectionAspect,
+          solutionImage: data.config.solutionSectionImage ?? "",
+          solutionAspect: data.config.solutionSectionAspect,
+          lifestyleImage: data.config.lifestyleSectionImage ?? "",
+          lifestyleAspect: data.config.lifestyleSectionAspect,
+          ...(data.override?.media ?? {}),
         },
         bundles: data.product.bundles,
       });
@@ -74,6 +159,52 @@ export default function AdminProductDetailPage() {
       currentIndex === index ? { ...bundle, ...patch } : bundle,
     );
     updateOverride({ ...override, bundles: nextBundles });
+  }
+
+  async function uploadImage(key: MediaKey, file: File | null) {
+    if (!file || !product) return;
+
+    setUploadingKey(key);
+    setMessage("");
+    const form = new FormData();
+    form.set("file", file);
+    form.set("slug", product.slug);
+    form.set("slot", key);
+    form.set("alt", product.name_ar);
+
+    const res = await fetch("/api/admin/media", {
+      method: "POST",
+      body: form,
+    });
+    setUploadingKey(null);
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      setMessage(data.error || "تعذر رفع الصورة.");
+      return;
+    }
+
+    const aspectKey = MEDIA_ASPECT_KEY[key];
+    const nextMedia = {
+      ...(override.media ?? {}),
+      [key]: data.url as string,
+      ...(aspectKey && data.aspectRatio ? { [aspectKey]: data.aspectRatio as string } : {}),
+      ...(key === "heroImage" ? { heroImageAlt: product.name_ar } : {}),
+    };
+
+    updateOverride({
+      ...override,
+      media: nextMedia,
+      catalog:
+        key === "cardImage"
+          ? {
+              ...(override.catalog ?? {}),
+              imageFile: data.url as string,
+              storeCardImageFile: data.url as string,
+            }
+          : override.catalog,
+    });
+    setMessage("تم رفع الصورة. اضغطي حفظ التغييرات لتطبيقها في المتجر.");
   }
 
   async function save() {
@@ -245,22 +376,12 @@ export default function AdminProductDetailPage() {
       <section className="admin-panel mb-6 p-5">
         <h2 className="mb-4 text-lg font-bold text-brand-espresso">النصوص المقنعة داخل صفحة المنتج</h2>
         <div className="grid gap-4 md:grid-cols-2">
-          {[
-            ["homepageSubtitle", "وصف بطاقة الصفحة الرئيسية"],
-            ["heroHeadline", "عنوان الهيرو"],
-            ["heroSubheadline", "وصف الهيرو"],
-            ["problemTitle", "عنوان المشكلة"],
-            ["problemCopy", "نص المشكلة"],
-            ["solutionTitle", "عنوان الحل"],
-            ["solutionCopy", "نص الحل"],
-            ["highlightCopy", "النص البارز"],
-            ["finalCtaTitle", "عنوان CTA النهائي"],
-          ].map(([key, label]) => (
+          {COPY_FIELDS.map(({ key, label }) => (
             <label key={key} className="text-sm font-semibold text-brand-espresso">
               {label}
               <textarea
                 className="admin-input mt-1 min-h-20"
-                value={(copy[key as keyof typeof copy] as string | undefined) ?? ""}
+                value={(copy[key] as string | undefined) ?? ""}
                 onChange={(event) =>
                   updateOverride({
                     ...override,
@@ -275,28 +396,24 @@ export default function AdminProductDetailPage() {
 
       <section className="admin-panel mb-6 p-5">
         <h2 className="mb-4 text-lg font-bold text-brand-espresso">الصور الأساسية</h2>
+        <p className="mb-4 text-sm text-brand-muted">
+          ارفعي الصورة من جهازك، وسيتم ضبط إطارها حسب أبعادها حتى تظهر كاملة بدون قص.
+        </p>
         <div className="grid gap-4 md:grid-cols-2">
-          {[
-            ["cardImage", "صورة البطاقة"],
-            ["heroImage", "صورة الهيرو"],
-            ["painImage", "صورة المشكلة"],
-            ["solutionImage", "صورة الحل"],
-            ["lifestyleImage", "صورة اللايفستايل"],
-          ].map(([key, label]) => (
-            <label key={key} className="text-sm font-semibold text-brand-espresso">
-              {label}
-              <input
-                className="admin-input mt-1"
-                placeholder="/images/products/example.png"
-                value={(media[key as keyof typeof media] as string | undefined) ?? ""}
-                onChange={(event) =>
-                  updateOverride({
-                    ...override,
-                    media: { ...media, [key]: event.target.value },
-                  })
-                }
-              />
-            </label>
+          {MEDIA_FIELDS.map((field) => (
+            <ImageUploadField
+              key={field.key}
+              field={field}
+              value={(media[field.key] as string | undefined) ?? ""}
+              uploading={uploadingKey === field.key}
+              onUpload={(file) => uploadImage(field.key, file)}
+              onClear={() =>
+                updateOverride({
+                  ...override,
+                  media: { ...media, [field.key]: "" },
+                })
+              }
+            />
           ))}
         </div>
       </section>
@@ -397,6 +514,69 @@ export default function AdminProductDetailPage() {
           {saving ? "جارٍ الحفظ…" : "حفظ كل التغييرات"}
         </button>
       </div>
+    </div>
+  );
+}
+
+function ImageUploadField({
+  field,
+  value,
+  uploading,
+  onUpload,
+  onClear,
+}: {
+  field: { key: MediaKey; label: string; help: string };
+  value: string;
+  uploading: boolean;
+  onUpload: (file: File | null) => void;
+  onClear: () => void;
+}) {
+  return (
+    <div className="rounded-2xl border border-brand-border bg-white p-4 shadow-sm">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="font-bold text-brand-espresso">{field.label}</h3>
+          <p className="mt-1 text-xs leading-relaxed text-brand-muted">{field.help}</p>
+        </div>
+        {value ? (
+          <button
+            type="button"
+            onClick={onClear}
+            className="rounded-lg border border-brand-border px-3 py-1.5 text-xs font-bold text-brand-muted hover:bg-brand-beige"
+          >
+            إزالة
+          </button>
+        ) : null}
+      </div>
+
+      <div className="mb-3 overflow-hidden rounded-xl border border-brand-border bg-brand-background">
+        {value ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={value} alt={field.label} className="h-auto w-full object-contain" />
+        ) : (
+          <div className="flex aspect-[4/3] items-center justify-center px-4 text-center text-xs font-bold text-brand-muted">
+            لم يتم رفع صورة بعد
+          </div>
+        )}
+      </div>
+
+      <label className="flex cursor-pointer items-center justify-center rounded-xl border border-dashed border-brand-gold/40 bg-brand-gold/10 px-4 py-3 text-sm font-extrabold text-brand-espresso transition hover:bg-brand-gold/15">
+        {uploading ? "جارٍ رفع الصورة…" : "تحميل صورة"}
+        <input
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          className="sr-only"
+          disabled={uploading}
+          onChange={(event) => {
+            onUpload(event.target.files?.[0] ?? null);
+            event.target.value = "";
+          }}
+        />
+      </label>
+
+      {value ? (
+        <p className="mt-2 break-all text-[11px] text-brand-muted">{value}</p>
+      ) : null}
     </div>
   );
 }

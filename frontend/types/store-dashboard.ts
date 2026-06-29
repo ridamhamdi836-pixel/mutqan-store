@@ -55,10 +55,14 @@ export type ProductCopyOverride = {
 export type ProductMediaOverride = {
   cardImage?: string;
   heroImage?: string;
+  heroAspect?: string;
   heroImageAlt?: string;
   painImage?: string;
+  painAspect?: string;
   solutionImage?: string;
+  solutionAspect?: string;
   lifestyleImage?: string;
+  lifestyleAspect?: string;
 };
 
 export type ProductOverride = {

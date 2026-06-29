@@ -169,10 +169,14 @@ function resolveProductConfig(product: StorefrontProduct): ProductPageConfig {
   config.heroAngle = copy?.heroSubheadline ?? config.heroAngle;
   config.problemStatement = copy?.problemCopy ?? config.problemStatement;
   config.heroSectionImage = media?.heroImage ?? config.heroSectionImage;
+  config.heroSectionAspect = media?.heroAspect ?? config.heroSectionAspect;
   config.heroSectionImageAlt = media?.heroImageAlt ?? config.heroSectionImageAlt;
   config.painSectionImage = media?.painImage ?? config.painSectionImage;
+  config.painSectionAspect = media?.painAspect ?? config.painSectionAspect;
   config.solutionSectionImage = media?.solutionImage ?? config.solutionSectionImage;
+  config.solutionSectionAspect = media?.solutionAspect ?? config.solutionSectionAspect;
   config.lifestyleSectionImage = media?.lifestyleImage ?? config.lifestyleSectionImage;
+  config.lifestyleSectionAspect = media?.lifestyleAspect ?? config.lifestyleSectionAspect;
   config.seoTitle = copy?.nameAr ? `${copy.nameAr} | متقن` : config.seoTitle;
   config.seoDescription = copy?.shortDescriptionAr ?? config.seoDescription;
   return config;
