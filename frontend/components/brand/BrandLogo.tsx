@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { MutqanLogoMark } from "@/components/brand/MutqanLogoMark";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +17,28 @@ export function BrandLogo({
   orientation = "horizontal",
   className,
 }: BrandLogoProps) {
+  const [logo, setLogo] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/store-settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!active) return;
+        const brand = data?.settings?.brand;
+        const nextLogo =
+          variant === "light" ? brand?.logoSrcLight ?? brand?.logoSrc : brand?.logoSrc;
+        if (typeof nextLogo === "string" && nextLogo.trim()) {
+          setLogo(nextLogo.trim());
+        }
+      })
+      .catch(() => undefined);
+
+    return () => {
+      active = false;
+    };
+  }, [variant]);
+
   return (
     <span
       className={cn(
@@ -21,7 +46,12 @@ export function BrandLogo({
         className,
       )}
     >
-      <MutqanLogoMark variant={variant} orientation={orientation} />
+      {logo && orientation !== "icon" ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={logo} alt="متقن" className="h-full w-full object-contain" />
+      ) : (
+        <MutqanLogoMark variant={variant} orientation={orientation} />
+      )}
     </span>
   );
 }

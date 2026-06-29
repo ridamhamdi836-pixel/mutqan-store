@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Package, LogOut } from "lucide-react";
+import { LayoutDashboard, Package, LogOut, Settings, ShoppingBag } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/admin", label: "لوحة التحكم", icon: LayoutDashboard },
   { href: "/admin/orders", label: "الطلبات", icon: Package },
+  { href: "/admin/products", label: "المنتجات", icon: ShoppingBag },
+  { href: "/admin/settings", label: "إعدادات المتجر", icon: Settings },
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

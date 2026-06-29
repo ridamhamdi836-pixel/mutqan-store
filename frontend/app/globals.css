@@ -4,19 +4,33 @@
 
 :root {
   --brand-background: #FAF8F6;
+  --brand-background-rgb: 250 248 246;
   --brand-surface: #FFFFFF;
+  --brand-surface-rgb: 255 255 255;
   --brand-beige: #EADBC8;
+  --brand-beige-rgb: 234 219 200;
   --brand-sand: #D4C4B0;
+  --brand-sand-rgb: 212 196 176;
   --brand-espresso: #0F172A;
+  --brand-espresso-rgb: 15 23 42;
   --brand-olive: #475569;
+  --brand-olive-rgb: 71 85 105;
   --brand-bronze: #D4AF37;
+  --brand-bronze-rgb: 212 175 55;
   --brand-gold: #D4AF37;
+  --brand-gold-rgb: 212 175 55;
   --brand-secondary: #EADBC8;
+  --brand-secondary-rgb: 234 219 200;
   --brand-text: #0F172A;
+  --brand-text-rgb: 15 23 42;
   --brand-muted: #64748B;
+  --brand-muted-rgb: 100 116 139;
   --brand-border: #E8E0D8;
+  --brand-border-rgb: 232 224 216;
   --brand-trust: #0F172A;
+  --brand-trust-rgb: 15 23 42;
   --brand-error: #EF4444;
+  --brand-error-rgb: 239 68 68;
 }
 
 * {

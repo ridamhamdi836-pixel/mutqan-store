@@ -26,9 +26,11 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
   const [imgError, setImgError] = useState(false);
   const catalogProduct = getProduct(product.slug);
   const usesSquareFillImage = SQUARE_FILL_IMAGE_SLUGS.has(product.slug);
-  const minPrice = catalogProduct
-    ? [...catalogProduct.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar
-    : null;
+  const minPrice =
+    product.minPriceSar ??
+    (catalogProduct
+      ? [...catalogProduct.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar
+      : null);
 
   const reviewCount = getProductReviewDisplayCount(product.slug);
 

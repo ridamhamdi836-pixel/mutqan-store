@@ -9,11 +9,12 @@ export const HOMEPAGE_FEATURED_SLUGS = [
 ] as const;
 
 export type HomepageBeautyProduct = {
-  slug: (typeof HOMEPAGE_FEATURED_SLUGS)[number];
+  slug: string;
   nameAr: string;
   subtitle: string;
   image: string;
   imageAlt: string;
+  minPriceSar?: number;
 };
 
 export const HOMEPAGE_BEAUTY = {

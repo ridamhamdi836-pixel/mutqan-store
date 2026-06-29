@@ -30,9 +30,13 @@ import { getProductCardImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { useCart } from "@/providers/cart-provider";
+import type { ProductPageConfig } from "@/config/products";
+import type { CroProductPageConfig } from "@/types/cro-product-page";
 
 type CroProductPageClientProps = {
   embedMode?: "store" | "upsell-preview";
+  pageConfig?: CroProductPageConfig;
+  productConfig?: ProductPageConfig;
   product: {
     id: string;
     slug: string;
@@ -77,10 +81,12 @@ type BeautyCabinetOfferChoice = "cabinet" | "bundle";
 export function CroProductPageClient({
   product,
   embedMode = "store",
+  pageConfig,
+  productConfig,
 }: CroProductPageClientProps) {
   const isUpsellPreview = embedMode === "upsell-preview";
-  const PAGE = getCroProductPage(product.slug);
-  const config = PRODUCTS_CONFIG[product.slug];
+  const PAGE = pageConfig ?? getCroProductPage(product.slug);
+  const config = productConfig ?? PRODUCTS_CONFIG[product.slug];
   const OFFER_HEADING_ID = `${product.slug}-offer-heading`;
   const { addItem, removeItem, openCheckout } = useCart();
   const defaultBundle =
@@ -93,7 +99,7 @@ export function CroProductPageClient({
   const offerRef = useRef<HTMLDivElement>(null);
 
   const isBeautyCabinet = product.slug === BEAUTY_CABINET_SLUG;
-  const cardImageSrc = getProductCardImageSrc(product.slug);
+  const cardImageSrc = config.heroSectionImage ?? getProductCardImageSrc(product.slug);
   const brushOrganizerImageSrc = getProductCardImageSrc(BRUSH_ORGANIZER_ADDON.slug);
   const beautyCabinetMainBundle = product.bundles.find(
     (bundle) => bundle.id === "beauty-cabinet-1",

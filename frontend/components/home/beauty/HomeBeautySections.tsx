@@ -19,6 +19,7 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { cn } from "@/lib/utils";
 
 const TRUST_ICONS = {
@@ -197,7 +198,11 @@ export function HomeBeautyTrustBar() {
   );
 }
 
-export function HomeBeautyBestSellers() {
+export function HomeBeautyBestSellers({
+  products = HOMEPAGE_BEAUTY.bestSellers.products,
+}: {
+  products?: HomepageBeautyProduct[];
+}) {
   const { bestSellers } = HOMEPAGE_BEAUTY;
 
   return (
@@ -214,7 +219,7 @@ export function HomeBeautyBestSellers() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {bestSellers.products.map((product) => (
+          {products.map((product) => (
             <BeautyProductCard key={product.slug} product={product} />
           ))}
         </div>

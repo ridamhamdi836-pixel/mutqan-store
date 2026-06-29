@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
-import { PRODUCTS_CONFIG } from "@/config/products";
-import { getProduct, PRODUCT_PAGE_SLUGS, resolveProductSlug } from "@/config/catalog";
 import { getProductOgImageUrl } from "@/lib/product-image";
+import { getResolvedProductPage } from "@/lib/storefront-resolver";
 
-export async function generateStaticParams() {
-  return PRODUCT_PAGE_SLUGS.map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
@@ -15,10 +12,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProduct(slug);
-  const config = PRODUCTS_CONFIG[resolveProductSlug(slug)];
+  const resolved = await getResolvedProductPage(slug);
 
-  if (!product || !config) return { title: "منتج | متقن" };
+  if (!resolved) return { title: "منتج | متقن" };
+  const { product, config } = resolved;
 
   return {
     title: config.seoTitle,
@@ -44,10 +41,10 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProduct(slug);
-  const config = PRODUCTS_CONFIG[resolveProductSlug(slug)];
+  const resolved = await getResolvedProductPage(slug);
 
-  if (!product || !config) notFound();
+  if (!resolved) notFound();
+  const { product, config, croPage } = resolved;
 
   const productPayload = {
     id: product.id,
@@ -58,5 +55,11 @@ export default async function ProductPage({
     bundles: product.bundles,
   };
 
-  return <CroProductPageClient product={productPayload} />;
+  return (
+    <CroProductPageClient
+      product={productPayload}
+      productConfig={config}
+      pageConfig={croPage}
+    />
+  );
 }

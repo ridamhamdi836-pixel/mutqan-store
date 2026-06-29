@@ -5,6 +5,8 @@ import { AnalyticsProvider } from "@/providers/analytics-provider";
 import { fontArabic, fontLatin } from "@/lib/fonts";
 import { getBundledPixelConfig } from "@/lib/browser-pixel-config";
 import { getHotjarSiteId } from "@/lib/hotjar-config";
+import { StoreThemeProvider } from "@/components/brand/StoreThemeProvider";
+import { getResolvedStoreSettings } from "@/lib/storefront-resolver";
 
 export const dynamic = "force-dynamic";
 
@@ -45,9 +47,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const pixels = getBundledPixelConfig();
   const hotjarSiteId = getHotjarSiteId();
+  const settings = await getResolvedStoreSettings();
 
   return (
     <html
@@ -57,7 +60,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="font-sans antialiased">
         <AnalyticsProvider pixels={pixels} hotjarSiteId={hotjarSiteId}>
-          <CartProvider>{children}</CartProvider>
+          <StoreThemeProvider settings={settings}>
+            <CartProvider>{children}</CartProvider>
+          </StoreThemeProvider>
         </AnalyticsProvider>
       </body>
     </html>

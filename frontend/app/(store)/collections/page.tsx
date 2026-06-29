@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Sparkles } from "lucide-react";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
-import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { getResolvedHomepageProducts } from "@/lib/storefront-resolver";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "مجموعات متقن | تنظيم الجمال والعناية",
@@ -9,8 +11,8 @@ export const metadata: Metadata = {
     "اكتشفي مجموعات متقن الفاخرة لتنظيم الجمال، العناية بالفرش، وأدوات المكياج المختارة بعناية. الدفع عند الاستلام والتوصيل داخل السعودية.",
 };
 
-export default function CollectionsPage() {
-  const { bestSellers } = HOMEPAGE_BEAUTY;
+export default async function CollectionsPage() {
+  const products = await getResolvedHomepageProducts();
 
   return (
     <div className="bg-brand-background min-h-screen">
@@ -33,7 +35,7 @@ export default function CollectionsPage() {
       <section className="page-x pb-14 md:pb-20">
         <div className="max-w-content mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-            {bestSellers.products.map((product) => (
+            {products.map((product) => (
               <BeautyProductCard key={product.slug} product={product} />
             ))}
           </div>

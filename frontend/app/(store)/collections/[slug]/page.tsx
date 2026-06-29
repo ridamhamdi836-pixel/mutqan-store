@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Star } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
@@ -109,9 +109,26 @@ export default function CollectionPage({
 }) {
   const { slug } = use(params);
   const collection = getBeautyCollectionBySlug(slug);
+  const [visibleSlugs, setVisibleSlugs] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/store-products")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data?.visibleCollectionSlugs)) {
+          setVisibleSlugs(data.visibleCollectionSlugs);
+        }
+      })
+      .catch(() => undefined);
+  }, []);
+
   if (!collection) {
     return null;
   }
+
+  const visibleProductSlugs = collection.productSlugs.filter(
+    (productSlug) => !visibleSlugs || visibleSlugs.includes(productSlug),
+  );
 
   return (
     <div className="bg-brand-background min-h-screen">
@@ -150,7 +167,7 @@ export default function CollectionPage({
             {collection.isBundle ? (
               <CompleteBundleCard />
             ) : (
-              collection.productSlugs.map((productSlug) => (
+              visibleProductSlugs.map((productSlug) => (
                 <BeautyProductCard key={productSlug} slug={productSlug} />
               ))
             )}

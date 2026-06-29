@@ -1,7 +1,7 @@
 import { Product } from "@/types";
 import { withImageVersion } from "@/lib/image-display";
 
-export const PRODUCTS_CONFIG: Record<string, {
+export type ProductPageConfig = {
   heroImageAlt: string;
   shortPromise: string;
   heroAngle: string;
@@ -91,7 +91,9 @@ export const PRODUCTS_CONFIG: Record<string, {
   faqs: Array<{ question: string; answer: string }>;
   seoTitle: string;
   seoDescription: string;
-}> = {
+};
+
+export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
   "powerful-cordless-vacuum": {
     heroImageAlt: "المكنسة اللاسلكية القوية أثناء التنظيف في المنزل",
     heroSectionImage: "/images/products/powerful-cordless-vacuum-hero.png",

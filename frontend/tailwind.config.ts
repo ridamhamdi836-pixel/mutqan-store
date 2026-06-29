@@ -1,5 +1,7 @@
 import type { Config } from "tailwindcss";
 
+const brandColor = (name: string) => `rgb(var(--brand-${name}-rgb) / <alpha-value>)`;
+
 const config: Config = {
   darkMode: ["class"],
   content: [
@@ -23,20 +25,20 @@ const config: Config = {
       },
       colors: {
         brand: {
-          background: "#FAF8F6",
-          surface: "#FFFFFF",
-          beige: "#EADBC8",
-          sand: "#D4C4B0",
-          espresso: "#0F172A",
-          olive: "#475569",
-          bronze: "#D4AF37",
-          gold: "#D4AF37",
-          secondary: "#EADBC8",
-          text: "#0F172A",
-          muted: "#64748B",
-          border: "#E8E0D8",
-          trust: "#0F172A",
-          error: "#EF4444",
+          background: brandColor("background"),
+          surface: brandColor("surface"),
+          beige: brandColor("beige"),
+          sand: brandColor("sand"),
+          espresso: brandColor("espresso"),
+          olive: brandColor("olive"),
+          bronze: brandColor("bronze"),
+          gold: brandColor("gold"),
+          secondary: brandColor("secondary"),
+          text: brandColor("text"),
+          muted: brandColor("muted"),
+          border: brandColor("border"),
+          trust: brandColor("trust"),
+          error: brandColor("error"),
         },
       },
       borderRadius: {
