@@ -7,7 +7,6 @@ import {
   HomeBeautyOrderSteps,
   HomeBeautyFinalCta,
   HomeBeautyFaq,
-  HomeBeautyTrustFooter,
 } from "@/components/home/beauty/HomeBeautySections";
 import { getResolvedHomepageProducts } from "@/lib/storefront-resolver";
 
@@ -31,7 +30,6 @@ export default async function HomePage() {
       <HomeBeautyOrderSteps />
       <HomeBeautyFinalCta />
       <HomeBeautyFaq />
-      <HomeBeautyTrustFooter />
     </div>
   );
 }

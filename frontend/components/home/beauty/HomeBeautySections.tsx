@@ -14,13 +14,13 @@ import {
   Microscope,
   HeartHandshake,
   Quote,
-  Banknote,
   Award,
   type LucideIcon,
 } from "lucide-react";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
 import { HeroProductShowcase } from "@/components/home/beauty/HeroProductShowcase";
+import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 
@@ -29,13 +29,6 @@ const WHY_ICONS: Record<string, LucideIcon> = {
   actives: FlaskConical,
   guarantee: HeartHandshake,
   korean: Leaf,
-};
-
-const TRUST_FOOTER_ICONS: Record<string, LucideIcon> = {
-  shipping: Truck,
-  cod: Banknote,
-  guarantee: ShieldCheck,
-  actives: FlaskConical,
 };
 
 const CTA_TRUST_ICONS = {
@@ -394,30 +387,7 @@ export function HomeBeautyFaq() {
 }
 
 export function HomeBeautyTrustFooter() {
-  const { trustFooter } = HOMEPAGE_BEAUTY;
-
-  return (
-    <section className="py-10 md:py-12 page-x bg-brand-cream border-t border-brand-border/30">
-      <div className="max-w-content mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {trustFooter.map((item) => {
-            const Icon = TRUST_FOOTER_ICONS[item.id] ?? ShieldCheck;
-            return (
-              <div key={item.id} className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-forest/10 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-5 h-5 text-brand-forest" />
-                </div>
-                <div>
-                  <p className="font-bold text-brand-forest text-sm mb-1">{item.title}</p>
-                  <p className="text-xs text-brand-muted leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
+  return <TrustFeaturesStrip />;
 }
 
 /* Legacy exports — no longer used on homepage but kept to avoid breaking imports */

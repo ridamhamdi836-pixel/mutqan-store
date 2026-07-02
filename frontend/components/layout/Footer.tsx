@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { BRAND, WHATSAPP_URL } from "@/config/brand";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { Shield, Truck, Banknote } from "lucide-react";
+import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { cn } from "@/lib/utils";
 
 type FooterProps = {
@@ -12,39 +12,11 @@ type FooterProps = {
 
 export function Footer({ className }: FooterProps) {
   return (
-    <footer className={cn("bg-brand-espresso text-brand-sand mt-20", className)}>
-      <div className="max-w-content mx-auto page-x py-14">
-        {/* Trust Badges */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12 pb-10 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-              <Shield className="w-5 h-5 text-brand-trust" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white">ضمان ٣٠ يوم</p>
-              <p className="text-xs text-brand-sand/60">استرجاع أو استبدال مجاني</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-              <Banknote className="w-5 h-5 text-brand-trust" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white">الدفع عند الاستلام</p>
-              <p className="text-xs text-brand-sand/60">ادفع نقدًا عند وصول طلبك</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-              <Truck className="w-5 h-5 text-brand-trust" />
-            </div>
-            <div>
-              <p className="text-sm font-bold text-white">توصيل سريع</p>
-              <p className="text-xs text-brand-sand/60">لجميع مناطق المملكة</p>
-            </div>
-          </div>
-        </div>
+    <footer className={cn("mt-20", className)}>
+      <TrustFeaturesStrip />
 
+      <div className="bg-brand-espresso text-brand-sand">
+        <div className="max-w-content mx-auto page-x py-14">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-10">
           {/* Brand */}
@@ -135,6 +107,7 @@ export function Footer({ className }: FooterProps) {
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-sand/50">
           <p>© {new Date().getFullYear()} مُتقن | Mutqan — عناية كورية فاخرة</p>
           <p>صُنع بعناية لبشرة تثقين بها</p>
+        </div>
         </div>
       </div>
     </footer>
