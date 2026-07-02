@@ -17,12 +17,10 @@ import {
   Banknote,
   MapPin,
   ChevronLeft,
-  BadgeCheck,
 } from "lucide-react";
 import { CroProductMedia } from "@/components/product/cro/CroProductMedia";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
-import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
@@ -82,8 +80,8 @@ function NamaBundleCards({
   }
 
   return (
-    <div className="space-y-3" role="group" aria-label="اختر العرض">
-      <div className="flex items-center justify-between gap-3 mb-1">
+    <div className="space-y-4" role="group" aria-label="اختر العرض">
+      <div className="flex items-center justify-between gap-3">
         <p className="font-extrabold text-base md:text-lg text-brand-forest">اختاري العرض:</p>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-forest/10 text-brand-forest text-[10px] md:text-xs font-bold px-3 py-1.5 shrink-0">
           <Sparkles className="w-3.5 h-3.5 shrink-0" />
@@ -96,8 +94,10 @@ function NamaBundleCards({
         const isDefault = bundle.is_default;
         const isBestValue = bestValueBundle?.id === bundle.id;
         const parts = bundle.label_ar.split(" — ");
-        const title = parts[0]?.trim() ?? bundle.label_ar;
-        const subtitle = parts.slice(1).join(" — ").trim();
+        const mainTitle = parts[0]?.trim() ?? bundle.label_ar;
+        const benefitPart = parts.slice(1).join(" — ").trim();
+        const displayTitle =
+          benefitPart && bundle.quantity > 1 ? `${mainTitle} • ${benefitPart}` : mainTitle;
 
         let savings: string | null = null;
         if (bundle.compare_at_price_sar && bundle.compare_at_price_sar > bundle.price_sar) {
@@ -108,12 +108,14 @@ function NamaBundleCards({
           savings = bundle.savings_label_ar;
         }
 
-        const durationLine =
+        const detailLine =
           bundle.quantity === 1
             ? "30 يوم · عبوة كاملة"
             : bundle.quantity === 2
               ? "60 يوم · شهر النتيجة + شهر التثبيت"
               : "90 يوم · نتيجة + تثبيت + هدية";
+
+        const hasTopBadge = isDefault || (isBestValue && !isDefault);
 
         return (
           <button
@@ -122,52 +124,51 @@ function NamaBundleCards({
             onClick={() => onSelect(bundle)}
             aria-pressed={isSelected}
             className={cn(
-              "relative w-full flex items-center justify-between gap-3 rounded-2xl border-2 p-4 md:p-5 text-start transition-all",
+              "relative w-full flex items-center justify-between gap-4 rounded-2xl p-4 md:p-5 text-start transition-all",
+              hasTopBadge && "mt-2",
               isSelected
-                ? "border-brand-forest bg-white shadow-[0_2px_16px_rgba(26,71,49,0.12)]"
-                : "border-[#E5DDD0] bg-[#FAF7F2] hover:border-brand-forest/25",
+                ? "border-[2.5px] border-brand-forest bg-[#F4F8F5] shadow-[0_2px_12px_rgba(26,71,49,0.08)]"
+                : "border border-[#DDD5C8] bg-white hover:border-brand-forest/20",
             )}
           >
             {isDefault ? (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-0.5 rounded-md font-bold shadow-sm whitespace-nowrap z-10">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold shadow-sm whitespace-nowrap z-10">
                 الأكثر اختياراً
               </span>
             ) : null}
             {isBestValue && !isDefault ? (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-0.5 rounded-md font-bold whitespace-nowrap z-10">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap z-10">
                 الأكثر توفيراً
               </span>
             ) : null}
 
-            <div className="flex items-center gap-3 flex-1 min-w-0 pt-1">
+            <div className="flex items-center gap-3.5 flex-1 min-w-0">
               <div
                 className={cn(
-                  "w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0",
-                  isSelected ? "border-brand-forest bg-brand-forest" : "border-brand-muted/35 bg-white",
+                  "w-[22px] h-[22px] rounded-full border-2 flex items-center justify-center shrink-0",
+                  isSelected
+                    ? "border-brand-forest bg-brand-forest"
+                    : "border-[#C5BDB0] bg-white",
                 )}
               >
-                {isSelected ? (
-                  <div className="w-2.5 h-2.5 rounded-full bg-brand-gold" />
-                ) : null}
+                {isSelected ? <div className="w-2 h-2 rounded-full bg-white" /> : null}
               </div>
               <div className="min-w-0">
                 <p className="font-extrabold text-[15px] md:text-base text-brand-forest leading-snug">
-                  {title}
+                  {displayTitle}
                 </p>
-                {subtitle ? (
-                  <p className="text-xs text-brand-muted mt-0.5 leading-snug">{subtitle}</p>
-                ) : null}
-                <p className="text-[11px] text-brand-muted/80 mt-1">{durationLine}</p>
+                <p className="text-xs text-brand-muted mt-1 leading-snug">{detailLine}</p>
               </div>
             </div>
 
-            <div className="text-start shrink-0 ps-1">
-              <p className="font-black text-xl md:text-2xl text-brand-forest tabular-nums leading-none">
-                {bundle.price_sar}{" "}
-                <span className="text-sm font-bold">ر.س</span>
+            <div className="text-start shrink-0 min-w-[72px]">
+              <p className="font-black text-xl md:text-[1.35rem] text-brand-forest tabular-nums leading-none">
+                {bundle.price_sar} <span className="text-sm font-bold">ر.س</span>
               </p>
               {savings ? (
-                <p className="text-xs font-bold text-emerald-700 mt-1.5 tabular-nums">{savings}</p>
+                <p className="text-[11px] md:text-xs font-bold text-emerald-700 mt-2 tabular-nums">
+                  {savings}
+                </p>
               ) : null}
             </div>
           </button>
@@ -393,23 +394,6 @@ export function SkincareNamaProductPage({
               ) : null}
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Trust bar — dark green */}
-      <section className="bg-brand-forest text-white py-5 md:py-6 page-x">
-        <div className="max-w-content mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 text-center">
-          {[
-            { icon: Banknote, label: "الدفع عند الاستلام" },
-            { icon: Package, label: "توصيل 2–5 أيام" },
-            { icon: BadgeCheck, label: "ضمان 30 يوم" },
-            { icon: FlaskConical, label: "عناية كورية أصلية" },
-          ].map(({ icon: Icon, label }) => (
-            <div key={label} className="flex flex-col items-center gap-1.5">
-              <Icon className="w-5 h-5 text-brand-gold" strokeWidth={1.75} />
-              <p className="text-xs md:text-sm font-bold">{label}</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -871,8 +855,6 @@ export function SkincareNamaProductPage({
           </div>
         </section>
       ) : null}
-
-      <TrustFeaturesStrip />
     </div>
   );
 }
