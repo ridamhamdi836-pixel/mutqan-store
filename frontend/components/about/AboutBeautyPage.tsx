@@ -1,364 +1,212 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 import {
   ArrowLeft,
-  Gem,
-  Sparkles,
+  Award,
+  FlaskConical,
   Heart,
-  Shield,
+  Leaf,
+  Sparkles,
+  Target,
   Truck,
-  CreditCard,
+  Banknote,
   ShieldCheck,
-  MessageCircle,
   type LucideIcon,
 } from "lucide-react";
-import { ABOUT_BEAUTY, ABOUT_NAVY } from "@/config/about-beauty";
-import { WHATSAPP_URL } from "@/config/brand";
-import { cn } from "@/lib/utils";
+import { ABOUT_BEAUTY } from "@/config/about-beauty";
 
-type CardTheme = {
-  Icon: LucideIcon;
-  accent: string;
-  gradient: string;
-  borderHover: string;
+const PILLAR_ICONS: Record<string, LucideIcon> = {
+  korean: FlaskConical,
+  actives: Leaf,
+  simple: Target,
+  experience: Heart,
 };
 
-const DIFFERENTIATOR_THEMES: Record<string, CardTheme> = {
-  quality: {
-    Icon: Gem,
-    accent: "#D4AF37",
-    gradient: "from-[#D4AF37]/28 via-[#D4AF37]/10 to-white",
-    borderHover: "hover:border-[#D4AF37]/30",
-  },
-  elegance: {
-    Icon: Sparkles,
-    accent: "#C9A87C",
-    gradient: "from-[#EADBC8]/80 via-[#FAF8F6] to-white",
-    borderHover: "hover:border-[#C9A87C]/35",
-  },
-  comfort: {
-    Icon: Heart,
-    accent: "#E8A4A4",
-    gradient: "from-[#E8A4A4]/30 via-[#E8A4A4]/8 to-white",
-    borderHover: "hover:border-[#E8A4A4]/35",
-  },
-  trust: {
-    Icon: Shield,
-    accent: "#2563EB",
-    gradient: "from-[#2563EB]/22 via-[#2563EB]/8 to-white",
-    borderHover: "hover:border-[#2563EB]/30",
-  },
+const TRUST_ICONS: Record<string, LucideIcon> = {
+  shipping: Truck,
+  cod: Banknote,
+  guarantee: ShieldCheck,
+  actives: Sparkles,
 };
 
-const EXPERIENCE_THEMES: Record<string, CardTheme> = {
-  shipping: {
-    Icon: Truck,
-    accent: "#10B981",
-    gradient: "from-[#10B981]/22 via-[#10B981]/8 to-white",
-    borderHover: "hover:border-[#10B981]/30",
-  },
-  cod: {
-    Icon: CreditCard,
-    accent: ABOUT_NAVY,
-    gradient: "from-[#07152F]/12 via-[#07152F]/4 to-white",
-    borderHover: "hover:border-[#07152F]/20",
-  },
-  guarantee: {
-    Icon: ShieldCheck,
-    accent: "#D4AF37",
-    gradient: "from-[#D4AF37]/22 via-[#D4AF37]/8 to-white",
-    borderHover: "hover:border-[#D4AF37]/30",
-  },
-  support: {
-    Icon: MessageCircle,
-    accent: "#25D366",
-    gradient: "from-[#25D366]/18 via-[#25D366]/6 to-white",
-    borderHover: "hover:border-[#25D366]/25",
-  },
-};
-
-function PremiumBadge({ children, className }: { children: ReactNode; className?: string }) {
+function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <span
-      className={cn(
-        "inline-flex items-center gap-2 rounded-pill px-5 py-2 text-sm font-medium tracking-wide",
-        className,
-      )}
-    >
+    <p className="text-[11px] md:text-xs font-bold uppercase tracking-[0.2em] text-brand-gold mb-3">
       {children}
-    </span>
+    </p>
   );
 }
 
-function GlassCard({
-  children,
-  className,
-  borderHover,
-}: {
-  children: ReactNode;
-  className?: string;
-  borderHover?: string;
-}) {
+function PillarIcon({ id }: { id: string }) {
+  const Icon = PILLAR_ICONS[id] ?? Sparkles;
   return (
-    <div
-      className={cn(
-        "group relative rounded-[32px] bg-white/80 backdrop-blur-xl",
-        "border border-white/90 shadow-[0_4px_32px_rgba(7,21,47,0.06)]",
-        "transition-all duration-500 ease-out",
-        "hover:-translate-y-1 hover:shadow-[0_20px_56px_rgba(7,21,47,0.10)]",
-        borderHover,
-        className,
-      )}
-    >
-      <div
-        className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-90 pointer-events-none"
-        aria-hidden
-      />
-      {children}
-    </div>
-  );
-}
-
-function IconTile({ theme }: { theme: CardTheme }) {
-  const { Icon, accent, gradient } = theme;
-  return (
-    <div
-      className={cn(
-        "w-14 h-14 md:w-16 md:h-16 rounded-2xl mx-auto mb-5",
-        "bg-gradient-to-br flex items-center justify-center",
-        "shadow-[inset_0_1px_0_rgba(255,255,255,0.8),0_6px_20px_rgba(7,21,47,0.05)]",
-        "transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105",
-        gradient,
-      )}
-    >
-      <Icon className="w-7 h-7 md:w-8 md:h-8" style={{ color: accent }} strokeWidth={1.5} />
+    <div className="mx-auto mb-5 w-[72px] h-[72px] rounded-full bg-brand-forest border-2 border-brand-gold/40 flex items-center justify-center shadow-[0_4px_16px_rgba(26,71,49,0.12)]">
+      <Icon className="w-8 h-8 text-white" strokeWidth={1.75} />
     </div>
   );
 }
 
 export function AboutBeautyPage() {
-  const { hero, philosophy, story, differentiators, promise, experience, finalCta } =
-    ABOUT_BEAUTY;
+  const { hero, story, pillars, promise, finalCta, trust } = ABOUT_BEAUTY;
 
   return (
     <div className="bg-white">
-      {/* ── HERO ── */}
-      <section
-        className="relative overflow-hidden page-x py-16 md:py-24 lg:py-28"
-        style={{ backgroundColor: ABOUT_NAVY }}
-      >
+      {/* Hero — Nama-style cream with decorative circles */}
+      <section className="relative overflow-hidden page-x py-16 md:py-24 bg-[#F9F8F3]">
         <div
-          className="absolute top-0 end-0 w-[480px] h-[480px] rounded-full blur-3xl opacity-30 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #D4AF37 0%, transparent 70%)" }}
+          className="absolute top-8 start-[8%] w-48 h-48 md:w-72 md:h-72 rounded-full border border-brand-forest/8 pointer-events-none"
           aria-hidden
         />
         <div
-          className="absolute bottom-0 start-0 w-[360px] h-[360px] rounded-full blur-3xl opacity-20 pointer-events-none"
-          style={{ background: "radial-gradient(circle, #2563EB 0%, transparent 70%)" }}
+          className="absolute bottom-4 end-[5%] w-64 h-64 md:w-96 md:h-96 rounded-full border border-brand-gold/15 pointer-events-none"
           aria-hidden
         />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent" aria-hidden />
+        <div
+          className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] max-w-3xl aspect-square rounded-full border border-brand-forest/5 pointer-events-none"
+          aria-hidden
+        />
 
-        <div className="max-w-content mx-auto text-center relative z-10 animate-fade-in">
-          <PremiumBadge className="bg-white/10 text-white/95 border border-[#D4AF37]/30 mb-8 md:mb-10">
+        <div className="max-w-3xl mx-auto text-center relative z-10">
+          <span className="inline-flex items-center gap-2 rounded-full bg-brand-forest/8 border border-brand-forest/12 px-4 py-2 text-sm font-semibold text-brand-forest mb-6 md:mb-8">
+            <FlaskConical className="w-4 h-4 text-brand-gold" />
             {hero.badge}
-          </PremiumBadge>
+          </span>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 md:mb-8 tracking-tight leading-tight">
-            {hero.title}
+          <h1 className="text-3xl md:text-5xl lg:text-[3.25rem] font-extrabold text-brand-forest leading-[1.25] mb-2 tracking-tight">
+            {hero.titleLine1}
           </h1>
+          <p className="text-xl md:text-3xl lg:text-[2rem] font-extrabold text-brand-forest/85 leading-snug mb-6 md:mb-8">
+            {hero.titleLine2}
+          </p>
 
-          <p className="text-base md:text-xl lg:text-[1.35rem] text-white/75 max-w-2xl mx-auto leading-[1.95] font-light">
+          <p className="text-base md:text-lg text-brand-muted leading-[1.95] max-w-2xl mx-auto">
             {hero.subtitle}
           </p>
         </div>
       </section>
 
-      {/* ── PHILOSOPHY ── */}
-      <section className="section-pad page-x bg-white">
-        <div className="max-w-3xl mx-auto text-center animate-slide-up">
-          <PremiumBadge className="bg-[#D4AF37]/10 text-[#07152F] border border-[#D4AF37]/25 mb-6 md:mb-8">
-            {philosophy.badge}
-          </PremiumBadge>
-
-          <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-[#07152F] mb-8 md:mb-10 leading-snug tracking-tight">
-            {philosophy.title}
+      {/* Story */}
+      <section className="page-x py-14 md:py-20 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <SectionLabel>{story.label}</SectionLabel>
+          <h2 className="text-2xl md:text-4xl font-extrabold text-brand-espresso leading-snug mb-8 md:mb-10">
+            {story.title}
           </h2>
 
-          <div className="space-y-6 md:space-y-7">
-            {philosophy.paragraphs.map((p, i) => (
-              <p
-                key={i}
-                className={cn(
-                  "text-base md:text-lg lg:text-xl text-brand-muted leading-[2]",
-                  i === philosophy.paragraphs.length - 1 && "text-[#07152F]/80 font-medium",
-                )}
+          <div className="space-y-6 text-base md:text-lg text-brand-muted leading-[1.95]">
+            {story.paragraphs.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
+          </div>
+
+          <blockquote className="mt-10 md:mt-12 border-s-4 border-brand-gold ps-5 md:ps-6 py-1">
+            <p className="text-lg md:text-xl font-bold text-brand-forest leading-relaxed">
+              {story.quote}
+            </p>
+          </blockquote>
+        </div>
+      </section>
+
+      {/* Four pillars */}
+      <section className="page-x py-14 md:py-20 bg-[#F9F8F3]">
+        <div className="max-w-content mx-auto">
+          <div className="text-center mb-10 md:mb-14">
+            <SectionLabel>{pillars.label}</SectionLabel>
+            <h2 className="text-2xl md:text-4xl font-extrabold text-brand-forest mb-3">
+              {pillars.title}
+            </h2>
+            <p className="text-sm md:text-base text-brand-muted">{pillars.subtitle}</p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+            {pillars.items.map((item) => (
+              <div
+                key={item.id}
+                className="rounded-2xl bg-white border border-brand-border/20 p-6 md:p-7 text-center shadow-[0_4px_24px_rgba(26,71,49,0.05)]"
               >
-                {p}
-              </p>
+                <PillarIcon id={item.id} />
+                <h3 className="text-lg font-extrabold text-brand-forest mb-3 leading-snug">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-brand-muted leading-relaxed">{item.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── STORY ── */}
-      <section className="section-pad page-x bg-brand-background">
-        <div className="max-w-content mx-auto">
-          <GlassCard className="p-8 md:p-12 lg:p-16 max-w-3xl mx-auto">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-[#07152F] mb-8 md:mb-10 text-center tracking-tight">
-              {story.title}
-            </h2>
-            <div className="space-y-6 md:space-y-7">
-              {story.paragraphs.map((p, i) => (
-                <p key={i} className="text-base md:text-lg text-brand-muted leading-[1.95] text-center">
-                  {p}
-                </p>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-      </section>
-
-      {/* ── DIFFERENTIATORS ── */}
-      <section className="section-pad page-x bg-white">
-        <div className="max-w-content mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#07152F] text-center mb-10 md:mb-14 tracking-tight">
-            {differentiators.title}
+      {/* Promise */}
+      <section className="page-x py-14 md:py-20 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <SectionLabel>{promise.label}</SectionLabel>
+          <h2 className="text-2xl md:text-4xl font-extrabold text-brand-forest mb-8 md:mb-10">
+            {promise.title}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
-            {differentiators.items.map((item) => {
-              const theme = DIFFERENTIATOR_THEMES[item.id];
-              return (
-                <GlassCard
-                  key={item.id}
-                  borderHover={theme.borderHover}
-                  className="p-6 md:p-8 text-center"
-                >
-                  <IconTile theme={theme} />
-                  <h3 className="text-lg md:text-xl font-bold text-[#07152F] mb-3 leading-snug">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed">
-                    {item.desc}
-                  </p>
-                </GlassCard>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── PROMISE ── */}
-      <section className="section-pad page-x bg-brand-background">
-        <div className="max-w-3xl mx-auto">
-          <GlassCard
-            className="p-10 md:p-14 lg:p-16 text-center border-[#D4AF37]/15"
-            borderHover="hover:border-[#D4AF37]/25"
-          >
-            <PremiumBadge className="bg-[#D4AF37]/10 text-[#07152F] border border-[#D4AF37]/20 mb-6 md:mb-8">
-              {promise.badge}
-            </PremiumBadge>
-
-            <h2 className="text-2xl md:text-3xl lg:text-[2.25rem] font-extrabold text-[#07152F] mb-8 md:mb-10 leading-snug tracking-tight">
-              {promise.title}
-            </h2>
-
-            <div className="space-y-5 md:space-y-6">
-              {promise.paragraphs.map((p, i) => (
-                <p
-                  key={i}
-                  className={cn(
-                    "text-base md:text-lg text-brand-muted leading-[1.95]",
-                    i === promise.paragraphs.length - 1 &&
-                      "text-[#07152F] font-semibold text-lg md:text-xl",
-                  )}
-                >
-                  {p}
+          <div className="rounded-3xl bg-[#F5F0E8] border border-brand-border/15 p-6 md:p-10 space-y-5">
+            {promise.items.map((item) => (
+              <div key={item} className="flex items-start gap-3 md:gap-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-forest">
+                  <Award className="w-4 h-4 text-brand-gold" strokeWidth={2} />
+                </span>
+                <p className="text-sm md:text-base text-brand-espresso leading-relaxed pt-1.5">
+                  {item}
                 </p>
-              ))}
-            </div>
-          </GlassCard>
-        </div>
-      </section>
-
-      {/* ── CUSTOMER EXPERIENCE ── */}
-      <section className="section-pad page-x bg-white">
-        <div className="max-w-content mx-auto">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#07152F] text-center mb-10 md:mb-14 tracking-tight">
-            {experience.title}
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-7">
-            {experience.items.map((item) => {
-              const theme = EXPERIENCE_THEMES[item.id];
-              return (
-                <GlassCard
-                  key={item.id}
-                  borderHover={theme.borderHover}
-                  className="p-6 md:p-8 text-center"
-                >
-                  <IconTile theme={theme} />
-                  <h3 className="text-base md:text-lg font-bold text-[#07152F] leading-snug">
-                    {item.title}
-                  </h3>
-                </GlassCard>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── FINAL CTA ── */}
-      <section className="section-pad page-x pb-16 md:pb-24">
-        <div className="max-w-3xl mx-auto">
-          <div
-            className="relative rounded-[32px] overflow-hidden p-10 md:p-14 lg:p-16 text-center shadow-[0_24px_64px_rgba(7,21,47,0.18)]"
-            style={{ backgroundColor: ABOUT_NAVY }}
-          >
-            <div
-              className="absolute inset-0 opacity-40 pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at 70% 20%, rgba(212,175,55,0.18) 0%, transparent 55%)",
-              }}
-              aria-hidden
-            />
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent" aria-hidden />
-
-            <div className="relative z-10">
-              <PremiumBadge className="bg-white/10 text-white/90 border border-[#D4AF37]/30 mb-6 md:mb-8">
-                {finalCta.badge}
-              </PremiumBadge>
-
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-5 md:mb-6 tracking-tight leading-snug">
-                {finalCta.title}
-              </h2>
-
-              <p className="text-base md:text-lg text-white/70 max-w-xl mx-auto leading-[1.9] mb-9 md:mb-11">
-                {finalCta.paragraph}
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link
-                  href={finalCta.primaryHref}
-                  className="inline-flex items-center justify-center gap-2.5 w-full sm:w-auto px-10 py-4 rounded-2xl bg-white text-[#07152F] font-bold text-base shadow-lg hover:bg-[#EADBC8] transition-colors duration-300"
-                >
-                  <span>{finalCta.primaryLabel}</span>
-                  <ArrowLeft className="w-5 h-5" />
-                </Link>
-                <a
-                  href={WHATSAPP_URL("مرحباً، أود التواصل مع فريق مُتقن")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-10 py-4 rounded-2xl border-2 border-white/25 text-white font-semibold text-base hover:border-[#D4AF37]/50 hover:bg-white/5 transition-all duration-300"
-                >
-                  <MessageCircle className="w-5 h-5" strokeWidth={1.75} />
-                  <span>{finalCta.secondaryLabel}</span>
-                </a>
               </div>
-            </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* Final CTA + trust */}
+      <section className="relative overflow-hidden bg-brand-forest page-x py-14 md:py-20">
+        <div
+          className="absolute inset-0 opacity-30 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,148,46,0.25) 0%, transparent 60%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="absolute top-8 end-8 w-40 h-40 rounded-full border border-brand-gold/20 pointer-events-none"
+          aria-hidden
+        />
+        <div
+          className="absolute bottom-4 start-4 w-56 h-56 rounded-full border border-white/10 pointer-events-none"
+          aria-hidden
+        />
+
+        <div className="max-w-3xl mx-auto text-center relative z-10 mb-12 md:mb-14">
+          <h2 className="text-2xl md:text-4xl font-extrabold text-white leading-snug mb-8 md:mb-10">
+            {finalCta.title}
+          </h2>
+          <Link
+            href={finalCta.buttonHref}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-gold text-brand-forest font-extrabold text-base md:text-lg px-8 md:px-10 py-4 shadow-[0_4px_20px_rgba(200,148,46,0.35)] hover:bg-[#d4a035] transition-colors"
+          >
+            {finalCta.buttonLabel}
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+        </div>
+
+        <div className="max-w-content mx-auto relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+          {trust.map((item) => {
+            const Icon = TRUST_ICONS[item.id] ?? ShieldCheck;
+            return (
+              <div
+                key={item.id}
+                className="flex items-start gap-3 rounded-2xl bg-white/95 p-4 md:p-5 shadow-sm"
+              >
+                <div className="w-10 h-10 rounded-xl bg-brand-forest/8 flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5 text-brand-forest" strokeWidth={2} />
+                </div>
+                <div className="min-w-0 text-start">
+                  <p className="font-bold text-sm text-brand-forest leading-snug">{item.title}</p>
+                  <p className="text-xs text-brand-muted mt-1 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
     </div>
