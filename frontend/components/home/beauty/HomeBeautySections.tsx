@@ -23,6 +23,7 @@ import { HeroProductShowcase } from "@/components/home/beauty/HeroProductShowcas
 import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
+import { cn } from "@/lib/utils";
 
 const WHY_ICONS: Record<string, LucideIcon> = {
   formulas: Microscope,
@@ -38,9 +39,14 @@ const CTA_TRUST_ICONS = {
   leaf: Leaf,
 } as const;
 
-function SectionLabel({ children }: { children: ReactNode }) {
+function SectionLabel({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className="text-[11px] md:text-xs font-bold tracking-[0.28em] uppercase text-brand-gold mb-4">
+    <p
+      className={cn(
+        "text-[11px] md:text-xs font-bold tracking-[0.28em] uppercase text-brand-gold mb-2",
+        className,
+      )}
+    >
       {children}
     </p>
   );
@@ -176,31 +182,31 @@ export function HomeBeautyWhyMutqan() {
   return (
     <section
       id="why-mutqan"
-      className="section-pad page-x bg-brand-cream scroll-mt-24"
+      className="section-pad page-x bg-[#F5F0E8] scroll-mt-24"
     >
       <div className="max-w-content mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <SectionLabel>{whyMutqan.label}</SectionLabel>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-brand-forest leading-snug tracking-tight mb-4">
+          <h2 className="text-2xl md:text-[2.35rem] font-extrabold text-brand-forest leading-snug tracking-tight mb-2">
             {whyMutqan.headline}
           </h2>
-          <p className="text-sm md:text-base text-brand-muted leading-relaxed">
+          <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed">
             {whyMutqan.subtitle}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           {whyMutqan.cards.map((card) => {
             const Icon = WHY_ICONS[card.id] ?? ShieldCheck;
             return (
               <div
                 key={card.id}
-                className="bg-white rounded-2xl p-6 md:p-7 text-center border border-brand-border/30 shadow-[0_2px_16px_rgba(47,69,56,0.04)] hover:shadow-[0_8px_32px_rgba(47,69,56,0.08)] transition-shadow duration-300"
+                className="bg-white rounded-2xl p-6 md:p-7 text-start shadow-[0_2px_20px_rgba(26,71,49,0.06)] hover:shadow-[0_8px_32px_rgba(26,71,49,0.1)] transition-shadow duration-300"
               >
-                <div className="w-14 h-14 rounded-full bg-brand-forest text-white flex items-center justify-center mx-auto mb-5">
-                  <Icon className="w-6 h-6" strokeWidth={1.75} />
+                <div className="w-11 h-11 rounded-xl bg-brand-forest flex items-center justify-center mb-5">
+                  <Icon className="w-5 h-5 text-brand-gold" strokeWidth={1.75} />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-brand-forest mb-3 leading-snug">
+                <h3 className="text-[15px] md:text-base font-bold text-brand-forest mb-2 leading-snug">
                   {card.title}
                 </h3>
                 <p className="text-sm text-brand-muted leading-relaxed">{card.desc}</p>
@@ -281,32 +287,38 @@ export function HomeBeautyTestimonials() {
 
 export function HomeBeautyOrderSteps() {
   const { orderSteps } = HOMEPAGE_BEAUTY;
+  const stepNumbers = ["١", "٢", "٣"];
 
   return (
-    <section className="section-pad page-x bg-brand-cream">
+    <section className="section-pad page-x bg-[#F5F0E8]">
       <div className="max-w-content mx-auto">
-        <div className="text-center max-w-xl mx-auto mb-10 md:mb-14">
+        <div className="text-center max-w-xl mx-auto mb-10 md:mb-12">
           <SectionLabel>{orderSteps.label}</SectionLabel>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-brand-forest leading-snug tracking-tight mb-3">
+          <h2 className="text-2xl md:text-[2.35rem] font-extrabold text-brand-forest leading-snug tracking-tight mb-2">
             {orderSteps.headline}
           </h2>
-          <p className="text-sm text-brand-muted">{orderSteps.subtitle}</p>
+          <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed">
+            {orderSteps.subtitle}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 max-w-4xl mx-auto relative">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 max-w-4xl mx-auto relative">
           <div
-            className="hidden md:block absolute top-12 inset-x-[16%] h-px bg-brand-border/60"
+            className="hidden md:block absolute top-[2.35rem] inset-x-[18%] h-px bg-brand-gold/35 z-0"
             aria-hidden
           />
           {orderSteps.steps.map((step, index) => (
-            <div key={step.title} className="text-center relative bg-brand-cream">
-              <div className="w-14 h-14 rounded-full bg-brand-forest text-white flex items-center justify-center mx-auto mb-5 text-lg font-extrabold shadow-md relative z-10">
-                {index + 1}
+            <div
+              key={step.title}
+              className="bg-white rounded-2xl px-6 pt-7 pb-8 text-center relative z-10 shadow-[0_2px_20px_rgba(26,71,49,0.06)]"
+            >
+              <div className="w-[3.25rem] h-[3.25rem] rounded-full bg-brand-forest text-brand-gold flex items-center justify-center mx-auto mb-5 text-lg font-extrabold border-[3px] border-[#F5F0E8]">
+                {stepNumbers[index]}
               </div>
-              <h3 className="font-bold text-brand-forest text-lg mb-2">{step.title}</h3>
-              <p className="text-sm text-brand-muted leading-relaxed max-w-[16rem] mx-auto">
-                {step.desc}
-              </p>
+              <h3 className="font-bold text-brand-forest text-base md:text-lg mb-2 leading-snug">
+                {step.title}
+              </h3>
+              <p className="text-sm text-brand-muted leading-relaxed">{step.desc}</p>
             </div>
           ))}
         </div>
@@ -321,47 +333,48 @@ export function HomeBeautyFinalCta() {
   return (
     <section className="section-pad page-x bg-brand-forest text-white relative overflow-hidden">
       <div
-        className="absolute inset-0 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 50%, white 1px, transparent 1px)",
-          backgroundSize: "120px 120px",
-        }}
+        className="absolute -top-16 -end-16 w-56 h-56 rounded-full border border-white/10 pointer-events-none hidden md:block"
+        aria-hidden
+      />
+      <div
+        className="absolute -bottom-20 -start-12 w-72 h-72 rounded-full border border-white/10 pointer-events-none hidden md:block"
+        aria-hidden
+      />
+      <div
+        className="absolute top-1/2 start-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(90vw,640px)] h-[min(90vw,640px)] rounded-full border border-white/[0.04] pointer-events-none"
         aria-hidden
       />
 
       <div className="max-w-content mx-auto text-center relative z-10">
-        <SectionLabel>
-          <span className="text-brand-gold/90">{finalCta.label}</span>
-        </SectionLabel>
+        <SectionLabel className="text-brand-gold/90">{finalCta.label}</SectionLabel>
 
-        <h2 className="text-2xl md:text-4xl lg:text-[2.5rem] font-extrabold text-white leading-snug tracking-tight mb-5 max-w-2xl mx-auto">
+        <h2 className="text-2xl md:text-[2.35rem] lg:text-[2.5rem] font-extrabold text-white leading-snug tracking-tight mb-3 max-w-2xl mx-auto">
           {finalCta.headline}
         </h2>
 
-        <p className="text-white/75 text-base md:text-lg mb-8 max-w-xl mx-auto leading-relaxed">
+        <p className="text-white/75 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed">
           {finalCta.description}
         </p>
 
-        <div className="flex flex-wrap justify-center gap-5 md:gap-8 mb-10 text-sm text-white/80">
+        <Link
+          href="#products"
+          className="inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-full bg-brand-gold text-brand-forest font-extrabold text-base md:text-lg shadow-[0_4px_24px_rgba(200,148,46,0.35)] hover:bg-[#d4a84a] transition-colors mb-8"
+        >
+          <span>{finalCta.button}</span>
+          <ArrowLeft className="w-5 h-5" />
+        </Link>
+
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs md:text-sm text-brand-gold/90">
           {finalCta.trustBadges.map((badge) => {
             const Icon = CTA_TRUST_ICONS[badge.icon];
             return (
               <span key={badge.label} className="inline-flex items-center gap-2">
-                <Icon className="w-4 h-4 text-brand-gold" />
+                <Icon className="w-4 h-4 shrink-0" strokeWidth={1.75} />
                 {badge.label}
               </span>
             );
           })}
         </div>
-
-        <Link
-          href="#products"
-          className="inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-xl bg-brand-gold text-brand-forest font-extrabold text-base md:text-lg shadow-lg hover:bg-[#d4b87a] transition-colors"
-        >
-          <span>{finalCta.button}</span>
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
       </div>
     </section>
   );
