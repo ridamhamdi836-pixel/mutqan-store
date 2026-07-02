@@ -35,7 +35,7 @@ export type SkincareNamaPageConfig = {
     headline: string;
     subheadline: string;
     urgencyLine?: string;
-    imageBadges: string[];
+    imageBadges: Array<{ value: string; label: string }>;
   };
   problemSection: {
     eyebrow: string;
