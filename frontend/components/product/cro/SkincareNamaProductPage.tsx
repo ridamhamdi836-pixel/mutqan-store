@@ -6,6 +6,7 @@ import {
   Check,
   X,
   ArrowUp,
+  Flame,
   FlaskConical,
   Quote,
   Stethoscope,
@@ -16,7 +17,6 @@ import {
   MapPin,
   ChevronLeft,
   BadgeCheck,
-  Flame,
 } from "lucide-react";
 import { CroProductMedia } from "@/components/product/cro/CroProductMedia";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
@@ -63,12 +63,29 @@ function NamaBundleCards({
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
   const unitPrice = sorted.find((b) => b.quantity === 1)?.price_sar ?? sorted[0].price_sar;
 
+  let bestValueBundle: ProductBundle | null = null;
+  let bestValueSavings = 0;
+  for (const bundle of sorted) {
+    if (bundle.is_default) continue;
+    const full = unitPrice * bundle.quantity;
+    const savings =
+      bundle.compare_at_price_sar && bundle.compare_at_price_sar > bundle.price_sar
+        ? bundle.compare_at_price_sar - bundle.price_sar
+        : bundle.quantity > 1 && full > bundle.price_sar
+          ? full - bundle.price_sar
+          : 0;
+    if (savings > bestValueSavings) {
+      bestValueSavings = savings;
+      bestValueBundle = bundle;
+    }
+  }
+
   return (
-    <div className="space-y-2.5" role="group" aria-label="اختر العرض">
-      <p className="font-extrabold text-base text-brand-forest">اختاري العرض:</p>
+    <div className="space-y-3" role="group" aria-label="اختر العرض">
       {sorted.map((bundle) => {
         const isSelected = bundle.id === selectedId;
         const isDefault = bundle.is_default;
+        const isBestValue = bestValueBundle?.id === bundle.id;
         const parts = bundle.label_ar.split(" — ");
         const title = parts[0]?.trim() ?? bundle.label_ar;
         const subtitle = parts.slice(1).join(" — ").trim();
@@ -82,6 +99,9 @@ function NamaBundleCards({
           savings = bundle.savings_label_ar;
         }
 
+        const durationLine =
+          bundle.quantity === 1 ? "30 يوم · عبوة كاملة" : `${bundle.quantity * 30} يوم · روتين أطول`;
+
         return (
           <button
             key={bundle.id}
@@ -89,44 +109,58 @@ function NamaBundleCards({
             onClick={() => onSelect(bundle)}
             aria-pressed={isSelected}
             className={cn(
-              "relative w-full flex items-center justify-between rounded-2xl border-2 p-4 text-start transition-colors",
+              "relative w-full flex items-center justify-between gap-3 rounded-2xl border-2 p-4 md:p-5 text-start transition-all",
               isSelected
                 ? "border-brand-forest bg-white shadow-[0_2px_16px_rgba(26,71,49,0.12)]"
-                : "border-[#E8E4DC] bg-[#FAF8F5] hover:border-brand-forest/25",
+                : "border-[#E5DDD0] bg-[#FAF7F2] hover:border-brand-forest/25",
             )}
           >
+            {bundle.quantity === 1 ? (
+              <span className="absolute -top-2.5 start-4 bg-brand-forest/10 text-brand-forest text-[10px] px-2.5 py-0.5 rounded-full font-bold">
+                النتيجة من العبوة الأولى
+              </span>
+            ) : null}
             {isDefault ? (
-              <span className="absolute -top-2.5 end-4 bg-brand-gold text-white text-[10px] px-3 py-0.5 rounded-full font-bold shadow-sm">
+              <span className="absolute -top-2.5 end-4 bg-brand-gold text-white text-[10px] md:text-[11px] px-3 py-0.5 rounded-md font-bold shadow-sm">
                 الأكثر اختياراً
               </span>
             ) : null}
+            {isBestValue && !isDefault ? (
+              <span className="absolute -top-2.5 end-4 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-3 py-0.5 rounded-md font-bold">
+                الأكثر توفيراً
+              </span>
+            ) : null}
 
-            <div className="flex items-center gap-3 flex-1 min-w-0 pt-0.5">
+            <div className="flex items-center gap-3 flex-1 min-w-0 pt-1">
               <div
                 className={cn(
-                  "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
-                  isSelected ? "border-brand-forest" : "border-brand-muted/40",
+                  "w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0",
+                  isSelected ? "border-brand-forest bg-brand-forest" : "border-brand-muted/35 bg-white",
                 )}
               >
-                {isSelected ? <div className="w-2.5 h-2.5 rounded-full bg-brand-forest" /> : null}
+                {isSelected ? <div className="w-2.5 h-2.5 rounded-full bg-white" /> : null}
               </div>
               <div className="min-w-0">
-                <p className="font-bold text-sm md:text-[15px] text-brand-forest leading-snug">{title}</p>
+                <p className="font-extrabold text-[15px] md:text-base text-brand-forest leading-snug">
+                  {title}
+                </p>
                 {subtitle ? (
-                  <p className="text-xs text-brand-muted mt-0.5">{subtitle}</p>
+                  <p className="text-xs text-brand-muted mt-0.5 leading-snug">{subtitle}</p>
                 ) : null}
+                <p className="text-[11px] text-brand-muted/80 mt-1">{durationLine}</p>
                 {savings ? (
-                  <p className="text-xs font-bold text-brand-gold mt-1">{savings}</p>
+                  <p className="text-xs font-bold text-emerald-700 mt-1">{savings}</p>
                 ) : null}
               </div>
             </div>
 
-            <div className="text-end shrink-0 ms-2">
-              <p className="font-black text-lg md:text-xl text-brand-forest tabular-nums">
-                {bundle.price_sar} <span className="text-xs font-bold">ر.س</span>
+            <div className="text-start shrink-0 ps-1">
+              <p className="font-black text-xl md:text-2xl text-brand-forest tabular-nums leading-none">
+                {bundle.price_sar}{" "}
+                <span className="text-sm font-bold">ر.س</span>
               </p>
               {bundle.compare_at_price_sar ? (
-                <p className="text-[11px] text-brand-muted line-through tabular-nums">
+                <p className="text-xs text-brand-muted line-through tabular-nums mt-1">
                   {bundle.compare_at_price_sar} ر.س
                 </p>
               ) : null}
@@ -214,94 +248,84 @@ export function SkincareNamaProductPage({
   }, [addItem, isUpsellPreview, openCheckout, product, selectedBundle]);
 
   return (
-    <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
-      {/* Sticky CTA — شريط أخضر ثابت كامل، الصورة فوقه */}
+    <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-28 md:pb-32">
+      {/* Sticky CTA — Nama white bar + green button + image above */}
       {!isUpsellPreview ? (
-        <div className="fixed bottom-0 inset-x-0 z-50">
-          <div className="max-w-content mx-auto relative px-3">
-            <div className="absolute -top-6 end-2 z-20 w-[58px] h-[58px] rounded-xl overflow-hidden border-[3px] border-white shadow-[0_6px_20px_rgba(0,0,0,0.22)] bg-white">
-              <StoreImage
-                src={cardImageSrc}
-                alt={product.name_ar}
-                fill
-                variant="thumbnail"
-                sizes={STORE_IMAGE_SIZES.tiny}
-              />
-            </div>
-            <div className="bg-brand-forest text-white rounded-t-2xl shadow-[0_-6px_28px_rgba(26,71,49,0.35)] px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-              <div className="flex items-center gap-3 min-h-[48px] pe-[64px]">
-                <button
-                  type="button"
-                  onClick={handlePlaceOrder}
-                  className="flex items-center gap-2 font-bold text-sm md:text-[15px] flex-1 min-w-0 text-start hover:opacity-90 transition-opacity"
-                >
-                  <ArrowUp className="w-4 h-4 shrink-0 opacity-90" />
-                  <span className="leading-snug">
-                    {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
-                  </span>
-                </button>
-                <div className="shrink-0 text-end min-w-0 max-w-[38%] hidden sm:block">
-                  <p className="text-[11px] font-semibold truncate opacity-95">{product.name_ar}</p>
-                  {selectedBundle.compare_at_price_sar ? (
-                    <p className="text-[10px] opacity-75 tabular-nums">
-                      بدل {selectedBundle.compare_at_price_sar} — {selectedBundle.price_sar} ر.س
-                    </p>
-                  ) : (
-                    <p className="text-[10px] opacity-75 tabular-nums">من {minPrice} ر.س</p>
-                  )}
-                </div>
+        <div className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-brand-border/25 shadow-[0_-6px_28px_rgba(26,71,49,0.1)]">
+          <div className="max-w-content mx-auto flex items-end justify-between gap-3 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="flex items-end gap-2.5 min-w-0 flex-1">
+              <div className="relative -mt-10 w-[52px] h-[52px] md:w-14 md:h-14 rounded-xl overflow-hidden bg-white border-2 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] shrink-0">
+                <StoreImage
+                  src={cardImageSrc}
+                  alt={product.name_ar}
+                  fill
+                  variant="thumbnail"
+                  sizes={STORE_IMAGE_SIZES.tiny}
+                />
+              </div>
+              <div className="min-w-0 pb-1">
+                <p className="font-bold text-xs md:text-sm text-brand-espresso truncate leading-tight">
+                  {product.name_ar}
+                </p>
+                {selectedBundle.compare_at_price_sar ? (
+                  <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
+                    بدل {selectedBundle.compare_at_price_sar} ر.س — {selectedBundle.price_sar} ر.س
+                  </p>
+                ) : (
+                  <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
+                    من {minPrice} ر.س · دفع عند الاستلام
+                  </p>
+                )}
               </div>
             </div>
+            <button
+              type="button"
+              onClick={handlePlaceOrder}
+              className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm md:text-base rounded-full px-5 md:px-7 py-3.5 md:py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
+            >
+              <span className="whitespace-nowrap">
+                {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
+              </span>
+              <ArrowUp className="w-4 h-4 shrink-0" />
+            </button>
           </div>
         </div>
       ) : null}
 
-      {/* 1. Hero — Nama mobile-first */}
-      <section className="page-x pt-3 pb-6 md:pb-8">
+      {/* 1. Hero — Nama purchase block */}
+      <section className="page-x pt-4 pb-6 md:pt-8 md:pb-10">
         <div className="max-w-content mx-auto">
-          <div className="max-w-lg mx-auto md:max-w-xl">
-            {/* صورة المنتج */}
-            <div className="relative z-10 mb-4">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-start">
+            {/* Image first on mobile */}
+            <div className="order-1 md:order-2">
               <CroProductMedia
                 src={cardImageSrc}
                 alt={productConfig.heroSectionImageAlt ?? product.name_ar}
                 aspect="1/1"
                 placeholder={product.name_ar}
                 priority
-                className="rounded-2xl border border-white shadow-[0_8px_32px_rgba(26,71,49,0.1)]"
+                className="rounded-2xl border border-white/80 shadow-[0_8px_32px_rgba(26,71,49,0.08)] bg-white"
               />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3">
+                {PAGE.hero.quickStats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="text-center rounded-2xl bg-white border border-brand-border/20 py-3 px-2 shadow-[0_2px_8px_rgba(26,71,49,0.04)]"
+                  >
+                    <p className="text-base md:text-lg font-extrabold text-brand-forest leading-none">
+                      {stat.value}
+                    </p>
+                    <p className="text-[10px] md:text-[11px] text-brand-muted mt-1.5 font-medium leading-tight">
+                      {stat.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* شارات Nama — بطاقات بيضاء */}
-            <div className="grid grid-cols-4 gap-2 mb-6">
-              {PAGE.hero.imageBadges.map((badge) => (
-                <div
-                  key={`${badge.value}-${badge.label}`}
-                  className="rounded-xl bg-white py-3 px-1.5 text-center shadow-[0_2px_8px_rgba(26,71,49,0.06)] border border-brand-border/20"
-                >
-                  <p className="text-sm md:text-base font-extrabold text-brand-forest leading-none">
-                    {badge.value}
-                  </p>
-                  <p className="text-[9px] md:text-[10px] text-brand-muted mt-1.5 leading-tight font-medium">
-                    {badge.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div ref={heroOfferRef}>
-              <h1
-                id="product-heading"
-                className="text-[1.55rem] md:text-[1.85rem] font-extrabold text-brand-forest leading-[1.25] mb-4 scroll-mt-20 text-start"
-              >
-                {PAGE.hero.headline}
-              </h1>
-
-              <p className="text-[14px] md:text-[15px] text-brand-muted leading-[1.9] mb-5 border-s-[3px] border-brand-gold ps-4 text-start">
-                {PAGE.hero.subheadline}
-              </p>
-
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-4">
+            {/* Copy + offers */}
+            <div className="order-2 md:order-1" ref={heroOfferRef}>
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
                 <div className="flex" aria-hidden>
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
@@ -315,16 +339,30 @@ export function SkincareNamaProductPage({
                     />
                   ))}
                 </div>
+                <span className="text-xs font-bold text-brand-muted">
+                  {reviewStats.avg} ({reviewStats.count.toLocaleString("ar-SA")} تقييم · موثّق)
+                </span>
+                <span className="text-xs text-brand-muted hidden sm:inline">·</span>
                 <span className="text-xs font-bold text-brand-forest">
-                  {reviewStats.avg} · {reviewStats.count.toLocaleString("ar-SA")} تقييم موثق · من{" "}
-                  {minPrice} ر.س / علبة
+                  من {minPrice} ر.س / عبوة
                 </span>
               </div>
+
+              <h1
+                id="product-heading"
+                className="text-[1.7rem] md:text-[2.35rem] lg:text-[2.55rem] font-extrabold text-brand-forest leading-[1.22] mb-4 scroll-mt-20 text-start tracking-tight"
+              >
+                {PAGE.hero.headline}
+              </h1>
+
+              <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] mb-4 text-start">
+                {PAGE.hero.subheadline}
+              </p>
 
               {PAGE.hero.urgencyLine ? (
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-bold px-3 py-1.5 mb-5">
                   <Flame className="w-3.5 h-3.5 shrink-0" />
-                  {PAGE.hero.urgencyLine}
+                  <span>{PAGE.hero.urgencyLine}</span>
                 </div>
               ) : null}
 
@@ -335,15 +373,15 @@ export function SkincareNamaProductPage({
               />
 
               {!isUpsellPreview ? (
-                <div className="mt-5 space-y-2">
+                <div className="mt-5 space-y-2.5">
                   <button
                     type="button"
                     onClick={handlePlaceOrder}
-                    className="w-full bg-brand-forest text-white font-bold rounded-2xl py-4 text-base shadow-[0_4px_20px_rgba(26,71,49,0.35)] hover:bg-[#143d2a] transition-colors"
+                    className="w-full bg-brand-forest text-white font-extrabold rounded-2xl py-4 md:py-[1.125rem] text-base md:text-lg shadow-[0_6px_24px_rgba(26,71,49,0.32)] hover:bg-[#143d2a] transition-colors"
                   >
                     {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
                   </button>
-                  <p className="text-center text-xs text-brand-muted font-medium">
+                  <p className="text-center text-xs text-brand-muted font-semibold">
                     الدفع عند الاستلام — بدون دفع أونلاين
                   </p>
                 </div>
@@ -406,23 +444,19 @@ export function SkincareNamaProductPage({
             </div>
 
             <div className="order-1 md:order-2">
-              <div className="relative max-w-sm mx-auto md:max-w-none">
-                <div className="relative z-10 px-3">
-                  <CroProductMedia
-                    src={cardImageSrc}
-                    alt={product.name_ar}
-                    aspect="3/4"
-                    placeholder={product.name_ar}
-                    className="rounded-2xl shadow-[0_8px_32px_rgba(26,71,49,0.12)]"
-                  />
-                </div>
-                <div className="relative z-0 -mt-12 mx-1 rounded-2xl bg-brand-forest text-white px-5 pt-16 pb-5 md:px-6 md:pb-6">
-                  <p className="text-3xl md:text-4xl font-black text-brand-gold tabular-nums mb-1">
-                    {PAGE.problemSection.statValue}
-                  </p>
-                  <p className="text-sm leading-relaxed opacity-95">{PAGE.problemSection.statText}</p>
-                  <p className="text-[10px] opacity-60 mt-2">{PAGE.problemSection.statSource}</p>
-                </div>
+              <CroProductMedia
+                src={cardImageSrc}
+                alt={product.name_ar}
+                aspect="3/4"
+                placeholder={product.name_ar}
+                className="rounded-t-2xl rounded-b-none border border-b-0 border-brand-border/20"
+              />
+              <div className="rounded-b-2xl bg-brand-forest text-white p-5 md:p-6 border border-t-0 border-brand-forest">
+                <p className="text-3xl md:text-4xl font-black text-brand-gold tabular-nums mb-2 text-start">
+                  {PAGE.problemSection.statValue}
+                </p>
+                <p className="text-sm leading-[1.85] opacity-95 text-start">{PAGE.problemSection.statText}</p>
+                <p className="text-[10px] opacity-60 mt-3 text-start">{PAGE.problemSection.statSource}</p>
               </div>
             </div>
           </div>

@@ -30,12 +30,18 @@ export type SkincareNamaTimelineStep = {
   desc: string;
 };
 
+export type SkincareNamaHeroStat = {
+  value: string;
+  label: string;
+};
+
 export type SkincareNamaPageConfig = {
   hero: {
     headline: string;
     subheadline: string;
     urgencyLine?: string;
-    imageBadges: Array<{ value: string; label: string }>;
+    imageBadges: string[];
+    quickStats: SkincareNamaHeroStat[];
   };
   problemSection: {
     eyebrow: string;
