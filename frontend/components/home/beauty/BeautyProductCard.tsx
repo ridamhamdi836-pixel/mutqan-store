@@ -32,91 +32,107 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
       : null);
 
   const reviewCount = getProductReviewDisplayCount(product.slug);
+  const cardBg = product.cardBg ?? "#FAF8F5";
 
   return (
     <Link
       href={getProductPath(product.slug)}
       className={cn(
-        "group block rounded-[1.75rem] bg-white border border-brand-border/40 overflow-hidden",
-        "shadow-[0_4px_24px_rgba(30,36,48,0.04)] card-lift transition-all duration-500",
-        "hover:border-brand-gold/40 hover:shadow-[0_12px_40px_rgba(30,36,48,0.08)]",
+        "group block rounded-2xl bg-white border border-brand-border/30 overflow-hidden",
+        "shadow-[0_2px_16px_rgba(47,69,56,0.05)] transition-all duration-300",
+        "hover:shadow-[0_12px_40px_rgba(47,69,56,0.1)] hover:-translate-y-0.5",
         className,
       )}
     >
+      {/* Image area — Nama style with routine badge */}
       <div
-        className={cn(
-          "relative bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden",
-          usesSquareFillImage
-            ? "aspect-square min-h-[260px] sm:min-h-[300px]"
-            : "aspect-[4/5] min-h-[220px] sm:min-h-[260px]",
-        )}
+        className="relative overflow-hidden"
+        style={{ backgroundColor: cardBg }}
       >
-        {!imgError ? (
-          <StoreImage
-            src={product.image}
-            alt={product.imageAlt}
-            fill
-            fit="contain"
-            variant="default"
-            sizes={STORE_IMAGE_SIZES.card}
-            className={cn(
-              usesSquareFillImage ? "p-0" : "p-6",
-              "md:group-hover:scale-[1.03] transition-transform duration-500 ease-out",
-            )}
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-brand-gold/15 flex items-center justify-center">
-              <Sparkles className="w-7 h-7 text-brand-gold" />
+        <div
+          className={cn(
+            "relative mx-auto",
+            usesSquareFillImage
+              ? "aspect-[3/4] max-h-[340px]"
+              : "aspect-[4/5] min-h-[220px]",
+          )}
+        >
+          {!imgError ? (
+            <StoreImage
+              src={product.image}
+              alt={product.imageAlt}
+              fill
+              fit="contain"
+              variant="default"
+              sizes={STORE_IMAGE_SIZES.card}
+              className="p-6 md:p-8 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+              <div className="w-14 h-14 rounded-full bg-white/80 flex items-center justify-center">
+                <Sparkles className="w-7 h-7 text-brand-gold" />
+              </div>
+              <p className="text-sm font-semibold text-brand-espresso/70">{product.nameAr}</p>
             </div>
-            <p className="text-sm font-semibold text-brand-espresso/70 leading-relaxed max-w-[12rem]">
-              {product.nameAr}
-            </p>
-          </div>
-        )}
+          )}
+        </div>
 
-        <div className="absolute top-4 start-4">
-          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-espresso/90 text-white text-[10px] font-bold tracking-[0.12em] uppercase shadow-sm backdrop-blur-sm">
-            {product.goalLabel ?? "متقن"}
+        <div className="absolute top-4 end-4">
+          <span
+            className="inline-block px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wide text-white shadow-sm"
+            style={{ backgroundColor: product.accentColor ?? "#2F4538" }}
+          >
+            {product.routineLabel ?? product.goalLabel} · متقن
           </span>
         </div>
       </div>
 
-      <div className="p-6 md:p-7">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="flex items-center gap-0.5">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} className="w-3.5 h-3.5 text-brand-gold fill-brand-gold" />
-            ))}
-          </div>
-          <span className="text-xs font-medium text-brand-muted">
-            (+{reviewCount.toLocaleString("ar-SA")})
-          </span>
-        </div>
-
-        <h3 className="font-bold text-brand-espresso text-lg md:text-xl leading-snug mb-2 group-hover:text-brand-gold transition-colors duration-200">
+      <div className="p-5 md:p-6">
+        <h3 className="font-extrabold text-brand-forest text-base md:text-lg leading-snug mb-2 group-hover:text-brand-gold transition-colors">
           {product.nameAr}
         </h3>
 
-        <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed mb-5 line-clamp-2">
+        <p className="text-xs font-semibold text-brand-muted mb-2 tracking-wide">
           {product.subtitle}
         </p>
 
-        <div className="flex items-end justify-between gap-4 pt-4 border-t border-brand-border/50">
+        <p className="text-sm text-brand-muted leading-relaxed mb-3 line-clamp-2">
+          {product.description}
+        </p>
+
+        {product.ingredients && product.ingredients.length > 0 && (
+          <p className="text-[11px] text-brand-muted/80 leading-relaxed mb-4 line-clamp-2">
+            {product.ingredients.slice(0, 3).join(" · ")}
+          </p>
+        )}
+
+        <div className="flex items-center gap-2 mb-4">
+          <div className="flex items-center gap-0.5">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} className="w-3 h-3 text-brand-gold fill-brand-gold" />
+            ))}
+          </div>
+          <span className="text-xs text-brand-muted">
+            ({reviewCount.toLocaleString("ar-SA")} تقييم)
+          </span>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 pt-4 border-t border-brand-border/30">
           <div>
-            <p className="text-[11px] uppercase tracking-wider text-brand-muted mb-1 font-medium">
-              يبدأ من
-            </p>
+            <p className="text-[10px] text-brand-muted font-medium mb-0.5">يبدأ من</p>
             {minPrice != null && (
-              <p className="font-extrabold text-brand-espresso text-2xl tracking-tight">
+              <p className="font-extrabold text-brand-forest text-xl tabular-nums">
                 {minPrice}{" "}
                 <span className="text-sm font-bold text-brand-muted">ر.س</span>
               </p>
             )}
           </div>
-          <span className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-espresso text-white text-sm font-bold shadow-sm group-hover:bg-brand-gold group-hover:text-brand-espresso transition-colors duration-300">
-            <span>اكتشفي</span>
+          <span
+            className="inline-flex items-center justify-center w-11 h-11 rounded-full text-white shadow-md group-hover:scale-105 transition-transform"
+            style={{ backgroundColor: product.accentColor ?? "#2F4538" }}
+            aria-hidden
+          >
             <ArrowLeft className="w-4 h-4" />
           </span>
         </div>

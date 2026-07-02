@@ -38,6 +38,8 @@ const config: Config = {
           muted: brandColor("muted"),
           border: brandColor("border"),
           trust: brandColor("trust"),
+          forest: brandColor("forest"),
+          cream: brandColor("cream"),
           error: brandColor("error"),
         },
       },

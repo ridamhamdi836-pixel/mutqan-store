@@ -1,19 +1,14 @@
 import type { Metadata } from "next";
 import {
+  HomeBeautyAnnouncement,
   HomeBeautyHero,
-  HomeBeautyTrustBar,
-  HomeBeautyWhyStartCare,
-  HomeBeautyThreeSteps,
-  HomeBeautyBestSellers,
+  HomeBeautyFormulations,
   HomeBeautyWhyMutqan,
-  HomeBeautyResults,
-  HomeBeautyBeforeAfter,
-  HomeBeautyRoutine,
-  HomeBeautyLifestyle,
   HomeBeautyTestimonials,
   HomeBeautyOrderSteps,
-  HomeBeautyFaq,
   HomeBeautyFinalCta,
+  HomeBeautyFaq,
+  HomeBeautyTrustFooter,
 } from "@/components/home/beauty/HomeBeautySections";
 import { getResolvedHomepageProducts } from "@/lib/storefront-resolver";
 
@@ -22,7 +17,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "متقن | عناية كورية فاخرة لبشرة تثقين بها",
   description:
-    "متقن — عناية كورية فاخرة للإشراقة والإصلاح والشباب. معزّزات مركزة بخطوة واحدة. الدفع عند الاستلام وضمان 30 يوم.",
+    "متقن — معزّزات كورية مركّزة للإشراقة والإصلاح والشباب. مكونات نشطة بجرعات واضحة. الدفع عند الاستلام وضمان 30 يوم.",
 };
 
 export default async function HomePage() {
@@ -30,20 +25,15 @@ export default async function HomePage() {
 
   return (
     <div className="bg-brand-background">
+      <HomeBeautyAnnouncement />
       <HomeBeautyHero />
-      <HomeBeautyTrustBar />
-      <HomeBeautyWhyStartCare />
-      <HomeBeautyThreeSteps />
-      <HomeBeautyBestSellers products={products} />
+      <HomeBeautyFormulations products={products} />
       <HomeBeautyWhyMutqan />
-      <HomeBeautyResults />
-      <HomeBeautyBeforeAfter />
-      <HomeBeautyRoutine />
-      <HomeBeautyLifestyle />
       <HomeBeautyTestimonials />
       <HomeBeautyOrderSteps />
-      <HomeBeautyFaq />
       <HomeBeautyFinalCta />
+      <HomeBeautyFaq />
+      <HomeBeautyTrustFooter />
     </div>
   );
 }

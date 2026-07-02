@@ -117,13 +117,20 @@ function mergeHomepageProduct(product: StorefrontProduct): HomepageBeautyProduct
 
   return {
     slug: product.slug,
-    nameAr: product.name_ar,
+    nameAr: staticCard?.nameAr ?? product.name_ar,
     subtitle:
       product.dashboardOverride?.copy?.homepageSubtitle ??
+      staticCard?.subtitle ??
       product.short_description_ar,
+    description: staticCard?.description ?? product.short_description_ar,
     image: media?.cardImage ?? staticCard?.image ?? imageFromProduct(product),
     imageAlt: staticCard?.imageAlt ?? product.name_ar,
     minPriceSar: [...product.bundles].sort((a, b) => a.price_sar - b.price_sar)[0]?.price_sar,
+    goalLabel: staticCard?.goalLabel,
+    routineLabel: staticCard?.routineLabel ?? "روتين متقن",
+    accentColor: staticCard?.accentColor ?? "#2F4538",
+    cardBg: staticCard?.cardBg ?? "#FAF8F5",
+    ingredients: staticCard?.ingredients ?? [],
   };
 }
 
