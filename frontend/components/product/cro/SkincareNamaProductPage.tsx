@@ -133,12 +133,12 @@ function NamaBundleCards({
             )}
           >
             {isDefault ? (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold shadow-sm whitespace-nowrap z-10">
+              <span className="absolute -top-3 end-4 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold shadow-sm whitespace-nowrap z-10">
                 الأكثر اختياراً
               </span>
             ) : null}
             {isBestValue && !isDefault ? (
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap z-10">
+              <span className="absolute -top-3 end-4 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap z-10">
                 الأكثر توفيراً
               </span>
             ) : null}
@@ -190,7 +190,7 @@ export function SkincareNamaProductPage({
   const { addItem, openCheckout } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
-  const heroOfferRef = useRef<HTMLDivElement>(null);
+  const offersRef = useRef<HTMLDivElement>(null);
 
   const cardImageSrc = productConfig.heroSectionImage ?? "";
   const minPrice = Math.min(...product.bundles.map((b) => b.price_sar));
@@ -216,6 +216,17 @@ export function SkincareNamaProductPage({
     const slugs = productConfig.crossSellSlugs ?? [];
     return HOMEPAGE_BEAUTY.bestSellers.products.filter((p) => slugs.includes(p.slug));
   }, [productConfig.crossSellSlugs]);
+
+  const stickyProductName = useMemo(() => {
+    return (
+      HOMEPAGE_BEAUTY.bestSellers.products.find((p) => p.slug === product.slug)?.nameAr ??
+      product.name_ar
+    );
+  }, [product.slug, product.name_ar]);
+
+  const scrollToOffers = useCallback(() => {
+    offersRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
 
   useEffect(() => {
     if (isUpsellPreview) return;
@@ -260,19 +271,23 @@ export function SkincareNamaProductPage({
       {!isUpsellPreview ? (
         <div className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-brand-border/25 shadow-[0_-6px_28px_rgba(26,71,49,0.1)]">
           <div className="max-w-content mx-auto flex items-end justify-between gap-3 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-            <div className="flex items-end gap-2.5 min-w-0 flex-1">
+            <button
+              type="button"
+              onClick={scrollToOffers}
+              className="flex items-end gap-2.5 min-w-0 flex-1 text-start cursor-pointer"
+            >
               <div className="relative -mt-10 w-[52px] h-[52px] md:w-14 md:h-14 rounded-xl overflow-hidden bg-white border-2 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] shrink-0">
                 <StoreImage
                   src={cardImageSrc}
-                  alt={product.name_ar}
+                  alt={stickyProductName}
                   fill
                   variant="thumbnail"
                   sizes={STORE_IMAGE_SIZES.tiny}
                 />
               </div>
               <div className="min-w-0 pb-1">
-                <p className="font-bold text-xs md:text-sm text-brand-espresso truncate leading-tight">
-                  {product.name_ar}
+                <p className="font-bold text-[11px] md:text-sm text-brand-espresso line-clamp-2 leading-snug">
+                  {stickyProductName}
                 </p>
                 {selectedBundle.compare_at_price_sar ? (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
@@ -284,10 +299,10 @@ export function SkincareNamaProductPage({
                   </p>
                 )}
               </div>
-            </div>
+            </button>
             <button
               type="button"
-              onClick={handlePlaceOrder}
+              onClick={scrollToOffers}
               className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm md:text-base rounded-full px-5 md:px-7 py-3.5 md:py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
             >
               <span className="whitespace-nowrap">
@@ -331,7 +346,7 @@ export function SkincareNamaProductPage({
             </div>
 
             {/* Copy + offers */}
-            <div className="order-2 md:order-1" ref={heroOfferRef}>
+            <div className="order-2 md:order-1">
               <h1
                 id="product-heading"
                 className="text-[1.7rem] md:text-[2.35rem] lg:text-[2.55rem] font-extrabold text-brand-forest leading-[1.22] mb-4 scroll-mt-20 text-start tracking-tight"
@@ -373,11 +388,13 @@ export function SkincareNamaProductPage({
                 </div>
               ) : null}
 
-              <NamaBundleCards
-                bundles={product.bundles}
-                selectedId={selectedBundle.id}
-                onSelect={setSelectedBundle}
-              />
+              <div id="product-offers" ref={offersRef} className="scroll-mt-24">
+                <NamaBundleCards
+                  bundles={product.bundles}
+                  selectedId={selectedBundle.id}
+                  onSelect={setSelectedBundle}
+                />
+              </div>
 
               {!isUpsellPreview ? (
                 <div className="mt-5 space-y-2.5">
