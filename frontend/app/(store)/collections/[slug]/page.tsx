@@ -267,7 +267,7 @@ function CompleteBundleCard() {
     >
       <div className="relative aspect-square min-h-[260px] sm:min-h-[300px] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden">
         <StoreImage
-          src={withImageVersion("/images/hero/skincare-hero.png", 1)}
+          src={withImageVersion("/images/hero/skincare-hero.png", 2)}
           alt="مجموعة متقن الكاملة للعناية"
           fill
           fit="contain"

@@ -30,7 +30,7 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/hero/saudi-family.png": { width: 1024, height: 950 },
   "/images/hero/beauty-vanity-hero.png": { width: 1024, height: 819 },
   "/images/hero/beauty-lifestyle.png": { width: 1024, height: 682 },
-  "/images/hero/skincare-hero.png": { width: 1200, height: 800 },
+  "/images/hero/skincare-hero.png": { width: 844, height: 1024 },
   "/images/products/vitamin-c-booster.png": { width: 800, height: 1200 },
   "/images/products/ceramide-booster.png": { width: 800, height: 1200 },
   "/images/products/pdrn-booster.png": { width: 800, height: 1200 },

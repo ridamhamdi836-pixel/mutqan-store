@@ -116,8 +116,8 @@ export function HomeBeautyHero() {
           </div>
 
           {/* Visual — يسار في RTL */}
-          <div className="order-2 relative">
-            <div className="rounded-[1.25rem] md:rounded-[1.5rem] bg-white p-4 md:p-6 shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-white">
+          <div className="order-2 relative max-w-md md:max-w-none mx-auto w-full">
+            <div className="rounded-[1.25rem] md:rounded-[1.5rem] overflow-hidden shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-brand-border/20">
               <HeroProductShowcase />
             </div>
 
