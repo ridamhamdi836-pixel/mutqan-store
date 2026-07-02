@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CroProductPageClient } from "@/components/product/cro/CroProductPageClient";
+import { SkincareNamaProductPage } from "@/components/product/cro/SkincareNamaProductPage";
+import {
+  getSkincareNamaPage,
+  isSkincareProductSlug,
+} from "@/config/cro-product-pages/skincare-nama-pages";
 import { getProductOgImageUrl } from "@/lib/product-image";
 import { getResolvedProductPage } from "@/lib/storefront-resolver";
 
@@ -54,6 +59,19 @@ export default async function ProductPage({
     category_slug: product.category_slug,
     bundles: product.bundles,
   };
+
+  if (isSkincareProductSlug(product.slug)) {
+    const namaPage = getSkincareNamaPage(product.slug);
+    if (!namaPage) notFound();
+
+    return (
+      <SkincareNamaProductPage
+        product={productPayload}
+        productConfig={config}
+        namaConfig={namaPage}
+      />
+    );
+  }
 
   return (
     <CroProductPageClient
