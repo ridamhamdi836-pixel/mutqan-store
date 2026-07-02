@@ -3,8 +3,9 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Star } from "lucide-react";
-import { StoreImage } from "@/components/ui/StoreImage";
+import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES, withImageVersion } from "@/lib/image-display";
+import { HOMEPAGE_HERO_IMAGE } from "@/config/homepage-beauty";
 import { getProduct, getProductPath } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { useCart } from "@/providers/cart-provider";
@@ -265,15 +266,13 @@ function CompleteBundleCard() {
     <article
       className="group block rounded-[1.75rem] bg-white border border-brand-border/60 overflow-hidden shadow-[0_4px_28px_rgba(30,36,48,0.05)] card-lift transition-all duration-300 hover:border-brand-gold/30 sm:col-span-2 lg:col-span-1"
     >
-      <div className="relative aspect-square min-h-[260px] sm:min-h-[300px] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden">
-        <StoreImage
-          src={withImageVersion("/images/hero/skincare-hero.png", 2)}
+      <div className="relative overflow-hidden bg-brand-background">
+        <StoreImageFrame
+          src={HOMEPAGE_HERO_IMAGE}
           alt="مجموعة متقن الكاملة للعناية"
-          fill
-          fit="contain"
-          variant="default"
           sizes={STORE_IMAGE_SIZES.card}
-          className="p-0 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+          className="bg-brand-background"
+          imageClassName="w-full h-auto max-w-full block transition-transform duration-500 ease-out group-hover:scale-[1.02]"
         />
 
         <div className="absolute top-4 start-4">

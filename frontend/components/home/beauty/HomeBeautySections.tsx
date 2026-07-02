@@ -115,13 +115,13 @@ export function HomeBeautyHero() {
             </div>
           </div>
 
-          {/* Visual — يسار في RTL */}
-          <div className="order-2 relative max-w-md md:max-w-none mx-auto w-full">
-            <div className="rounded-[1.25rem] md:rounded-[1.5rem] overflow-hidden shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-brand-border/20">
+          {/* Visual — نفس الصورة والإطار على الجوال والحاسوب */}
+          <div className="order-2 relative w-full">
+            <div className="w-full rounded-2xl overflow-hidden shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-brand-border/20">
               <HeroProductShowcase />
             </div>
 
-            <div className="absolute -bottom-3 start-4 md:-bottom-4 md:start-6 z-10 bg-white px-3.5 py-2.5 md:px-4 md:py-3 rounded-xl shadow-[0_8px_24px_rgba(26,71,49,0.12)] border border-brand-border/40 flex items-center gap-2.5 max-w-[85%]">
+            <div className="absolute -bottom-4 start-4 z-10 bg-white px-4 py-3 rounded-xl shadow-[0_8px_24px_rgba(26,71,49,0.12)] border border-brand-border/40 flex items-center gap-2.5 max-w-[85%]">
               <div className="w-9 h-9 rounded-full bg-brand-forest flex items-center justify-center shrink-0">
                 <ShieldCheck className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
               </div>

@@ -1,21 +1,19 @@
 import { StoreImageFrame } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES, withImageVersion } from "@/lib/image-display";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
-
-const HERO_IMAGE = withImageVersion("/images/hero/skincare-hero.png", 2);
 
 export function HeroProductShowcase() {
   const { hero } = HOMEPAGE_BEAUTY;
 
   return (
     <StoreImageFrame
-      src={HERO_IMAGE}
+      src={hero.image}
       alt={hero.imageAlt}
       variant="hero"
       priority
       sizes={STORE_IMAGE_SIZES.hero}
-      className="rounded-xl bg-transparent"
-      imageClassName="rounded-xl"
+      className="rounded-2xl bg-transparent"
+      imageClassName="rounded-2xl w-full h-auto max-w-full block"
     />
   );
 }

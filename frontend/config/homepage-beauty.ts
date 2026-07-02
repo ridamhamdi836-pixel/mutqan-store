@@ -22,6 +22,8 @@ export type HomepageBeautyProduct = {
   ingredients: readonly string[];
 };
 
+export const HOMEPAGE_HERO_IMAGE = withImageVersion("/images/hero/skincare-hero.png", 3);
+
 export const HOMEPAGE_BEAUTY = {
   tagline: "عناية كورية فاخرة… لبشرة تثقين بها",
 
@@ -40,6 +42,7 @@ export const HOMEPAGE_BEAUTY = {
     ],
     primaryCta: "استكشفي السيرومات الكورية",
     guaranteeBadge: "ضمان استرجاع 30 يوم",
+    image: HOMEPAGE_HERO_IMAGE,
     imageAlt: "سيرومات متقن الكورية — إشراقة، إصلاح، شباب",
     imageBadgeTitle: "تركيبات كورية مركّزة",
     imageBadgeSub: "متقن — عناية موثوقة",
