@@ -228,23 +228,13 @@ export function SkincareNamaProductPage({
   }, []);
 
   return (
-    <div className="bg-brand-background pb-24 md:pb-28">
+    <div dir="rtl" lang="ar" className="bg-brand-background pb-24 md:pb-28">
       {/* Sticky CTA — Nama dark green bar */}
       {!isUpsellPreview && showSticky ? (
         <div className="fixed bottom-0 inset-x-0 z-50 bg-brand-forest text-white shadow-[0_-4px_24px_rgba(0,0,0,0.2)]">
           <div className="max-w-content mx-auto flex items-center gap-3 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-            <button
-              type="button"
-              onClick={scrollToOffers}
-              className="flex items-center gap-2 font-bold text-sm md:text-base shrink-0 hover:opacity-90 transition-opacity"
-            >
-              <ArrowUp className="w-4 h-4 shrink-0" />
-              <span>
-                {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
-              </span>
-            </button>
-            <div className="flex items-center gap-2 min-w-0 flex-1 justify-end">
-              <div className="min-w-0 text-end hidden sm:block">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <div className="min-w-0 text-start hidden sm:block">
                 <p className="text-xs font-semibold truncate opacity-95">{product.name_ar}</p>
                 {selectedBundle.compare_at_price_sar ? (
                   <p className="text-[11px] opacity-75 tabular-nums">
@@ -264,6 +254,16 @@ export function SkincareNamaProductPage({
                 />
               </div>
             </div>
+            <button
+              type="button"
+              onClick={scrollToOffers}
+              className="flex items-center gap-2 font-bold text-sm md:text-base shrink-0 hover:opacity-90 transition-opacity"
+            >
+              <ArrowUp className="w-4 h-4 shrink-0" />
+              <span>
+                {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
+              </span>
+            </button>
           </div>
         </div>
       ) : null}
@@ -317,7 +317,7 @@ export function SkincareNamaProductPage({
 
               <h1
                 id="product-heading"
-                className="text-[1.65rem] md:text-[2.25rem] lg:text-[2.5rem] font-extrabold text-brand-forest leading-[1.2] mb-3 scroll-mt-20"
+                className="text-[1.65rem] md:text-[2.25rem] lg:text-[2.5rem] font-extrabold text-brand-forest leading-[1.2] mb-3 scroll-mt-20 text-start"
               >
                 {PAGE.hero.headline}
               </h1>
@@ -431,7 +431,7 @@ export function SkincareNamaProductPage({
       <section className={cn("page-x py-12 md:py-16", CREAM_SECTION)}>
         <div className="max-w-content mx-auto">
           <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-start">
-            <div className="order-1 md:order-1">
+            <div className="order-1 md:order-2">
               <CroProductMedia
                 src={cardImageSrc}
                 alt={product.name_ar}
@@ -455,7 +455,7 @@ export function SkincareNamaProductPage({
               </div>
             </div>
 
-            <div className="order-2 md:order-2">
+            <div className="order-2 md:order-1">
               <h2 className="text-2xl md:text-3xl font-extrabold text-brand-forest mb-3 leading-tight">
                 {PAGE.ingredients.title}
               </h2>

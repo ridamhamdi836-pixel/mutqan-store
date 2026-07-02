@@ -361,7 +361,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk1",
     slug: "vitamin-c-booster",
-    name_ar: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
+    name_ar: "بوستر فيتامين سي ونياسيناميد ضد البقع والبهتان",
     name_en: "Vitamin C Booster",
     short_description_ar:
       "حمض الأسكوربيك ونياسيناميد — يستهدف البقع والبهتان ويوحّد مظهر البشرة.",
@@ -383,7 +383,7 @@ export const CATALOG: CatalogProduct[] = [
       }),
     ],
     upsell: {
-      hook_ar: "أكملي روتينك بسيروم يعيد للبشرة راحتها وتوازنها",
+      hook_ar: "أكملي روتينك ببوستر يعيد للبشرة راحتها وتوازنها",
       original_price_sar: 249,
       upsell_price_sar: 169,
     },
@@ -392,7 +392,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk2",
     slug: "ceramide-booster",
-    name_ar: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
+    name_ar: "بوستر السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
     name_en: "Ceramide Booster",
     short_description_ar:
       "سنتيلا آسيوية وسيراميد NP — يهدئان الحبوب ويرطّبان البشرة ويخففان جلد الدجاجة.",
@@ -423,7 +423,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk3",
     slug: "pdrn-booster",
-    name_ar: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+    name_ar: "بوستر PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
     name_en: "PDRN Booster",
     short_description_ar:
       "PDRN وأدينوزين وببتيدات — يشدّان البشرة ويقللان مظهر الخطوط الدقيقة.",
