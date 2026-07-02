@@ -44,18 +44,14 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
         className,
       )}
     >
-      {/* Image area — Nama style with routine badge */}
-      <div
-        className="relative overflow-hidden"
-        style={{ backgroundColor: cardBg }}
-      >
+      {/* Image area — إطار ملون رفيع (2mm) حول الصورة */}
+      <div className="relative">
         <div
           className={cn(
-            "relative mx-auto",
-            usesSquareFillImage
-              ? "aspect-square max-h-[320px]"
-              : "aspect-[4/5] min-h-[220px]",
+            "relative border-[2mm] border-solid bg-white",
+            usesSquareFillImage ? "aspect-square" : "aspect-[4/5] min-h-[220px]",
           )}
+          style={{ borderColor: cardBg }}
         >
           {!imgError ? (
             <StoreImage
@@ -65,7 +61,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
               fit="contain"
               variant="default"
               sizes={STORE_IMAGE_SIZES.card}
-              className="p-4 md:p-5 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              className="p-0 md:group-hover:scale-[1.02] transition-transform duration-500 ease-out"
               onError={() => setImgError(true)}
             />
           ) : (
@@ -78,7 +74,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
           )}
         </div>
 
-        <div className="absolute top-4 end-4">
+        <div className="absolute top-2.5 end-2.5 z-10">
           <span
             className="inline-block px-3 py-1.5 rounded-full text-[10px] font-bold tracking-wide text-white shadow-sm"
             style={{ backgroundColor: product.accentColor ?? "#2F4538" }}
