@@ -105,7 +105,7 @@ export function PostPurchaseOffer({
     const addedProducts = products.filter((p) => selectedSlugs.has(p.slug));
     const addedItems = addedProducts.map((p) => ({
       slug: p.slug,
-      name_ar: p.name_ar,
+      name_ar: getStorefrontProductNameAr(p.slug),
       price_sar: p.upsell_price_sar,
     }));
 
@@ -348,14 +348,14 @@ function UpsellProductRow({
           onClick={onOpenPreview}
           className="flex flex-1 items-start gap-3 min-w-0 text-start group"
         >
-          <div className="relative w-24 aspect-square md:w-28 rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
+          <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
             <StoreImage
               src={product.image}
               alt={productNameAr}
-              fill
+              width={112}
+              height={112}
               sizes={STORE_IMAGE_SIZES.thumbnail}
-              fit="contain"
-              className="p-1.5 md:group-hover:scale-[1.02] md:transition-transform md:duration-200"
+              className="w-full h-full object-contain p-1.5"
             />
             {product.isBestseller ? (
               <span className="absolute top-1.5 start-1.5 text-[9px] font-bold bg-brand-gold text-white px-1.5 py-0.5 rounded-full shadow-sm">
@@ -379,6 +379,10 @@ function UpsellProductRow({
                 />
               ))}
             </div>
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-brand-forest bg-brand-forest/5 border border-brand-forest/15 rounded-full px-2 py-0.5">
+              <Truck className="w-3 h-3" />
+              لنفس الشحنة بسعر خاص
+            </span>
             <div className="flex flex-wrap items-center gap-2 pt-0.5">
               <span className="font-black text-lg text-brand-espresso">
                 {formatSARCompact(product.upsell_price_sar)}
@@ -390,9 +394,16 @@ function UpsellProductRow({
                 وفّر {product.savings_percent}%
               </span>
             </div>
-            <span className="text-[10px] text-brand-gold font-bold block">
-              اضغط لمعرفة المزيد والمراجعات
-            </span>
+            {product.benefits.length > 0 ? (
+              <ul className="space-y-1 pt-1">
+                {product.benefits.slice(0, 2).map((benefit) => (
+                  <li key={benefit} className="text-[10px] text-brand-muted leading-relaxed flex gap-1.5">
+                    <Check className="w-3 h-3 text-brand-forest shrink-0 mt-0.5" strokeWidth={3} />
+                    <span>{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
 
           <ChevronRight className="w-5 h-5 text-brand-muted flex-shrink-0 mt-3 rotate-180 opacity-60 group-hover:opacity-100" />

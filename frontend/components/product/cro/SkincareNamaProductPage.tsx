@@ -271,27 +271,49 @@ export function SkincareNamaProductPage({
   }, [addItem, isUpsellPreview, openCheckout, product.slug, selectedBundle, stickyProductName]);
 
   return (
-    <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-28 md:pb-32">
+    <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-20 md:pb-32">
       {/* Sticky CTA — Nama white bar + green button + image above */}
       {!isUpsellPreview ? (
-        <div className="fixed bottom-0 inset-x-0 z-50 bg-white border-t border-brand-border/25 shadow-[0_-6px_28px_rgba(26,71,49,0.1)]">
-          <div className="max-w-content mx-auto flex items-end justify-between gap-3 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+        <div className="fixed bottom-0 inset-x-0 z-50 isolate bg-white border-t border-brand-border/25 shadow-[0_-6px_28px_rgba(26,71,49,0.1)]">
+          {/* Mobile — full-width CTA, no floating image (avoids GPU compositor glitches) */}
+          <div className="md:hidden px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
+            <button
+              type="button"
+              onClick={scrollToOffers}
+              className="w-full flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm rounded-full py-3.5 shadow-[0_4px_16px_rgba(26,71,49,0.28)] active:bg-[#143d2a]"
+            >
+              <span className="truncate">
+                {PAGE.stickyCtaVerb} · {firstOfferBundle.price_sar} ر.س
+              </span>
+              <ArrowUp className="w-4 h-4 shrink-0" />
+            </button>
+            <p className="text-center text-[10px] text-brand-muted tabular-nums mt-1.5">
+              {firstOfferBundle.compare_at_price_sar
+                ? `بدل ${firstOfferBundle.compare_at_price_sar} ر.س — ${firstOfferBundle.price_sar} ر.س · دفع عند الاستلام`
+                : `من ${firstOfferBundle.price_sar} ر.س · دفع عند الاستلام`}
+            </p>
+          </div>
+
+          {/* Desktop */}
+          <div className="hidden md:flex max-w-content mx-auto items-end justify-between gap-3 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
             <button
               type="button"
               onClick={scrollToOffers}
               className="flex items-end gap-2.5 min-w-0 flex-1 text-start cursor-pointer"
             >
-              <div className="relative -mt-10 w-[52px] h-[52px] md:w-14 md:h-14 rounded-xl overflow-hidden bg-white border-2 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] shrink-0">
+              <div className="relative -mt-10 w-14 h-14 rounded-xl overflow-hidden bg-white border-2 border-white shadow-[0_4px_16px_rgba(0,0,0,0.12)] shrink-0">
                 <StoreImage
                   src={cardImageSrc}
                   alt={stickyProductName}
-                  fill
+                  width={56}
+                  height={56}
                   variant="thumbnail"
                   sizes={STORE_IMAGE_SIZES.tiny}
+                  className="w-full h-full object-contain p-0.5"
                 />
               </div>
               <div className="min-w-0 pb-1">
-                <p className="font-bold text-[11px] md:text-sm text-brand-espresso line-clamp-2 leading-snug">
+                <p className="font-bold text-sm text-brand-espresso line-clamp-2 leading-snug">
                   {stickyProductName}
                 </p>
                 {firstOfferBundle.compare_at_price_sar ? (
@@ -308,7 +330,7 @@ export function SkincareNamaProductPage({
             <button
               type="button"
               onClick={scrollToOffers}
-              className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm md:text-base rounded-full px-5 md:px-7 py-3.5 md:py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
+              className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-base rounded-full px-7 py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
             >
               <span className="whitespace-nowrap">
                 {PAGE.stickyCtaVerb} · {firstOfferBundle.price_sar} ر.س
@@ -812,9 +834,9 @@ export function SkincareNamaProductPage({
       </section>
 
       {/* 11. Shipping + FAQ */}
-      <section className={cn("page-x py-12 md:py-16", CREAM_SECTION)}>
+      <section className={cn("page-x py-12 md:py-16 relative z-10 isolate", CREAM_SECTION)}>
         <div className="max-w-content mx-auto space-y-12">
-          <div className="rounded-3xl overflow-hidden border border-brand-forest/10 shadow-[0_8px_32px_rgba(26,71,49,0.08)] bg-white">
+          <div className="rounded-3xl border border-brand-forest/10 shadow-[0_8px_32px_rgba(26,71,49,0.08)] bg-white overflow-hidden">
             <div className="bg-brand-forest px-5 py-5 md:px-8 md:py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
@@ -835,15 +857,15 @@ export function SkincareNamaProductPage({
               </div>
             </div>
 
-            <div className="p-5 md:p-8">
+            <div className="p-5 md:p-8 bg-white">
               <p className="text-xs font-bold text-brand-muted uppercase tracking-wide mb-4">
                 مدن نخدمها حالياً
               </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 md:gap-3">
+              <div className="flex flex-wrap gap-2 md:gap-2.5">
                 {PAGE.shipping.cities.map((city) => (
                   <div
                     key={city}
-                    className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-brand-border/20 px-3 py-2.5"
+                    className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-brand-border/20 px-3 py-2.5 min-w-[calc(50%-0.25rem)] sm:min-w-0 sm:flex-1 sm:basis-[calc(33.333%-0.5rem)] md:basis-[calc(25%-0.5rem)]"
                   >
                     <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-forest/10">
                       <Check className="w-3 h-3 text-brand-forest" strokeWidth={3} />
@@ -860,7 +882,13 @@ export function SkincareNamaProductPage({
               </div>
             </div>
 
-            <div className="border-t border-brand-border/20 bg-[#FAF8F5] px-5 py-4 md:px-8 md:py-5">
+            <div className="border-t border-brand-border/20 bg-[#FAF8F5] px-5 py-4 md:px-8 md:py-5 space-y-3">
+              {PAGE.shipping.upsellNote ? (
+                <div className="flex items-center gap-2 rounded-xl bg-brand-forest/5 border border-brand-forest/15 px-4 py-3">
+                  <Package className="w-4 h-4 text-brand-forest shrink-0" />
+                  <p className="text-sm font-bold text-brand-forest">{PAGE.shipping.upsellNote}</p>
+                </div>
+              ) : null}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <p className="text-xs md:text-sm text-brand-muted leading-relaxed">
                   {PAGE.shipping.note}

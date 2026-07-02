@@ -105,6 +105,7 @@ export type SkincareNamaPageConfig = {
     title: string;
     cities: string[];
     note: string;
+    upsellNote?: string;
   };
   faqTitle: string;
   crossSellTitle: string;
