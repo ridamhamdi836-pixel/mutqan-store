@@ -57,7 +57,7 @@ export function Footer({ className }: FooterProps) {
               />
             </Link>
             <p className="text-sm text-brand-sand/70 leading-relaxed max-w-xs">
-              تفاصيل أجمل لروتين جمال أكثر ترتيبًا وراحة وأناقة. منتجات مختارة بعناية للمرأة السعودية.
+              عناية كورية فاخرة تمنحكِ إشراقة وثقة — روتين بسيط، مكونات مدروسة، وشعور بالجمال يبدأ من بشرتك.
             </p>
           </div>
 
@@ -133,8 +133,8 @@ export function Footer({ className }: FooterProps) {
 
         {/* Copyright */}
         <div className="border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-sand/50">
-          <p>© {new Date().getFullYear()} مُتقن | Mutqan — جميع الحقوق محفوظة</p>
-          <p>صُنع بعناية للبيوت السعودية</p>
+          <p>© {new Date().getFullYear()} مُتقن | Mutqan — عناية كورية فاخرة</p>
+          <p>صُنع بعناية لبشرة تثقين بها</p>
         </div>
       </div>
     </footer>

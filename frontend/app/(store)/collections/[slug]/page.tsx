@@ -9,97 +9,78 @@ import { getProduct, getProductPath } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { useCart } from "@/providers/cart-provider";
 
-type BeautyProductSlug =
-  | "beauty-vanity-cabinet"
-  | "led-makeup-bag"
-  | "makeup-brush-cleaner"
-  | "rotating-brush-organizer";
+type SkincareProductSlug =
+  | "vitamin-c-booster"
+  | "ceramide-booster"
+  | "pdrn-booster";
 
-type BeautyCollection = {
+type SkincareCollection = {
   slug: string;
   nameAr: string;
   descriptionAr: string;
   badge: string;
-  productSlugs: BeautyProductSlug[];
+  productSlugs: SkincareProductSlug[];
   isBundle?: boolean;
 };
 
 const PRODUCT_PRESENTATION: Record<
-  BeautyProductSlug,
+  SkincareProductSlug,
   { nameAr: string; subtitle: string; image: string; imageAlt: string }
 > = {
-  "beauty-vanity-cabinet": {
-    nameAr: "خزانة الجمال الفاخرة المضادة للغبار",
-    subtitle: "تنظيم أنيق يحافظ على مستحضراتك بأفضل صورة.",
-    image: withImageVersion("/images/products/beauty-vanity-cabinet.png", 3),
-    imageAlt: "خزانة الجمال الفاخرة المضادة للغبار — متقن",
+  "vitamin-c-booster": {
+    nameAr: "معزّز فيتامين سي",
+    subtitle: "إشراقة طبيعية وبشرة أكثر توحيداً.",
+    image: withImageVersion("/images/products/vitamin-c-booster.png", 1),
+    imageAlt: "معزّز فيتامين سي — متقن",
   },
-  "led-makeup-bag": {
-    nameAr: "حقيبة المكياج الفاخرة بإضاءة LED",
-    subtitle: "إضاءة مثالية وأناقة ترافقك أينما كنت.",
-    image: withImageVersion("/images/products/led-makeup-bag.png", 2),
-    imageAlt: "حقيبة المكياج الفاخرة بإضاءة LED — متقن",
+  "ceramide-booster": {
+    nameAr: "معزّز السيراميد",
+    subtitle: "إصلاح الحاجز وترطيب عميق للبشرة الحساسة.",
+    image: withImageVersion("/images/products/ceramide-booster.png", 1),
+    imageAlt: "معزّز السيراميد — متقن",
   },
-  "makeup-brush-cleaner": {
-    nameAr: "جهاز تنظيف فرش المكياج الذكي",
-    subtitle: "تنظيف وتجفيف سريع لفرش أكثر نظافة وعناية.",
-    image: withImageVersion("/images/products/makeup-brush-cleaner.png", 2),
-    imageAlt: "جهاز تنظيف فرش المكياج الذكي — متقن",
-  },
-  "rotating-brush-organizer": {
-    nameAr: "منظم الفرش الدوار الفاخر",
-    subtitle: "ترتيب أنيق يحافظ على فرشك بعيداً عن الغبار.",
-    image: withImageVersion("/images/products/rotating-brush-organizer.png", 2),
-    imageAlt: "منظم الفرش الدوار الفاخر — متقن",
+  "pdrn-booster": {
+    nameAr: "معزّز PDRN",
+    subtitle: "مرونة أعلى ومظهر أنعم — لبشرة أكثر شباباً.",
+    image: withImageVersion("/images/products/pdrn-booster.png", 1),
+    imageAlt: "معزّز PDRN — متقن",
   },
 };
 
-const BEAUTY_COLLECTIONS: BeautyCollection[] = [
+const SKINCARE_COLLECTIONS: SkincareCollection[] = [
   {
-    slug: "beauty-organization",
-    nameAr: "تنظيم الجمال",
-    descriptionAr: "حلول أنيقة للحفاظ على مستحضراتك منظمة وجميلة.",
-    badge: "الأكثر طلباً",
-    productSlugs: ["beauty-vanity-cabinet"],
+    slug: "glow",
+    nameAr: "الإشراقة",
+    descriptionAr: "توهج طبيعي وتوحيد لون البشرة — لثقة تبدأ من أول نظرة.",
+    badge: "Glow",
+    productSlugs: ["vitamin-c-booster"],
   },
   {
-    slug: "brush-care",
-    nameAr: "العناية بالفرش",
-    descriptionAr: "منتجات تمنح فرشك نظافة وترتيباً يدومان.",
-    badge: "الأكثر طلباً",
-    productSlugs: ["makeup-brush-cleaner", "rotating-brush-organizer"],
+    slug: "repair",
+    nameAr: "الإصلاح",
+    descriptionAr: "إعادة بناء الحاجز وترطيب عميق — لبشرة هادئة ومريحة.",
+    badge: "Repair",
+    productSlugs: ["ceramide-booster"],
   },
   {
-    slug: "makeup-tools",
-    nameAr: "أدوات المكياج الفاخرة",
-    descriptionAr: "إكسسوارات مختارة بعناية لتجربة أكثر أناقة وراحة.",
-    badge: "الأكثر طلباً",
-    productSlugs: ["rotating-brush-organizer", "led-makeup-bag"],
-  },
-  {
-    slug: "beauty-vanity",
-    nameAr: "الجمال والعناية",
-    descriptionAr: "مختارات متقن الفاخرة للعناية اليومية وتنظيم مستحضراتك.",
-    badge: "الأكثر مبيعاً",
-    productSlugs: ["led-makeup-bag", "beauty-vanity-cabinet"],
+    slug: "youth",
+    nameAr: "الشباب",
+    descriptionAr: "مرونة وشد — لبشرة تشعرين أنها أكثر شباباً كل يوم.",
+    badge: "Youth",
+    productSlugs: ["pdrn-booster"],
   },
   {
     slug: "mutqan-sets",
-    nameAr: "مجموعات متقن",
-    descriptionAr: "مجموعة متكاملة تمنحك روتين جمال أكثر ترتيباً وأناقة.",
-    badge: "الأفضل توفيراً",
-    productSlugs: [
-      "beauty-vanity-cabinet",
-      "led-makeup-bag",
-      "makeup-brush-cleaner",
-      "rotating-brush-organizer",
-    ],
+    nameAr: "مجموعة متقن الكاملة",
+    descriptionAr: "روتين متكامل — إشراقة، إصلاح، وشباب في خطوة واحدة لكل هدف.",
+    badge: "الأفضل قيمة",
+    productSlugs: ["vitamin-c-booster", "ceramide-booster", "pdrn-booster"],
     isBundle: true,
   },
 ];
 
-function getBeautyCollectionBySlug(slug: string | undefined) {
-  return BEAUTY_COLLECTIONS.find((collection) => collection.slug === slug);
+function getSkincareCollectionBySlug(slug: string | undefined) {
+  return SKINCARE_COLLECTIONS.find((collection) => collection.slug === slug);
 }
 
 export default function CollectionPage({
@@ -108,7 +89,7 @@ export default function CollectionPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const collection = getBeautyCollectionBySlug(slug);
+  const collection = getSkincareCollectionBySlug(slug);
   const [visibleSlugs, setVisibleSlugs] = useState<string[] | null>(null);
 
   useEffect(() => {
@@ -168,7 +149,7 @@ export default function CollectionPage({
               <CompleteBundleCard />
             ) : (
               visibleProductSlugs.map((productSlug) => (
-                <BeautyProductCard key={productSlug} slug={productSlug} />
+                <SkincareProductCard key={productSlug} slug={productSlug} />
               ))
             )}
           </div>
@@ -178,7 +159,7 @@ export default function CollectionPage({
   );
 }
 
-function BeautyProductCard({ slug }: { slug: BeautyProductSlug }) {
+function SkincareProductCard({ slug }: { slug: SkincareProductSlug }) {
   const product = PRODUCT_PRESENTATION[slug];
   const catalogProduct = getProduct(slug);
   const minPrice = catalogProduct
@@ -244,36 +225,31 @@ function BeautyProductCard({ slug }: { slug: BeautyProductSlug }) {
 }
 
 function CompleteBundleCard() {
-  const reviewCount = getProductReviewDisplayCount("beauty-vanity-cabinet");
+  const reviewCount = getProductReviewDisplayCount("vitamin-c-booster");
   const { clearCart, addItem, openCheckout } = useCart();
 
   const handleOrderBundle = () => {
     clearCart();
     [
       {
-        productSlug: "beauty-vanity-cabinet",
-        productNameAr: "خزانة الجمال الفاخرة المضادة للغبار",
-        priceSar: 173,
+        productSlug: "vitamin-c-booster",
+        productNameAr: "معزّز فيتامين سي",
+        priceSar: 189,
       },
       {
-        productSlug: "led-makeup-bag",
-        productNameAr: "حقيبة المكياج الفاخرة بإضاءة LED",
-        priceSar: 188,
+        productSlug: "ceramide-booster",
+        productNameAr: "معزّز السيراميد",
+        priceSar: 199,
       },
       {
-        productSlug: "makeup-brush-cleaner",
-        productNameAr: "جهاز تنظيف فرش المكياج الذكي",
-        priceSar: 188,
-      },
-      {
-        productSlug: "rotating-brush-organizer",
-        productNameAr: "منظم الفرش الدوار الفاخر",
-        priceSar: 150,
+        productSlug: "pdrn-booster",
+        productNameAr: "معزّز PDRN",
+        priceSar: 229,
       },
     ].forEach((item) =>
       addItem({
         ...item,
-        bundleId: `mutqan-complete-set-${item.productSlug}`,
+        bundleId: `mutqan-skincare-set-${item.productSlug}`,
         bundleLabelAr: "مجموعة متقن الكاملة",
         quantity: 1,
         itemType: "main",
@@ -284,12 +260,12 @@ function CompleteBundleCard() {
 
   return (
     <article
-      className="group block rounded-[1.25rem] bg-white border border-brand-border/60 overflow-hidden shadow-[0_2px_12px_rgba(15,23,42,0.04)] card-lift transition-all duration-300 hover:border-brand-gold/30 sm:col-span-2 lg:col-span-1"
+      className="group block rounded-[1.75rem] bg-white border border-brand-border/60 overflow-hidden shadow-[0_4px_28px_rgba(30,36,48,0.05)] card-lift transition-all duration-300 hover:border-brand-gold/30 sm:col-span-2 lg:col-span-1"
     >
       <div className="relative aspect-square min-h-[260px] sm:min-h-[300px] bg-gradient-to-b from-brand-secondary/40 to-brand-background overflow-hidden">
         <StoreImage
-          src={withImageVersion("/images/hero/beauty-vanity-hero.png", 2)}
-          alt="مجموعة متقن الكاملة"
+          src={withImageVersion("/images/hero/skincare-hero.png", 1)}
+          alt="مجموعة متقن الكاملة للعناية"
           fill
           fit="contain"
           variant="default"
@@ -299,7 +275,7 @@ function CompleteBundleCard() {
 
         <div className="absolute top-4 start-4">
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-espresso text-white text-[11px] font-bold tracking-wide shadow-md">
-            الأفضل توفيراً
+            الأفضل قيمة
           </span>
         </div>
       </div>
@@ -312,29 +288,28 @@ function CompleteBundleCard() {
         </h2>
 
         <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed mb-5">
-          خزانة الجمال الفاخرة + حقيبة المكياج LED + جهاز تنظيف الفرش الذكي +
-          منظم الفرش الدوار الفاخر
+          معزّز فيتامين سي + معزّز السيراميد + معزّز PDRN — روتين متكامل للإشراقة والإصلاح والشباب
         </p>
 
-        <div className="mb-5 inline-flex rounded-full bg-brand-gold/10 px-3.5 py-1.5 text-xs font-extrabold text-[#8A6A12]">
-          وفر 227 ريال ✨
+        <div className="mb-5 inline-flex rounded-full bg-brand-gold/10 px-3.5 py-1.5 text-xs font-extrabold text-brand-gold">
+          وفر 118 ريال
         </div>
 
         <div className="flex items-end justify-between gap-4 pt-4 border-t border-brand-border/50">
           <div>
             <p className="text-sm text-brand-muted line-through tabular-nums">
-              926 ر.س
+              617 ر.س
             </p>
             <p className="font-extrabold text-brand-espresso text-2xl tracking-tight tabular-nums">
-              699 <span className="text-sm font-bold text-brand-muted">ر.س</span>
+              499 <span className="text-sm font-bold text-brand-muted">ر.س</span>
             </p>
           </div>
           <button
             type="button"
             onClick={handleOrderBundle}
-            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-[#1a2744] transition-colors"
+            className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-brand-gold transition-colors"
           >
-            <span>احصلي على المجموعة كاملة</span>
+            <span>احصلي على المجموعة</span>
             <ArrowLeft className="w-4 h-4" />
           </button>
         </div>

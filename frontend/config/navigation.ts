@@ -7,31 +7,26 @@ export type StoreNavItem = {
 
 export const STORE_NAV_ITEMS: StoreNavItem[] = [
   {
-    label: "الجمال والعناية",
-    href: "/collections/beauty-vanity",
+    label: "الإشراقة",
+    href: "/products/glow",
     isPrimary: true,
     match: (pathname) =>
-      pathname === "/" || pathname.startsWith("/collections/beauty-vanity"),
+      pathname === "/" || pathname.startsWith("/products/glow"),
   },
   {
-    label: "أدوات المكياج",
-    href: "/collections/makeup-tools",
-    match: (pathname) => pathname.startsWith("/collections/makeup-tools"),
+    label: "الإصلاح",
+    href: "/products/repair",
+    match: (pathname) => pathname.startsWith("/products/repair"),
   },
   {
-    label: "تنظيم الجمال",
-    href: "/collections/beauty-organization",
-    match: (pathname) => pathname.startsWith("/collections/beauty-organization"),
+    label: "الشباب",
+    href: "/products/youth",
+    match: (pathname) => pathname.startsWith("/products/youth"),
   },
   {
-    label: "العناية بالفرش",
-    href: "/collections/brush-care",
-    match: (pathname) => pathname.startsWith("/collections/brush-care"),
-  },
-  {
-    label: "مجموعات متقن",
+    label: "المجموعة",
     href: "/collections",
-    match: (pathname) => pathname === "/collections",
+    match: (pathname) => pathname.startsWith("/collections"),
   },
   {
     label: "عن متقن",

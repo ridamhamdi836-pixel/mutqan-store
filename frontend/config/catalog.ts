@@ -358,6 +358,96 @@ export const CATALOG: CatalogProduct[] = [
     },
     crossSell: { shortDesc: "ترتيب دوار لفرش المكياج", singleUnitPriceSar: 199 },
   },
+  {
+    id: "sk1",
+    slug: "vitamin-c-booster",
+    name_ar: "معزّز فيتامين سي",
+    name_en: "Vitamin C Booster",
+    short_description_ar: "إشراقة طبيعية وبشرة أكثر توحيداً — لثقة تبدأ من أول نظرة.",
+    positioning: "Glow · Brightening · Even Skin Tone",
+    category_slug: "korean-skincare",
+    sku: "MTQ-SK-VC-001",
+    imageFile: "vitamin-c-booster.png",
+    storeCardImageFile: "vitamin-c-booster.png",
+    bundles: [
+      bundle("vitamin-c-1", "العرض الرئيسي — الأكثر طلباً", 1, 189, {
+        compare_at_price_sar: 249,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("vitamin-c-2", "قطعتان — روتين إشراق أطول", 2, 329, {
+        compare_at_price_sar: 498,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
+    ],
+    upsell: {
+      hook_ar: "أكملي روتينك بمعزّز يعيد للبشرة راحتها وتوازنها",
+      original_price_sar: 249,
+      upsell_price_sar: 169,
+    },
+    crossSell: { shortDesc: "إشراقة وتوحيد لون البشرة", singleUnitPriceSar: 189 },
+  },
+  {
+    id: "sk2",
+    slug: "ceramide-booster",
+    name_ar: "معزّز السيراميد",
+    name_en: "Ceramide Booster",
+    short_description_ar: "إصلاح الحاجز وترطيب عميق — لبشرة هادئة ومريحة كل يوم.",
+    positioning: "Repair · Barrier · Hydration",
+    category_slug: "korean-skincare",
+    sku: "MTQ-SK-CE-002",
+    imageFile: "ceramide-booster.png",
+    storeCardImageFile: "ceramide-booster.png",
+    bundles: [
+      bundle("ceramide-1", "العرض الرئيسي — الأكثر طلباً", 1, 199, {
+        compare_at_price_sar: 269,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("ceramide-2", "قطعتان — عناية أطول للبشرة الحساسة", 2, 349, {
+        compare_at_price_sar: 538,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
+    ],
+    upsell: {
+      hook_ar: "خطوة صغيرة تمنح بشرتك إشراقة أكثر وضوحاً",
+      original_price_sar: 269,
+      upsell_price_sar: 179,
+    },
+    crossSell: { shortDesc: "إصلاح وترطيب للبشرة الحساسة", singleUnitPriceSar: 199 },
+  },
+  {
+    id: "sk3",
+    slug: "pdrn-booster",
+    name_ar: "معزّز PDRN",
+    name_en: "PDRN Booster",
+    short_description_ar: "مرونة أعلى ومظهر أنعم — لبشرة تشعرين أنها أكثر شباباً.",
+    positioning: "Youth · Firmness · Elasticity",
+    category_slug: "korean-skincare",
+    sku: "MTQ-SK-PD-003",
+    imageFile: "pdrn-booster.png",
+    storeCardImageFile: "pdrn-booster.png",
+    bundles: [
+      bundle("pdrn-1", "العرض الرئيسي — الأكثر طلباً", 1, 229, {
+        compare_at_price_sar: 299,
+        is_default: true,
+        sort_order: 1,
+      }),
+      bundle("pdrn-2", "قطعتان — عناية شباب أطول", 2, 399, {
+        compare_at_price_sar: 598,
+        savings_label_ar: "وفر أكثر",
+        sort_order: 2,
+      }),
+    ],
+    upsell: {
+      hook_ar: "أضيفي خطوة إشراق تكمل عناية شباب بشرتك",
+      original_price_sar: 299,
+      upsell_price_sar: 199,
+    },
+    crossSell: { shortDesc: "شد ومرونة للبشرة الناضجة", singleUnitPriceSar: 229 },
+  },
 ];
 
 export const CATALOG_BY_SLUG: Record<string, CatalogProduct> = Object.fromEntries(
@@ -379,6 +469,9 @@ export const PRODUCT_SHORT_SLUGS: Record<string, string> = {
   "led-makeup-bag": "led",
   "makeup-brush-cleaner": "cleaner",
   "rotating-brush-organizer": "brush",
+  "vitamin-c-booster": "glow",
+  "ceramide-booster": "repair",
+  "pdrn-booster": "youth",
 };
 
 export const PRODUCT_PAGE_SLUGS = Object.values(PRODUCT_SHORT_SLUGS);
@@ -395,6 +488,9 @@ const PRODUCT_SLUG_ALIASES: Record<string, string> = {
   led: "led-makeup-bag",
   cleaner: "makeup-brush-cleaner",
   brush: "rotating-brush-organizer",
+  glow: "vitamin-c-booster",
+  repair: "ceramide-booster",
+  youth: "pdrn-booster",
   "smart-stackable-cabinet": "storage",
   "magic-under-sink-organizer": "sink-organizer",
 };
@@ -412,12 +508,19 @@ export function getProductPath(slug: string): string {
   return `/products/${getProductPageSlug(slug)}`;
 }
 
-export const FEATURED_SLUGS = [
-  "beauty-vanity-cabinet",
-  "led-makeup-bag",
-  "makeup-brush-cleaner",
-  "rotating-brush-organizer",
+/** Active storefront products — legacy makeup/home products remain in CATALOG for orders/admin only */
+export const STOREFRONT_VISIBLE_SLUGS = [
+  "vitamin-c-booster",
+  "ceramide-booster",
+  "pdrn-booster",
 ] as const;
+
+export const FEATURED_SLUGS = STOREFRONT_VISIBLE_SLUGS;
+
+export function isStorefrontVisibleSlug(slug: string): boolean {
+  const resolved = resolveProductSlug(slug);
+  return (STOREFRONT_VISIBLE_SLUGS as readonly string[]).includes(resolved);
+}
 
 export function getProduct(slug: string): CatalogProduct | undefined {
   return CATALOG_BY_SLUG[resolveProductSlug(slug)];

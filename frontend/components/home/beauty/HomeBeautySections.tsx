@@ -20,6 +20,7 @@ import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
+import { getProductPath } from "@/config/catalog";
 import { cn } from "@/lib/utils";
 
 const TRUST_ICONS = {
@@ -41,10 +42,10 @@ type WhyCardTheme = {
 const WHY_MUTQAN_THEMES: Record<string, WhyCardTheme> = {
   curated: {
     Icon: Gift,
-    accent: "#D4AF37",
-    iconGradient: "from-[#D4AF37]/30 via-[#D4AF37]/12 to-[#FAF8F6]",
-    glowColor: "rgba(212,175,55,0.12)",
-    borderHover: "group-hover:border-[#D4AF37]/25",
+    accent: "#C9A96A",
+    iconGradient: "from-[#C9A96A]/25 via-[#C9A96A]/10 to-[#FAF8F5]",
+    glowColor: "rgba(201,169,106,0.12)",
+    borderHover: "group-hover:border-[#C9A96A]/25",
   },
   quality: {
     Icon: Gem,
@@ -177,7 +178,7 @@ export function HomeBeautyHero() {
 
 export function HomeBeautyTrustBar() {
   return (
-    <section className="py-5 md:py-6 bg-brand-espresso text-white border-y border-brand-gold/20">
+    <section className="py-5 md:py-6 bg-brand-espresso text-white border-y border-brand-gold/15">
       <div className="max-w-content mx-auto page-x">
         <div className="flex flex-wrap justify-center md:justify-between items-center gap-x-6 gap-y-4">
           {HOMEPAGE_BEAUTY.trustBar.map((item) => {
@@ -198,12 +199,77 @@ export function HomeBeautyTrustBar() {
   );
 }
 
+export function HomeBeautyWhyStartCare() {
+  const { whyStartCare } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-white">
+      <div className="max-w-content mx-auto text-center max-w-2xl">
+        <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso leading-snug tracking-tight mb-5">
+          {whyStartCare.headline}
+        </h2>
+        <p className="text-base md:text-lg text-brand-muted leading-[1.9] mb-8">
+          {whyStartCare.description}
+        </p>
+        <ul className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 md:gap-4">
+          {whyStartCare.points.map((point) => (
+            <li
+              key={point}
+              className="inline-flex items-center gap-2 rounded-full border border-brand-border/60 bg-brand-background px-5 py-2.5 text-sm font-semibold text-brand-espresso"
+            >
+              <Check className="w-4 h-4 text-brand-gold" strokeWidth={2.5} />
+              {point}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyThreeSteps() {
+  const { threeSteps } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-brand-background">
+      <div className="max-w-content mx-auto">
+        <div className="text-center section-title-gap max-w-xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-brand-espresso leading-snug tracking-tight">
+            {threeSteps.headline}
+          </h2>
+          <p className="mt-3 text-brand-muted">{threeSteps.subtitle}</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+          {threeSteps.steps.map((step) => (
+            <Link
+              key={step.id}
+              href={getProductPath(step.slug)}
+              className="group rounded-[1.75rem] border border-white bg-white p-8 text-center shadow-[0_4px_28px_rgba(30,36,48,0.05)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_48px_rgba(30,36,48,0.08)]"
+            >
+              <span
+                className="inline-block text-[11px] font-bold tracking-[0.2em] uppercase mb-4"
+                style={{ color: step.accent }}
+              >
+                {step.label}
+              </span>
+              <h3 className="text-xl font-extrabold text-brand-espresso mb-2 group-hover:text-brand-gold transition-colors">
+                {step.title}
+              </h3>
+              <p className="text-sm text-brand-muted leading-relaxed">{step.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HomeBeautyBestSellers({
   products = HOMEPAGE_BEAUTY.bestSellers.products,
 }: {
   products?: HomepageBeautyProduct[];
 }) {
-  const { bestSellers } = HOMEPAGE_BEAUTY;
+  const { skinGoals } = HOMEPAGE_BEAUTY;
 
   return (
     <section id="best-sellers" className="section-pad page-x bg-white scroll-mt-24">
@@ -211,14 +277,15 @@ export function HomeBeautyBestSellers({
         <div className="text-center section-title-gap max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 text-brand-gold font-semibold text-sm mb-4 tracking-wide">
             <Sparkles className="w-4 h-4" />
-            <span>مجموعة متقن</span>
+            <span>متقن للعناية</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold text-brand-espresso leading-snug tracking-tight">
-            {bestSellers.title}
+            {skinGoals.title}
           </h2>
+          <p className="mt-3 text-brand-muted">{skinGoals.subtitle}</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 max-w-5xl mx-auto">
           {products.map((product) => (
             <BeautyProductCard key={product.slug} product={product} />
           ))}
@@ -308,6 +375,93 @@ export function HomeBeautyWhyMutqan() {
   );
 }
 
+export function HomeBeautyResults() {
+  const { results } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-brand-background">
+      <div className="max-w-content mx-auto">
+        <h2 className="text-center text-3xl md:text-4xl font-extrabold text-brand-espresso mb-10 tracking-tight">
+          {results.headline}
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+          {results.items.map((item) => (
+            <div
+              key={item.period}
+              className="rounded-[1.5rem] border border-brand-border/50 bg-white p-8 text-center shadow-sm"
+            >
+              <p className="text-sm font-bold text-brand-gold tracking-wide mb-3">{item.period}</p>
+              <p className="text-brand-espresso font-semibold leading-relaxed">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyBeforeAfter() {
+  const { beforeAfter } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-white">
+      <div className="max-w-content mx-auto">
+        <h2 className="text-center text-3xl md:text-4xl font-extrabold text-brand-espresso mb-10">
+          {beforeAfter.headline}
+        </h2>
+        <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
+          <div className="rounded-[1.75rem] border border-brand-border/60 bg-brand-background p-8 md:p-10">
+            <p className="text-xs font-bold text-brand-muted uppercase tracking-widest mb-3">قبل</p>
+            <p className="text-lg font-semibold text-brand-espresso/80 leading-relaxed">
+              {beforeAfter.before}
+            </p>
+          </div>
+          <div className="rounded-[1.75rem] border border-brand-gold/30 bg-gradient-to-br from-white to-brand-secondary/40 p-8 md:p-10 shadow-sm">
+            <p className="text-xs font-bold text-brand-gold uppercase tracking-widest mb-3">بعد</p>
+            <p className="text-lg font-semibold text-brand-espresso leading-relaxed">
+              {beforeAfter.after}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function HomeBeautyRoutine() {
+  const { routine } = HOMEPAGE_BEAUTY;
+
+  return (
+    <section className="section-pad page-x bg-brand-background">
+      <div className="max-w-content mx-auto">
+        <h2 className="text-center text-3xl md:text-4xl font-extrabold text-brand-espresso mb-10">
+          {routine.headline}
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {[routine.morning, routine.night].map((block) => (
+            <div
+              key={block.title}
+              className="rounded-[1.75rem] border border-white bg-white p-8 shadow-[0_4px_24px_rgba(30,36,48,0.04)]"
+            >
+              <h3 className="text-xl font-extrabold text-brand-espresso mb-5">{block.title}</h3>
+              <ol className="space-y-3">
+                {block.steps.map((step, i) => (
+                  <li key={step} className="flex items-center gap-3 text-sm text-brand-muted">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-brand-gold/15 text-xs font-bold text-brand-gold">
+                      {i + 1}
+                    </span>
+                    {step}
+                  </li>
+                ))}
+              </ol>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function HomeBeautyLifestyle() {
   const { lifestyle } = HOMEPAGE_BEAUTY;
 
@@ -362,19 +516,19 @@ export function HomeBeautyTestimonials() {
           {testimonials.items.map((review) => (
             <article
               key={review.name}
-              className="bg-brand-background rounded-[1.25rem] p-8 border border-brand-border/50 shadow-sm card-lift"
+              className="bg-white rounded-[1.5rem] p-8 border border-brand-border/40 shadow-sm"
             >
-              <div className="flex text-brand-gold gap-0.5 mb-5">
+              <div className="flex text-brand-gold gap-0.5 mb-4">
                 {Array.from({ length: review.rating }).map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-current" />
+                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
                 ))}
               </div>
-              <p className="text-[15px] text-brand-espresso/85 leading-[1.9] mb-6">
-                &ldquo;{review.text}&rdquo;
+              <p className="text-[15px] text-brand-espresso leading-[1.85] mb-5 font-medium">
+                {review.text}
               </p>
-              <div className="pt-5 border-t border-brand-border/50">
-                <p className="font-bold text-brand-espresso">{review.name}</p>
-                <p className="text-sm text-brand-muted mt-0.5">{review.city}</p>
+              <div className="pt-4 border-t border-brand-border/40">
+                <p className="font-bold text-brand-espresso text-sm">{review.name}</p>
+                <p className="text-xs text-brand-muted mt-0.5">{review.city}</p>
               </div>
             </article>
           ))}

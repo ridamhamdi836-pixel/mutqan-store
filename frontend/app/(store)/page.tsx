@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import {
   HomeBeautyHero,
   HomeBeautyTrustBar,
+  HomeBeautyWhyStartCare,
+  HomeBeautyThreeSteps,
   HomeBeautyBestSellers,
   HomeBeautyWhyMutqan,
+  HomeBeautyResults,
+  HomeBeautyBeforeAfter,
+  HomeBeautyRoutine,
   HomeBeautyLifestyle,
   HomeBeautyTestimonials,
   HomeBeautyOrderSteps,
@@ -15,9 +20,9 @@ import { getResolvedHomepageProducts } from "@/lib/storefront-resolver";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "متقن | تفاصيل أجمل… لأنك تستحقين الأفضل",
+  title: "متقن | عناية كورية فاخرة لبشرة تثقين بها",
   description:
-    "مجموعة متقن المختارة بعناية لتنظيم مستحضراتك، تنظيف فرشك، وإضاءة روتينك اليومي بأناقة وجودة تدوم. الدفع عند الاستلام وضمان 30 يوم.",
+    "متقن — عناية كورية فاخرة للإشراقة والإصلاح والشباب. معزّزات مركزة بخطوة واحدة. الدفع عند الاستلام وضمان 30 يوم.",
 };
 
 export default async function HomePage() {
@@ -27,8 +32,13 @@ export default async function HomePage() {
     <div className="bg-brand-background">
       <HomeBeautyHero />
       <HomeBeautyTrustBar />
+      <HomeBeautyWhyStartCare />
+      <HomeBeautyThreeSteps />
       <HomeBeautyBestSellers products={products} />
       <HomeBeautyWhyMutqan />
+      <HomeBeautyResults />
+      <HomeBeautyBeforeAfter />
+      <HomeBeautyRoutine />
       <HomeBeautyLifestyle />
       <HomeBeautyTestimonials />
       <HomeBeautyOrderSteps />

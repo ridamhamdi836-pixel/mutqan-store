@@ -4,7 +4,7 @@ export const BRAND = {
   /** SVG brand assets; UI uses BrandLogo for crisp inline rendering */
   logoSrc: "/images/brand/mutqan-logo-horizontal.svg",
   logoSrcLight: "/images/brand/mutqan-logo-white-navy.svg",
-  taglineAr: "تفاصيل أجمل… لأنك تستحقين الأفضل",
+  taglineAr: "عناية كورية فاخرة… لبشرة تثقين بها",
   domain: "mutqan.online",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212717783042",
   supportEmail: process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@mutqan.online",

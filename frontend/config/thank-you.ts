@@ -6,22 +6,22 @@ export const THANK_YOU_STATS = [
 
 export const THANK_YOU_REVIEWS = [
   {
-    name: "نورة المطيري",
+    name: "ريم الحربي",
     city: "الرياض",
     rating: 5,
-    text: "اتصلوا للتأكيد ووضّحوا العنوان — وصل الطلب والدفع عند الاستلام مريح جدًا.",
+    text: "بشرتي صارت أكثر إشراقاً من أول أسبوع — والدفع عند الاستلام مريح جداً.",
   },
   {
     name: "سارة العنزي",
     city: "جدة",
     rating: 5,
-    text: "كنت مترددة من الرقم الغير معروف، لكنه فعلاً متقن. التأكيد سريع والشحن خلال أيام.",
+    text: "كنت مترددة من الرقم الغير معروف، لكنه فعلاً متقن. التأكيد سريع والمنتج لطيف على بشرتي.",
   },
   {
     name: "هنوف الشهري",
     city: "الدمام",
     rating: 5,
-    text: "أفضل تجربة COD: تأكيد واضح، توصيل نظيف، والمنتج فعلاً غيّر ترتيب البيت.",
+    text: "أفضل تجربة COD — تأكيد واضح، توصيل سريع، وبشرتي تشعر أنها أكثر راحة.",
   },
 ] as const;
 
@@ -67,6 +67,6 @@ export const THANK_YOU_LIVE_ORDERS = [
 
 /** Upsell cards: show «الأكثر مبيعاً» */
 export const THANK_YOU_BESTSELLER_SLUGS = new Set([
-  "beauty-vanity-cabinet",
-  "led-makeup-bag",
+  "vitamin-c-booster",
+  "ceramide-booster",
 ]);

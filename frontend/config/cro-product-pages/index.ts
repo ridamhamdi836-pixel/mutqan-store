@@ -15,6 +15,11 @@ import {
   makeupBrushCleanerCroPage,
   rotatingBrushOrganizerCroPage,
 } from "./beauty-products";
+import {
+  vitaminCBoosterCroPage,
+  ceramideBoosterCroPage,
+  pdrnBoosterCroPage,
+} from "./skincare-products";
 
 const CRO_PRODUCT_PAGES: Record<string, CroProductPageConfig> = {
   "sink-organizer": sinkOrganizerCroPage,
@@ -28,6 +33,9 @@ const CRO_PRODUCT_PAGES: Record<string, CroProductPageConfig> = {
   "led-makeup-bag": ledMakeupBagCroPage,
   "makeup-brush-cleaner": makeupBrushCleanerCroPage,
   "rotating-brush-organizer": rotatingBrushOrganizerCroPage,
+  "vitamin-c-booster": vitaminCBoosterCroPage,
+  "ceramide-booster": ceramideBoosterCroPage,
+  "pdrn-booster": pdrnBoosterCroPage,
 };
 
 export function getCroProductPage(slug: string): CroProductPageConfig {

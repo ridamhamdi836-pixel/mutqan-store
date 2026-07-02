@@ -16,10 +16,9 @@ type BeautyProductCardProps = {
 };
 
 const SQUARE_FILL_IMAGE_SLUGS = new Set([
-  "beauty-vanity-cabinet",
-  "led-makeup-bag",
-  "makeup-brush-cleaner",
-  "rotating-brush-organizer",
+  "vitamin-c-booster",
+  "ceramide-booster",
+  "pdrn-booster",
 ]);
 
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
@@ -38,9 +37,9 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
     <Link
       href={getProductPath(product.slug)}
       className={cn(
-        "group block rounded-[1.25rem] bg-white border border-brand-border/60 overflow-hidden",
-        "shadow-[0_2px_12px_rgba(15,23,42,0.04)] card-lift transition-all duration-300",
-        "hover:border-brand-gold/30",
+        "group block rounded-[1.75rem] bg-white border border-brand-border/40 overflow-hidden",
+        "shadow-[0_4px_24px_rgba(30,36,48,0.04)] card-lift transition-all duration-500",
+        "hover:border-brand-gold/40 hover:shadow-[0_12px_40px_rgba(30,36,48,0.08)]",
         className,
       )}
     >
@@ -78,8 +77,8 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
         )}
 
         <div className="absolute top-4 start-4">
-          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-espresso text-white text-[11px] font-bold tracking-wide shadow-md">
-            الأكثر حباً
+          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-brand-espresso/90 text-white text-[10px] font-bold tracking-[0.12em] uppercase shadow-sm backdrop-blur-sm">
+            {product.goalLabel ?? "متقن"}
           </span>
         </div>
       </div>
@@ -116,7 +115,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
               </p>
             )}
           </div>
-          <span className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-brand-espresso text-white text-sm font-bold shadow-btn group-hover:bg-[#1a2744] transition-colors">
+          <span className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-brand-espresso text-white text-sm font-bold shadow-sm group-hover:bg-brand-gold group-hover:text-brand-espresso transition-colors duration-300">
             <span>اكتشفي</span>
             <ArrowLeft className="w-4 h-4" />
           </span>

@@ -9,33 +9,33 @@ type MutqanLogoMarkProps = {
 
 const COLORS = {
   default: {
-    primary: "#08152D",
-    gold: "#D4AF37",
-    ivory: "#FAF8F1",
-    latin: "#5F6675",
+    primary: "#1E2430",
+    gold: "#C9A96A",
+    ivory: "#FAF8F5",
+    latin: "#6B7280",
   },
   light: {
     primary: "#FFFFFF",
-    gold: "#D4AF37",
-    ivory: "#FAF8F1",
+    gold: "#C9A96A",
+    ivory: "#FAF8F5",
     latin: "rgba(255,255,255,0.72)",
   },
   gold: {
-    primary: "#D4AF37",
-    gold: "#D4AF37",
-    ivory: "#FAF8F1",
-    latin: "rgba(212,175,55,0.72)",
+    primary: "#C9A96A",
+    gold: "#C9A96A",
+    ivory: "#FAF8F5",
+    latin: "rgba(201,169,106,0.72)",
   },
 } as const;
 
 /**
- * Luxury beauty identity mark — one SVG source for header, footer, admin, and brand assets.
+ * Premium Korean skincare identity — drop, glow, and minimal luxury mark.
  */
 export function MutqanLogoMark({
   variant = "default",
   orientation = "horizontal",
   className,
-  title = "متقن — Mutqan",
+  title = "متقن — عناية كورية فاخرة",
 }: MutqanLogoMarkProps) {
   const c = COLORS[variant];
   const viewBox =
@@ -67,35 +67,36 @@ export function MutqanLogoMark({
       <title>{title}</title>
 
       <g transform={iconTransform}>
+        {/* Soft glow ring */}
+        <circle cx="30" cy="30" r="26" stroke={c.gold} strokeWidth="1" opacity="0.35" />
+        {/* Drop — skincare essence */}
         <path
-          d="M30 2C33 18 42 27 58 30C42 33 33 42 30 58C27 42 18 33 2 30C18 27 27 18 30 2Z"
-          stroke={c.gold}
-          strokeWidth="2.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M30 20L40 30L30 40L20 30L30 20Z"
+          d="M30 8C30 8 44 24 44 36C44 46.493 37.732 54 30 54C22.268 54 16 46.493 16 36C16 24 30 8 30 8Z"
           stroke={c.primary}
           strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          fill={c.ivory}
+          fillOpacity="0.5"
         />
+        {/* Inner glow highlight */}
         <path
-          d="M46 8L47.5 12.5L52 14L47.5 15.5L46 20L44.5 15.5L40 14L44.5 12.5L46 8Z"
+          d="M26 32C26 28.5 28 24 30 20C32 24 34 28.5 34 32C34 35.5 32.2 38 30 38C27.8 38 26 35.5 26 32Z"
+          fill={c.gold}
+          opacity="0.45"
+        />
+        {/* Spark — subtle luxury accent */}
+        <path
+          d="M48 12L49.2 15.2L52.4 16.4L49.2 17.6L48 20.8L46.8 17.6L43.6 16.4L46.8 15.2L48 12Z"
           fill={c.gold}
         />
+        {/* Leaf whisper */}
         <path
-          d="M12 44L13.2 47.8L17 49L13.2 50.2L12 54L10.8 50.2L7 49L10.8 47.8L12 44Z"
-          fill={c.gold}
-          opacity="0.72"
-        />
-        <path
-          d="M30 2C30 16 30 44 30 58"
-          stroke={c.ivory}
-          strokeWidth="1"
+          d="M10 40C14 36 18 36 20 40C18 44 14 44 10 40Z"
+          stroke={c.gold}
+          strokeWidth="1.4"
           strokeLinecap="round"
-          opacity="0.65"
+          opacity="0.7"
         />
       </g>
 
@@ -125,12 +126,12 @@ export function MutqanLogoMark({
             fill={c.latin}
             style={{
               fontFamily: "'Inter', system-ui, sans-serif",
-              fontSize: orientation === "horizontal" ? "9.5px" : "9px",
-              fontWeight: 400,
-              letterSpacing: "0.5em",
+              fontSize: orientation === "horizontal" ? "8px" : "7.5px",
+              fontWeight: 500,
+              letterSpacing: "0.38em",
             }}
           >
-            MUTQAN
+            KOREAN SKINCARE
           </text>
         </g>
       )}

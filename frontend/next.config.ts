@@ -61,6 +61,21 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: "/products/vitamin-c-booster",
+        destination: "/products/glow",
+        permanent: true,
+      },
+      {
+        source: "/products/ceramide-booster",
+        destination: "/products/repair",
+        permanent: true,
+      },
+      {
+        source: "/products/pdrn-booster",
+        destination: "/products/youth",
+        permanent: true,
+      },
+      {
         source: "/products/smart-stackable-cabinet",
         destination: "/products/storage",
         permanent: true,

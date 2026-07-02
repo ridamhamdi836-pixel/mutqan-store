@@ -2,6 +2,7 @@ import {
   CATALOG,
   CATALOG_BY_SLUG,
   FEATURED_SLUGS,
+  isStorefrontVisibleSlug,
   resolveProductSlug,
   type CatalogProduct,
 } from "@/config/catalog";
@@ -183,7 +184,7 @@ function resolveProductConfig(product: StorefrontProduct): ProductPageConfig {
 }
 
 function defaultCroPage(product: StorefrontProduct): CroProductPageConfig {
-  const page = clone(getCroProductPage("beauty-vanity-cabinet"));
+  const page = clone(getCroProductPage("vitamin-c-booster"));
   page.hero.headline = product.name_ar;
   page.hero.subheadline = product.short_description_ar;
   page.problem.title = "المشكلة ليست في روتينك… بل في التفاصيل غير المرتبة";
@@ -241,6 +242,7 @@ export async function getResolvedHomepageProducts(): Promise<HomepageBeautyProdu
   return products
     .filter(
       (product) =>
+        isStorefrontVisibleSlug(product.slug) &&
         product.visibility.enabled &&
         product.visibility.showOnHome &&
         product.visibility.showPdp,
@@ -255,7 +257,10 @@ export async function getResolvedProductPage(
   const product = await getResolvedProduct(slug);
   if (
     !product ||
-    (!options.includeHidden && (!product.visibility.enabled || !product.visibility.showPdp))
+    (!options.includeHidden &&
+      (!isStorefrontVisibleSlug(product.slug) ||
+        !product.visibility.enabled ||
+        !product.visibility.showPdp))
   ) {
     return null;
   }
