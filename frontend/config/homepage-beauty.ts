@@ -59,12 +59,12 @@ export const HOMEPAGE_BEAUTY = {
     products: [
       {
         slug: "vitamin-c-booster",
-        nameAr: "🟡 كريم إشراقة البشرة مصمم لتوحيد لون البشرة والقضاء على التصبغات",
+        nameAr: "كريم إشراقة البشرة مصمم لتوحيد لون البشرة والقضاء على التصبغات",
         subtitle: "إشراقة · توحيد · بقع داكنة",
         description:
           "حمض الأسكوربيك ونياسيناميد بجرعة مركّزة — يستهدف البقع والبهتان ويوحّد مظهر البشرة. تركيبة كورية لإشراقة تبدأ من أول أسبوعين.",
         image: withImageVersion("/images/products/vitamin-c-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-        imageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
+        imageAlt: "كريم إشراقة البشرة — متقن",
         goalLabel: "Glow",
         routineLabel: "روتين الإشراقة",
         accentColor: "#A89420",
@@ -78,12 +78,12 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "ceramide-booster",
-        nameAr: "⚪ كريم تنعيم البشرة مصمم للقضاء على الحبوب وخشونة الجلد",
+        nameAr: "كريم تنعيم البشرة مصمم للقضاء على الحبوب وخشونة الجلد",
         subtitle: "حبوب · ترطيب · بشرة حريرية",
         description:
           "سنتيلا آسيوية وسيراميد NP وبانثينول — يهدئان الحبوب، يرطّبان، ويخففان جلد الدجاجة. للبشرة الحساسة التي تحتاج راحة لا تعقيد.",
         image: withImageVersion("/images/products/ceramide-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-        imageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
+        imageAlt: "كريم تنعيم البشرة — متقن",
         goalLabel: "Repair",
         routineLabel: "روتين الإصلاح",
         accentColor: "#5C6670",
@@ -98,12 +98,12 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "pdrn-booster",
-        nameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+        nameAr: "كريم شد البشرة مصمم للقضاء على التجاعيد والخطوط الدقيقة",
         subtitle: "تجاعيد · شد · مرونة",
         description:
           "PDRN وأدينوزين وببتيدات — يشدّان مظهر البشرة ويقللان الخطوط الدقيقة. عناية شباب بروتين كوري بخطوة واحدة — بلا إبر وبلا مبالغة.",
         image: withImageVersion("/images/products/pdrn-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-        imageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
+        imageAlt: "كريم شد البشرة — متقن",
         goalLabel: "Youth",
         routineLabel: "روتين الشباب",
         accentColor: "#C25D78",
