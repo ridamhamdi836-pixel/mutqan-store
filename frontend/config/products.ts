@@ -10,6 +10,8 @@ export type ProductPageConfig = {
   heroSectionImage?: string;
   heroSectionImageAlt?: string;
   heroSectionAspect?: string;
+  /** Optional hero gallery (main image + thumbnails on skincare PDP) */
+  heroGalleryImages?: Array<{ src: string; alt?: string }>;
   /** Optional image used only in the pain/problem section on the product page */
   painSectionImage?: string;
   painSectionImageAlt?: string;
@@ -1098,10 +1100,33 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     heroAngle: "راحة البشرة تبدأ من إصلاح الحاجز",
     problemStatement: "حبوب وجلد دجاجة رغم المرطب؟ بشرتك تحتاج بوستر تهدئة وإصلاحاً مركّزاً.",
     heroSectionImage: withImageVersion(
-      "/images/products/ceramide-booster.png",
+      "/images/products/ceramide-booster-before-after.png",
       SKINCARE_PRODUCT_IMAGE_VERSION,
     ),
-    heroSectionImageAlt: "بوستر السنتيلا والسيراميد ضد الحبوب — متقن",
+    heroSectionImageAlt: "قبل وبعد — بوستر السنتيلا والسيراميد ضد الحبوب",
+    heroGalleryImages: [
+      {
+        src: withImageVersion(
+          "/images/products/ceramide-booster-before-after.png",
+          SKINCARE_PRODUCT_IMAGE_VERSION,
+        ),
+        alt: "قبل وبعد — بوستر السنتيلا والسيراميد ضد الحبوب",
+      },
+      {
+        src: withImageVersion(
+          "/images/products/ceramide-booster-model.png",
+          SKINCARE_PRODUCT_IMAGE_VERSION,
+        ),
+        alt: "امرأة تعاني من حبوب وحمرار — قبل استخدام البوستر",
+      },
+      {
+        src: withImageVersion(
+          "/images/products/ceramide-booster.png",
+          SKINCARE_PRODUCT_IMAGE_VERSION,
+        ),
+        alt: "بوستر السنتيلا والسيراميد — Arencia Eraser Shot",
+      },
+    ],
     benefits: ["حاجز أقوى", "ترطيب يدوم", "بشرة هادئة", "ملمس ناعم"],
     beforeLabel: "قبل",
     afterLabel: "بعد",

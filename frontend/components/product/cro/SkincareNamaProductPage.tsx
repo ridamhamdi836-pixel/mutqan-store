@@ -194,10 +194,30 @@ export function SkincareNamaProductPage({
   const { addItem, openCheckout } = useCart();
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
+  const [selectedGalleryIndex, setSelectedGalleryIndex] = useState(0);
   const offersRef = useRef<HTMLDivElement>(null);
 
   const cardImageSrc = getProductMainImageSrc(product.slug);
   const minPrice = Math.min(...product.bundles.map((b) => b.price_sar));
+
+  const heroGallery = useMemo(() => {
+    if (productConfig.heroGalleryImages?.length) {
+      return productConfig.heroGalleryImages;
+    }
+    const mainSrc = productConfig.heroSectionImage ?? cardImageSrc;
+    if (!mainSrc) return [];
+    return [
+      {
+        src: mainSrc,
+        alt:
+          productConfig.heroSectionImageAlt ??
+          getHomepageProductImageAlt(product.slug) ??
+          product.name_ar,
+      },
+    ];
+  }, [cardImageSrc, product.name_ar, product.slug, productConfig.heroGalleryImages, productConfig.heroSectionImage, productConfig.heroSectionImageAlt]);
+
+  const activeGalleryImage = heroGallery[selectedGalleryIndex] ?? heroGallery[0];
 
   const reviewStats = useMemo(() => {
     const n = productConfig.reviews.length;
@@ -350,13 +370,45 @@ export function SkincareNamaProductPage({
             {/* Image first on mobile */}
             <div className="order-1 md:order-2">
               <CroProductMedia
-                src={cardImageSrc}
-                alt={getHomepageProductImageAlt(product.slug) ?? productConfig.heroSectionImageAlt ?? product.name_ar}
-                aspect="1/1"
+                src={activeGalleryImage?.src}
+                alt={
+                  activeGalleryImage?.alt ??
+                  getHomepageProductImageAlt(product.slug) ??
+                  productConfig.heroSectionImageAlt ??
+                  product.name_ar
+                }
                 placeholder={product.name_ar}
                 priority
                 className="rounded-2xl border border-white/80 shadow-[0_8px_32px_rgba(26,71,49,0.08)] bg-white"
               />
+              {heroGallery.length > 1 ? (
+                <div className="grid grid-cols-3 gap-2.5 mt-3">
+                  {heroGallery.map((item, index) => (
+                    <button
+                      key={item.src}
+                      type="button"
+                      aria-label={`عرض الصورة ${index + 1}`}
+                      aria-pressed={index === selectedGalleryIndex}
+                      onClick={() => setSelectedGalleryIndex(index)}
+                      className={cn(
+                        "relative aspect-square rounded-xl overflow-hidden border-2 bg-white transition-all",
+                        index === selectedGalleryIndex
+                          ? "border-brand-forest shadow-[0_4px_12px_rgba(26,71,49,0.15)]"
+                          : "border-brand-border/25 opacity-85 hover:opacity-100",
+                      )}
+                    >
+                      <StoreImage
+                        src={item.src}
+                        alt={item.alt ?? product.name_ar}
+                        fill
+                        variant="thumbnail"
+                        fit="cover"
+                        sizes={STORE_IMAGE_SIZES.thumbnail}
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-3">
                 {PAGE.hero.quickStats.map((stat) => (
                   <div
