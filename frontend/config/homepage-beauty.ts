@@ -1,5 +1,5 @@
 /** Homepage copy & presentation — Nama-style trust + Korean skincare */
-import { withImageVersion } from "@/lib/image-display";
+import { withImageVersion, SKINCARE_PRODUCT_IMAGE_VERSION } from "@/lib/image-display";
 
 export const HOMEPAGE_FEATURED_SLUGS = [
   "vitamin-c-booster",
@@ -63,7 +63,7 @@ export const HOMEPAGE_BEAUTY = {
         subtitle: "إشراقة · توحيد · بقع داكنة",
         description:
           "حمض الأسكوربيك ونياسيناميد بجرعة مركّزة — يستهدف البقع والبهتان ويوحّد مظهر البشرة. تركيبة كورية لإشراقة تبدأ من أول أسبوعين.",
-        image: withImageVersion("/images/products/vitamin-c-booster.png", 2),
+        image: withImageVersion("/images/products/vitamin-c-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
         imageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
         goalLabel: "Glow",
         routineLabel: "روتين الإشراقة",
@@ -82,7 +82,7 @@ export const HOMEPAGE_BEAUTY = {
         subtitle: "حبوب · ترطيب · بشرة حريرية",
         description:
           "سنتيلا آسيوية وسيراميد NP وبانثينول — يهدئان الحبوب، يرطّبان، ويخففان جلد الدجاجة. للبشرة الحساسة التي تحتاج راحة لا تعقيد.",
-        image: withImageVersion("/images/products/ceramide-booster.png", 2),
+        image: withImageVersion("/images/products/ceramide-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
         imageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
         goalLabel: "Repair",
         routineLabel: "روتين الإصلاح",
@@ -102,7 +102,7 @@ export const HOMEPAGE_BEAUTY = {
         subtitle: "تجاعيد · شد · مرونة",
         description:
           "PDRN وأدينوزين وببتيدات — يشدّان مظهر البشرة ويقللان الخطوط الدقيقة. عناية شباب بروتين كوري بخطوة واحدة — بلا إبر وبلا مبالغة.",
-        image: withImageVersion("/images/products/pdrn-booster.png", 2),
+        image: withImageVersion("/images/products/pdrn-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
         imageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
         goalLabel: "Youth",
         routineLabel: "روتين الشباب",

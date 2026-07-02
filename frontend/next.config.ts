@@ -14,6 +14,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        source: "/images/products/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+        ],
+      },
     ];
   },
   async redirects() {

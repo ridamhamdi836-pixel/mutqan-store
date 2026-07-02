@@ -1,5 +1,5 @@
 import { Product } from "@/types";
-import { withImageVersion } from "@/lib/image-display";
+import { withImageVersion, SKINCARE_PRODUCT_IMAGE_VERSION } from "@/lib/image-display";
 
 export type ProductPageConfig = {
   heroImageAlt: string;
@@ -1068,7 +1068,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     shortPromise: "حمض الأسكوربيك ونياسيناميد — ضد البقع والبهتان.",
     heroAngle: "إشراقة تبدأ من خطوة واحدة واضحة",
     problemStatement: "بقع داكنة وبهتان رغم الروتين؟ بشرتك تحتاج فيتامين C مركّزاً.",
-    heroSectionImage: "/images/products/vitamin-c-booster.png",
+    heroSectionImage: withImageVersion(
+      "/images/products/vitamin-c-booster.png",
+      SKINCARE_PRODUCT_IMAGE_VERSION,
+    ),
     heroSectionImageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
     benefits: ["إشراقة طبيعية", "مظهر موحّد", "ملمس خفيف", "روتين بسيط"],
     beforeLabel: "قبل",
@@ -1094,7 +1097,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     shortPromise: "سنتيلا وسيراميد — ضد الحبوب وجلد الدجاجة.",
     heroAngle: "راحة البشرة تبدأ من إصلاح الحاجز",
     problemStatement: "حبوب وجلد دجاجة رغم المرطب؟ بشرتك تحتاج تهدئة وإصلاحاً مركّزاً.",
-    heroSectionImage: "/images/products/ceramide-booster.png",
+    heroSectionImage: withImageVersion(
+      "/images/products/ceramide-booster.png",
+      SKINCARE_PRODUCT_IMAGE_VERSION,
+    ),
     heroSectionImageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
     benefits: ["حاجز أقوى", "ترطيب يدوم", "بشرة هادئة", "ملمس ناعم"],
     beforeLabel: "قبل",
@@ -1120,7 +1126,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     shortPromise: "PDRN وببتيدات — ضد التجاعيد والخطوط الدقيقة.",
     heroAngle: "شباب البشرة يبدأ من عناية مركّزة",
     problemStatement: "تجاعيد وخطوط دقيقة؟ بشرتك تحتاج دعماً يعيد المرونة والشد.",
-    heroSectionImage: "/images/products/pdrn-booster.png",
+    heroSectionImage: withImageVersion(
+      "/images/products/pdrn-booster.png",
+      SKINCARE_PRODUCT_IMAGE_VERSION,
+    ),
     heroSectionImageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
     benefits: ["مرونة أعلى", "خطوط أقل وضوحاً", "حيوية تعود", "ثقة في كل عمر"],
     beforeLabel: "قبل",

@@ -53,7 +53,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
           className={cn(
             "relative mx-auto",
             usesSquareFillImage
-              ? "aspect-[3/4] max-h-[340px]"
+              ? "aspect-square max-h-[320px]"
               : "aspect-[4/5] min-h-[220px]",
           )}
         >
@@ -65,7 +65,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
               fit="contain"
               variant="default"
               sizes={STORE_IMAGE_SIZES.card}
-              className="p-6 md:p-8 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
+              className="p-4 md:p-5 md:group-hover:scale-[1.03] transition-transform duration-500 ease-out"
               onError={() => setImgError(true)}
             />
           ) : (
