@@ -13,6 +13,7 @@ import {
 import { PRODUCTS_CONFIG, type ProductPageConfig } from "@/config/products";
 import { getCroProductPage, hasCroProductPage } from "@/config/cro-product-pages";
 import { readProductOverrides, readStoreSettings } from "@/lib/store-dashboard-db";
+import { getHomepageProductImageSrc } from "@/lib/storefront-product-image";
 import type {
   ProductOverride,
   ProductVisibilitySettings,
@@ -104,6 +105,8 @@ function mergeProducts(overrides: Record<string, ProductOverride>): StorefrontPr
 function imageFromProduct(product: StorefrontProduct): string {
   const media = product.dashboardOverride?.media;
   if (media?.cardImage) return media.cardImage;
+  const fromHomepage = getHomepageProductImageSrc(product.slug);
+  if (fromHomepage) return fromHomepage;
   const file = product.storeCardImageFile ?? product.imageFile;
   if (file.startsWith("/")) return file;
   return `/images/products/${file}`;

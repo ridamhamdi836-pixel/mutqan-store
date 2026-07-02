@@ -31,6 +31,8 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import { getFirstOfferBundleFromBundles } from "@/config/catalog";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
+import { getProductMainImageSrc } from "@/lib/product-image";
+import { getHomepageProductImageAlt } from "@/lib/storefront-product-image";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/providers/cart-provider";
 import type { ProductBundle } from "@/types";
@@ -194,7 +196,7 @@ export function SkincareNamaProductPage({
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const offersRef = useRef<HTMLDivElement>(null);
 
-  const cardImageSrc = productConfig.heroSectionImage ?? "";
+  const cardImageSrc = getProductMainImageSrc(product.slug);
   const minPrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   const reviewStats = useMemo(() => {
@@ -349,7 +351,7 @@ export function SkincareNamaProductPage({
             <div className="order-1 md:order-2">
               <CroProductMedia
                 src={cardImageSrc}
-                alt={productConfig.heroSectionImageAlt ?? product.name_ar}
+                alt={getHomepageProductImageAlt(product.slug) ?? productConfig.heroSectionImageAlt ?? product.name_ar}
                 aspect="1/1"
                 placeholder={product.name_ar}
                 priority

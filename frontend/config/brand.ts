@@ -2,8 +2,8 @@ export const BRAND = {
   nameAr: "متقن",
   nameEn: "Mutqan",
   /** SVG brand assets; UI uses BrandLogo for crisp inline rendering */
-  logoSrc: "/images/brand/mutqan-logo-horizontal.svg",
-  logoSrcLight: "/images/brand/mutqan-logo-white-navy.svg",
+  logoSrc: "/images/brand/mutqan-logo-horizontal.svg?v=2",
+  logoSrcLight: "/images/brand/mutqan-logo-white-navy.svg?v=2",
   taglineAr: "عناية كورية فاخرة… لبشرة تثقين بها",
   domain: "mutqan.online",
   whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "212717783042",

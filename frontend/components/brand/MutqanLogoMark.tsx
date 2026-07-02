@@ -9,51 +9,86 @@ type MutqanLogoMarkProps = {
 
 const COLORS = {
   default: {
-    primary: "#1E2430",
-    gold: "#C9A96A",
-    ivory: "#FAF8F5",
-    latin: "#6B7280",
+    forest: "#1A4731",
+    gold: "#C8942E",
+    cream: "#F9F8F3",
+    muted: "#5A6578",
   },
   light: {
-    primary: "#FFFFFF",
-    gold: "#C9A96A",
-    ivory: "#FAF8F5",
-    latin: "rgba(255,255,255,0.72)",
+    forest: "#FFFFFF",
+    gold: "#E8C06A",
+    cream: "#FFFFFF",
+    muted: "rgba(255,255,255,0.78)",
   },
   gold: {
-    primary: "#C9A96A",
-    gold: "#C9A96A",
-    ivory: "#FAF8F5",
-    latin: "rgba(201,169,106,0.72)",
+    forest: "#C8942E",
+    gold: "#C8942E",
+    cream: "#F9F8F3",
+    muted: "rgba(200,148,46,0.75)",
   },
 } as const;
 
+function LogoIcon({
+  c,
+  size = 60,
+}: {
+  c: (typeof COLORS)[keyof typeof COLORS];
+  size?: number;
+}) {
+  const r = size / 2;
+  return (
+    <g>
+      <rect
+        x={0}
+        y={0}
+        width={size}
+        height={size}
+        rx={size * 0.22}
+        fill={c.forest}
+      />
+      <circle cx={r} cy={r} r={r * 0.78} stroke={c.gold} strokeWidth={1.2} opacity={0.45} fill="none" />
+      <path
+        d={`M${r} ${r * 0.28}C${r} ${r * 0.28} ${r + r * 0.38} ${r * 0.72} ${r + r * 0.38} ${r * 1.05}C${r + r * 0.38} ${r * 1.34} ${r + r * 0.12} ${r * 1.52} ${r} ${r * 1.52}C${r - r * 0.12} ${r * 1.52} ${r - r * 0.38} ${r * 1.34} ${r - r * 0.38} ${r * 1.05}C${r - r * 0.38} ${r * 0.72} ${r} ${r * 0.28} ${r} ${r * 0.28}Z`}
+        fill={c.cream}
+        fillOpacity={0.95}
+      />
+      <path
+        d={`M${r - r * 0.08} ${r * 0.98}C${r - r * 0.08} ${r * 0.82} ${r} ${r * 0.68} ${r} ${r * 0.68}C${r} ${r * 0.68} ${r + r * 0.08} ${r * 0.82} ${r + r * 0.08} ${r * 0.98}C${r + r * 0.08} ${r * 1.08} ${r} ${r * 1.12} ${r - r * 0.08} ${r * 1.08}Z`}
+        fill={c.gold}
+        opacity={0.55}
+      />
+      <circle cx={r + r * 0.42} cy={r * 0.38} r={r * 0.07} fill={c.gold} />
+    </g>
+  );
+}
+
 /**
- * Premium Korean skincare identity — drop, glow, and minimal luxury mark.
+ * Mutqan — memorable Korean skincare mark: green square + cream drop + gold accent.
  */
 export function MutqanLogoMark({
   variant = "default",
   orientation = "horizontal",
   className,
-  title = "متقن — عناية كورية فاخرة",
+  title = "متقن — بوسترات كورية",
 }: MutqanLogoMarkProps) {
   const c = COLORS[variant];
   const viewBox =
     orientation === "icon"
       ? "0 0 96 96"
       : orientation === "stacked"
-        ? "0 0 148 172"
-        : "0 0 320 96";
-  const iconTransform =
-    orientation === "horizontal"
-      ? "translate(236 18)"
-      : orientation === "stacked"
-        ? "translate(50 12)"
-        : "translate(18 18)";
-  const arabicX = orientation === "horizontal" ? "145" : "74";
-  const arabicY = orientation === "horizontal" ? "42" : "116";
-  const latinX = orientation === "horizontal" ? "144" : "74";
-  const latinY = orientation === "horizontal" ? "69" : "146";
+        ? "0 0 160 176"
+        : "0 0 300 96";
+
+  const iconSize = orientation === "icon" ? 60 : 60;
+  const iconX =
+    orientation === "horizontal" ? 8 : orientation === "stacked" ? 50 : 18;
+  const iconY =
+    orientation === "horizontal" ? 18 : orientation === "stacked" ? 12 : 18;
+
+  const arabicX = orientation === "horizontal" ? 168 : 80;
+  const arabicY = orientation === "horizontal" ? 40 : 118;
+  const tagX = orientation === "horizontal" ? 168 : 80;
+  const tagY = orientation === "horizontal" ? 66 : 148;
 
   return (
     <svg
@@ -66,38 +101,8 @@ export function MutqanLogoMark({
     >
       <title>{title}</title>
 
-      <g transform={iconTransform}>
-        {/* Soft glow ring */}
-        <circle cx="30" cy="30" r="26" stroke={c.gold} strokeWidth="1" opacity="0.35" />
-        {/* Drop — skincare essence */}
-        <path
-          d="M30 8C30 8 44 24 44 36C44 46.493 37.732 54 30 54C22.268 54 16 46.493 16 36C16 24 30 8 30 8Z"
-          stroke={c.primary}
-          strokeWidth="2.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          fill={c.ivory}
-          fillOpacity="0.5"
-        />
-        {/* Inner glow highlight */}
-        <path
-          d="M26 32C26 28.5 28 24 30 20C32 24 34 28.5 34 32C34 35.5 32.2 38 30 38C27.8 38 26 35.5 26 32Z"
-          fill={c.gold}
-          opacity="0.45"
-        />
-        {/* Spark — subtle luxury accent */}
-        <path
-          d="M48 12L49.2 15.2L52.4 16.4L49.2 17.6L48 20.8L46.8 17.6L43.6 16.4L46.8 15.2L48 12Z"
-          fill={c.gold}
-        />
-        {/* Leaf whisper */}
-        <path
-          d="M10 40C14 36 18 36 20 40C18 44 14 44 10 40Z"
-          stroke={c.gold}
-          strokeWidth="1.4"
-          strokeLinecap="round"
-          opacity="0.7"
-        />
+      <g transform={`translate(${iconX} ${iconY})`}>
+        <LogoIcon c={c} size={iconSize} />
       </g>
 
       {orientation !== "icon" && (
@@ -107,31 +112,31 @@ export function MutqanLogoMark({
             y={arabicY}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={c.primary}
+            fill={c.forest}
             style={{
               fontFamily:
-                "'Aref Ruqaa', 'Noto Nastaliq Urdu', 'IBM Plex Sans Arabic', 'Tajawal', 'Noto Sans Arabic', sans-serif",
-              fontSize: orientation === "horizontal" ? "38px" : "40px",
-              fontWeight: 700,
-              letterSpacing: "-0.055em",
+                "'Tajawal', 'IBM Plex Sans Arabic', 'Noto Sans Arabic', sans-serif",
+              fontSize: orientation === "horizontal" ? "36px" : "38px",
+              fontWeight: 800,
+              letterSpacing: "-0.03em",
             }}
           >
             متقن
           </text>
           <text
-            x={latinX}
-            y={latinY}
+            x={tagX}
+            y={tagY}
             textAnchor="middle"
             dominantBaseline="middle"
-            fill={c.latin}
+            fill={c.muted}
             style={{
-              fontFamily: "'Inter', system-ui, sans-serif",
-              fontSize: orientation === "horizontal" ? "8px" : "7.5px",
-              fontWeight: 500,
-              letterSpacing: "0.38em",
+              fontFamily: "'Tajawal', 'IBM Plex Sans Arabic', sans-serif",
+              fontSize: orientation === "horizontal" ? "11px" : "10px",
+              fontWeight: 600,
+              letterSpacing: "0.12em",
             }}
           >
-            KOREAN SKINCARE
+            بوسترات كورية
           </text>
         </g>
       )}

@@ -1,5 +1,5 @@
 import { CATALOG_BY_SLUG, resolveProductSlug } from "@/config/catalog";
-import { PRODUCTS_CONFIG } from "@/config/products";
+import { getHomepageProductImageSrc } from "@/lib/storefront-product-image";
 
 /** Bump when replacing product image (cache bust) */
 const IMAGE_VERSION: Record<string, number> = {
@@ -23,14 +23,6 @@ const IMAGE_VERSION: Record<string, number> = {
 
 type ImageVariant = "card" | "main";
 
-function heroImageFile(slug: string): string | undefined {
-  const path = PRODUCTS_CONFIG[resolveProductSlug(slug)]?.heroSectionImage;
-  if (!path) return undefined;
-  const withoutQuery = path.split("?")[0];
-  const name = withoutQuery.split("/").pop();
-  return name || undefined;
-}
-
 function imageQuery(slug: string, variant?: ImageVariant): string {
   const key = variant ? `${slug}:${variant}` : slug;
   const version = IMAGE_VERSION[key] ?? IMAGE_VERSION[slug];
@@ -42,8 +34,11 @@ function staticProductImage(filename: string): string {
   return `/images/products/${filename}`;
 }
 
-/** Prefer static /images/ so Next.js can serve WebP/AVIF at responsive widths */
+/** Prefer homepage product card image everywhere in the storefront. */
 export function getProductImageSrc(slug: string): string {
+  const fromHomepage = getHomepageProductImageSrc(slug);
+  if (fromHomepage) return fromHomepage;
+
   const resolved = resolveProductSlug(slug);
   const product = CATALOG_BY_SLUG[resolved];
   if (product?.imageFile) {
@@ -52,20 +47,13 @@ export function getProductImageSrc(slug: string): string {
   return `/api/product-image/${resolved}${imageQuery(resolved)}`;
 }
 
-/** Cart, checkout, and sticky bar — product page hero when configured */
+/** Cart, checkout, sticky bar, thank-you — same image as homepage cards */
 export function getProductMainImageSrc(slug: string): string {
-  const hero = heroImageFile(slug);
-  if (hero) return staticProductImage(hero);
   return getProductImageSrc(slug);
 }
 
-/** Store listing cards — may use a different photo than the product page */
+/** Store listing cards — same homepage image when available */
 export function getProductCardImageSrc(slug: string): string {
-  const resolved = resolveProductSlug(slug);
-  const product = CATALOG_BY_SLUG[resolved];
-  if (product?.storeCardImageFile) {
-    return staticProductImage(product.storeCardImageFile);
-  }
   return getProductImageSrc(slug);
 }
 
