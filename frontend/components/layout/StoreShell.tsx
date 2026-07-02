@@ -52,8 +52,8 @@ export function StoreShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <StoreAnalyticsTracker />
-      {!isProductPage ? <TrustBar /> : null}
       <Header />
+      <TrustBar />
       <main>{children}</main>
       <Footer className={isProductPage ? "mt-0" : undefined} />
       <CartDrawer />

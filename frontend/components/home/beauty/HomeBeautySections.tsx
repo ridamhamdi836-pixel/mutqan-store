@@ -53,14 +53,6 @@ function SectionLabel({ children }: { children: ReactNode }) {
   );
 }
 
-export function HomeBeautyAnnouncement() {
-  return (
-    <div className="bg-brand-forest text-white py-2.5 text-center text-xs md:text-sm font-semibold tracking-wide">
-      {HOMEPAGE_BEAUTY.announcement}
-    </div>
-  );
-}
-
 export function HomeBeautyHero() {
   const { hero } = HOMEPAGE_BEAUTY;
 

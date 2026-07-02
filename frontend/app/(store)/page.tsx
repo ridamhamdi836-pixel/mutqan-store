@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import {
-  HomeBeautyAnnouncement,
   HomeBeautyHero,
   HomeBeautyFormulations,
   HomeBeautyWhyMutqan,
@@ -25,7 +24,6 @@ export default async function HomePage() {
 
   return (
     <div className="bg-brand-background">
-      <HomeBeautyAnnouncement />
       <HomeBeautyHero />
       <HomeBeautyFormulations products={products} />
       <HomeBeautyWhyMutqan />

@@ -11,7 +11,7 @@ import { STORE_NAV_ITEMS, isNavItemActive } from "@/config/navigation";
 import { cn } from "@/lib/utils";
 
 const NAV_LINK_CLASS =
-  "relative py-2 text-[15px] font-medium text-brand-espresso tracking-wide transition-colors duration-300 ease-out after:absolute after:bottom-0 after:inset-x-0 after:h-[2px] after:rounded-full after:bg-brand-gold after:scale-x-0 after:transition-transform after:duration-300 after:ease-out after:origin-center hover:text-brand-gold hover:after:scale-x-100";
+  "relative py-2 text-[15px] font-medium text-brand-forest tracking-wide transition-colors duration-300 ease-out after:absolute after:bottom-0 after:inset-x-0 after:h-[2px] after:rounded-full after:bg-brand-gold after:scale-x-0 after:transition-transform after:duration-300 after:ease-out after:origin-center hover:text-brand-gold hover:after:scale-x-100";
 
 function NavLink({
   href,
@@ -79,17 +79,17 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 transition-all duration-500 ease-out",
+        "sticky top-0 z-40 bg-white transition-all duration-300 ease-out",
         scrolled
-          ? "bg-white/75 backdrop-blur-xl border-b border-brand-border/30 shadow-[0_1px_20px_rgba(15,23,42,0.05)]"
-          : "bg-white/50 backdrop-blur-lg border-b border-transparent",
+          ? "border-b border-brand-border/30 shadow-[0_1px_12px_rgba(47,69,56,0.06)]"
+          : "border-b border-brand-border/20",
       )}
     >
       <div className="max-w-content mx-auto page-x">
-        <div className={cn("flex items-center justify-between", isProductPage ? "h-14" : "h-[4.25rem] md:h-[4.75rem]")}>
+        <div className={cn("flex items-center justify-between gap-4", isProductPage ? "h-14" : "h-[4.25rem] md:h-[4.75rem]")}>
           <Link
             href="/"
-            className="flex items-center shrink-0 group py-1"
+            className="flex items-center shrink-0 group py-1 lg:flex-1 lg:justify-end"
             aria-label={`${BRAND.nameAr} — الرئيسية`}
           >
             <BrandLogo
@@ -101,7 +101,7 @@ export function Header() {
 
           <nav
             className={cn(
-              "hidden lg:flex items-center gap-8 xl:gap-10",
+              "hidden lg:flex items-center justify-center gap-10 xl:gap-14 flex-1",
               isProductPage && "!hidden",
             )}
             aria-label="التنقل الرئيسي"
@@ -117,7 +117,7 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 lg:flex-1 lg:justify-start">
             <button
               onClick={openCart}
               aria-label={`سلة الشراء - ${itemCount} منتج`}

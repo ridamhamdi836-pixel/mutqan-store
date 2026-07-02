@@ -7,21 +7,10 @@ export type StoreNavItem = {
 
 export const STORE_NAV_ITEMS: StoreNavItem[] = [
   {
-    label: "الإشراقة",
-    href: "/products/glow",
+    label: "الرئيسية",
+    href: "/",
     isPrimary: true,
-    match: (pathname) =>
-      pathname === "/" || pathname.startsWith("/products/glow"),
-  },
-  {
-    label: "الإصلاح",
-    href: "/products/repair",
-    match: (pathname) => pathname.startsWith("/products/repair"),
-  },
-  {
-    label: "الشباب",
-    href: "/products/youth",
-    match: (pathname) => pathname.startsWith("/products/youth"),
+    match: (pathname) => pathname === "/",
   },
   {
     label: "المجموعة",
@@ -38,3 +27,21 @@ export const STORE_NAV_ITEMS: StoreNavItem[] = [
 export function isNavItemActive(item: StoreNavItem, pathname: string): boolean {
   return item.match(pathname);
 }
+
+export const STORE_ANNOUNCEMENT_MESSAGES = [
+  {
+    id: "cod-shipping",
+    icon: "truck" as const,
+    text: "الدفع عند الاستلام • شحن سريع لجميع مناطق المملكة",
+  },
+  {
+    id: "korean-actives",
+    icon: "shield" as const,
+    text: "معزّزات كورية مركّزة • مكونات نشطة بجرعات واضحة",
+  },
+  {
+    id: "guarantee",
+    icon: "heart" as const,
+    text: "ضمان 30 يوم • استرجاع كامل عند عدم الرضا",
+  },
+] as const;
