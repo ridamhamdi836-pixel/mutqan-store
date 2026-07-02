@@ -361,7 +361,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk1",
     slug: "vitamin-c-booster",
-    name_ar: "معزّز فيتامين سي",
+    name_ar: "سيروم فيتامين سي",
     name_en: "Vitamin C Booster",
     short_description_ar: "إشراقة طبيعية وبشرة أكثر توحيداً — لثقة تبدأ من أول نظرة.",
     positioning: "Glow · Brightening · Even Skin Tone",
@@ -391,7 +391,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk2",
     slug: "ceramide-booster",
-    name_ar: "معزّز السيراميد",
+    name_ar: "سيروم السيراميد",
     name_en: "Ceramide Booster",
     short_description_ar: "إصلاح الحاجز وترطيب عميق — لبشرة هادئة ومريحة كل يوم.",
     positioning: "Repair · Barrier · Hydration",
@@ -421,7 +421,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk3",
     slug: "pdrn-booster",
-    name_ar: "معزّز PDRN",
+    name_ar: "سيروم PDRN",
     name_en: "PDRN Booster",
     short_description_ar: "مرونة أعلى ومظهر أنعم — لبشرة تشعرين أنها أكثر شباباً.",
     positioning: "Youth · Firmness · Elasticity",

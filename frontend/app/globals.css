@@ -3,38 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --brand-background: #FAF8F5;
-  --brand-background-rgb: 250 248 245;
+  --brand-background: #FFF6EC;
+  --brand-background-rgb: 255 246 236;
   --brand-surface: #FFFFFF;
   --brand-surface-rgb: 255 255 255;
-  --brand-beige: #F3EEE7;
-  --brand-beige-rgb: 243 238 231;
-  --brand-sand: #E7D8C9;
-  --brand-sand-rgb: 231 216 201;
-  --brand-espresso: #1E2430;
-  --brand-espresso-rgb: 30 36 48;
-  --brand-olive: #5C6470;
-  --brand-olive-rgb: 92 100 112;
-  --brand-bronze: #C9A96A;
-  --brand-bronze-rgb: 201 169 106;
-  --brand-gold: #C9A96A;
-  --brand-gold-rgb: 201 169 106;
-  --brand-secondary: #F3EEE7;
-  --brand-secondary-rgb: 243 238 231;
-  --brand-text: #1E2430;
-  --brand-text-rgb: 30 36 48;
-  --brand-muted: #6B7280;
-  --brand-muted-rgb: 107 114 128;
-  --brand-border: #E7D8C9;
-  --brand-border-rgb: 231 216 201;
-  --brand-trust: #1E2430;
-  --brand-trust-rgb: 30 36 48;
-  --brand-forest: #2F4538;
-  --brand-forest-rgb: 47 69 56;
-  --brand-cream: #F5F2EB;
-  --brand-cream-rgb: 245 242 235;
-  --brand-error: #EF4444;
-  --brand-error-rgb: 239 68 68;
+  --brand-beige: #F3E4D0;
+  --brand-beige-rgb: 243 228 208;
+  --brand-sand: #E2C49A;
+  --brand-sand-rgb: 226 196 154;
+  --brand-espresso: #15202B;
+  --brand-espresso-rgb: 21 32 43;
+  --brand-olive: #4A5568;
+  --brand-olive-rgb: 74 85 104;
+  --brand-bronze: #B8860B;
+  --brand-bronze-rgb: 184 134 11;
+  --brand-gold: #C8942E;
+  --brand-gold-rgb: 200 148 46;
+  --brand-secondary: #F5E8D6;
+  --brand-secondary-rgb: 245 232 214;
+  --brand-text: #15202B;
+  --brand-text-rgb: 21 32 43;
+  --brand-muted: #5A6578;
+  --brand-muted-rgb: 90 101 120;
+  --brand-border: #D9B98E;
+  --brand-border-rgb: 217 185 142;
+  --brand-trust: #15202B;
+  --brand-trust-rgb: 21 32 43;
+  --brand-forest: #1A4731;
+  --brand-forest-rgb: 26 71 49;
+  --brand-cream: #F9EBD8;
+  --brand-cream-rgb: 249 235 216;
+  --brand-error: #DC2626;
+  --brand-error-rgb: 220 38 38;
 }
 
 * {
@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::selection {
-  background-color: rgba(212, 175, 55, 0.2);
+  background-color: rgba(200, 148, 46, 0.28);
   color: var(--brand-espresso);
 }
 
@@ -86,23 +86,23 @@ h1, h2, h3, h4, h5, h6 {
 
 @layer components {
   .btn-primary {
-    @apply bg-brand-espresso text-white font-bold rounded-2xl px-8 py-3.5 text-base
+    @apply bg-brand-forest text-white font-bold rounded-2xl px-8 py-3.5 text-base
       shadow-btn transition-all duration-200 ease-out
-      hover:bg-[#1a2744] hover:shadow-btn-lg
+      hover:bg-[#143d2a] hover:shadow-btn-lg
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
-    @apply bg-transparent border-2 border-brand-espresso/20 text-brand-espresso font-semibold rounded-2xl px-7 py-3 text-base
+    @apply bg-transparent border-2 border-brand-forest/25 text-brand-forest font-semibold rounded-2xl px-7 py-3 text-base
       transition-all duration-200 ease-out
-      hover:border-brand-espresso hover:bg-brand-espresso/5
+      hover:border-brand-forest hover:bg-brand-forest/5
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
   .btn-cta {
-    @apply bg-brand-espresso text-white font-bold rounded-2xl px-10 py-4 text-lg
+    @apply bg-brand-forest text-white font-bold rounded-2xl px-10 py-4 text-lg
       shadow-btn-lg transition-all duration-200 ease-out
-      hover:bg-[#1a2744] hover:shadow-btn-lg
+      hover:bg-[#143d2a] hover:shadow-btn-lg
       disabled:opacity-60 disabled:cursor-not-allowed;
   }
 
@@ -156,7 +156,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .badge-popular {
-    @apply inline-flex items-center rounded-full bg-brand-bronze text-white shadow-md text-xs font-bold px-3 py-1.5;
+    @apply inline-flex items-center rounded-full bg-brand-gold text-white shadow-md text-xs font-bold px-3 py-1.5;
   }
 
   .trust-chip {
@@ -164,7 +164,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   .gradient-text {
-    @apply bg-gradient-to-l from-brand-gold to-[#C9A227] bg-clip-text text-transparent;
+    @apply bg-gradient-to-l from-brand-gold to-[#E0A82A] bg-clip-text text-transparent;
   }
 
   /* Admin — white + blue (matches storefront) */

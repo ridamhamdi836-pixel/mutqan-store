@@ -25,11 +25,11 @@ export type HomepageBeautyProduct = {
 export const HOMEPAGE_BEAUTY = {
   tagline: "عناية كورية فاخرة… لبشرة تثقين بها",
 
-  announcement: "✓ معزّزات كورية مركّزة — تركيبات مدروسة بمكونات نشطة واضحة",
+  announcement: "✓ سيرومات كورية مركّزة — تركيبات مدروسة بمكونات نشطة واضحة",
 
   hero: {
     badge: "متقن — عناية كورية فاخرة",
-    headline: "معزّزات سريرية لبشرة تبدأ من الداخل",
+    headline: "سيرومات كورية لبشرة تبدأ من الداخل",
     subheadline:
       "تركيبات كورية مركّزة بخطوة واحدة — تستهدف الإشراقة، الحبوب والتهيج، والتجاعيد. مكونات نشطة بجرعات واضحة، بدون وعود فارغة.",
     trustPills: [
@@ -38,34 +38,34 @@ export const HOMEPAGE_BEAUTY = {
       { id: "halal", label: "آمنة", sub: "للاستخدام اليومي" },
       { id: "guarantee", label: "30 يوم", sub: "ضمان استرجاع" },
     ],
-    primaryCta: "استكشفي المعزّزات",
+    primaryCta: "استكشفي السيرومات",
     guaranteeBadge: "ضمان استرجاع 30 يوم",
     image: withImageVersion("/images/hero/skincare-hero.png", 2),
-    imageAlt: "معزّزات متقن الكورية — إشراقة، إصلاح، شباب",
+    imageAlt: "سيرومات متقن الكورية — إشراقة، إصلاح، شباب",
     imageBadge: "تركيبات كورية مركّزة",
   },
 
   formulations: {
     label: "تركيباتنا",
-    headline: "ثلاث معزّزات. ثلاث مشاكل. حلّ واحد واضح.",
+    headline: "ثلاث سيرومات. ثلاث مشاكل. حلّ واحد واضح.",
     subtitle:
-      "كل معزّز يستهدف هدفاً محدداً — يمكنكِ استخدامه وحده أو بناء روتين متكامل. مكونات نشطة بجرعات مدروسة، لا خلطات عشوائية.",
+      "كل سيروم يستهدف هدفاً محدداً — يمكنكِ استخدامه وحده أو بناء روتين متكامل. مكونات نشطة بجرعات مدروسة، لا خلطات عشوائية.",
   },
 
   bestSellers: {
     products: [
       {
         slug: "vitamin-c-booster",
-        nameAr: "معزّز فيتامين سي للإشراقة",
+        nameAr: "سيروم فيتامين سي للإشراقة",
         subtitle: "إشراقة · توحيد · بقع داكنة",
         description:
           "حمض الأسكوربيك ونياسيناميد وجلسرين — لتوهج طبيعي وبشرة أكثر توحيداً.",
         image: withImageVersion("/images/products/vitamin-c-booster.png", 2),
-        imageAlt: "معزّز فيتامين سي — متقن",
+        imageAlt: "سيروم فيتامين سي — متقن",
         goalLabel: "Glow",
         routineLabel: "روتين الإشراقة",
-        accentColor: "#B8A84A",
-        cardBg: "#F5F2E4",
+        accentColor: "#A89420",
+        cardBg: "#EDE08A",
         ingredients: [
           "حمض الأسكوربيك (فيتامين C)",
           "نياسيناميد",
@@ -75,16 +75,16 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "ceramide-booster",
-        nameAr: "معزّز السيراميد للإصلاح",
+        nameAr: "سيروم السيراميد للإصلاح",
         subtitle: "حبوب · ترطيب · بشرة حريرية",
         description:
           "سنتيلا آسيوية وسيراميد NP وبانثينول — لتهدئة البشرة وإزالة الحبوب وجلد الدجاجة.",
         image: withImageVersion("/images/products/ceramide-booster.png", 2),
-        imageAlt: "معزّز السيراميد — متقن",
+        imageAlt: "سيروم السيراميد — متقن",
         goalLabel: "Repair",
         routineLabel: "روتين الإصلاح",
-        accentColor: "#7A8490",
-        cardBg: "#EEF0F2",
+        accentColor: "#5C6670",
+        cardBg: "#D4D8DE",
         ingredients: [
           "سنتيلا آسيوية",
           "سيراميد NP",
@@ -95,16 +95,16 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "pdrn-booster",
-        nameAr: "معزّز PDRN للشباب",
+        nameAr: "سيروم PDRN للشباب",
         subtitle: "تجاعيد · شد · مرونة",
         description:
           "PDRN وببتيدات وأدينوزين — لشد البشرة وتقليل الخطوط الدقيقة ومرونة أعلى.",
         image: withImageVersion("/images/products/pdrn-booster.png", 2),
-        imageAlt: "معزّز PDRN — متقن",
+        imageAlt: "سيروم PDRN — متقن",
         goalLabel: "Youth",
         routineLabel: "روتين الشباب",
-        accentColor: "#C98B9A",
-        cardBg: "#FAF0F3",
+        accentColor: "#C25D78",
+        cardBg: "#F5B8C8",
         ingredients: [
           "PDRN (DNA السلمون)",
           "ببتيدات",
@@ -130,7 +130,7 @@ export const HOMEPAGE_BEAUTY = {
       {
         id: "actives",
         title: "مكونات نشطة بجرعات مدروسة",
-        desc: "فيتامين C، سنتيلا، PDRN، سيراميدات — كل معزّز يستهدف مشكلة بشرتكِ بشكل مباشر.",
+        desc: "فيتامين C، سنتيلا، PDRN، سيراميدات — كل سيروم يستهدف مشكلة بشرتكِ بشكل مباشر.",
       },
       {
         id: "guarantee",
@@ -163,7 +163,7 @@ export const HOMEPAGE_BEAUTY = {
         city: "جدة",
         age: "29",
         rating: 5,
-        text: "معزّز السيراميد هدّأ حبوبي وجلد الدجاجة. الدفع عند الاستلام خلاني أجرّب بدون قلق.",
+        text: "سيروم السيراميد هدّأ حبوبي وجلد الدجاجة. الدفع عند الاستلام خلاني أجرّب بدون قلق.",
         verified: true,
       },
       {
@@ -184,7 +184,7 @@ export const HOMEPAGE_BEAUTY = {
     steps: [
       {
         title: "اختاري روتينك",
-        desc: "إشراقة، إصلاح حبوب وترطيب، أو شد وتجاعيد — اختاري المعزّز الذي يناسب هدف بشرتكِ.",
+        desc: "إشراقة، إصلاح حبوب وترطيب، أو شد وتجاعيد — اختاري السيروم الذي يناسب هدف بشرتكِ.",
       },
       {
         title: "أكدي طلبك (بدون دفع)",
@@ -203,9 +203,9 @@ export const HOMEPAGE_BEAUTY = {
     subtitle: "كل شيء تحتاجين معرفته قبل الدفع عند الاستلام.",
     items: [
       {
-        question: "هل المعزّزات مناسبة للبشرة الحساسة؟",
+        question: "هل السيرومات مناسبة للبشرة الحساسة؟",
         answer:
-          "تركيباتنا خفيفة ومصممة للاستخدام اليومي. معزّز السيراميد مخصّص للبشرة الحساسة والمعرّضة للحبوب. ابدئي بخطوة واحدة ثم زيدي تدريجياً.",
+          "تركيباتنا خفيفة ومصممة للاستخدام اليومي. سيروم السيراميد مخصّص للبشرة الحساسة والمعرّضة للحبوب. ابدئي بخطوة واحدة ثم زيدي تدريجياً.",
       },
       {
         question: "هل الدفع عند الاستلام متاح لكل المدن؟",
@@ -228,7 +228,7 @@ export const HOMEPAGE_BEAUTY = {
           "ضمان 30 يوماً — لم تلاحظي فرقاً؟ تواصلي معنا عبر واتساب للاستبدال أو الاسترجاع الكامل.",
       },
       {
-        question: "هل يمكنني استخدام أكثر من معزّز معاً؟",
+        question: "هل يمكنني استخدام أكثر من سيروم معاً؟",
         answer:
           "نعم. فيتامين C صباحاً، السيراميد أو PDRN مساءً — روتين بسيط يغطي الإشراقة والإصلاح والشباب.",
       },
@@ -246,7 +246,7 @@ export const HOMEPAGE_BEAUTY = {
       { icon: "card" as const, label: "الدفع عند الاستلام" },
       { icon: "leaf" as const, label: "مكونات نشطة واضحة" },
     ],
-    button: "استكشفي المعزّزات الآن",
+    button: "استكشفي السيرومات الآن",
   },
 
   trustFooter: [

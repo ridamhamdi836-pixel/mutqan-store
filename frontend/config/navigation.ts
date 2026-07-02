@@ -37,7 +37,7 @@ export const STORE_ANNOUNCEMENT_MESSAGES = [
   {
     id: "korean-actives",
     icon: "shield" as const,
-    text: "معزّزات كورية مركّزة • مكونات نشطة بجرعات واضحة",
+    text: "سيرومات كورية مركّزة • مكونات نشطة بجرعات واضحة",
   },
   {
     id: "guarantee",

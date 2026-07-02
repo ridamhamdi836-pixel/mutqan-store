@@ -26,7 +26,7 @@ export default async function CollectionsPage() {
             اختاري هدف بشرتكِ
           </h1>
           <p className="mt-4 text-sm md:text-lg text-brand-muted max-w-2xl mx-auto leading-relaxed">
-            ثلاثة معزّزات كورية مركّزة — لإشراقة تلمع، حاجز يُصلَح، وبشرة تشعرين أنها أكثر شباباً.
+            ثلاثة سيرومات كورية — لإشراقة تلمع، حاجز يُصلَح، وبشرة تشعرين أنها أكثر شباباً.
           </p>
         </div>
       </section>

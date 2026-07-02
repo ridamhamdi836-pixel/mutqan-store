@@ -86,10 +86,15 @@ export function Header() {
       )}
     >
       <div className="max-w-content mx-auto page-x">
-        <div className={cn("flex items-center justify-between gap-4", isProductPage ? "h-14" : "h-[4.25rem] md:h-[4.75rem]")}>
+        <div
+          className={cn(
+            "relative flex items-center justify-between w-full",
+            isProductPage ? "h-14" : "h-[4.25rem] md:h-[4.75rem]",
+          )}
+        >
           <Link
             href="/"
-            className="flex items-center shrink-0 group py-1 lg:flex-1 lg:justify-end"
+            className="flex items-center shrink-0 z-10 group py-1"
             aria-label={`${BRAND.nameAr} — الرئيسية`}
           >
             <BrandLogo
@@ -101,7 +106,8 @@ export function Header() {
 
           <nav
             className={cn(
-              "hidden lg:flex items-center justify-center gap-10 xl:gap-14 flex-1",
+              "hidden lg:flex items-center justify-center gap-10 xl:gap-14",
+              "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
               isProductPage && "!hidden",
             )}
             aria-label="التنقل الرئيسي"
@@ -117,7 +123,7 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-1.5 lg:flex-1 lg:justify-start">
+          <div className="flex items-center gap-1.5 shrink-0 z-10">
             <button
               onClick={openCart}
               aria-label={`سلة الشراء - ${itemCount} منتج`}
