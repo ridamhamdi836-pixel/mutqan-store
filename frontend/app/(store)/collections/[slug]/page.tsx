@@ -28,22 +28,25 @@ const PRODUCT_PRESENTATION: Record<
   { nameAr: string; subtitle: string; image: string; imageAlt: string }
 > = {
   "vitamin-c-booster": {
-    nameAr: "معزّز فيتامين سي",
-    subtitle: "إشراقة طبيعية وبشرة أكثر توحيداً.",
+    nameAr: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
+    subtitle:
+      "حمض الأسكوربيك ونياسيناميد — يستهدف البقع والبهتان ويوحّد مظهر البشرة.",
     image: withImageVersion("/images/products/vitamin-c-booster.png", 1),
-    imageAlt: "معزّز فيتامين سي — متقن",
+    imageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
   },
   "ceramide-booster": {
-    nameAr: "معزّز السيراميد",
-    subtitle: "إصلاح الحاجز وترطيب عميق للبشرة الحساسة.",
+    nameAr: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
+    subtitle:
+      "سنتيلا آسيوية وسيراميد NP — يهدئان الحبوب ويرطّبان البشرة ويخففان جلد الدجاجة.",
     image: withImageVersion("/images/products/ceramide-booster.png", 1),
-    imageAlt: "معزّز السيراميد — متقن",
+    imageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
   },
   "pdrn-booster": {
-    nameAr: "معزّز PDRN",
-    subtitle: "مرونة أعلى ومظهر أنعم — لبشرة أكثر شباباً.",
+    nameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+    subtitle:
+      "PDRN وأدينوزين وببتيدات — يشدّان البشرة ويقللان مظهر الخطوط الدقيقة.",
     image: withImageVersion("/images/products/pdrn-booster.png", 1),
-    imageAlt: "معزّز PDRN — متقن",
+    imageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
   },
 };
 
@@ -233,17 +236,17 @@ function CompleteBundleCard() {
     [
       {
         productSlug: "vitamin-c-booster",
-        productNameAr: "معزّز فيتامين سي",
+        productNameAr: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
         priceSar: 189,
       },
       {
         productSlug: "ceramide-booster",
-        productNameAr: "معزّز السيراميد",
+        productNameAr: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
         priceSar: 199,
       },
       {
         productSlug: "pdrn-booster",
-        productNameAr: "معزّز PDRN",
+        productNameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
         priceSar: 229,
       },
     ].forEach((item) =>
@@ -288,7 +291,7 @@ function CompleteBundleCard() {
         </h2>
 
         <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed mb-5">
-          معزّز فيتامين سي + معزّز السيراميد + معزّز PDRN — روتين متكامل للإشراقة والإصلاح والشباب
+          سيروم فيتامين سي + سيروم السنتيلا والسيراميد + سيروم PDRN — روتين متكامل للإشراقة والإصلاح والشباب
         </p>
 
         <div className="mb-5 inline-flex rounded-full bg-brand-gold/10 px-3.5 py-1.5 text-xs font-extrabold text-brand-gold">

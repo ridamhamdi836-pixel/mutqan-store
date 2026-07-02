@@ -104,9 +104,9 @@ function buildSkincareCroPage(input: SkincareCroInput): CroProductPageConfig {
 }
 
 export const vitaminCBoosterCroPage = buildSkincareCroPage({
-  heroHeadline: "بشرتك تستحق إشراقة ترى نتيجتها",
+  heroHeadline: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
   heroSubheadline:
-    "معزّز فيتامين سي مركز يمنحك توهجاً طبيعياً وبشرة أكثر توحيداً — لثقة تبدأ من أول نظرة في المرآة.",
+    "حمض الأسكوربيك ونياسيناميد بجرعة مركّزة — يستهدف البقع والبهتان ويوحّد مظهر البشرة. لإشراقة تبدأ من أول نظرة في المرآة.",
   bullets: [
     "إشراقة هادئة دون مبالغة",
     "يساعد على توحيد مظهر البشرة",
@@ -121,7 +121,7 @@ export const vitaminCBoosterCroPage = buildSkincareCroPage({
     "مع الوقت، تفقد البشرة توهجها الطبيعي. الإجهاد والتعرض اليومي يبطئان تجدد الخلايا، فيظهر اللون غير متساوٍ والبشرة بلا حياة.",
   solutionTitle: "الإشراقة تبدأ من خطوة مركزة",
   solutionCopy:
-    "فيتامين سي في تركيبة معزّزة يدعم إشراقة البشرة ويوحّد مظهرها تدريجياً — لتشعرين أن بشرتك تعود للحياة.",
+    "فيتامين سي في تركيبة مركّزة يدعم إشراقة البشرة ويوحّد مظهرها تدريجياً — لتشعرين أن بشرتك تعود للحياة.",
   ingredientsTitle: "المكونات المهمة",
   ingredients: [
     { title: "فيتامين سي مستقر", desc: "يدعم الإشراقة ويوحّد مظهر البشرة بلطف." },
@@ -158,9 +158,9 @@ export const vitaminCBoosterCroPage = buildSkincareCroPage({
 });
 
 export const ceramideBoosterCroPage = buildSkincareCroPage({
-  heroHeadline: "بشرة مرتاحة تبدأ من حاجز قوي",
+  heroHeadline: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
   heroSubheadline:
-    "معزّز السيراميد يعيد للبشرة توازنها وترطيبها — لإحساس بالراحة يدوم طوال اليوم.",
+    "سنتيلا آسيوية وسيراميد NP وبانثينول — يهدئان الحبوب، يرطّبان، ويخففان جلد الدجاجة. لبشرة حريرية ومريحة كل يوم.",
   bullets: [
     "إصلاح حاجز البشرة بلطف",
     "ترطيب عميق دون ثقل",
@@ -212,9 +212,9 @@ export const ceramideBoosterCroPage = buildSkincareCroPage({
 });
 
 export const pdrnBoosterCroPage = buildSkincareCroPage({
-  heroHeadline: "بشرة تشعرين أنها أكثر شباباً",
+  heroHeadline: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
   heroSubheadline:
-    "معزّز PDRN يدعم مرونة البشرة ويقلل مظهر الخطوط — لإحساس بالشباب يعود تدريجياً.",
+    "PDRN وأدينوزين وببتيدات — يشدّان مظهر البشرة ويقللان الخطوط الدقيقة. عناية شباب بروتين كوري — بلا إبر وبلا مبالغة.",
   bullets: [
     "يدعم مرونة البشرة بلطف",
     "يقلل مظهر الخطوط الدقيقة",

@@ -38,7 +38,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
     <Link
       href={getProductPath(product.slug)}
       className={cn(
-        "group block rounded-2xl bg-white border border-brand-border/30 overflow-hidden",
+        "group flex flex-col h-full rounded-2xl bg-white border border-brand-border/30 overflow-hidden",
         "shadow-[0_2px_16px_rgba(47,69,56,0.05)] transition-all duration-300",
         "hover:shadow-[0_12px_40px_rgba(47,69,56,0.1)] hover:-translate-y-0.5",
         className,
@@ -88,24 +88,14 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
         </div>
       </div>
 
-      <div className="p-5 md:p-6">
-        <h3 className="font-extrabold text-brand-forest text-base md:text-lg leading-snug mb-2 group-hover:text-brand-gold transition-colors">
+      <div className="p-5 md:p-6 flex flex-col flex-1">
+        <h3 className="font-extrabold text-brand-forest text-[15px] md:text-[17px] leading-[1.45] mb-3 min-h-[4.5rem] md:min-h-[5rem] group-hover:text-brand-gold transition-colors">
           {product.nameAr}
         </h3>
 
-        <p className="text-xs font-semibold text-brand-muted mb-2 tracking-wide">
-          {product.subtitle}
-        </p>
-
-        <p className="text-sm text-brand-muted leading-relaxed mb-3 line-clamp-2">
+        <p className="text-[13px] md:text-sm text-brand-muted leading-[1.75] mb-4 line-clamp-3 flex-1">
           {product.description}
         </p>
-
-        {product.ingredients && product.ingredients.length > 0 && (
-          <p className="text-[11px] text-brand-muted/80 leading-relaxed mb-4 line-clamp-2">
-            {product.ingredients.slice(0, 3).join(" · ")}
-          </p>
-        )}
 
         <div className="flex items-center gap-2 mb-4">
           <div className="flex items-center gap-0.5">
@@ -118,7 +108,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
           </span>
         </div>
 
-        <div className="flex items-center justify-between gap-3 pt-4 border-t border-brand-border/30">
+        <div className="flex items-center justify-between gap-3 pt-4 border-t border-brand-border/30 mt-auto">
           <div>
             <p className="text-[10px] text-brand-muted font-medium mb-0.5">يبدأ من</p>
             {minPrice != null && (

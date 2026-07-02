@@ -56,12 +56,12 @@ export const HOMEPAGE_BEAUTY = {
     products: [
       {
         slug: "vitamin-c-booster",
-        nameAr: "سيروم فيتامين سي للإشراقة",
+        nameAr: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
         subtitle: "إشراقة · توحيد · بقع داكنة",
         description:
-          "حمض الأسكوربيك ونياسيناميد وجلسرين — لتوهج طبيعي وبشرة أكثر توحيداً.",
+          "حمض الأسكوربيك ونياسيناميد بجرعة مركّزة — يستهدف البقع والبهتان ويوحّد مظهر البشرة. تركيبة كورية لإشراقة تبدأ من أول أسبوعين.",
         image: withImageVersion("/images/products/vitamin-c-booster.png", 2),
-        imageAlt: "سيروم فيتامين سي — متقن",
+        imageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
         goalLabel: "Glow",
         routineLabel: "روتين الإشراقة",
         accentColor: "#A89420",
@@ -75,12 +75,12 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "ceramide-booster",
-        nameAr: "سيروم السيراميد للإصلاح",
+        nameAr: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
         subtitle: "حبوب · ترطيب · بشرة حريرية",
         description:
-          "سنتيلا آسيوية وسيراميد NP وبانثينول — لتهدئة البشرة وإزالة الحبوب وجلد الدجاجة.",
+          "سنتيلا آسيوية وسيراميد NP وبانثينول — يهدئان الحبوب، يرطّبان، ويخففان جلد الدجاجة. للبشرة الحساسة التي تحتاج راحة لا تعقيد.",
         image: withImageVersion("/images/products/ceramide-booster.png", 2),
-        imageAlt: "سيروم السيراميد — متقن",
+        imageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
         goalLabel: "Repair",
         routineLabel: "روتين الإصلاح",
         accentColor: "#5C6670",
@@ -95,12 +95,12 @@ export const HOMEPAGE_BEAUTY = {
       },
       {
         slug: "pdrn-booster",
-        nameAr: "سيروم PDRN للشباب",
+        nameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
         subtitle: "تجاعيد · شد · مرونة",
         description:
-          "PDRN وببتيدات وأدينوزين — لشد البشرة وتقليل الخطوط الدقيقة ومرونة أعلى.",
+          "PDRN وأدينوزين وببتيدات — يشدّان مظهر البشرة ويقللان الخطوط الدقيقة. عناية شباب بروتين كوري بخطوة واحدة — بلا إبر وبلا مبالغة.",
         image: withImageVersion("/images/products/pdrn-booster.png", 2),
-        imageAlt: "سيروم PDRN — متقن",
+        imageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
         goalLabel: "Youth",
         routineLabel: "روتين الشباب",
         accentColor: "#C25D78",
