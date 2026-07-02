@@ -7,6 +7,7 @@ import {
   X,
   ArrowUp,
   Flame,
+  Sparkles,
   FlaskConical,
   Quote,
   Stethoscope,
@@ -82,6 +83,14 @@ function NamaBundleCards({
 
   return (
     <div className="space-y-3" role="group" aria-label="اختر العرض">
+      <div className="flex items-center justify-between gap-3 mb-1">
+        <p className="font-extrabold text-base md:text-lg text-brand-forest">اختاري العرض:</p>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-forest/10 text-brand-forest text-[10px] md:text-xs font-bold px-3 py-1.5 shrink-0">
+          <Sparkles className="w-3.5 h-3.5 shrink-0" />
+          نتيجة من العبوة الأولى
+        </span>
+      </div>
+
       {sorted.map((bundle) => {
         const isSelected = bundle.id === selectedId;
         const isDefault = bundle.is_default;
@@ -92,15 +101,19 @@ function NamaBundleCards({
 
         let savings: string | null = null;
         if (bundle.compare_at_price_sar && bundle.compare_at_price_sar > bundle.price_sar) {
-          savings = `وفّر ${bundle.compare_at_price_sar - bundle.price_sar} ر.س`;
+          savings = `وفّري ${bundle.compare_at_price_sar - bundle.price_sar} ريال`;
         } else if (bundle.quantity > 1 && unitPrice * bundle.quantity > bundle.price_sar) {
-          savings = `وفّر ${unitPrice * bundle.quantity - bundle.price_sar} ر.س`;
+          savings = `وفّري ${unitPrice * bundle.quantity - bundle.price_sar} ريال`;
         } else if (bundle.savings_label_ar) {
           savings = bundle.savings_label_ar;
         }
 
         const durationLine =
-          bundle.quantity === 1 ? "30 يوم · عبوة كاملة" : `${bundle.quantity * 30} يوم · روتين أطول`;
+          bundle.quantity === 1
+            ? "30 يوم · عبوة كاملة"
+            : bundle.quantity === 2
+              ? "60 يوم · شهر النتيجة + شهر التثبيت"
+              : "90 يوم · نتيجة + تثبيت + هدية";
 
         return (
           <button
@@ -115,18 +128,13 @@ function NamaBundleCards({
                 : "border-[#E5DDD0] bg-[#FAF7F2] hover:border-brand-forest/25",
             )}
           >
-            {bundle.quantity === 1 ? (
-              <span className="absolute -top-2.5 start-4 bg-brand-forest/10 text-brand-forest text-[10px] px-2.5 py-0.5 rounded-full font-bold">
-                النتيجة من العبوة الأولى
-              </span>
-            ) : null}
             {isDefault ? (
-              <span className="absolute -top-2.5 end-4 bg-brand-gold text-white text-[10px] md:text-[11px] px-3 py-0.5 rounded-md font-bold shadow-sm">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-0.5 rounded-md font-bold shadow-sm whitespace-nowrap z-10">
                 الأكثر اختياراً
               </span>
             ) : null}
             {isBestValue && !isDefault ? (
-              <span className="absolute -top-2.5 end-4 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-3 py-0.5 rounded-md font-bold">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-0.5 rounded-md font-bold whitespace-nowrap z-10">
                 الأكثر توفيراً
               </span>
             ) : null}
@@ -138,7 +146,9 @@ function NamaBundleCards({
                   isSelected ? "border-brand-forest bg-brand-forest" : "border-brand-muted/35 bg-white",
                 )}
               >
-                {isSelected ? <div className="w-2.5 h-2.5 rounded-full bg-white" /> : null}
+                {isSelected ? (
+                  <div className="w-2.5 h-2.5 rounded-full bg-brand-gold" />
+                ) : null}
               </div>
               <div className="min-w-0">
                 <p className="font-extrabold text-[15px] md:text-base text-brand-forest leading-snug">
@@ -148,9 +158,6 @@ function NamaBundleCards({
                   <p className="text-xs text-brand-muted mt-0.5 leading-snug">{subtitle}</p>
                 ) : null}
                 <p className="text-[11px] text-brand-muted/80 mt-1">{durationLine}</p>
-                {savings ? (
-                  <p className="text-xs font-bold text-emerald-700 mt-1">{savings}</p>
-                ) : null}
               </div>
             </div>
 
@@ -159,10 +166,8 @@ function NamaBundleCards({
                 {bundle.price_sar}{" "}
                 <span className="text-sm font-bold">ر.س</span>
               </p>
-              {bundle.compare_at_price_sar ? (
-                <p className="text-xs text-brand-muted line-through tabular-nums mt-1">
-                  {bundle.compare_at_price_sar} ر.س
-                </p>
+              {savings ? (
+                <p className="text-xs font-bold text-emerald-700 mt-1.5 tabular-nums">{savings}</p>
               ) : null}
             </div>
           </button>
@@ -325,7 +330,18 @@ export function SkincareNamaProductPage({
 
             {/* Copy + offers */}
             <div className="order-2 md:order-1" ref={heroOfferRef}>
-              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
+              <h1
+                id="product-heading"
+                className="text-[1.7rem] md:text-[2.35rem] lg:text-[2.55rem] font-extrabold text-brand-forest leading-[1.22] mb-4 scroll-mt-20 text-start tracking-tight"
+              >
+                {PAGE.hero.headline}
+              </h1>
+
+              <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] mb-4 text-start">
+                {PAGE.hero.subheadline}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-4">
                 <div className="flex" aria-hidden>
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
@@ -347,17 +363,6 @@ export function SkincareNamaProductPage({
                   من {minPrice} ر.س / عبوة
                 </span>
               </div>
-
-              <h1
-                id="product-heading"
-                className="text-[1.7rem] md:text-[2.35rem] lg:text-[2.55rem] font-extrabold text-brand-forest leading-[1.22] mb-4 scroll-mt-20 text-start tracking-tight"
-              >
-                {PAGE.hero.headline}
-              </h1>
-
-              <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] mb-4 text-start">
-                {PAGE.hero.subheadline}
-              </p>
 
               {PAGE.hero.urgencyLine ? (
                 <div className="inline-flex items-center gap-1.5 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-bold px-3 py-1.5 mb-5">

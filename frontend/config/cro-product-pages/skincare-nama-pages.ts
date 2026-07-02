@@ -248,7 +248,7 @@ const vitaminCNamaPage: SkincareNamaPageConfig = {
     ],
     mutqanBar: [
       "بوستر فيتامين C ونياسيناميد",
-      "من 189 ر.س",
+      "من 169 ر.س",
       "طبقة رقيقة صباحاً",
       "يعمل من داخل البشرة",
       "كريم معزّز كوري",
@@ -481,7 +481,7 @@ const ceramideNamaPage: SkincareNamaPageConfig = {
     ],
     mutqanBar: [
       "بوستر السنتيلا والسيراميد",
-      "من 199 ر.س",
+      "من 169 ر.س",
       "طبقة رقيقة مساءً",
       "يصلح الحاجز من الداخل",
       "كريم معزّز كوري",
@@ -713,7 +713,7 @@ const pdrnNamaPage: SkincareNamaPageConfig = {
     ],
     mutqanBar: [
       "بوستر PDRN والببتيدات",
-      "من 229 ر.س",
+      "من 169 ر.س",
       "طبقة رقيقة يومياً",
       "يعمل من داخل البشرة",
       "بدون إبر",

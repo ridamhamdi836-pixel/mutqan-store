@@ -237,18 +237,18 @@ function CompleteBundleCard() {
     [
       {
         productSlug: "vitamin-c-booster",
-        productNameAr: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
-        priceSar: 189,
+        productNameAr: "بوستر فيتامين سي ونياسيناميد ضد البقع والبهتان",
+        priceSar: 169,
       },
       {
         productSlug: "ceramide-booster",
-        productNameAr: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
-        priceSar: 199,
+        productNameAr: "بوستر السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
+        priceSar: 169,
       },
       {
         productSlug: "pdrn-booster",
-        productNameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
-        priceSar: 229,
+        productNameAr: "بوستر PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+        priceSar: 169,
       },
     ].forEach((item) =>
       addItem({
