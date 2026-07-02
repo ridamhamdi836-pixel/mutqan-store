@@ -265,7 +265,7 @@ export function HomeBeautyTestimonials() {
                     {review.verified && (
                       <>
                         {" · "}
-                        <span className="text-brand-gold font-semibold">مشترية مؤكدة</span>
+                        <span className="text-brand-gold font-semibold">مشتري مؤكد</span>
                       </>
                     )}
                   </p>
