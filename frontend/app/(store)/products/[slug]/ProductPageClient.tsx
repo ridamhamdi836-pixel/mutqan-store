@@ -28,6 +28,7 @@ import {
 } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 
 function beforeAfterImageClass(muted?: boolean): string {
   return cn(muted && "opacity-90 grayscale-[20%]");
@@ -127,6 +128,10 @@ export function ProductPageClient({
   const productImageSrc = getProductImageSrc(product.slug);
   const cardImageSrc = getProductCardImageSrc(product.slug);
   const heroImageSrc = config.heroSectionImage ?? productImageSrc;
+  const storefrontProductName = useMemo(
+    () => getStorefrontProductNameAr(product.slug),
+    [product.slug],
+  );
   const minBundlePrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   const specs = PRODUCT_SPECS[product.slug] ?? [];
@@ -169,7 +174,7 @@ export function ProductPageClient({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: storefrontProductName,
     });
   }, []);
 
@@ -182,7 +187,7 @@ export function ProductPageClient({
 
     addItem({
       productSlug: product.slug,
-      productNameAr: product.name_ar,
+      productNameAr: storefrontProductName,
       bundleId: selectedBundle.id,
       bundleLabelAr: selectedBundle.label_ar,
       quantity: 1,
@@ -198,7 +203,7 @@ export function ProductPageClient({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: storefrontProductName,
       bundleId: selectedBundle.id,
       quantity: selectedBundle.quantity,
     });
@@ -222,7 +227,7 @@ export function ProductPageClient({
               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
                 <StoreImage
                   src={cardImageSrc}
-                  alt={product.name_ar}
+                  alt={storefrontProductName}
                   fill
                   variant="thumbnail"
                   sizes={STORE_IMAGE_SIZES.tiny}
@@ -230,7 +235,7 @@ export function ProductPageClient({
               </div>
               <div className="min-w-0">
                 <p className="font-bold text-sm text-brand-espresso truncate">
-                  {product.name_ar}
+                  {storefrontProductName}
                 </p>
                 <p className="text-xs text-brand-muted tabular-nums">
                   ابتداءً من {minBundlePrice} ر.س
@@ -380,7 +385,7 @@ export function ProductPageClient({
             {config.lifestyleSectionImage ? (
               <SectionImage
                 src={config.lifestyleSectionImage}
-                alt={config.lifestyleSectionImageAlt ?? product.name_ar}
+                alt={config.lifestyleSectionImageAlt ?? storefrontProductName}
                 aspect={config.lifestyleSectionAspect}
               />
             ) : null}

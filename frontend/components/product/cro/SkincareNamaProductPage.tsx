@@ -29,6 +29,8 @@ import { PRODUCT_COD_FAQS } from "@/lib/product-cod-faqs";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { getFirstOfferBundleFromBundles } from "@/config/catalog";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/providers/cart-provider";
 import type { ProductBundle } from "@/types";
@@ -217,12 +219,15 @@ export function SkincareNamaProductPage({
     return HOMEPAGE_BEAUTY.bestSellers.products.filter((p) => slugs.includes(p.slug));
   }, [productConfig.crossSellSlugs]);
 
-  const stickyProductName = useMemo(() => {
-    return (
-      HOMEPAGE_BEAUTY.bestSellers.products.find((p) => p.slug === product.slug)?.nameAr ??
-      product.name_ar
-    );
-  }, [product.slug, product.name_ar]);
+  const firstOfferBundle = useMemo(
+    () => getFirstOfferBundleFromBundles(product.bundles),
+    [product.bundles],
+  );
+
+  const stickyProductName = useMemo(
+    () => getStorefrontProductNameAr(product.slug),
+    [product.slug],
+  );
 
   const scrollToOffers = useCallback(() => {
     offersRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -236,15 +241,15 @@ export function SkincareNamaProductPage({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: stickyProductName,
     });
-  }, [isUpsellPreview, product.name_ar, product.slug, selectedBundle.price_sar]);
+  }, [isUpsellPreview, stickyProductName, product.slug, selectedBundle.price_sar]);
 
   const handlePlaceOrder = useCallback(() => {
     if (isUpsellPreview) return;
     addItem({
       productSlug: product.slug,
-      productNameAr: product.name_ar,
+      productNameAr: stickyProductName,
       bundleId: selectedBundle.id,
       bundleLabelAr: selectedBundle.label_ar,
       quantity: 1,
@@ -258,12 +263,12 @@ export function SkincareNamaProductPage({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: stickyProductName,
       bundleId: selectedBundle.id,
       quantity: selectedBundle.quantity,
     });
     openCheckout();
-  }, [addItem, isUpsellPreview, openCheckout, product, selectedBundle]);
+  }, [addItem, isUpsellPreview, openCheckout, product.slug, selectedBundle, stickyProductName]);
 
   return (
     <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-28 md:pb-32">
@@ -289,13 +294,13 @@ export function SkincareNamaProductPage({
                 <p className="font-bold text-[11px] md:text-sm text-brand-espresso line-clamp-2 leading-snug">
                   {stickyProductName}
                 </p>
-                {selectedBundle.compare_at_price_sar ? (
+                {firstOfferBundle.compare_at_price_sar ? (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    بدل {selectedBundle.compare_at_price_sar} ر.س — {selectedBundle.price_sar} ر.س
+                    بدل {firstOfferBundle.compare_at_price_sar} ر.س — {firstOfferBundle.price_sar} ر.س
                   </p>
                 ) : (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    من {minPrice} ر.س · دفع عند الاستلام
+                    من {firstOfferBundle.price_sar} ر.س · دفع عند الاستلام
                   </p>
                 )}
               </div>
@@ -306,7 +311,7 @@ export function SkincareNamaProductPage({
               className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm md:text-base rounded-full px-5 md:px-7 py-3.5 md:py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
             >
               <span className="whitespace-nowrap">
-                {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
+                {PAGE.stickyCtaVerb} · {firstOfferBundle.price_sar} ر.س
               </span>
               <ArrowUp className="w-4 h-4 shrink-0" />
             </button>

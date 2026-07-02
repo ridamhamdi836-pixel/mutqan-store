@@ -15,6 +15,7 @@ import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { formatSARCompact } from "@/lib/currency";
 import { useCountdown } from "@/lib/use-countdown";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import {
   listThankYouUpsellProducts,
   type UpsellProductDetail,
@@ -138,7 +139,7 @@ export function PostPurchaseOffer({
 
     const lineItems: LastOrderLineItem[] = addedProducts.map((p) => ({
       productSlug: p.slug,
-      productNameAr: `${p.name_ar} (إضافة لنفس الطلب)`,
+      productNameAr: `${getStorefrontProductNameAr(p.slug)} (إضافة لنفس الطلب)`,
       bundleLabelAr: "إضافة لنفس الطلب",
       quantity: 1,
       priceSar: p.upsell_price_sar,
@@ -312,6 +313,8 @@ function UpsellProductRow({
   onToggle: () => void;
   onOpenPreview: () => void;
 }) {
+  const productNameAr = getStorefrontProductNameAr(product.slug);
+
   return (
     <div
       className={cn(
@@ -348,7 +351,7 @@ function UpsellProductRow({
           <div className="relative w-24 aspect-square md:w-28 rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
             <StoreImage
               src={product.image}
-              alt={product.name_ar}
+              alt={productNameAr}
               fill
               sizes={STORE_IMAGE_SIZES.thumbnail}
               fit="contain"
@@ -363,7 +366,7 @@ function UpsellProductRow({
 
           <div className="flex-1 min-w-0 space-y-1.5">
             <p className="font-extrabold text-sm md:text-base text-brand-espresso group-hover:text-brand-gold transition-colors leading-snug">
-              {product.name_ar}
+              {productNameAr}
             </p>
             <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
               {product.hook_ar}

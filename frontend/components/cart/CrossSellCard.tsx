@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
 import { getProduct, getFirstOfferBundle } from "@/config/catalog";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { getProductCardImageSrc } from "@/lib/product-image";
 
 interface CrossSellCardProps {
@@ -22,6 +23,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
   const crossSell = catalog.crossSell;
   const firstOffer = getFirstOfferBundle(catalog);
   const displayPriceSar = firstOffer.price_sar;
+  const productNameAr = getStorefrontProductNameAr(productSlug);
 
   const alreadyInCart = items.some((i) => i.productSlug === productSlug);
 
@@ -29,7 +31,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
     if (alreadyInCart) return;
     addItem({
       productSlug,
-      productNameAr: catalog.name_ar,
+      productNameAr,
       bundleId: firstOffer.id,
       bundleLabelAr: firstOffer.label_ar,
       quantity: 1,
@@ -46,7 +48,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
         {!imgError ? (
           <StoreImage
             src={productImageSrc}
-            alt={catalog.name_ar}
+            alt={productNameAr}
             fill
             fit="contain"
             sizes={STORE_IMAGE_SIZES.card}
@@ -55,14 +57,14 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-xs text-gray-400 px-2 text-center">
-            {catalog.name_ar}
+            {productNameAr}
           </div>
         )}
       </div>
 
       <div className="flex items-center gap-3 p-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-extrabold text-brand-espresso leading-snug">{catalog.name_ar}</p>
+          <p className="text-sm font-extrabold text-brand-espresso leading-snug">{productNameAr}</p>
           <p className="text-xs text-brand-muted mt-0.5">{crossSell.shortDesc}</p>
           <p className="text-sm font-black text-brand-gold mt-1">
             {displayPriceSar} ر.س
@@ -72,7 +74,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
         <button
           onClick={handleAdd}
           disabled={alreadyInCart}
-          aria-label={`أضف ${catalog.name_ar} للطلب`}
+          aria-label={`أضف ${productNameAr} للطلب`}
           className={cn(
             "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all",
             alreadyInCart

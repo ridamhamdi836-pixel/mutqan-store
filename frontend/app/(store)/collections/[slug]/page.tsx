@@ -4,10 +4,11 @@ import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, Sparkles, Star } from "lucide-react";
 import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES, withImageVersion, SKINCARE_PRODUCT_IMAGE_VERSION } from "@/lib/image-display";
-import { HOMEPAGE_HERO_IMAGE } from "@/config/homepage-beauty";
+import { STORE_IMAGE_SIZES } from "@/lib/image-display";
+import { HOMEPAGE_BEAUTY, HOMEPAGE_HERO_IMAGE } from "@/config/homepage-beauty";
 import { getProduct, getProductPath } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { useCart } from "@/providers/cart-provider";
 
 type SkincareProductSlug =
@@ -27,29 +28,20 @@ type SkincareCollection = {
 const PRODUCT_PRESENTATION: Record<
   SkincareProductSlug,
   { nameAr: string; subtitle: string; image: string; imageAlt: string }
-> = {
-  "vitamin-c-booster": {
-    nameAr: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان",
-    subtitle:
-      "حمض الأسكوربيك ونياسيناميد — يستهدف البقع والبهتان ويوحّد مظهر البشرة.",
-    image: withImageVersion("/images/products/vitamin-c-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-    imageAlt: "سيروم فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
-  },
-  "ceramide-booster": {
-    nameAr: "سيروم السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
-    subtitle:
-      "سنتيلا آسيوية وسيراميد NP — يهدئان الحبوب ويرطّبان البشرة ويخففان جلد الدجاجة.",
-    image: withImageVersion("/images/products/ceramide-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-    imageAlt: "سيروم السنتيلا والسيراميد ضد الحبوب — متقن",
-  },
-  "pdrn-booster": {
-    nameAr: "سيروم PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
-    subtitle:
-      "PDRN وأدينوزين وببتيدات — يشدّان البشرة ويقللان مظهر الخطوط الدقيقة.",
-    image: withImageVersion("/images/products/pdrn-booster.png", SKINCARE_PRODUCT_IMAGE_VERSION),
-    imageAlt: "سيروم PDRN والببتيدات ضد التجاعيد — متقن",
-  },
-};
+> = Object.fromEntries(
+  HOMEPAGE_BEAUTY.bestSellers.products.map((p) => [
+    p.slug,
+    {
+      nameAr: p.nameAr,
+      subtitle: p.description.split("—")[0]?.trim() ?? p.subtitle,
+      image: p.image,
+      imageAlt: p.imageAlt,
+    },
+  ]),
+) as Record<
+  SkincareProductSlug,
+  { nameAr: string; subtitle: string; image: string; imageAlt: string }
+>;
 
 const SKINCARE_COLLECTIONS: SkincareCollection[] = [
   {
@@ -237,17 +229,17 @@ function CompleteBundleCard() {
     [
       {
         productSlug: "vitamin-c-booster",
-        productNameAr: "بوستر فيتامين سي ونياسيناميد ضد البقع والبهتان",
+        productNameAr: getStorefrontProductNameAr("vitamin-c-booster"),
         priceSar: 169,
       },
       {
         productSlug: "ceramide-booster",
-        productNameAr: "بوستر السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
+        productNameAr: getStorefrontProductNameAr("ceramide-booster"),
         priceSar: 169,
       },
       {
         productSlug: "pdrn-booster",
-        productNameAr: "بوستر PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+        productNameAr: getStorefrontProductNameAr("pdrn-booster"),
         priceSar: 169,
       },
     ].forEach((item) =>

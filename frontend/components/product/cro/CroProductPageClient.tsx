@@ -26,6 +26,7 @@ import { getWhyItWorksImage } from "@/lib/cro-product-page-images";
 import { reviewDateLabel } from "@/lib/product-review-dates";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import type { ProductBundle } from "@/types";
+import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { getProductCardImageSrc } from "@/lib/product-image";
 import { cn } from "@/lib/utils";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
@@ -88,6 +89,10 @@ export function CroProductPageClient({
   const PAGE = pageConfig ?? getCroProductPage(product.slug);
   const config = productConfig ?? PRODUCTS_CONFIG[product.slug];
   const OFFER_HEADING_ID = `${product.slug}-offer-heading`;
+  const storefrontProductName = useMemo(
+    () => getStorefrontProductNameAr(product.slug),
+    [product.slug],
+  );
   const { addItem, removeItem, openCheckout } = useCart();
   const defaultBundle =
     product.bundles.find((b) => b.is_default) || product.bundles[0];
@@ -154,9 +159,9 @@ export function CroProductPageClient({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: storefrontProductName,
     });
-  }, [isUpsellPreview, product.name_ar, product.slug, selectedBundle.price_sar]);
+  }, [isUpsellPreview, storefrontProductName, product.slug, selectedBundle.price_sar]);
 
   const scrollToOffers = useCallback(() => {
     const el = document.getElementById(OFFER_HEADING_ID);
@@ -168,7 +173,7 @@ export function CroProductPageClient({
     if (isBeautyCabinet) {
       addItem({
         productSlug: product.slug,
-        productNameAr: product.name_ar,
+        productNameAr: storefrontProductName,
         bundleId: beautyCabinetMainBundle.id,
         bundleLabelAr: beautyCabinetMainBundle.label_ar,
         quantity: 1,
@@ -197,7 +202,7 @@ export function CroProductPageClient({
         value: beautyCabinetCheckoutTotal,
         currency: "SAR",
         productSlug: product.slug,
-        productName: product.name_ar,
+        productName: storefrontProductName,
         bundleId: addBrushOrganizer
           ? "beauty-cabinet-with-brush-organizer"
           : beautyCabinetMainBundle.id,
@@ -209,7 +214,7 @@ export function CroProductPageClient({
 
     addItem({
       productSlug: product.slug,
-      productNameAr: product.name_ar,
+      productNameAr: storefrontProductName,
       bundleId: selectedBundle.id,
       bundleLabelAr: selectedBundle.label_ar,
       quantity: 1,
@@ -223,7 +228,7 @@ export function CroProductPageClient({
       value: selectedBundle.price_sar,
       currency: "SAR",
       productSlug: product.slug,
-      productName: product.name_ar,
+      productName: storefrontProductName,
       bundleId: selectedBundle.id,
       quantity: selectedBundle.quantity,
     });
@@ -251,7 +256,7 @@ export function CroProductPageClient({
               <div className="relative w-11 h-11 rounded-lg overflow-hidden bg-brand-beige border border-brand-border shrink-0">
                 <StoreImage
                   src={cardImageSrc}
-                  alt={product.name_ar}
+                  alt={storefrontProductName}
                   fill
                   variant="thumbnail"
                   sizes={STORE_IMAGE_SIZES.tiny}
@@ -259,7 +264,7 @@ export function CroProductPageClient({
               </div>
               <div className="min-w-0">
                 <p className="font-bold text-sm text-brand-espresso truncate">
-                  {product.name_ar}
+                  {storefrontProductName}
                 </p>
                 <p className="text-xs text-brand-muted tabular-nums">
                   ابتداءً من {firstOfferPrice} ر.س
@@ -761,7 +766,7 @@ export function CroProductPageClient({
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border border-brand-gold/10 bg-[#FAF8F5]">
                       <StoreImage
                         src={cardImageSrc}
-                        alt={product.name_ar}
+                        alt={storefrontProductName}
                         fill
                         fit="contain"
                         sizes={STORE_IMAGE_SIZES.thumbnail}

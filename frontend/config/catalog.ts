@@ -361,7 +361,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk1",
     slug: "vitamin-c-booster",
-    name_ar: "بوستر فيتامين سي ونياسيناميد ضد البقع والبهتان",
+    name_ar: "كريم إشراقة البشرة مصمم لتوحيد لون البشرة والقضاء على التصبغات",
     name_en: "Vitamin C Booster",
     short_description_ar:
       "حمض الأسكوربيك ونياسيناميد — يستهدف البقع والبهتان ويوحّد مظهر البشرة.",
@@ -395,7 +395,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk2",
     slug: "ceramide-booster",
-    name_ar: "بوستر السنتيلا والسيراميد ضد الحبوب وجلد الدجاجة",
+    name_ar: "كريم تنعيم البشرة مصمم للقضاء على الحبوب وخشونة الجلد",
     name_en: "Ceramide Booster",
     short_description_ar:
       "سنتيلا آسيوية وسيراميد NP — يهدئان الحبوب ويرطّبان البشرة ويخففان جلد الدجاجة.",
@@ -429,7 +429,7 @@ export const CATALOG: CatalogProduct[] = [
   {
     id: "sk3",
     slug: "pdrn-booster",
-    name_ar: "بوستر PDRN والببتيدات ضد التجاعيد والخطوط الدقيقة",
+    name_ar: "كريم شد البشرة مصمم للقضاء على التجاعيد والخطوط الدقيقة",
     name_en: "PDRN Booster",
     short_description_ar:
       "PDRN وأدينوزين وببتيدات — يشدّان البشرة ويقللان مظهر الخطوط الدقيقة.",
@@ -539,10 +539,12 @@ export function getProduct(slug: string): CatalogProduct | undefined {
 }
 
 /** First bundle by sort_order — same «العرض الأول» shown on the product page. */
+export function getFirstOfferBundleFromBundles(bundles: ProductBundle[]): ProductBundle {
+  return [...bundles].sort((a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99))[0];
+}
+
 export function getFirstOfferBundle(product: CatalogProduct): ProductBundle {
-  return [...product.bundles].sort(
-    (a, b) => (a.sort_order ?? 99) - (b.sort_order ?? 99),
-  )[0];
+  return getFirstOfferBundleFromBundles(product.bundles);
 }
 
 export function getProductsBySlugs(slugs: string[]): CatalogProduct[] {
