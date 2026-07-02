@@ -15,12 +15,12 @@ import {
   HeartHandshake,
   Quote,
   Banknote,
+  Award,
   type LucideIcon,
 } from "lucide-react";
-import { StoreImage, StoreImageFrame } from "@/components/ui/StoreImage";
-import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
+import { HeroProductShowcase } from "@/components/home/beauty/HeroProductShowcase";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 
@@ -57,74 +57,82 @@ export function HomeBeautyHero() {
   const { hero } = HOMEPAGE_BEAUTY;
 
   return (
-    <section className="relative pt-10 pb-14 md:pt-16 md:pb-20 page-x bg-brand-background overflow-hidden">
-      <div className="max-w-content mx-auto">
-        <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
-          {/* Image — Nama style white rounded frame */}
-          <div className="order-1 md:order-1 relative">
-            <div className="rounded-[1.5rem] bg-white p-6 md:p-8 shadow-[0_8px_40px_rgba(47,69,56,0.08)] border border-brand-border/30">
-              <StoreImageFrame
-                src={hero.image}
-                alt={hero.imageAlt}
-                className="rounded-xl overflow-hidden"
-                variant="hero"
-                priority
-                sizes={STORE_IMAGE_SIZES.hero}
-              />
-            </div>
+    <section className="relative pt-8 pb-12 md:pt-12 md:pb-16 page-x bg-brand-background overflow-hidden">
+      {/* Nama-style soft background rings */}
+      <div
+        className="absolute top-1/2 start-0 -translate-y-1/2 w-[520px] h-[520px] rounded-full border border-brand-forest/5 pointer-events-none hidden md:block"
+        aria-hidden
+      />
+      <div
+        className="absolute top-1/3 end-0 w-[420px] h-[420px] rounded-full border border-brand-forest/5 pointer-events-none hidden lg:block"
+        aria-hidden
+      />
 
-            <div className="absolute -bottom-4 start-6 md:-bottom-5 md:start-8 z-10 bg-white px-4 py-3 rounded-xl shadow-lg border border-brand-border/40 flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-full bg-brand-forest/10 flex items-center justify-center">
-                <ShieldCheck className="w-5 h-5 text-brand-forest" />
-              </div>
-              <div>
-                <p className="text-[10px] font-bold text-brand-muted uppercase tracking-wider">
-                  {hero.imageBadge}
-                </p>
-                <p className="text-xs font-bold text-brand-espresso">متقن للعناية</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Copy */}
-          <div className="order-2 md:order-2">
-            <div className="inline-flex items-center gap-2 rounded-full border border-brand-forest/15 bg-white px-4 py-2 text-xs md:text-sm font-semibold text-brand-forest mb-6 shadow-sm">
-              <FlaskConical className="w-4 h-4" />
+      <div className="max-w-content mx-auto relative z-10">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
+          {/* Copy — يمين في RTL */}
+          <div className="order-1">
+            <div className="inline-flex items-center gap-2 rounded-full border border-brand-forest/20 bg-white px-4 py-2 text-xs md:text-sm font-semibold text-brand-forest mb-5 md:mb-6 shadow-sm">
+              <FlaskConical className="w-4 h-4 shrink-0" />
               <span>{hero.badge}</span>
             </div>
 
-            <h1 className="text-[1.85rem] md:text-[2.75rem] lg:text-[3rem] font-extrabold text-brand-forest leading-[1.2] mb-5 tracking-tight">
+            <h1 className="text-[1.75rem] md:text-[2.65rem] lg:text-[2.85rem] font-extrabold text-brand-forest leading-[1.18] mb-4 md:mb-5 tracking-tight">
               {hero.headline}
             </h1>
 
-            <p className="text-base md:text-lg text-brand-muted leading-[1.9] mb-8 max-w-lg">
+            <p className="text-[15px] md:text-base text-brand-muted leading-[1.9] mb-7 md:mb-8 max-w-lg">
               {hero.subheadline}
             </p>
 
-            {/* Trust pills — 4 icons like Nama */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 md:gap-3 mb-7 md:mb-8">
               {hero.trustPills.map((pill) => (
                 <div
                   key={pill.id}
-                  className="text-center rounded-xl bg-white border border-brand-border/40 py-3 px-2 shadow-sm"
+                  className="text-center rounded-lg bg-white border border-brand-border/50 py-3 px-2 shadow-[0_1px_4px_rgba(26,71,49,0.04)]"
                 >
-                  <p className="text-sm font-extrabold text-brand-forest">{pill.label}</p>
-                  <p className="text-[10px] text-brand-muted mt-0.5 font-medium">{pill.sub}</p>
+                  <p className="text-sm md:text-[15px] font-extrabold text-brand-forest leading-none">
+                    {pill.label}
+                  </p>
+                  <p className="text-[10px] md:text-[11px] text-brand-muted mt-1.5 font-medium leading-tight">
+                    {pill.sub}
+                  </p>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
               <Link
                 href="#products"
-                className="inline-flex items-center justify-center gap-2.5 bg-brand-forest text-white font-bold rounded-xl px-8 py-4 text-base shadow-[0_4px_20px_rgba(47,69,56,0.25)] hover:bg-brand-forest/90 transition-colors"
+                className="inline-flex items-center justify-center gap-2.5 bg-brand-forest text-white font-bold rounded-xl px-7 md:px-8 py-3.5 md:py-4 text-sm md:text-base shadow-[0_4px_20px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors order-1 sm:order-1"
               >
                 <span>{hero.primaryCta}</span>
                 <ArrowLeft className="w-5 h-5" />
               </Link>
-              <div className="inline-flex items-center gap-2 rounded-xl bg-brand-gold/10 border border-brand-gold/25 px-4 py-3 text-sm font-semibold text-brand-forest">
-                <ShieldCheck className="w-4 h-4 text-brand-gold" />
+              <div className="inline-flex items-center justify-center gap-2 rounded-full bg-[#F0E0C8] border border-brand-gold/35 px-4 py-3 text-xs md:text-sm font-bold text-brand-forest order-2 sm:order-2">
+                <Award className="w-4 h-4 text-brand-gold shrink-0" />
                 <span>{hero.guaranteeBadge}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Visual — يسار في RTL */}
+          <div className="order-2 relative">
+            <div className="rounded-[1.25rem] md:rounded-[1.5rem] bg-white p-4 md:p-6 shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-white">
+              <HeroProductShowcase />
+            </div>
+
+            <div className="absolute -bottom-3 start-4 md:-bottom-4 md:start-6 z-10 bg-white px-3.5 py-2.5 md:px-4 md:py-3 rounded-xl shadow-[0_8px_24px_rgba(26,71,49,0.12)] border border-brand-border/40 flex items-center gap-2.5 max-w-[85%]">
+              <div className="w-9 h-9 rounded-full bg-brand-forest flex items-center justify-center shrink-0">
+                <ShieldCheck className="w-4.5 h-4.5 text-white" strokeWidth={2.5} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold text-brand-forest leading-tight">
+                  {hero.imageBadgeTitle}
+                </p>
+                <p className="text-[10px] text-brand-muted font-medium leading-tight mt-0.5">
+                  {hero.imageBadgeSub}
+                </p>
               </div>
             </div>
           </div>
