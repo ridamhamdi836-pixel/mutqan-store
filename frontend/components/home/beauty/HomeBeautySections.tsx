@@ -224,45 +224,56 @@ export function HomeBeautyTestimonials() {
   const { testimonials } = HOMEPAGE_BEAUTY;
 
   return (
-    <section className="section-pad page-x bg-brand-background">
+    <section className="section-pad page-x bg-white">
       <div className="max-w-content mx-auto">
-        <div className="text-center max-w-xl mx-auto mb-10 md:mb-14">
+        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
           <SectionLabel>{testimonials.label}</SectionLabel>
-          <h2 className="text-2xl md:text-4xl font-extrabold text-brand-forest leading-snug tracking-tight mb-3">
+          <h2 className="text-2xl md:text-[2.35rem] font-extrabold text-brand-forest leading-snug tracking-tight mb-2">
             {testimonials.headline}
           </h2>
-          <p className="text-sm text-brand-muted">{testimonials.subtitle}</p>
+          <p className="text-sm md:text-[15px] text-brand-muted leading-relaxed">
+            {testimonials.subtitle}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           {testimonials.items.map((review) => (
             <article
               key={review.name}
-              className="bg-brand-cream rounded-2xl p-7 md:p-8 border border-brand-border/25 relative"
+              className="bg-[#F7EFE5] rounded-2xl p-7 md:p-8 flex flex-col min-h-[280px]"
             >
-              <div className="flex items-start justify-between mb-5">
-                <Quote className="w-8 h-8 text-brand-gold/40" />
-                <div className="flex text-brand-gold gap-0.5">
+              <div className="flex items-start justify-between gap-4 mb-5">
+                <Quote
+                  className="w-9 h-9 text-brand-gold/45 shrink-0"
+                  strokeWidth={1.5}
+                  aria-hidden
+                />
+                <div className="flex text-brand-gold gap-0.5 shrink-0">
                   {Array.from({ length: review.rating }).map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-current" />
                   ))}
                 </div>
               </div>
 
-              <p className="text-[15px] text-brand-espresso leading-[1.85] mb-6 font-medium">
+              <p className="text-[15px] md:text-base text-brand-forest leading-[1.85] font-medium flex-1 mb-6">
                 {review.text}
               </p>
 
-              <div className="flex items-center gap-3 pt-5 border-t border-brand-border/30">
-                <div className="w-10 h-10 rounded-full bg-brand-forest text-white flex items-center justify-center text-sm font-bold">
+              <div className="flex items-center gap-3 mt-auto">
+                <div className="w-10 h-10 rounded-full bg-brand-forest text-white flex items-center justify-center text-sm font-bold shrink-0">
                   {review.name.charAt(0)}
                 </div>
-                <div>
-                  <p className="font-bold text-brand-forest text-sm">{review.name}</p>
-                  <p className="text-xs text-brand-muted">
+                <div className="min-w-0">
+                  <p className="font-bold text-brand-forest text-sm leading-tight">
+                    {review.name}
+                  </p>
+                  <p className="text-xs text-brand-muted mt-1 leading-relaxed">
                     {review.age} سنة · {review.city}
                     {review.verified && (
-                      <span className="text-brand-gold font-semibold"> · شراء موثّق</span>
+                      <>
+                        {" · "}
+                        <span className="text-brand-gold font-semibold">مشترية مؤكدة</span>
+                      </>
                     )}
                   </p>
                 </div>

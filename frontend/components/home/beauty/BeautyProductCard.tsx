@@ -89,11 +89,11 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
       </div>
 
       <div className="p-5 md:p-6 flex flex-col flex-1">
-        <h3 className="font-extrabold text-brand-forest text-[15px] md:text-[17px] leading-[1.45] mb-3 min-h-[4.5rem] md:min-h-[5rem] group-hover:text-brand-gold transition-colors">
+        <h3 className="font-extrabold text-brand-forest text-[15px] md:text-[17px] leading-[1.35] mb-1.5 min-h-0 group-hover:text-brand-gold transition-colors">
           {product.nameAr}
         </h3>
 
-        <p className="text-[13px] md:text-sm text-brand-muted leading-[1.75] mb-4 line-clamp-3 flex-1">
+        <p className="text-[13px] md:text-sm text-brand-muted leading-[1.7] mb-4 line-clamp-3 flex-1 mt-0">
           {product.description}
         </p>
 
