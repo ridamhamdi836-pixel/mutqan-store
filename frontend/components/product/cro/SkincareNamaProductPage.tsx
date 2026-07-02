@@ -834,102 +834,72 @@ export function SkincareNamaProductPage({
       </section>
 
       {/* 11. Shipping + FAQ */}
-      <section className={cn("page-x py-12 md:py-16", CREAM_SECTION)}>
-        <div className="max-w-content mx-auto space-y-12">
-          <div className="rounded-2xl md:rounded-3xl border border-brand-forest/10 bg-white shadow-[0_4px_24px_rgba(26,71,49,0.06)]">
-            {/* Mobile — compact, no city grid (avoids layout/compositor glitches) */}
-            <div className="md:hidden p-4 space-y-3">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-xl bg-brand-forest flex items-center justify-center shrink-0">
-                  <Truck className="w-5 h-5 text-brand-gold" strokeWidth={2} />
+      <section className={cn("page-x py-8 md:py-16", CREAM_SECTION)}>
+        <div className="max-w-content mx-auto space-y-8 md:space-y-12">
+          <div className="hidden md:block rounded-2xl md:rounded-3xl border border-brand-forest/10 bg-white shadow-[0_4px_24px_rgba(26,71,49,0.06)]">
+            <div className="bg-brand-forest px-8 py-6 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5 text-brand-gold" strokeWidth={2} />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-extrabold text-brand-forest text-base leading-snug">
+                <div>
+                  <h3 className="font-extrabold text-white text-xl leading-tight">
                     {PAGE.shipping.title}
                   </h3>
-                  <p className="text-xs text-brand-muted mt-1 leading-relaxed">
-                    توصيل سريع لباب بيتك — الدفع عند الاستلام · 2–5 أيام عمل
+                  <p className="text-white/75 text-sm mt-1">
+                    توصيل سريع لباب بيتك — بدون دفع مقدّم
                   </p>
                 </div>
               </div>
-              <p className="text-sm text-brand-forest/90 leading-relaxed bg-[#F5F0E8] rounded-xl px-3.5 py-3">
-                نوصل لجميع مدن المملكة عبر أرامكس وSMSA وريدبوكس — الرياض، جدة، مكة،
-                الدمام، وجميع المناطق.
-              </p>
-              {PAGE.shipping.upsellNote ? (
-                <p className="text-xs font-semibold text-brand-forest leading-relaxed flex items-start gap-2">
-                  <Package className="w-4 h-4 shrink-0 mt-0.5" />
-                  <span>{PAGE.shipping.upsellNote}</span>
-                </p>
-              ) : null}
+              <div className="inline-flex items-center gap-2 rounded-full bg-brand-gold/20 border border-brand-gold/30 px-4 py-2 shrink-0">
+                <Truck className="w-4 h-4 text-brand-gold shrink-0" />
+                <span className="text-sm font-bold text-white tabular-nums">2–5 أيام عمل</span>
+              </div>
             </div>
 
-            {/* Desktop — full card with city grid */}
-            <div className="hidden md:block">
-              <div className="bg-brand-forest px-8 py-6 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
-                    <MapPin className="w-5 h-5 text-brand-gold" strokeWidth={2} />
+            <div className="p-8 bg-white">
+              <p className="text-xs font-bold text-brand-muted uppercase tracking-wide mb-4">
+                مدن نخدمها حالياً
+              </p>
+              <div className="grid grid-cols-4 gap-2.5">
+                {PAGE.shipping.cities.map((city) => (
+                  <div
+                    key={city}
+                    className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-brand-border/20 px-3 py-2.5"
+                  >
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-forest/10">
+                      <Check className="w-3 h-3 text-brand-forest" strokeWidth={3} />
+                    </span>
+                    <span className="text-sm font-semibold text-brand-forest">{city}</span>
                   </div>
-                  <div>
-                    <h3 className="font-extrabold text-white text-xl leading-tight">
-                      {PAGE.shipping.title}
-                    </h3>
-                    <p className="text-white/75 text-sm mt-1">
-                      توصيل سريع لباب بيتك — بدون دفع مقدّم
-                    </p>
-                  </div>
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full bg-brand-gold/20 border border-brand-gold/30 px-4 py-2 shrink-0">
-                  <Truck className="w-4 h-4 text-brand-gold shrink-0" />
-                  <span className="text-sm font-bold text-white tabular-nums">2–5 أيام عمل</span>
-                </div>
+                ))}
               </div>
+              <div className="mt-5 flex justify-center">
+                <span className="inline-flex items-center gap-2 rounded-full bg-brand-forest text-white px-5 py-2.5 text-sm font-bold">
+                  <MapPin className="w-4 h-4 text-brand-gold" />
+                  + كل المناطق داخل المملكة
+                </span>
+              </div>
+            </div>
 
-              <div className="p-8 bg-white">
-                <p className="text-xs font-bold text-brand-muted uppercase tracking-wide mb-4">
-                  مدن نخدمها حالياً
-                </p>
-                <div className="grid grid-cols-4 gap-2.5">
-                  {PAGE.shipping.cities.map((city) => (
-                    <div
-                      key={city}
-                      className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-brand-border/20 px-3 py-2.5"
+            <div className="border-t border-brand-border/20 bg-[#FAF8F5] px-8 py-5 space-y-3">
+              {PAGE.shipping.upsellNote ? (
+                <div className="flex items-center gap-2 rounded-xl bg-brand-forest/5 border border-brand-forest/15 px-4 py-3">
+                  <Package className="w-4 h-4 text-brand-forest shrink-0" />
+                  <p className="text-sm font-bold text-brand-forest">{PAGE.shipping.upsellNote}</p>
+                </div>
+              ) : null}
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-sm text-brand-muted leading-relaxed">{PAGE.shipping.note}</p>
+                <div className="flex flex-wrap items-center gap-2 shrink-0">
+                  {["أرامكس", "SMSA", "ريدبوكس"].map((partner) => (
+                    <span
+                      key={partner}
+                      className="inline-flex items-center rounded-lg bg-white border border-brand-border/30 px-3 py-1.5 text-[11px] font-bold text-brand-forest"
                     >
-                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-brand-forest/10">
-                        <Check className="w-3 h-3 text-brand-forest" strokeWidth={3} />
-                      </span>
-                      <span className="text-sm font-semibold text-brand-forest">{city}</span>
-                    </div>
+                      {partner}
+                    </span>
                   ))}
-                </div>
-                <div className="mt-5 flex justify-center">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-brand-forest text-white px-5 py-2.5 text-sm font-bold">
-                    <MapPin className="w-4 h-4 text-brand-gold" />
-                    + كل المناطق داخل المملكة
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t border-brand-border/20 bg-[#FAF8F5] px-8 py-5 space-y-3">
-                {PAGE.shipping.upsellNote ? (
-                  <div className="flex items-center gap-2 rounded-xl bg-brand-forest/5 border border-brand-forest/15 px-4 py-3">
-                    <Package className="w-4 h-4 text-brand-forest shrink-0" />
-                    <p className="text-sm font-bold text-brand-forest">{PAGE.shipping.upsellNote}</p>
-                  </div>
-                ) : null}
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm text-brand-muted leading-relaxed">{PAGE.shipping.note}</p>
-                  <div className="flex flex-wrap items-center gap-2 shrink-0">
-                    {["أرامكس", "SMSA", "ريدبوكس"].map((partner) => (
-                      <span
-                        key={partner}
-                        className="inline-flex items-center rounded-lg bg-white border border-brand-border/30 px-3 py-1.5 text-[11px] font-bold text-brand-forest"
-                      >
-                        {partner}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
