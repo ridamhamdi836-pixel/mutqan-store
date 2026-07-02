@@ -69,8 +69,8 @@ export function HomeBeautyHero() {
 
       <div className="max-w-content mx-auto relative z-10">
         <div className="grid md:grid-cols-2 gap-10 md:gap-12 lg:gap-16 items-center">
-          {/* Copy — يمين في RTL */}
-          <div className="order-1">
+          {/* Copy — يمين في RTL على الحاسوب، تحت الصورة على الجوال */}
+          <div className="order-2 md:order-1">
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-forest/20 bg-white px-4 py-2 text-xs md:text-sm font-semibold text-brand-forest mb-5 md:mb-6 shadow-sm">
               <FlaskConical className="w-4 h-4 shrink-0" />
               <span>{hero.badge}</span>
@@ -115,8 +115,8 @@ export function HomeBeautyHero() {
             </div>
           </div>
 
-          {/* Visual — نفس الصورة والإطار على الجوال والحاسوب */}
-          <div className="order-2 relative w-full">
+          {/* Visual — أولاً على الجوال، يسار في RTL على الحاسوب */}
+          <div className="order-1 md:order-2 relative w-full">
             <div className="w-full rounded-2xl overflow-hidden shadow-[0_12px_48px_rgba(26,71,49,0.1)] border border-brand-border/20">
               <HeroProductShowcase />
             </div>
