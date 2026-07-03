@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { MutqanLogoMark } from "@/components/brand/MutqanLogoMark";
+import { BRAND } from "@/config/brand";
 import { cn } from "@/lib/utils";
 
 type BrandLogoProps = {
@@ -11,13 +12,17 @@ type BrandLogoProps = {
   className?: string;
 };
 
-/** Consistent store logo — SVG only, fills its box (set h + w on className). */
+function defaultLogoSrc(variant: BrandLogoProps["variant"]) {
+  return variant === "light" ? BRAND.logoSrcLight : BRAND.logoSrc;
+}
+
+/** Consistent store logo — transparent PNG from brand config; API can override. */
 export function BrandLogo({
   variant = "default",
   orientation = "horizontal",
   className,
 }: BrandLogoProps) {
-  const [logo, setLogo] = useState<string | null>(null);
+  const [logo, setLogo] = useState(defaultLogoSrc(variant));
 
   useEffect(() => {
     let active = true;
@@ -30,14 +35,31 @@ export function BrandLogo({
           variant === "light" ? brand?.logoSrcLight ?? brand?.logoSrc : brand?.logoSrc;
         if (typeof nextLogo === "string" && nextLogo.trim()) {
           setLogo(nextLogo.trim());
+        } else {
+          setLogo(defaultLogoSrc(variant));
         }
       })
-      .catch(() => undefined);
+      .catch(() => {
+        if (active) setLogo(defaultLogoSrc(variant));
+      });
 
     return () => {
       active = false;
     };
   }, [variant]);
+
+  if (orientation === "icon") {
+    return (
+      <span
+        className={cn(
+          "inline-flex shrink-0 items-center justify-center bg-transparent",
+          className,
+        )}
+      >
+        <MutqanLogoMark variant={variant} orientation="icon" />
+      </span>
+    );
+  }
 
   return (
     <span
@@ -46,12 +68,12 @@ export function BrandLogo({
         className,
       )}
     >
-      {logo && orientation !== "icon" ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={logo} alt="متقن" className="h-full w-full object-contain" />
-      ) : (
-        <MutqanLogoMark variant={variant} orientation={orientation} />
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={logo}
+        alt={`${BRAND.nameEn} Beauty`}
+        className="h-full w-full object-contain object-left"
+      />
     </span>
   );
 }
