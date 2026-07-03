@@ -493,9 +493,9 @@ export function SkincareNamaProductPage({
 
             <div className="order-1 md:order-2">
               <CroProductMedia
-                src={cardImageSrc}
-                alt={product.name_ar}
-                aspect="3/4"
+                src={productConfig.painSectionImage ?? cardImageSrc}
+                alt={productConfig.painSectionImageAlt ?? product.name_ar}
+                aspect={productConfig.painSectionImage ? undefined : "3/4"}
                 placeholder={product.name_ar}
                 className="rounded-t-2xl rounded-b-none border border-b-0 border-brand-border/20"
               />

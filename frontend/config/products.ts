@@ -1073,6 +1073,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     heroSectionImageAlt: "قبل وبعد — بوستر فيتامين سي ضد البقع والبهتان",
+    painSectionImage: withImageVersion(
+      "/images/products/vitamin-c-booster-model.png",
+      1,
+    ),
+    painSectionImageAlt: "امرأة تلمس وجهها — بقع وبهتان قبل العلاج",
     benefits: ["إشراقة طبيعية", "مظهر موحّد", "ملمس خفيف", "روتين بسيط"],
     beforeLabel: "قبل",
     afterLabel: "بعد",

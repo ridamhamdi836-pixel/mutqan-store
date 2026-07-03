@@ -32,6 +32,7 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/hero/beauty-lifestyle.png": { width: 1024, height: 682 },
   "/images/hero/skincare-hero.png": { width: 844, height: 1024 },
   "/images/products/vitamin-c-booster-before-after.png": { width: 1024, height: 1024 },
+  "/images/products/vitamin-c-booster-model.png": { width: 765, height: 1024 },
   "/images/products/vitamin-c-booster.png": { width: 1024, height: 996 },
   "/images/products/ceramide-booster.png": { width: 1024, height: 1024 },
   "/images/products/pdrn-booster.png": { width: 1024, height: 1024 },
