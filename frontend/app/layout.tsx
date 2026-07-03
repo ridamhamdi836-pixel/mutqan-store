@@ -43,8 +43,11 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   alternates: { canonical: SITE_URL },
   icons: {
-    icon: [{ url: "/icon.svg?v=3", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg?v=3", type: "image/svg+xml" }],
+    icon: [
+      { url: "/icon.png?v=4", type: "image/png", sizes: "512x512" },
+      { url: "/icon.svg?v=4", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/icon.png?v=4", type: "image/png", sizes: "512x512" }],
   },
 };
 
