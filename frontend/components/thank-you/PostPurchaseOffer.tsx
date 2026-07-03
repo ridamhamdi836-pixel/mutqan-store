@@ -1,14 +1,11 @@
 "use client";
 
-import { useState, useCallback, useEffect, useMemo } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useCallback, useEffect } from "react";
 import {
   Check,
-  ChevronRight,
   Clock,
   Flame,
   PackageCheck,
-  Star,
   Truck,
 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
@@ -28,7 +25,6 @@ import {
   type LastOrderLineItem,
 } from "@/lib/last-order-session";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
-import { UpsellProductPagePreview } from "@/components/thank-you/UpsellProductPagePreview";
 import { cn } from "@/lib/utils";
 
 const UPSELL_OFFER_SECONDS = 9 * 60 + 59;
@@ -44,34 +40,13 @@ export function PostPurchaseOffer({
   orderedSlugs,
   onFinished,
 }: PostPurchaseOfferProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const [localOrderedSlugs, setLocalOrderedSlugs] = useState(orderedSlugs);
   const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const previewSlug = searchParams?.get("preview") ?? null;
   const offerCountdown = useCountdown(UPSELL_OFFER_SECONDS);
   const products = listThankYouUpsellProducts(localOrderedSlugs);
-  const previewProduct = useMemo(
-    () =>
-      previewSlug != null
-        ? products.find((p) => p.slug === previewSlug) ?? null
-        : null,
-    [previewSlug, products],
-  );
-
-  const setPreviewSlug = useCallback(
-    (slug: string | null) => {
-      const params = new URLSearchParams(searchParams?.toString() ?? "");
-      if (slug) params.set("preview", slug);
-      else params.delete("preview");
-      const qs = params.toString();
-      router.push(qs ? `/order-offer?${qs}` : "/order-offer", { scroll: false });
-    },
-    [router, searchParams],
-  );
 
   useEffect(() => {
     firePixelEvent({
@@ -188,12 +163,7 @@ export function PostPurchaseOffer({
 
   return (
     <>
-      <div
-        className={cn(
-          "mx-auto space-y-5 pb-36 md:pb-32",
-          previewProduct ? "max-w-content w-full" : "max-w-xl",
-        )}
-      >
+      <div className="mx-auto max-w-xl space-y-5 pb-36 md:pb-32">
         <div className="text-center space-y-2 px-1">
           <div className="inline-flex items-center gap-2 text-brand-trust font-bold text-sm bg-brand-trust/10 px-4 py-2 rounded-pill">
             <PackageCheck className="w-4 h-4" />
@@ -230,32 +200,16 @@ export function PostPurchaseOffer({
             </div>
           </div>
 
-          {previewProduct ? (
-            <UpsellProductPagePreview
-              product={previewProduct}
-              isSelected={selectedSlugs.has(previewProduct.slug)}
-              onClose={() => setPreviewSlug(null)}
-              onAcceptProduct={() => {
-                if (!selectedSlugs.has(previewProduct.slug)) {
-                  toggle(previewProduct.slug);
-                }
-                setPreviewSlug(null);
-              }}
-              onDeclineProduct={() => setPreviewSlug(null)}
-            />
-          ) : (
-            <div className="space-y-4">
-              {products.map((product) => (
-                <UpsellProductRow
-                  key={product.slug}
-                  product={product}
-                  isSelected={selectedSlugs.has(product.slug)}
-                  onToggle={() => toggle(product.slug)}
-                  onOpenPreview={() => setPreviewSlug(product.slug)}
-                />
-              ))}
-            </div>
-          )}
+          <div className="space-y-3">
+            {products.map((product) => (
+              <UpsellProductRow
+                key={product.slug}
+                product={product}
+                isSelected={selectedSlugs.has(product.slug)}
+                onToggle={() => toggle(product.slug)}
+              />
+            ))}
+          </div>
 
           {error ? (
             <p className="text-sm text-red-600 font-medium" role="alert">
@@ -271,12 +225,7 @@ export function PostPurchaseOffer({
       </div>
 
       <div className="fixed bottom-0 inset-x-0 z-40 bg-white/95 border-t border-brand-border shadow-[0_-8px_28px_rgba(0,0,0,0.08)] px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div
-          className={cn(
-            "mx-auto space-y-2.5",
-            previewProduct ? "max-w-content w-full" : "max-w-xl",
-          )}
-        >
+        <div className="mx-auto max-w-xl space-y-2.5">
           <button
             type="button"
             onClick={handleAcceptOffer}
@@ -306,109 +255,79 @@ function UpsellProductRow({
   product,
   isSelected,
   onToggle,
-  onOpenPreview,
 }: {
   product: UpsellProductDetail;
   isSelected: boolean;
   onToggle: () => void;
-  onOpenPreview: () => void;
 }) {
   const productNameAr = getStorefrontProductNameAr(product.slug);
+  const benefitLine = product.benefits.slice(0, 2).join(" · ");
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={isSelected}
+      aria-label={isSelected ? `إلغاء اختيار ${productNameAr}` : `اختيار ${productNameAr}`}
       className={cn(
-        "rounded-[24px] border-2 bg-white p-3.5 md:p-4 shadow-sm transition-all",
+        "w-full rounded-2xl border-2 bg-white p-3 text-start shadow-sm transition-all",
         isSelected
           ? "border-brand-gold bg-brand-gold/5 shadow-md shadow-brand-gold/10"
           : "border-brand-border hover:border-brand-gold/45 hover:shadow-md",
       )}
     >
-      <div className="flex items-start gap-3">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onToggle();
-          }}
-          aria-pressed={isSelected}
-          aria-label={isSelected ? "إلغاء الاختيار" : "اختيار المنتج"}
+      <div className="flex items-center gap-3">
+        <span
+          aria-hidden
           className={cn(
-            "mt-2 w-6 h-6 rounded-lg border-2 flex items-center justify-center flex-shrink-0 transition-colors",
+            "w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-colors",
             isSelected
               ? "bg-brand-gold border-brand-gold"
-              : "border-brand-muted/40 hover:border-brand-bronze",
+              : "border-brand-muted/40",
           )}
         >
-          {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
-        </button>
+          {isSelected ? <Check className="w-3 h-3 text-white" strokeWidth={3} /> : null}
+        </span>
 
-        <button
-          type="button"
-          onClick={onOpenPreview}
-          className="flex flex-1 items-start gap-3 min-w-0 text-start group"
-        >
-          <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
-            <StoreImage
-              src={product.image}
-              alt={productNameAr}
-              width={112}
-              height={112}
-              sizes={STORE_IMAGE_SIZES.thumbnail}
-              className="w-full h-full object-contain p-1.5"
-            />
-            {product.isBestseller ? (
-              <span className="absolute top-1.5 start-1.5 text-[9px] font-bold bg-brand-gold text-white px-1.5 py-0.5 rounded-full shadow-sm">
-                الأكثر مبيعاً
-              </span>
-            ) : null}
-          </div>
-
-          <div className="flex-1 min-w-0 space-y-1.5">
-            <p className="font-extrabold text-sm md:text-base text-brand-espresso group-hover:text-brand-gold transition-colors leading-snug">
-              {productNameAr}
-            </p>
-            <p className="text-xs text-brand-muted line-clamp-2 leading-relaxed">
-              {product.hook_ar}
-            </p>
-            <div className="flex items-center gap-0.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-3 h-3 text-amber-400 fill-amber-400"
-                />
-              ))}
-            </div>
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-brand-forest bg-brand-forest/5 border border-brand-forest/15 rounded-full px-2 py-0.5">
-              <Truck className="w-3 h-3" />
-              لنفس الشحنة بسعر خاص
+        <div className="relative w-[4.5rem] h-[4.5rem] rounded-xl overflow-hidden bg-brand-surface flex-shrink-0 border border-brand-gold/15">
+          <StoreImage
+            src={product.image}
+            alt={productNameAr}
+            width={72}
+            height={72}
+            sizes={STORE_IMAGE_SIZES.thumbnail}
+            className="w-full h-full object-contain p-1"
+          />
+          {product.isBestseller ? (
+            <span className="absolute top-1 start-1 text-[8px] font-bold bg-brand-gold text-white px-1 py-px rounded-full">
+              الأكثر مبيعاً
             </span>
-            <div className="flex flex-wrap items-center gap-2 pt-0.5">
-              <span className="font-black text-lg text-brand-espresso">
-                {formatSARCompact(product.upsell_price_sar)}
-              </span>
-              <span className="text-sm text-red-500 line-through">
-                {product.original_price_sar} ر.س
-              </span>
-              <span className="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded">
-                وفّر {product.savings_percent}%
-              </span>
-            </div>
-            {product.benefits.length > 0 ? (
-              <ul className="space-y-1 pt-1">
-                {product.benefits.slice(0, 2).map((benefit) => (
-                  <li key={benefit} className="text-[10px] text-brand-muted leading-relaxed flex gap-1.5">
-                    <Check className="w-3 h-3 text-brand-forest shrink-0 mt-0.5" strokeWidth={3} />
-                    <span>{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+          ) : null}
+        </div>
 
-          <ChevronRight className="w-5 h-5 text-brand-muted flex-shrink-0 mt-3 rotate-180 opacity-60 group-hover:opacity-100" />
-        </button>
+        <div className="flex-1 min-w-0">
+          <p className="font-extrabold text-[13px] md:text-sm text-brand-espresso leading-snug line-clamp-2">
+            {productNameAr}
+          </p>
+          <p className="text-[11px] text-brand-muted leading-snug line-clamp-1 mt-0.5">
+            {product.short_description_ar}
+          </p>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1.5">
+            <span className="font-black text-base text-brand-espresso tabular-nums">
+              {formatSARCompact(product.upsell_price_sar)}
+            </span>
+            <span className="text-[11px] text-red-500 line-through tabular-nums">
+              {product.original_price_sar} ر.س
+            </span>
+            <span className="text-[10px] font-bold text-white bg-red-500 px-1.5 py-0.5 rounded">
+              وفّر {product.savings_percent}%
+            </span>
+          </div>
+          {benefitLine ? (
+            <p className="text-[10px] text-brand-forest/80 mt-1 line-clamp-1">{benefitLine}</p>
+          ) : null}
+        </div>
       </div>
-    </div>
+    </button>
   );
 }
