@@ -1108,10 +1108,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     heroAngle: "راحة البشرة تبدأ من إصلاح الحاجز",
     problemStatement: "حبوب وجلد دجاجة رغم المرطب؟ بشرتك تحتاج بوستر تهدئة وإصلاحاً مركّزاً.",
     heroSectionImage: withImageVersion(
-      "/images/products/ceramide-booster.png",
-      SKINCARE_PRODUCT_IMAGE_VERSION,
+      "/images/products/ceramide-booster-before-after.png",
+      1,
     ),
-    heroSectionImageAlt: "بوستر السنتيلا والسيراميد ضد الحبوب — متقن",
+    heroSectionImageAlt: "قبل وبعد — بوستر السنتيلا والسيراميد ضد الحبوب",
     benefits: ["حاجز أقوى", "ترطيب يدوم", "بشرة هادئة", "ملمس ناعم"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
