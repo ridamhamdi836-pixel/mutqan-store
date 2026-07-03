@@ -32,8 +32,6 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/hero/beauty-lifestyle.png": { width: 1024, height: 682 },
   "/images/hero/skincare-hero.png": { width: 1024, height: 483 },
   "/images/products/vitamin-c-booster.png": { width: 1024, height: 996 },
-  "/images/products/ceramide-booster-before-after.png": { width: 1024, height: 1024 },
-  "/images/products/ceramide-booster-model.png": { width: 768, height: 1024 },
   "/images/products/ceramide-booster.png": { width: 1024, height: 1024 },
   "/images/products/pdrn-booster.png": { width: 1024, height: 1024 },
   "/images/products/beauty-vanity-cabinet.png": { width: 1024, height: 1024 },
@@ -184,7 +182,7 @@ export function withImageVersion(src: string, version: number): string {
 }
 
 /** Bump when replacing skincare product PNGs in public/images/products */
-export const SKINCARE_PRODUCT_IMAGE_VERSION = 5;
+export const SKINCARE_PRODUCT_IMAGE_VERSION = 4;
 
 export function getImageIntrinsic(
   src: string,
