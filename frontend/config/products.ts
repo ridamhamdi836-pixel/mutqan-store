@@ -1147,10 +1147,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     heroAngle: "شباب البشرة يبدأ من عناية مركّزة",
     problemStatement: "تجاعيد وخطوط دقيقة؟ بشرتك تحتاج بوستر يعيد المرونة والشد.",
     heroSectionImage: withImageVersion(
-      "/images/products/pdrn-booster.png",
-      SKINCARE_PRODUCT_IMAGE_VERSION,
+      "/images/products/pdrn-booster-before-after.png",
+      1,
     ),
-    heroSectionImageAlt: "بوستر PDRN والببتيدات ضد التجاعيد — متقن",
+    heroSectionImageAlt: "قبل وبعد — بوستر PDRN والببتيدات ضد التجاعيد",
     benefits: ["مرونة أعلى", "خطوط أقل وضوحاً", "حيوية تعود", "ثقة في كل عمر"],
     beforeLabel: "قبل",
     afterLabel: "بعد",

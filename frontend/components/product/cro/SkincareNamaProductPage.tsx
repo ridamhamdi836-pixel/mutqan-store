@@ -200,11 +200,15 @@ export function SkincareNamaProductPage({
   const minPrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
   const heroImageSrc =
-    product.slug === "vitamin-c-booster" || product.slug === "ceramide-booster"
+    product.slug === "vitamin-c-booster" ||
+    product.slug === "ceramide-booster" ||
+    product.slug === "pdrn-booster"
       ? (productConfig.heroSectionImage ?? cardImageSrc)
       : cardImageSrc;
   const heroImageAlt =
-    product.slug === "vitamin-c-booster" || product.slug === "ceramide-booster"
+    product.slug === "vitamin-c-booster" ||
+    product.slug === "ceramide-booster" ||
+    product.slug === "pdrn-booster"
       ? (productConfig.heroSectionImageAlt ??
           getHomepageProductImageAlt(product.slug) ??
           product.name_ar)
