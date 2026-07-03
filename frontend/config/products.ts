@@ -1156,6 +1156,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     painSectionImageAlt: "امرأة تظهر علامات التجاعيد — قبل استخدام البوستر",
+    solutionSectionImage: withImageVersion(
+      "/images/products/pdrn-booster-studio.png",
+      1,
+    ),
+    solutionSectionImageAlt: "بوستر PDRN Arencia — تركيبة معزّزة على رخام",
     benefits: ["مرونة أعلى", "خطوط أقل وضوحاً", "حيوية تعود", "ثقة في كل عمر"],
     beforeLabel: "قبل",
     afterLabel: "بعد",

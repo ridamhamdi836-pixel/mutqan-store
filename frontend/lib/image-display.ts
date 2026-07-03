@@ -41,6 +41,7 @@ export const STORE_IMAGE_INTRINSIC: Record<
   "/images/products/ceramide-booster.png": { width: 1024, height: 1024 },
   "/images/products/pdrn-booster-before-after.png": { width: 1024, height: 1024 },
   "/images/products/pdrn-booster-model.png": { width: 768, height: 1024 },
+  "/images/products/pdrn-booster-studio.png": { width: 1024, height: 1024 },
   "/images/products/pdrn-booster.png": { width: 1024, height: 1024 },
   "/images/products/beauty-vanity-cabinet.png": { width: 1024, height: 1024 },
   "/images/products/beauty-vanity-cabinet-before.png": {
