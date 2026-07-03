@@ -199,6 +199,19 @@ export function SkincareNamaProductPage({
   const cardImageSrc = getProductMainImageSrc(product.slug);
   const minPrice = Math.min(...product.bundles.map((b) => b.price_sar));
 
+  const heroImageSrc =
+    product.slug === "vitamin-c-booster"
+      ? (productConfig.heroSectionImage ?? cardImageSrc)
+      : cardImageSrc;
+  const heroImageAlt =
+    product.slug === "vitamin-c-booster"
+      ? (productConfig.heroSectionImageAlt ??
+          getHomepageProductImageAlt(product.slug) ??
+          product.name_ar)
+      : (getHomepageProductImageAlt(product.slug) ??
+          productConfig.heroSectionImageAlt ??
+          product.name_ar);
+
   const reviewStats = useMemo(() => {
     const n = productConfig.reviews.length;
     const avg =
@@ -350,9 +363,8 @@ export function SkincareNamaProductPage({
             {/* Image first on mobile */}
             <div className="order-1 md:order-2">
               <CroProductMedia
-                src={cardImageSrc}
-                alt={getHomepageProductImageAlt(product.slug) ?? productConfig.heroSectionImageAlt ?? product.name_ar}
-                aspect="1/1"
+                src={heroImageSrc}
+                alt={heroImageAlt}
                 placeholder={product.name_ar}
                 priority
                 className="rounded-2xl border border-white/80 shadow-[0_8px_32px_rgba(26,71,49,0.08)] bg-white"

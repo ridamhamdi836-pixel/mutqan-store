@@ -1069,10 +1069,10 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
     heroAngle: "إشراقة تبدأ من خطوة واحدة واضحة",
     problemStatement: "بقع داكنة وبهتان رغم الروتين؟ بشرتك تحتاج بوستر فيتامين C مركّزاً.",
     heroSectionImage: withImageVersion(
-      "/images/products/vitamin-c-booster.png",
-      SKINCARE_PRODUCT_IMAGE_VERSION,
+      "/images/products/vitamin-c-booster-before-after.png",
+      1,
     ),
-    heroSectionImageAlt: "بوستر فيتامين سي ونياسيناميد ضد البقع والبهتان — متقن",
+    heroSectionImageAlt: "قبل وبعد — بوستر فيتامين سي ضد البقع والبهتان",
     benefits: ["إشراقة طبيعية", "مظهر موحّد", "ملمس خفيف", "روتين بسيط"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
