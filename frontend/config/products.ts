@@ -1112,6 +1112,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     heroSectionImageAlt: "قبل وبعد — بوستر السنتيلا والسيراميد ضد الحبوب",
+    painSectionImage: withImageVersion(
+      "/images/products/ceramide-booster-model.png",
+      1,
+    ),
+    painSectionImageAlt: "امرأة تعاني من حبوب وحمرار — قبل استخدام البوستر",
     benefits: ["حاجز أقوى", "ترطيب يدوم", "بشرة هادئة", "ملمس ناعم"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
