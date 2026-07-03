@@ -517,9 +517,9 @@ export function SkincareNamaProductPage({
           <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-start">
             <div className="order-1 md:order-2">
               <CroProductMedia
-                src={cardImageSrc}
-                alt={product.name_ar}
-                aspect="1/1"
+                src={productConfig.solutionSectionImage ?? cardImageSrc}
+                alt={productConfig.solutionSectionImageAlt ?? product.name_ar}
+                aspect={productConfig.solutionSectionImage ? undefined : "1/1"}
                 placeholder={product.name_ar}
                 className="rounded-2xl border-[2mm] border-white shadow-lg"
               />

@@ -1078,6 +1078,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     painSectionImageAlt: "امرأة تلمس وجهها — بقع وبهتان قبل العلاج",
+    solutionSectionImage: withImageVersion(
+      "/images/products/vitamin-c-booster-studio.png",
+      1,
+    ),
+    solutionSectionImageAlt: "بوستر فيتامين سي Arencia — تركيبة معزّزة على رخام",
     benefits: ["إشراقة طبيعية", "مظهر موحّد", "ملمس خفيف", "روتين بسيط"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
