@@ -1151,6 +1151,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     heroSectionImageAlt: "قبل وبعد — بوستر PDRN والببتيدات ضد التجاعيد",
+    painSectionImage: withImageVersion(
+      "/images/products/pdrn-booster-model.png",
+      1,
+    ),
+    painSectionImageAlt: "امرأة تظهر علامات التجاعيد — قبل استخدام البوستر",
     benefits: ["مرونة أعلى", "خطوط أقل وضوحاً", "حيوية تعود", "ثقة في كل عمر"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
