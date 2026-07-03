@@ -22,7 +22,7 @@ export type HomepageBeautyProduct = {
   ingredients: readonly string[];
 };
 
-export const HOMEPAGE_HERO_IMAGE = withImageVersion("/images/hero/skincare-hero.png", 4);
+export const HOMEPAGE_HERO_IMAGE = withImageVersion("/images/hero/skincare-hero.png", 5);
 
 export const HOMEPAGE_BEAUTY = {
   tagline: "عناية كورية فاخرة… لبشرة تثقين بها",
