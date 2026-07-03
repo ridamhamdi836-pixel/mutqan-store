@@ -1117,6 +1117,11 @@ export const PRODUCTS_CONFIG: Record<string, ProductPageConfig> = {
       1,
     ),
     painSectionImageAlt: "امرأة تعاني من حبوب وحمرار — قبل استخدام البوستر",
+    solutionSectionImage: withImageVersion(
+      "/images/products/ceramide-booster-studio.png",
+      1,
+    ),
+    solutionSectionImageAlt: "بوستر السنتيلا والسيراميد Arencia — تركيبة معزّزة على رخام",
     benefits: ["حاجز أقوى", "ترطيب يدوم", "بشرة هادئة", "ملمس ناعم"],
     beforeLabel: "قبل",
     afterLabel: "بعد",
