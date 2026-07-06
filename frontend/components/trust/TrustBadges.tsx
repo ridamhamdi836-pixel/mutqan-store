@@ -1,12 +1,8 @@
-import { Truck, CreditCard, CheckCircle, MessageCircle, Shield } from "lucide-react";
-import { cn } from "@/lib/utils";
+"use client";
 
-const BADGES = [
-  { icon: CreditCard, label: "الدفع عند الاستلام", sub: "بدون دفع إلكتروني الآن" },
-  { icon: CheckCircle, label: "تأكيد قبل الشحن", sub: "نتواصل معك قبل التجهيز" },
-  { icon: Truck, label: "توصيل داخل السعودية", sub: "2-5 أيام عمل" },
-  { icon: MessageCircle, label: "دعم عبر واتساب", sub: "فريق متقن في خدمتك" },
-];
+import { Truck, CreditCard, CheckCircle, MessageCircle } from "lucide-react";
+import { useStorefront } from "@/providers/storefront-provider";
+import { cn } from "@/lib/utils";
 
 interface TrustBadgesProps {
   compact?: boolean;
@@ -14,6 +10,32 @@ interface TrustBadgesProps {
 }
 
 export function TrustBadges({ compact = false, className }: TrustBadgesProps) {
+  const { t, locale } = useStorefront();
+  const en = locale === "en";
+
+  const BADGES = [
+    {
+      icon: CreditCard,
+      label: t("footerCod"),
+      sub: en ? "No online payment now" : "بدون دفع إلكتروني الآن",
+    },
+    {
+      icon: CheckCircle,
+      label: en ? "Confirm before shipping" : "تأكيد قبل الشحن",
+      sub: en ? "We contact you before dispatch" : "نتواصل معك قبل التجهيز",
+    },
+    {
+      icon: Truck,
+      label: t("deliveryBadge"),
+      sub: en ? "2–5 business days" : "2-5 أيام عمل",
+    },
+    {
+      icon: MessageCircle,
+      label: t("footerWhatsapp"),
+      sub: en ? "Mutqan team at your service" : "فريق متقن في خدمتك",
+    },
+  ];
+
   if (compact) {
     return (
       <div className={cn("flex flex-wrap gap-3", className)}>

@@ -10,6 +10,8 @@ import { getProduct, getProductPath } from "@/config/catalog";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
+import { formatSavings } from "@/lib/storefront-i18n";
 
 type SkincareProductSlug =
   | "vitamin-c-booster"
@@ -156,6 +158,7 @@ export default function CollectionPage({
 }
 
 function SkincareProductCard({ slug }: { slug: SkincareProductSlug }) {
+  const { formatMoney } = useStorefront();
   const product = PRODUCT_PRESENTATION[slug];
   const catalogProduct = getProduct(slug);
   const minPrice = catalogProduct
@@ -205,8 +208,7 @@ function SkincareProductCard({ slug }: { slug: SkincareProductSlug }) {
             </p>
             {minPrice != null ? (
               <p className="font-extrabold text-brand-espresso text-2xl tracking-tight">
-                {minPrice}{" "}
-                <span className="text-sm font-bold text-brand-muted">ر.س</span>
+                {formatMoney(minPrice)}
               </p>
             ) : null}
           </div>
@@ -221,6 +223,7 @@ function SkincareProductCard({ slug }: { slug: SkincareProductSlug }) {
 }
 
 function CompleteBundleCard() {
+  const { formatMoney, locale, market } = useStorefront();
   const reviewCount = getProductReviewDisplayCount("vitamin-c-booster");
   const { clearCart, addItem, openCheckout } = useCart();
 
@@ -286,16 +289,16 @@ function CompleteBundleCard() {
         </p>
 
         <div className="mb-5 inline-flex rounded-full bg-brand-gold/10 px-3.5 py-1.5 text-xs font-extrabold text-brand-gold">
-          وفر 118 ريال
+          {formatSavings(118, locale, market)}
         </div>
 
         <div className="flex items-end justify-between gap-4 pt-4 border-t border-brand-border/50">
           <div>
             <p className="text-sm text-brand-muted line-through tabular-nums">
-              617 ر.س
+              {formatMoney(617)}
             </p>
             <p className="font-extrabold text-brand-espresso text-2xl tracking-tight tabular-nums">
-              499 <span className="text-sm font-bold text-brand-muted">ر.س</span>
+              {formatMoney(499)}
             </p>
           </div>
           <button

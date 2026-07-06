@@ -5,8 +5,9 @@ import { X, ShoppingBag, Trash2, CreditCard } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
+import { marketCurrency } from "@/lib/currency";
 import { PRODUCTS_CONFIG } from "@/config/products";
-import { formatSARCompact } from "@/lib/currency";
 import { CrossSellCard } from "./CrossSellCard";
 import { cn } from "@/lib/utils";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
@@ -40,6 +41,7 @@ function CartItemImage({ slug, name }: { slug: string; name: string }) {
 
 export function CartDrawer() {
   const { isOpen, closeCart, items, removeItem, totalSar, itemCount, openCheckout } = useCart();
+  const { t, formatMoney, market } = useStorefront();
   const drawerRef = useRef<HTMLDivElement>(null);
   const cartDisplayLines = buildCartDisplayLines(items);
 
@@ -77,7 +79,7 @@ export function CartDrawer() {
       eventId: generateEventId("initiate_checkout"),
       eventName: "InitiateCheckout",
       value: totalSar,
-      currency: "SAR",
+      currency: marketCurrency(market),
     });
     closeCart();
     setTimeout(() => openCheckout(), 150);
@@ -102,7 +104,7 @@ export function CartDrawer() {
             tabIndex={-1}
             role="dialog"
             aria-modal="true"
-            aria-label="سلة المشتريات"
+            aria-label={t("cartTitle")}
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -116,7 +118,7 @@ export function CartDrawer() {
                   <ShoppingBag className="w-5 h-5 text-brand-gold" />
                 </div>
                 <div>
-                  <h2 className="font-extrabold text-lg text-brand-espresso">سلة المشتريات</h2>
+                  <h2 className="font-extrabold text-lg text-brand-espresso">{t("cartTitle")}</h2>
                   {itemCount > 0 && (
                     <p className="text-xs font-medium text-brand-muted">{itemCount} منتج</p>
                   )}
@@ -124,7 +126,7 @@ export function CartDrawer() {
               </div>
               <button
                 onClick={closeCart}
-                aria-label="إغلاق السلة"
+                aria-label={t("checkoutClose")}
                 className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-brand-surface transition-colors"
               >
                 <X className="w-5 h-5 text-brand-muted" />
@@ -147,14 +149,14 @@ export function CartDrawer() {
                     <ShoppingBag className="w-10 h-10 text-brand-gold" />
                   </div>
                   <div>
-                    <p className="text-lg font-extrabold text-brand-espresso mb-1">سلتك فارغة</p>
+                    <p className="text-lg font-extrabold text-brand-espresso mb-1">{t("cartEmpty")}</p>
                     <p className="text-sm text-brand-muted">تصفح منتجات متقن وأضف ما يناسبك</p>
                   </div>
                   <button
                     onClick={closeCart}
                     className="px-6 py-3 rounded-2xl bg-brand-espresso text-white font-bold text-sm hover:bg-brand-espresso/90 transition-colors shadow-md shadow-brand-espresso/15"
                   >
-                    تصفح المنتجات
+                    {t("cartEmptyCta")}
                   </button>
                 </div>
               ) : (
@@ -188,7 +190,7 @@ export function CartDrawer() {
                               ))}
                             </ul>
                             <p className="font-black text-brand-gold text-base mt-2">
-                              {formatSARCompact(line.totalSar)}
+                              {formatMoney(line.totalSar)}
                             </p>
                           </div>
                           <button
@@ -213,7 +215,7 @@ export function CartDrawer() {
                           <p className="text-xs text-brand-muted mt-0.5">{line.item.bundleLabelAr}</p>
                           <div className="flex items-center gap-2 mt-1.5">
                             <span className="font-black text-brand-gold text-base">
-                              {formatSARCompact(line.totalSar)}
+                              {formatMoney(line.totalSar)}
                             </span>
                             {line.item.quantity > 1 && (
                               <span className="text-xs text-brand-muted">× {line.item.quantity}</span>
@@ -249,9 +251,9 @@ export function CartDrawer() {
             {items.length > 0 && (
               <div className="border-t border-brand-gold/15 px-4 py-3.5 space-y-2 bg-white shrink-0 shadow-[0_-10px_30px_rgba(15,23,42,0.06)]">
                 <div className="flex items-center justify-between">
-                  <span className="text-brand-muted font-bold text-sm">الإجمالي</span>
+                  <span className="text-brand-muted font-bold text-sm">{t("cartSubtotal")}</span>
                   <span className="font-black text-2xl text-brand-espresso">
-                    {formatSARCompact(totalSar)}
+                    {formatMoney(totalSar)}
                   </span>
                 </div>
 
@@ -267,7 +269,7 @@ export function CartDrawer() {
                     "transition-all duration-150 shadow-md shadow-brand-espresso/20",
                   )}
                 >
-                  أكمل الطلب · الدفع عند الاستلام
+                  {t("cartCheckout")}
                 </button>
 
                 <p className="text-[10px] text-center text-brand-muted leading-snug">

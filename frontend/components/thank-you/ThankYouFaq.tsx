@@ -5,9 +5,18 @@ import {
   THANK_YOU_FAQ_MORE,
   THANK_YOU_FAQ_PRIORITY,
 } from "@/config/thank-you";
+import { useStorefront } from "@/providers/storefront-provider";
 import { HelpCircle } from "lucide-react";
 
 export function ThankYouFaq() {
+  const { t } = useStorefront();
+
+  const moreItems = THANK_YOU_FAQ_MORE.map((item) =>
+    item.question === "كم مدة التوصيل؟"
+      ? { ...item, answer: t("thankYouDeliveryFaqAnswer") }
+      : item,
+  );
+
   return (
     <section className="space-y-4">
       <div className="flex items-center gap-2">
@@ -33,7 +42,7 @@ export function ThankYouFaq() {
         ))}
       </div>
 
-      <FAQAccordion items={[...THANK_YOU_FAQ_MORE]} />
+      <FAQAccordion items={moreItems} />
     </section>
   );
 }

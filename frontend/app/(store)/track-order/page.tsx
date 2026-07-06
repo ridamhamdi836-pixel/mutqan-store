@@ -5,6 +5,7 @@ import { Loader2, Package, CheckCircle2, Truck, MapPin } from "lucide-react";
 import { apiClient } from "@/lib/api-client";
 import { validatePhone } from "@/lib/phone";
 import { WhatsAppButton } from "@/components/trust/WhatsAppButton";
+import { useStorefront } from "@/providers/storefront-provider";
 import { cn } from "@/lib/utils";
 
 interface TrackResult {
@@ -17,6 +18,7 @@ interface TrackResult {
 }
 
 export default function TrackOrderPage() {
+  const { formatMoney } = useStorefront();
   const [orderNumber, setOrderNumber] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -114,7 +116,7 @@ export default function TrackOrderPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-brand-muted">الإجمالي</span>
-                <span className="font-bold">{result.total_sar} ر.س</span>
+                <span className="font-bold">{formatMoney(result.total_sar)}</span>
               </div>
             </div>
 

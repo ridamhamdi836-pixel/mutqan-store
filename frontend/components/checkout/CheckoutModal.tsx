@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { apiClient } from "@/lib/api-client";
 import { getSessionTracking, generateEventId } from "@/lib/analytics";
@@ -39,6 +40,7 @@ function ItemImage({ slug, name }: { slug: string; name: string }) {
 
 export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
   const { isCheckoutOpen, closeCheckout, items, totalSar, clearCart } = useCart();
+  const { t, formatMoney, market, phonePlaceholder } = useStorefront();
   const cartDisplayLines = buildCartDisplayLines(items);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -79,11 +81,11 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
     setApiError("");
 
     if (!name.trim() || name.trim().length < 2) {
-      setNameError("فضلاً أدخل الاسم الكامل.");
+      setNameError(t("checkoutNameError"));
       valid = false;
     }
     if (!validatePhone(phone)) {
-      setPhoneError("فضلاً أدخل رقم جوال صحيح.");
+      setPhoneError(t("checkoutPhoneError"));
       valid = false;
     }
     return valid;
@@ -106,18 +108,18 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
         const ipResult = await ipCheck.json();
 
         if (!ipResult.allowed) {
-          if (ipResult.reason === "not_ksa") {
-            setApiError("عذراً، هذه الخدمة متاحة فقط داخل المملكة العربية السعودية.");
+          if (ipResult.reason === "not_supported_country" || ipResult.reason === "not_ksa") {
+            setApiError(t("checkoutGeoError"));
           } else if (["vpn_detected", "proxy_detected", "tor_detected", "residential_proxy", "anonymous_ip", "hosting_provider"].includes(ipResult.reason)) {
-            setApiError("يرجى إيقاف الـ VPN أو البروكسي للمتابعة. نقبل الطلبات فقط من داخل السعودية.");
+            setApiError(t("checkoutVpnError"));
           } else {
-            setApiError("تعذر التحقق من موقعك حالياً. فضلاً حاول مرة أخرى بعد قليل.");
+            setApiError(t("checkoutVerifyError"));
           }
           setSubmitting(false);
           return;
         }
       } catch {
-        setApiError("تعذر التحقق من موقعك حالياً. فضلاً حاول مرة أخرى بعد قليل.");
+        setApiError(t("checkoutVerifyError"));
         setSubmitting(false);
         return;
       }
@@ -125,6 +127,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
       const tracking = getSessionTracking();
       const orderPayload = {
         customer: { full_name: name.trim(), phone: phone.trim() },
+        market,
         items: items.map((item) => ({
           product_slug: item.productSlug,
           bundle_id: item.bundleId,
@@ -138,7 +141,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
       const response = await apiClient.createOrder(orderPayload);
 
-      const { e164: phoneE164 } = normalizePhone(phone);
+      const { e164: phoneE164 } = normalizePhone(phone, market);
 
       saveLastOrderSession({
         purchaseEventId: eventId,
@@ -165,9 +168,9 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
       if (error.code === "INVALID_PHONE" || error.code === "INVALID_SAUDI_PHONE" || error.field === "phone") {
         setPhoneError(error.message || "رقم الجوال غير صحيح.");
       } else if (error.message === "Failed to fetch" || error.message?.includes("fetch")) {
-        setApiError("تعذر الاتصال بالخادم. فضلاً تحقق من اتصالك بالإنترنت وحاول مرة أخرى.");
+        setApiError(t("checkoutNetworkError"));
       } else {
-        setApiError(error.message || "تعذر تأكيد الطلب الآن. فضلاً حاول مرة أخرى أو تواصل معنا عبر واتساب.");
+        setApiError(error.message || t("checkoutGenericError"));
       }
       setSubmitting(false);
     }
@@ -189,7 +192,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
             <motion.div
               role="dialog"
               aria-modal="true"
-              aria-label="إتمام الطلب"
+              aria-label={t("checkoutTitle")}
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -198,8 +201,8 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
             >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 sm:px-5 sm:py-4 border-b border-gray-100 shrink-0">
-                <h2 className="font-bold text-base sm:text-lg text-gray-900">إتمام الطلب</h2>
-                <button onClick={closeCheckout} aria-label="إغلاق" className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+                <h2 className="font-bold text-base sm:text-lg text-gray-900">{t("checkoutTitle")}</h2>
+                <button onClick={closeCheckout} aria-label={t("checkoutClose")} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
                   <X className="w-5 h-5 text-gray-400" />
                 </button>
               </div>
@@ -208,13 +211,13 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
               <div className="px-4 py-2 sm:px-5 sm:py-2.5 bg-amber-50 border-b border-amber-100 shrink-0">
                 <div className="flex items-center gap-2 text-[11px] sm:text-xs font-semibold text-amber-700">
                   <Clock className="w-3.5 h-3.5 flex-shrink-0" />
-                  <span>آخر 48 ساعة على عرض الشحن المجاني</span>
+                  <span>{t("checkoutUrgency")}</span>
                 </div>
               </div>
 
               {/* Social proof */}
               <div className="px-4 py-1.5 sm:px-5 sm:py-2 border-b border-gray-100 flex items-center justify-between shrink-0">
-                <span className="text-xs text-gray-500">+1,200 عميل طلبوا هذا الأسبوع</span>
+                <span className="text-xs text-gray-500">{t("checkoutSocialProof")}</span>
                 <div className="flex items-center gap-1">
                   <span className="text-xs font-bold text-gray-700">4.9</span>
                   <div className="flex">
@@ -232,12 +235,12 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border-2 border-dashed border-gray-200 text-xs sm:text-sm font-bold text-gray-700 hover:border-[#1B4DDB]/40 hover:text-[#1B4DDB] hover:bg-[#1B4DDB]/5 transition-colors"
                   >
                     <Store className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                    الاستمرار في التسوق — اختر منتجات أخرى
+                    {t("checkoutContinueShopping")}
                   </Link>
 
                   {/* Order items */}
                   <div>
-                    <p className="text-sm font-bold text-gray-900 mb-3">طلبك</p>
+                    <p className="text-sm font-bold text-gray-900 mb-3">{t("checkoutYourOrder")}</p>
                     <div className="space-y-3">
                       {cartDisplayLines.map((line) =>
                         line.kind === "bundle" ? (
@@ -266,7 +269,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                                 </ul>
                               </div>
                               <span className="text-sm font-black text-gray-900 shrink-0">
-                                {line.totalSar} ر.س
+                                {formatMoney(line.totalSar)}
                               </span>
                             </div>
                           </div>
@@ -277,7 +280,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                               <p className="text-sm font-bold text-gray-900 leading-snug truncate">{line.item.productNameAr}</p>
                               <p className="text-xs text-gray-500 mt-0.5">{line.item.bundleLabelAr}</p>
                             </div>
-                            <span className="text-sm font-bold text-gray-900 flex-shrink-0">{line.totalSar} ر.س</span>
+                            <span className="text-sm font-bold text-gray-900 flex-shrink-0">{formatMoney(line.totalSar)}</span>
                           </div>
                         ),
                       )}
@@ -286,20 +289,20 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
 
                   {/* Total */}
                   <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <span className="font-medium text-sm text-gray-600">الإجمالي</span>
-                    <span className="font-black text-xl sm:text-2xl text-gray-900">{totalSar} <span className="text-xs sm:text-sm font-bold">ر.س</span></span>
+                    <span className="font-medium text-sm text-gray-600">{t("checkoutTotal")}</span>
+                    <span className="font-black text-xl sm:text-2xl text-gray-900">{formatMoney(totalSar)}</span>
                   </div>
 
                   {/* Free shipping + COD */}
                   <div className="flex items-center gap-2 text-xs text-[#10B981] font-semibold">
                     <CheckCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                    <span>شحن مجاني · الدفع عند الاستلام فقط</span>
+                    <span>{t("checkoutFreeCod")}</span>
                   </div>
 
                   {/* Name field */}
                   <div>
                     <label htmlFor="checkout-name" className="block text-sm font-bold text-gray-900 mb-1.5">
-                      الاسم الكامل
+                      {t("checkoutFullName")}
                     </label>
                     <input
                       ref={firstFieldRef}
@@ -308,7 +311,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                       autoComplete="name"
                       value={name}
                       onChange={(e) => { setName(e.target.value); setNameError(""); }}
-                      placeholder="مثال: سارة محمد"
+                      placeholder={t("checkoutNamePlaceholder")}
                       aria-invalid={!!nameError}
                       className={cn(
                         "w-full h-11 sm:h-12 rounded-xl border bg-white px-4 text-gray-900 placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
@@ -321,7 +324,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                   {/* Phone field */}
                   <div>
                     <label htmlFor="checkout-phone" className="block text-sm font-bold text-gray-900 mb-1.5">
-                      رقم الجوال
+                      {t("checkoutPhone")}
                     </label>
                     <input
                       id="checkout-phone"
@@ -331,7 +334,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                       dir="ltr"
                       value={phone}
                       onChange={(e) => { setPhone(e.target.value); setPhoneError(""); }}
-                      placeholder="05XXXXXXXX أو 01XXXXXXX"
+                      placeholder={phonePlaceholder}
                       aria-invalid={!!phoneError}
                       className={cn(
                         "w-full h-11 sm:h-12 rounded-xl border bg-white px-4 text-gray-900 text-right placeholder:text-gray-400 focus:border-[#1B4DDB] focus:ring-2 focus:ring-[#1B4DDB]/20 outline-none transition-all",
@@ -341,7 +344,7 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     {phoneError ? (
                       <p role="alert" className="text-xs text-red-500 mt-1.5 font-medium">{phoneError}</p>
                     ) : (
-                      <p className="text-xs text-gray-400 mt-1.5">أدخل رقم جوال أو هاتف صحيح للتواصل وتأكيد الطلب</p>
+                      <p className="text-xs text-gray-400 mt-1.5">{t("checkoutPhoneHint")}</p>
                     )}
                   </div>
 
@@ -364,10 +367,10 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                     {submitting ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>جارٍ تأكيد الطلب...</span>
+                        <span>{t("checkoutSubmitting")}</span>
                       </>
                     ) : (
-                      "تأكيد الطلب بالدفع عند الاستلام"
+                      t("checkoutSubmit")
                     )}
                   </button>
 
@@ -375,20 +378,20 @@ export function CheckoutModal({ onOrderSuccess }: CheckoutModalProps) {
                   <div className="flex items-center justify-center gap-4 text-[10px] text-gray-400 pt-1">
                     <span className="flex items-center gap-1">
                       <CreditCard className="w-3 h-3" />
-                      بدون دفع الآن
+                      {t("checkoutTrustNoPay")}
                     </span>
                     <span className="flex items-center gap-1">
                       <Phone className="w-3 h-3" />
-                      نتصل للتأكيد
+                      {t("checkoutTrustCall")}
                     </span>
                     <span className="flex items-center gap-1">
                       <Truck className="w-3 h-3" />
-                      ارفض بدون تكلفة
+                      {t("checkoutTrustRefuse")}
                     </span>
                   </div>
 
                   <p className="text-[10px] text-center text-gray-300">
-                    بالمتابعة أنت توافق على الشروط والأحكام وسياسة الخصوصية
+                    {t("checkoutTerms")}
                   </p>
                 </form>
               </div>

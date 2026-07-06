@@ -25,7 +25,7 @@ import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { trackStoreEvent } from "@/lib/store-analytics-client";
-import { PRODUCT_COD_FAQS } from "@/lib/product-cod-faqs";
+import { getProductCodFaqs } from "@/lib/product-cod-faqs";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
@@ -35,6 +35,9 @@ import { getProductMainImageSrc } from "@/lib/product-image";
 import { getHomepageProductImageAlt } from "@/lib/storefront-product-image";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
+import { marketCurrency } from "@/lib/currency";
+import { formatSavings } from "@/lib/storefront-i18n";
 import type { ProductBundle } from "@/types";
 import type { ProductPageConfig } from "@/config/products";
 import type { SkincareNamaPageConfig } from "@/types/skincare-nama-page";
@@ -59,10 +62,14 @@ function NamaBundleCards({
   bundles,
   selectedId,
   onSelect,
+  formatMoney,
+  formatSaving,
 }: {
   bundles: ProductBundle[];
   selectedId: string;
   onSelect: (b: ProductBundle) => void;
+  formatMoney: (amount: number) => string;
+  formatSaving: (amount: number) => string;
 }) {
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
   const unitPrice = sorted.find((b) => b.quantity === 1)?.price_sar ?? sorted[0].price_sar;
@@ -106,9 +113,9 @@ function NamaBundleCards({
 
         let savings: string | null = null;
         if (bundle.compare_at_price_sar && bundle.compare_at_price_sar > bundle.price_sar) {
-          savings = `وفّري ${bundle.compare_at_price_sar - bundle.price_sar} ريال`;
+          savings = formatSaving(bundle.compare_at_price_sar - bundle.price_sar);
         } else if (bundle.quantity > 1 && unitPrice * bundle.quantity > bundle.price_sar) {
-          savings = `وفّري ${unitPrice * bundle.quantity - bundle.price_sar} ريال`;
+          savings = formatSaving(unitPrice * bundle.quantity - bundle.price_sar);
         } else if (bundle.savings_label_ar) {
           savings = bundle.savings_label_ar;
         }
@@ -168,7 +175,7 @@ function NamaBundleCards({
 
             <div className="text-start shrink-0 min-w-[72px]">
               <p className="font-black text-xl md:text-[1.35rem] text-brand-forest tabular-nums leading-none">
-                {bundle.price_sar} <span className="text-sm font-bold">ر.س</span>
+                {formatMoney(bundle.price_sar)}
               </p>
               {savings ? (
                 <p className="text-[11px] md:text-xs font-bold text-emerald-700 mt-2 tabular-nums">
@@ -192,6 +199,18 @@ export function SkincareNamaProductPage({
   const isUpsellPreview = embedMode === "upsell-preview";
   const PAGE = namaConfig;
   const { addItem, openCheckout } = useCart();
+  const {
+    formatMoney,
+    locale,
+    market,
+    t,
+    shippingCities: marketCities,
+    shippingTitle,
+    shippingNote: marketShippingNote,
+    shippingAllRegions,
+    deliveryPartners: marketDeliveryPartners,
+  } = useStorefront();
+  const fmtSaving = (amount: number) => formatSavings(amount, locale, market);
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
   const offersRef = useRef<HTMLDivElement>(null);
@@ -229,8 +248,8 @@ export function SkincareNamaProductPage({
   }, [productConfig.reviews, product.slug]);
 
   const allFaqs = useMemo(
-    () => [...PRODUCT_COD_FAQS, ...productConfig.faqs],
-    [productConfig.faqs],
+    () => [...getProductCodFaqs(locale, market), ...productConfig.faqs],
+    [locale, market, productConfig.faqs],
   );
 
   const crossSellProducts = useMemo(() => {
@@ -258,11 +277,11 @@ export function SkincareNamaProductPage({
       eventId: generateEventId("view_content"),
       eventName: "ViewContent",
       value: selectedBundle.price_sar,
-      currency: "SAR",
+      currency: marketCurrency(market),
       productSlug: product.slug,
       productName: stickyProductName,
     });
-  }, [isUpsellPreview, stickyProductName, product.slug, selectedBundle.price_sar]);
+  }, [isUpsellPreview, stickyProductName, product.slug, selectedBundle.price_sar, market]);
 
   const handlePlaceOrder = useCallback(() => {
     if (isUpsellPreview) return;
@@ -280,17 +299,17 @@ export function SkincareNamaProductPage({
       eventId: generateEventId("add_to_cart"),
       eventName: "AddToCart",
       value: selectedBundle.price_sar,
-      currency: "SAR",
+      currency: marketCurrency(market),
       productSlug: product.slug,
       productName: stickyProductName,
       bundleId: selectedBundle.id,
       quantity: selectedBundle.quantity,
     });
     openCheckout();
-  }, [addItem, isUpsellPreview, openCheckout, product.slug, selectedBundle, stickyProductName]);
+  }, [addItem, isUpsellPreview, openCheckout, product.slug, selectedBundle, stickyProductName, market]);
 
   return (
-    <div dir="rtl" lang="ar" className="bg-[#F9F8F3] pb-20 md:pb-32">
+    <div dir={locale === "en" ? "ltr" : "rtl"} lang={locale === "en" ? "en" : "ar"} className="bg-[#F9F8F3] pb-20 md:pb-32">
       {/* Sticky CTA — Nama white bar + green button + image above */}
       {!isUpsellPreview ? (
         <div className="fixed bottom-0 inset-x-0 z-50 isolate bg-white border-t border-brand-border/25 shadow-[0_-6px_28px_rgba(26,71,49,0.1)]">
@@ -302,14 +321,14 @@ export function SkincareNamaProductPage({
               className="w-full flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-sm rounded-full py-3.5 shadow-[0_4px_16px_rgba(26,71,49,0.28)] active:bg-[#143d2a]"
             >
               <span className="truncate">
-                {PAGE.stickyCtaVerb} · {firstOfferBundle.price_sar} ر.س
+                {PAGE.stickyCtaVerb} · {formatMoney(firstOfferBundle.price_sar)}
               </span>
               <ArrowUp className="w-4 h-4 shrink-0" />
             </button>
             <p className="text-center text-[10px] text-brand-muted tabular-nums mt-1.5">
               {firstOfferBundle.compare_at_price_sar
-                ? `بدل ${firstOfferBundle.compare_at_price_sar} ر.س — ${firstOfferBundle.price_sar} ر.س · دفع عند الاستلام`
-                : `من ${firstOfferBundle.price_sar} ر.س · دفع عند الاستلام`}
+                ? `${locale === "en" ? "Was" : "بدل"} ${formatMoney(firstOfferBundle.compare_at_price_sar)} — ${formatMoney(firstOfferBundle.price_sar)} · ${locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}`
+                : `${locale === "en" ? "From" : "من"} ${formatMoney(firstOfferBundle.price_sar)} · ${locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}`}
             </p>
           </div>
 
@@ -337,11 +356,11 @@ export function SkincareNamaProductPage({
                 </p>
                 {firstOfferBundle.compare_at_price_sar ? (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    بدل {firstOfferBundle.compare_at_price_sar} ر.س — {firstOfferBundle.price_sar} ر.س
+                    {locale === "en" ? "Was" : "بدل"} {formatMoney(firstOfferBundle.compare_at_price_sar)} — {formatMoney(firstOfferBundle.price_sar)}
                   </p>
                 ) : (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    من {firstOfferBundle.price_sar} ر.س · دفع عند الاستلام
+                    {locale === "en" ? "From" : "من"} {formatMoney(firstOfferBundle.price_sar)} · {locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}
                   </p>
                 )}
               </div>
@@ -352,7 +371,7 @@ export function SkincareNamaProductPage({
               className="flex items-center justify-center gap-2 bg-brand-forest text-white font-bold text-base rounded-full px-7 py-4 shrink-0 shadow-[0_4px_16px_rgba(26,71,49,0.28)] hover:bg-[#143d2a] transition-colors mb-0.5"
             >
               <span className="whitespace-nowrap">
-                {PAGE.stickyCtaVerb} · {firstOfferBundle.price_sar} ر.س
+                {PAGE.stickyCtaVerb} · {formatMoney(firstOfferBundle.price_sar)}
               </span>
               <ArrowUp className="w-4 h-4 shrink-0" />
             </button>
@@ -422,7 +441,7 @@ export function SkincareNamaProductPage({
                 </span>
                 <span className="text-xs text-brand-muted hidden sm:inline">·</span>
                 <span className="text-xs font-bold text-brand-forest">
-                  من {minPrice} ر.س / عبوة
+                  {locale === "en" ? "From" : "من"} {formatMoney(minPrice)} / {locale === "en" ? "bottle" : "عبوة"}
                 </span>
               </div>
 
@@ -438,6 +457,8 @@ export function SkincareNamaProductPage({
                   bundles={product.bundles}
                   selectedId={selectedBundle.id}
                   onSelect={setSelectedBundle}
+                  formatMoney={formatMoney}
+                  formatSaving={fmtSaving}
                 />
               </div>
 
@@ -448,7 +469,7 @@ export function SkincareNamaProductPage({
                     onClick={handlePlaceOrder}
                     className="w-full bg-brand-forest text-white font-extrabold rounded-2xl py-4 md:py-[1.125rem] text-base md:text-lg shadow-[0_6px_24px_rgba(26,71,49,0.32)] hover:bg-[#143d2a] transition-colors"
                   >
-                    {PAGE.stickyCtaVerb} · {selectedBundle.price_sar} ر.س
+                    {PAGE.stickyCtaVerb} · {formatMoney(selectedBundle.price_sar)}
                   </button>
                   <p className="text-center text-xs text-brand-muted font-semibold">
                     الدفع عند الاستلام — بدون دفع أونلاين
@@ -862,25 +883,25 @@ export function SkincareNamaProductPage({
                 </div>
                 <div>
                   <h3 className="font-extrabold text-white text-xl leading-tight">
-                    {PAGE.shipping.title}
+                    {shippingTitle}
                   </h3>
                   <p className="text-white/75 text-sm mt-1">
-                    توصيل سريع لباب بيتك — بدون دفع مقدّم
+                    {t("pdpShippingSubtitle")}
                   </p>
                 </div>
               </div>
               <div className="inline-flex items-center gap-2 rounded-full bg-brand-gold/20 border border-brand-gold/30 px-4 py-2 shrink-0">
                 <Truck className="w-4 h-4 text-brand-gold shrink-0" />
-                <span className="text-sm font-bold text-white tabular-nums">2–5 أيام عمل</span>
+                <span className="text-sm font-bold text-white tabular-nums">{t("pdpShippingDaysBadge")}</span>
               </div>
             </div>
 
             <div className="p-8 bg-white">
               <p className="text-xs font-bold text-brand-muted uppercase tracking-wide mb-4">
-                مدن نخدمها حالياً
+                {t("pdpShippingCitiesLabel")}
               </p>
               <div className="grid grid-cols-4 gap-2.5">
-                {PAGE.shipping.cities.map((city) => (
+                {marketCities.map((city) => (
                   <div
                     key={city}
                     className="flex items-center gap-2 rounded-xl bg-[#F5F0E8] border border-brand-border/20 px-3 py-2.5"
@@ -895,7 +916,7 @@ export function SkincareNamaProductPage({
               <div className="mt-5 flex justify-center">
                 <span className="inline-flex items-center gap-2 rounded-full bg-brand-forest text-white px-5 py-2.5 text-sm font-bold">
                   <MapPin className="w-4 h-4 text-brand-gold" />
-                  + كل المناطق داخل المملكة
+                  {shippingAllRegions}
                 </span>
               </div>
             </div>
@@ -908,9 +929,9 @@ export function SkincareNamaProductPage({
                 </div>
               ) : null}
               <div className="flex items-center justify-between gap-3">
-                <p className="text-sm text-brand-muted leading-relaxed">{PAGE.shipping.note}</p>
+                <p className="text-sm text-brand-muted leading-relaxed">{marketShippingNote}</p>
                 <div className="flex flex-wrap items-center gap-2 shrink-0">
-                  {["أرامكس", "SMSA", "ريدبوكس"].map((partner) => (
+                  {marketDeliveryPartners.map((partner) => (
                     <span
                       key={partner}
                       className="inline-flex items-center rounded-lg bg-white border border-brand-border/30 px-3 py-1.5 text-[11px] font-bold text-brand-forest"
@@ -958,7 +979,7 @@ export function SkincareNamaProductPage({
               onClick={handlePlaceOrder}
               className="inline-flex items-center justify-center gap-2 bg-brand-forest text-white font-bold rounded-xl px-10 py-4 text-base md:text-lg shadow-[0_4px_20px_rgba(26,71,49,0.3)] hover:bg-[#143d2a] transition-colors"
             >
-              {PAGE.stickyCtaVerb} — {selectedBundle.price_sar} ر.س
+              {PAGE.stickyCtaVerb} — {formatMoney(selectedBundle.price_sar)}
               <ChevronLeft className="w-5 h-5" />
             </button>
             <p className="text-xs text-brand-muted mt-3">دفع عند الاستلام · ضمان 30 يوم</p>

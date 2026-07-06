@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, ShoppingBag, Clock, Star, Flame, Truck, ShieldCheck, Gift } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
-import { formatSARCompact } from "@/lib/currency";
+import { useStorefront } from "@/providers/storefront-provider";
+import { formatSavings } from "@/lib/storefront-i18n";
 import { firePixelEvent, generateEventId } from "@/lib/analytics";
 import { FEATURED_SLUGS, getProduct } from "@/config/catalog";
 import {
@@ -51,6 +52,7 @@ const ALL_UPSELL_PRODUCTS: UpsellProduct[] = FEATURED_SLUGS.map((slug) => getPro
 const TIMER_SECONDS = 180;
 
 export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: PostPurchaseUpsellProps) {
+  const { formatMoney, locale, market } = useStorefront();
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS);
   const [selectedSlugs, setSelectedSlugs] = useState<Set<string>>(new Set());
   const [adding, setAdding] = useState(false);
@@ -297,8 +299,8 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
                     </div>
 
                     <div className="flex items-center gap-2 mt-1">
-                      <span className="font-black text-lg text-brand-espresso leading-none">{product.upsell_price_sar} <span className="text-xs font-bold">ر.س</span></span>
-                      <span className="text-xs text-red-400 line-through font-medium">{product.original_price_sar} ر.س</span>
+                      <span className="font-black text-lg text-brand-espresso leading-none">{formatMoney(product.upsell_price_sar)}</span>
+                      <span className="text-xs text-red-400 line-through font-medium">{formatMoney(product.original_price_sar)}</span>
                     </div>
                   </div>
                 </motion.button>
@@ -317,9 +319,9 @@ export function PostPurchaseUpsell({ orderNumber, orderedSlugs, onComplete }: Po
               >
                 <span className="text-xs text-green-700 font-bold flex items-center gap-1">
                   <Gift className="w-3.5 h-3.5" />
-                  وفّرت {totalSavings} ر.س
+                  {formatSavings(totalSavings, locale, market)}
                 </span>
-                <span className="font-black text-green-800 text-lg">{formatSARCompact(totalPrice)}</span>
+                <span className="font-black text-green-800 text-lg">{formatMoney(totalPrice)}</span>
               </motion.div>
             )}
 

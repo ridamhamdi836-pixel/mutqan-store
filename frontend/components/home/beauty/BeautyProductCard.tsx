@@ -7,6 +7,7 @@ import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { getProduct, getProductPath } from "@/config/catalog";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
+import { useStorefront } from "@/providers/storefront-provider";
 import { Star, ArrowLeft, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ const SQUARE_FILL_IMAGE_SLUGS = new Set([
 
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
   const [imgError, setImgError] = useState(false);
+  const { formatMoney } = useStorefront();
   const catalogProduct = getProduct(product.slug);
   const usesSquareFillImage = SQUARE_FILL_IMAGE_SLUGS.has(product.slug);
   const minPrice =
@@ -109,8 +111,7 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             <p className="text-[10px] text-brand-muted font-medium mb-0.5">يبدأ من</p>
             {minPrice != null && (
               <p className="font-extrabold text-brand-forest text-xl tabular-nums">
-                {minPrice}{" "}
-                <span className="text-sm font-bold text-brand-muted">ر.س</span>
+                {formatMoney(minPrice)}
               </p>
             )}
           </div>

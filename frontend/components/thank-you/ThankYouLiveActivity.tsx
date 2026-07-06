@@ -1,15 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Circle } from "lucide-react";
-import { THANK_YOU_LIVE_ORDERS } from "@/config/thank-you";
+import { useStorefront } from "@/providers/storefront-provider";
+
+const MINUTES = [1, 3, 5, 8] as const;
 
 export function ThankYouLiveActivity() {
+  const { shippingCities, locale, t } = useStorefront();
   const [visible, setVisible] = useState(false);
 
+  const orders = useMemo(
+    () =>
+      MINUTES.map((minutesAgo, index) => ({
+        city: shippingCities[index] ?? shippingCities[0],
+        minutesAgo,
+      })),
+    [shippingCities],
+  );
+
   useEffect(() => {
-    const t = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(t);
+    const frame = requestAnimationFrame(() => setVisible(true));
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   return (
@@ -28,17 +40,26 @@ export function ThankYouLiveActivity() {
         </h2>
       </div>
       <ul className="space-y-3">
-        {THANK_YOU_LIVE_ORDERS.map((order) => (
+        {orders.map((order) => (
           <li
-            key={order.city}
+            key={`${order.city}-${order.minutesAgo}`}
             className="flex items-center justify-between gap-3 text-sm py-2 border-b border-brand-border/40 last:border-0"
           >
             <span className="text-brand-espresso font-medium">
-              طلب من {order.city}
+              {t("thankYouLiveOrderFrom")} {order.city}
             </span>
             <span className="text-xs text-brand-muted tabular-nums whitespace-nowrap">
-              قبل {order.minutesAgo}{" "}
-              {order.minutesAgo === 1 ? "دقيقة" : "دقائق"}
+              {locale === "en" ? (
+                <>
+                  {order.minutesAgo}{" "}
+                  {order.minutesAgo === 1 ? t("thankYouMinute") : t("thankYouMinutes")} ago
+                </>
+              ) : (
+                <>
+                  {t("thankYouMinutesAgo")} {order.minutesAgo}{" "}
+                  {order.minutesAgo === 1 ? t("thankYouMinute") : t("thankYouMinutes")}
+                </>
+              )}
             </span>
           </li>
         ))}

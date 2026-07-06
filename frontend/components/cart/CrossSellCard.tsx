@@ -6,6 +6,7 @@ import { STORE_IMAGE_SIZES, STORE_IMAGE_FRAME } from "@/lib/image-display";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
 import { getProduct, getFirstOfferBundle } from "@/config/catalog";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { getProductCardImageSrc } from "@/lib/product-image";
@@ -16,6 +17,7 @@ interface CrossSellCardProps {
 
 export function CrossSellCard({ productSlug }: CrossSellCardProps) {
   const { addItem, items } = useCart();
+  const { formatMoney } = useStorefront();
   const catalog = getProduct(productSlug);
   const [imgError, setImgError] = useState(false);
 
@@ -67,7 +69,7 @@ export function CrossSellCard({ productSlug }: CrossSellCardProps) {
           <p className="text-sm font-extrabold text-brand-espresso leading-snug">{productNameAr}</p>
           <p className="text-xs text-brand-muted mt-0.5">{crossSell.shortDesc}</p>
           <p className="text-sm font-black text-brand-gold mt-1">
-            {displayPriceSar} ر.س
+            {formatMoney(displayPriceSar)}
           </p>
         </div>
 

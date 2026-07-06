@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import type { MarketId } from "@/config/markets";
+import { getMarketConfig } from "@/config/markets";
 import { normalizePhone, validatePhone } from "@/lib/phone";
 import { getPool } from "@/lib/db";
 import { sendOrderToGoogleSheets, type GoogleSheetsOrderInput } from "@/lib/google-sheets";
@@ -38,11 +40,15 @@ function isDuplicateOrder(phoneE164: string, totalSar: number): boolean {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { customer, items, tracking } = body as {
+    const { customer, items, tracking, market: marketInput } = body as {
       customer: { full_name: string; phone: string };
       items: OrderItemInput[];
       tracking?: TrackingInput;
+      market?: MarketId;
     };
+
+    const market: MarketId = marketInput === "AE" ? "AE" : "SA";
+    const marketCfg = getMarketConfig(market);
 
     if (!customer?.full_name?.trim() || customer.full_name.trim().length < 2) {
       return NextResponse.json(
@@ -71,7 +77,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { e164: phoneE164, local: phoneLocal } = normalizePhone(customer.phone);
+    const { e164: phoneE164, local: phoneLocal } = normalizePhone(customer.phone, market);
 
     const totalSar = items.reduce(
       (sum, item) => sum + (item.price_sar || 0) * (item.quantity || 1),
@@ -123,7 +129,7 @@ export async function POST(request: NextRequest) {
               totalSar,
               0,
               totalSar,
-              "SAR",
+              marketCfg.currency,
               tracking?.landing_page || null,
               tracking?.referrer || null,
               tracking?.utm_source || null,
@@ -211,6 +217,7 @@ export async function POST(request: NextRequest) {
       })),
       totalSar,
       address: "",
+      market,
     };
 
     const sheetsResult = await sendOrderToGoogleSheets(sheetsOrder);
@@ -252,7 +259,7 @@ export async function POST(request: NextRequest) {
           discount_sar: 0,
           shipping_sar: 0,
           total_sar: totalSar,
-          currency: "SAR",
+          currency: marketCfg.currency,
         },
         customer: { phone_e164: phoneE164 },
         order_slugs: items.map((i) => i.product_slug),

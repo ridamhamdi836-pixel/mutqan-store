@@ -52,6 +52,13 @@ function getCookie(name: string): string | undefined {
   return match ? match[2] : undefined;
 }
 
+function resolveCurrency(event: MutqanAnalyticsEvent): "SAR" | "AED" {
+  if (event.currency === "AED" || event.currency === "SAR") {
+    return event.currency;
+  }
+  return getCookie("mutqan_market") === "AE" ? "AED" : "SAR";
+}
+
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
@@ -152,7 +159,7 @@ function buildPurchaseEvent(params: {
     eventId: params.eventId,
     eventName: "Purchase",
     value: params.value,
-    currency: "SAR",
+    currency: resolveCurrency({ eventName: "Purchase", eventId: params.eventId, value: params.value }),
     orderNumber: params.orderNumber,
     contents: params.contents,
   };
@@ -160,12 +167,13 @@ function buildPurchaseEvent(params: {
 
 function trackMetaPurchase(event: MutqanAnalyticsEvent): void {
   if (!window.fbq) return;
+  const currency = resolveCurrency(event);
   const { contents, content_ids, num_items } = mapContentsForMeta(event);
   window.fbq(
     "track",
     "Purchase",
     {
-      currency: "SAR",
+      currency,
       value: event.value ?? 0,
       content_type: "product",
       contents,
@@ -198,7 +206,7 @@ function trackTikTokCompletePayment(event: MutqanAnalyticsEvent): void {
       content_type: "product",
       contents,
       value: event.value ?? 0,
-      currency: "SAR",
+      currency: resolveCurrency(event),
       order_id: event.orderNumber,
     },
     { event_id: event.eventId },
@@ -270,7 +278,7 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
       const mappedEvent = pixelEventMap[eventName] || eventName;
       const { contents, content_ids, num_items } = mapContentsForMeta(event);
       const data: Record<string, unknown> = {
-        currency: "SAR",
+        currency: resolveCurrency(event),
         content_type: "product",
         contents,
         content_ids,
@@ -299,7 +307,7 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
           {
             contents: mapContentsForTikTok(event),
             value: event.value,
-            currency: "SAR",
+            currency: resolveCurrency(event),
           },
           { event_id: event.eventId },
         );
@@ -321,7 +329,7 @@ export function firePixelEvent(event: MutqanAnalyticsEvent): void {
         (event.productSlug ? [event.productSlug] : []);
       window.snaptr("track", scEvent, {
         price: event.value,
-        currency: "SAR",
+        currency: resolveCurrency(event),
         transaction_id: event.orderNumber,
         item_ids: itemIds,
         client_dedup_id: event.eventId,

@@ -3,6 +3,8 @@
  * Primary destination for every checkout order (frontend only).
  */
 
+import type { MarketId } from "@/config/markets";
+import { DEFAULT_MARKET, getMarketConfig } from "@/config/markets";
 import { getCatalogNameAr, getCatalogSku, getProductPath } from "@/config/catalog";
 import { getPool } from "@/lib/db";
 
@@ -41,6 +43,7 @@ export interface GoogleSheetsOrderInput {
   }>;
   totalSar: number;
   address?: string;
+  market?: MarketId;
   /** Defaults to create; use merge for post-purchase upsell */
   action?: "create" | "merge";
 }
@@ -58,11 +61,17 @@ function formatDateSaudi(): string {
   return `${dd}/${mm}/${yyyy}`;
 }
 
-function formatSaudiPhone(phoneE164: string): string {
+function formatLocalPhone(phoneE164: string, market: MarketId = DEFAULT_MARKET): string {
   const digits = phoneE164.replace(/\D/g, "");
-  if (digits.startsWith("966")) return digits;
-  if (digits.startsWith("0")) return `966${digits.slice(1)}`;
-  return `966${digits}`;
+  const dial = getMarketConfig(market).phoneDialCode;
+  if (digits.startsWith(dial)) return digits;
+  if (digits.startsWith("0")) return `${dial}${digits.slice(1)}`;
+  return `${dial}${digits}`;
+}
+
+/** @deprecated use formatLocalPhone */
+function formatSaudiPhone(phoneE164: string): string {
+  return formatLocalPhone(phoneE164, "SA");
 }
 
 function productName(slug: string, nameAr?: string): string {
@@ -91,6 +100,8 @@ export function formatOrderItemsSummary(
 }
 
 export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload {
+  const market = order.market ?? DEFAULT_MARKET;
+  const marketCfg = getMarketConfig(market);
   const products: string[] = [];
   const skus: string[] = [];
   const urls: string[] = [];
@@ -108,16 +119,16 @@ export function buildPayload(order: GoogleSheetsOrderInput): GoogleSheetsPayload
     orderid: orderId,
     order_number: orderId,
     action: order.action === "merge" ? "merge" : "create",
-    country: "KSA",
+    country: marketCfg.sheetsCountry,
     name: order.customerName.trim(),
-    phone: formatSaudiPhone(order.phoneE164),
+    phone: formatLocalPhone(order.phoneE164, market),
     address: order.address?.trim() || "",
     url: urls.join("/"),
     sku: skus.join("/"),
     product: products.join("/"),
     quantity: formatOrderItemsSummary(order.items),
     price: order.totalSar,
-    currency: "SAR",
+    currency: marketCfg.currency,
   };
 }
 

@@ -3,7 +3,7 @@
 import { ArrowRight, Check, Package, Star, Truck } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
-import { formatSARCompact } from "@/lib/currency";
+import { useStorefront } from "@/providers/storefront-provider";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import type { UpsellProductDetail } from "@/lib/thank-you-product";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,7 @@ export function UpsellProductPagePreview({
   onAcceptProduct,
   onDeclineProduct,
 }: UpsellProductPagePreviewProps) {
+  const { formatMoney } = useStorefront();
   const productNameAr = getStorefrontProductNameAr(product.slug);
 
   return (
@@ -71,10 +72,10 @@ export function UpsellProductPagePreview({
           <div className="flex flex-wrap items-center gap-2 rounded-xl bg-red-50 border border-red-100 px-3 py-2.5">
             <span className="text-xs font-bold text-red-800">سعر العرض الخاص:</span>
             <span className="font-black text-lg text-brand-espresso tabular-nums">
-              {formatSARCompact(product.upsell_price_sar)}
+              {formatMoney(product.upsell_price_sar)}
             </span>
             <span className="text-sm text-red-500 line-through tabular-nums">
-              {product.original_price_sar} ر.س
+              {formatMoney(product.original_price_sar)}
             </span>
             <span className="text-xs font-bold text-white bg-red-500 px-2 py-0.5 rounded">
               وفّر {product.savings_percent}%

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { marketFromCountry } from "@/config/markets";
 import { getClientIpFromHeaders, lookupIp } from "@/lib/geoip";
 
 const WHITELISTED_PHONES = (process.env.WHITELISTED_PHONES || "0512345678")
@@ -33,6 +34,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       allowed: geo.allowed,
       country: geo.country,
+      market: marketFromCountry(geo.country),
       ip: geo.ip,
       suspicious: geo.isSuspicious,
       reason: geo.blockReason,

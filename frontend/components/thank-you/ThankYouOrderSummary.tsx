@@ -2,7 +2,7 @@
 
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
-import { formatSARCompact } from "@/lib/currency";
+import { useStorefront } from "@/providers/storefront-provider";
 import { getProductCardImageSrc } from "@/lib/product-image";
 import type { LastOrderLineItem } from "@/lib/last-order-session";
 import { CreditCard, Package, User } from "lucide-react";
@@ -22,6 +22,7 @@ export function ThankYouOrderSummary({
   customerName,
   customerPhone,
 }: ThankYouOrderSummaryProps) {
+  const { formatMoney } = useStorefront();
   const showCustomer = customerName?.trim() || customerPhone?.trim();
 
   return (
@@ -89,7 +90,7 @@ export function ThankYouOrderSummary({
                 </p>
               </div>
               <p className="text-sm font-black text-brand-espresso tabular-nums flex-shrink-0 pt-0.5">
-                {formatSARCompact(item.priceSar)}
+                {formatMoney(item.priceSar)}
               </p>
             </li>
           ))}
@@ -104,7 +105,7 @@ export function ThankYouOrderSummary({
         <div className="flex items-baseline justify-between gap-4">
           <span className="text-sm font-medium text-brand-muted">الإجمالي</span>
           <span className="text-2xl md:text-3xl font-black text-brand-espresso tabular-nums">
-            {formatSARCompact(totalSar)}
+            {formatMoney(totalSar)}
           </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-trust">

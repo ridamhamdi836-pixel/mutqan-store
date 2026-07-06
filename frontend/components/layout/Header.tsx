@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useCart } from "@/providers/cart-provider";
+import { useStorefront } from "@/providers/storefront-provider";
 import { BRAND } from "@/config/brand";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { STORE_NAV_ITEMS, isNavItemActive } from "@/config/navigation";
@@ -12,6 +13,12 @@ import { cn } from "@/lib/utils";
 
 const NAV_LINK_CLASS =
   "relative py-2 text-[15px] font-medium text-brand-forest tracking-wide transition-colors duration-300 ease-out after:absolute after:bottom-0 after:inset-x-0 after:h-[2px] after:rounded-full after:bg-brand-gold after:scale-x-0 after:transition-transform after:duration-300 after:ease-out after:origin-center hover:text-brand-gold hover:after:scale-x-100";
+
+const NAV_LABEL_KEYS = {
+  "/": "navHome",
+  "/collections": "navCollections",
+  "/about": "navAbout",
+} as const;
 
 function NavLink({
   href,
@@ -53,6 +60,7 @@ function NavLink({
 
 export function Header() {
   const { itemCount, openCart } = useCart();
+  const { t, toggleLocale, locale } = useStorefront();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname() ?? "/";
@@ -76,6 +84,11 @@ export function Header() {
     };
   }, [menuOpen]);
 
+  const navLabel = (href: string, fallback: string) => {
+    const key = NAV_LABEL_KEYS[href as keyof typeof NAV_LABEL_KEYS];
+    return key ? t(key) : fallback;
+  };
+
   return (
     <header
       className={cn(
@@ -95,7 +108,7 @@ export function Header() {
           <Link
             href="/"
             className="flex items-center shrink-0 z-10 group py-1"
-            aria-label={`${BRAND.nameAr} — الرئيسية`}
+            aria-label={`${BRAND.nameAr} — ${t("navHome")}`}
           >
             <BrandLogo
               variant="default"
@@ -110,13 +123,13 @@ export function Header() {
               "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2",
               isProductPage && "!hidden",
             )}
-            aria-label="التنقل الرئيسي"
+            aria-label={locale === "en" ? "Main navigation" : "التنقل الرئيسي"}
           >
             {STORE_NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.href}
                 href={item.href}
-                label={item.label}
+                label={navLabel(item.href, item.label)}
                 active={isNavItemActive(item, pathname)}
                 primary={item.isPrimary}
               />
@@ -125,8 +138,17 @@ export function Header() {
 
           <div className="flex items-center gap-1.5 shrink-0 z-10">
             <button
+              type="button"
+              onClick={toggleLocale}
+              aria-label={t("langSwitchAria")}
+              className="min-w-[2.25rem] h-9 px-2 rounded-xl text-xs font-bold text-brand-espresso border border-brand-border/40 hover:border-brand-gold/50 hover:text-brand-gold hover:bg-brand-gold/8 transition-all duration-200"
+            >
+              {t("langSwitchToEn")}
+            </button>
+
+            <button
               onClick={openCart}
-              aria-label={`سلة الشراء - ${itemCount} منتج`}
+              aria-label={`${t("openCart")} - ${itemCount}`}
               className="relative p-2.5 rounded-xl text-brand-espresso hover:text-brand-gold hover:bg-brand-gold/8 transition-all duration-200"
             >
               <ShoppingBag className="w-5 h-5" strokeWidth={1.75} />
@@ -141,7 +163,7 @@ export function Header() {
               <button
                 className="lg:hidden p-2.5 rounded-xl text-brand-espresso hover:text-brand-gold hover:bg-brand-gold/8 transition-all duration-200"
                 onClick={() => setMenuOpen(!menuOpen)}
-                aria-label={menuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+                aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
                 aria-expanded={menuOpen}
               >
                 {menuOpen ? <X className="w-5 h-5" strokeWidth={1.75} /> : <Menu className="w-5 h-5" strokeWidth={1.75} />}
@@ -156,12 +178,12 @@ export function Header() {
           <button
             type="button"
             className="lg:hidden fixed inset-0 top-[4.25rem] bg-brand-espresso/20 backdrop-blur-sm z-20 animate-fade-in"
-            aria-label="إغلاق القائمة"
+            aria-label={t("closeMenu")}
             onClick={() => setMenuOpen(false)}
           />
 
           <div className="lg:hidden relative z-30 bg-white/95 backdrop-blur-xl border-t border-brand-border/30 animate-slide-up shadow-[0_16px_48px_rgba(15,23,42,0.08)]">
-            <nav className="max-w-content mx-auto page-x py-6 flex flex-col gap-1" aria-label="قائمة الجوال">
+            <nav className="max-w-content mx-auto page-x py-6 flex flex-col gap-1" aria-label={locale === "en" ? "Mobile menu" : "قائمة الجوال"}>
               {STORE_NAV_ITEMS.map((item) => {
                 const active = isNavItemActive(item, pathname);
                 return (
@@ -183,7 +205,7 @@ export function Header() {
                       {active && (
                         <span className="w-1 h-5 rounded-full bg-brand-gold shrink-0" aria-hidden />
                       )}
-                      {item.label}
+                      {navLabel(item.href, item.label)}
                     </span>
                   </Link>
                 );
@@ -196,14 +218,14 @@ export function Header() {
                 className="py-3 px-4 rounded-xl text-[15px] text-brand-muted font-medium hover:text-brand-gold hover:bg-brand-background transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
-                الأسئلة الشائعة
+                {t("faq")}
               </Link>
               <Link
                 href="/track-order"
                 className="py-3 px-4 rounded-xl text-[15px] text-brand-muted font-medium hover:text-brand-gold hover:bg-brand-background transition-colors"
                 onClick={() => setMenuOpen(false)}
               >
-                تتبع الطلب
+                {t("trackOrder")}
               </Link>
             </nav>
           </div>

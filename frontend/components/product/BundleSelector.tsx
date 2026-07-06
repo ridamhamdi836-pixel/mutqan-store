@@ -2,6 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import type { ProductBundle } from "@/types";
+import { useStorefront } from "@/providers/storefront-provider";
+import { formatSavings } from "@/lib/storefront-i18n";
 
 interface BundleSelectorProps {
   bundles: ProductBundle[];
@@ -31,14 +33,19 @@ function bundleSavings(
   return null;
 }
 
-function formatSavingsLabel(bundle: ProductBundle, savings: { sar: number } | null): string | null {
+function formatSavingsLabel(
+  bundle: ProductBundle,
+  savings: { sar: number } | null,
+  locale: "ar" | "en",
+  market: "SA" | "AE",
+): string | null {
   if (bundle.savings_label_ar) {
     return bundle.savings_label_ar
       .replace(/^وفر\s/i, "وفّر ")
       .replace(/^وفّري\s/i, "وفّر ");
   }
   if (savings && savings.sar > 0) {
-    return `وفّر ${savings.sar} ر.س`;
+    return formatSavings(savings.sar, locale, market);
   }
   return null;
 }
@@ -48,6 +55,7 @@ export function BundleSelector({
   selectedId,
   onSelect,
 }: BundleSelectorProps) {
+  const { formatMoney, locale, market } = useStorefront();
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
   const unitBundle = sorted.find((b) => b.quantity === 1) ?? sorted[0];
   const unitPrice = unitBundle.price_sar;
@@ -73,7 +81,7 @@ export function BundleSelector({
           const isDefault = bundle.is_default;
           const isBestValue = bestValueBundle?.id === bundle.id;
           const savings = bundleSavings(bundle, unitPrice);
-          const savingsLabel = formatSavingsLabel(bundle, savings);
+          const savingsLabel = formatSavingsLabel(bundle, savings, locale, market);
 
           const parts = bundle.label_ar.split(" - ");
           const title = parts[0].trim();
@@ -133,12 +141,11 @@ export function BundleSelector({
 
               <div className="text-end flex-shrink-0 ms-3">
                 <p className="font-black text-xl md:text-2xl text-brand-espresso tabular-nums">
-                  {bundle.price_sar}{" "}
-                  <span className="text-sm font-bold">ر.س</span>
+                  {formatMoney(bundle.price_sar)}
                 </p>
                 {bundle.compare_at_price_sar ? (
                   <p className="text-xs text-brand-muted line-through tabular-nums">
-                    {bundle.compare_at_price_sar} ر.س
+                    {formatMoney(bundle.compare_at_price_sar)}
                   </p>
                 ) : null}
               </div>

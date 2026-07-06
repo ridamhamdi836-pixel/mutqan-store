@@ -23,6 +23,7 @@ import { HeroProductShowcase } from "@/components/home/beauty/HeroProductShowcas
 import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
+import { useStorefront } from "@/providers/storefront-provider";
 import { cn } from "@/lib/utils";
 
 const WHY_ICONS: Record<string, LucideIcon> = {
@@ -287,6 +288,7 @@ export function HomeBeautyTestimonials() {
 
 export function HomeBeautyOrderSteps() {
   const { orderSteps } = HOMEPAGE_BEAUTY;
+  const { t } = useStorefront();
   const stepNumbers = ["١", "٢", "٣"];
 
   return (
@@ -318,7 +320,9 @@ export function HomeBeautyOrderSteps() {
               <h3 className="font-bold text-brand-forest text-base md:text-lg mb-2 leading-snug">
                 {step.title}
               </h3>
-              <p className="text-sm text-brand-muted leading-relaxed">{step.desc}</p>
+              <p className="text-sm text-brand-muted leading-relaxed">
+                {index === 2 ? t("homeOrderStep3Desc") : step.desc}
+              </p>
             </div>
           ))}
         </div>
@@ -329,6 +333,7 @@ export function HomeBeautyOrderSteps() {
 
 export function HomeBeautyFinalCta() {
   const { finalCta } = HOMEPAGE_BEAUTY;
+  const { t } = useStorefront();
 
   return (
     <section className="section-pad page-x bg-brand-forest text-white relative overflow-hidden">
@@ -353,7 +358,7 @@ export function HomeBeautyFinalCta() {
         </h2>
 
         <p className="text-white/75 text-sm md:text-base mb-8 max-w-xl mx-auto leading-relaxed">
-          {finalCta.description}
+          {t("homeFinalCtaDesc")}
         </p>
 
         <Link
@@ -367,10 +372,12 @@ export function HomeBeautyFinalCta() {
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs md:text-sm text-brand-gold/90">
           {finalCta.trustBadges.map((badge) => {
             const Icon = CTA_TRUST_ICONS[badge.icon];
+            const label =
+              badge.icon === "truck" ? t("homeTrustShippingBadge") : badge.label;
             return (
               <span key={badge.label} className="inline-flex items-center gap-2">
                 <Icon className="w-4 h-4 shrink-0" strokeWidth={1.75} />
-                {badge.label}
+                {label}
               </span>
             );
           })}
@@ -382,6 +389,17 @@ export function HomeBeautyFinalCta() {
 
 export function HomeBeautyFaq() {
   const { faq } = HOMEPAGE_BEAUTY;
+  const { t } = useStorefront();
+
+  const items = faq.items.map((item, index) => {
+    if (index === 1) {
+      return { ...item, answer: t("homeFaqCodAnswer") };
+    }
+    if (index === 3) {
+      return { ...item, question: t("homeFaqDeliveryQuestion") };
+    }
+    return item;
+  });
 
   return (
     <section className="section-pad page-x bg-white">
@@ -393,7 +411,7 @@ export function HomeBeautyFaq() {
           </h2>
           <p className="text-sm text-brand-muted">{faq.subtitle}</p>
         </div>
-        <FAQAccordion items={[...faq.items]} />
+        <FAQAccordion items={items} />
       </div>
     </section>
   );

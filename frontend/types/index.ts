@@ -88,7 +88,7 @@ export interface MutqanAnalyticsEvent {
   eventId: string;
   eventName: string;
   value?: number;
-  currency?: "SAR";
+  currency?: "SAR" | "AED";
   productSlug?: string;
   productName?: string;
   bundleId?: string;

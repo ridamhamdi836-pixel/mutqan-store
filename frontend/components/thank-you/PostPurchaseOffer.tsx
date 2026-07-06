@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { StoreImage } from "@/components/ui/StoreImage";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
-import { formatSARCompact } from "@/lib/currency";
+import { useStorefront } from "@/providers/storefront-provider";
 import { useCountdown } from "@/lib/use-countdown";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import {
@@ -260,6 +260,7 @@ function UpsellProductRow({
   isSelected: boolean;
   onToggle: () => void;
 }) {
+  const { formatMoney } = useStorefront();
   const productNameAr = getStorefrontProductNameAr(product.slug);
   const benefitLine = product.benefits.slice(0, 2).join(" · ");
 
@@ -314,10 +315,10 @@ function UpsellProductRow({
           </p>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1.5">
             <span className="font-black text-base text-brand-espresso tabular-nums">
-              {formatSARCompact(product.upsell_price_sar)}
+              {formatMoney(product.upsell_price_sar)}
             </span>
             <span className="text-[11px] text-red-500 line-through tabular-nums">
-              {product.original_price_sar} ر.س
+              {formatMoney(product.original_price_sar)}
             </span>
             <span className="text-[10px] font-bold text-white bg-red-500 px-1.5 py-0.5 rounded">
               وفّر {product.savings_percent}%

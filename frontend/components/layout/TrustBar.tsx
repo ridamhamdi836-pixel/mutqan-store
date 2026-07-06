@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Truck, ShieldCheck, HeartHandshake } from "lucide-react";
-import { STORE_ANNOUNCEMENT_MESSAGES } from "@/config/navigation";
+import { useStorefront } from "@/providers/storefront-provider";
 
 const ICONS = {
   truck: Truck,
@@ -11,15 +11,22 @@ const ICONS = {
 } as const;
 
 export function TrustBar() {
+  const { t } = useStorefront();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(true);
+
+  const messages = [
+    { id: "cod-shipping", icon: "truck" as const, text: t("trustCodShipping") },
+    { id: "korean-actives", icon: "shield" as const, text: t("trustActives") },
+    { id: "guarantee", icon: "heart" as const, text: t("trustGuarantee") },
+  ];
 
   useEffect(() => {
     let fadeTimeout: ReturnType<typeof setTimeout> | undefined;
     const interval = setInterval(() => {
       setVisible(false);
       fadeTimeout = setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % STORE_ANNOUNCEMENT_MESSAGES.length);
+        setCurrentIndex((prev) => (prev + 1) % messages.length);
         setVisible(true);
       }, 250);
     }, 4500);
@@ -27,9 +34,9 @@ export function TrustBar() {
       clearInterval(interval);
       if (fadeTimeout) clearTimeout(fadeTimeout);
     };
-  }, []);
+  }, [messages.length]);
 
-  const message = STORE_ANNOUNCEMENT_MESSAGES[currentIndex];
+  const message = messages[currentIndex];
   const Icon = ICONS[message.icon];
 
   return (

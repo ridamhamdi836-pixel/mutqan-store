@@ -1,5 +1,5 @@
 /**
- * KSA geo + VPN/proxy detection: MaxMind Insights first, then ip-api.com / ipapi.co / ipwho.is
+ * GCC geo + VPN/proxy detection: MaxMind Insights first, then ip-api.com / ipapi.co / ipwho.is
  */
 
 export type GeoLookupResult = {
@@ -10,6 +10,8 @@ export type GeoLookupResult = {
   blockReason?: string;
   provider: string;
 };
+
+const SUPPORTED_COUNTRIES = new Set(["SA", "AE"]);
 
 function isPrivateIp(ip: string): boolean {
   return (
@@ -179,22 +181,27 @@ export async function lookupIp(ip: string): Promise<GeoLookupResult> {
     };
   }
 
-  const isKsa = country === "SA";
+  const isSupported = SUPPORTED_COUNTRIES.has(country);
   let blockReason: string | undefined;
-  if (!isKsa) blockReason = "not_ksa";
+  if (!isSupported) blockReason = "not_supported_country";
   else if (isSuspicious) blockReason = "vpn_detected";
 
   return {
     ip,
     country,
     isSuspicious,
-    allowed: isKsa && !isSuspicious,
+    allowed: isSupported && !isSuspicious,
     blockReason,
     provider,
   };
 }
 
-/** Valid KSA visitor for analytics (clicks / views) */
-export function isValidKsaTraffic(geo: GeoLookupResult): boolean {
+/** Valid GCC visitor for analytics */
+export function isValidMarketTraffic(geo: GeoLookupResult): boolean {
   return geo.allowed;
+}
+
+/** @deprecated use isValidMarketTraffic */
+export function isValidKsaTraffic(geo: GeoLookupResult): boolean {
+  return isValidMarketTraffic(geo);
 }

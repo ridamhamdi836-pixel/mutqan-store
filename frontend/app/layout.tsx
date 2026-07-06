@@ -6,6 +6,7 @@ import { fontArabic, fontLatin } from "@/lib/fonts";
 import { getBundledPixelConfig } from "@/lib/browser-pixel-config";
 import { getHotjarSiteId } from "@/lib/hotjar-config";
 import { StoreThemeProvider } from "@/components/brand/StoreThemeProvider";
+import { StorefrontProvider } from "@/providers/storefront-provider";
 import { getResolvedStoreSettings } from "@/lib/storefront-resolver";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | متقن",
   },
   description:
-    "متقن — معزّزات كورية مركّزة للإشراقة والإصلاح والشباب. روتين بسيط بخطوة واحدة. الدفع عند الاستلام والتوصيل داخل السعودية.",
+    "متقن — معزّزات كورية مركّزة للإشراقة والإصلاح والشباب. روتين بسيط بخطوة واحدة. الدفع عند الاستلام والتوصيل داخل السعودية والإمارات.",
   keywords: [
     "عناية كورية",
     "فيتامين سي للبشرة",
@@ -65,7 +66,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="font-sans antialiased">
         <AnalyticsProvider pixels={pixels} hotjarSiteId={hotjarSiteId}>
           <StoreThemeProvider settings={settings}>
-            <CartProvider>{children}</CartProvider>
+            <StorefrontProvider>
+              <CartProvider>{children}</CartProvider>
+            </StorefrontProvider>
           </StoreThemeProvider>
         </AnalyticsProvider>
       </body>
