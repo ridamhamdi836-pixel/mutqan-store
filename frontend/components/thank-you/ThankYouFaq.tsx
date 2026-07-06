@@ -22,7 +22,7 @@ export function ThankYouFaq() {
       <div className="flex items-center gap-2">
         <HelpCircle className="w-5 h-5 text-brand-bronze" />
         <h2 className="font-bold text-brand-espresso text-base md:text-lg">
-          أسئلة سريعة قبل الاتصال
+          {t("thankYouFaqTitle")}
         </h2>
       </div>
 

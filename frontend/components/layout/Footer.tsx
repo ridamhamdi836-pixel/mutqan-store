@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { WHATSAPP_URL } from "@/config/brand";
-import { FOOTER_CONTENT } from "@/config/footer";
+import { getFooterContent } from "@/config/footer-i18n";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
 import { useStorefront } from "@/providers/storefront-provider";
@@ -13,8 +13,8 @@ type FooterProps = {
 };
 
 export function Footer({ className }: FooterProps) {
-  const { t } = useStorefront();
-  const { products, legal, support } = FOOTER_CONTENT;
+  const { t, locale } = useStorefront();
+  const { products, legal, support, trustPills } = getFooterContent(locale);
 
   return (
     <footer className={cn("mt-20", className)}>
@@ -35,7 +35,7 @@ export function Footer({ className }: FooterProps) {
                 {t("footerDescription")}
               </p>
               <div className="flex flex-wrap gap-2">
-                {FOOTER_CONTENT.trustPills.map((pill) => (
+                {trustPills.map((pill) => (
                   <span
                     key={pill}
                     className="inline-flex items-center rounded-full border border-brand-forest/20 bg-white/60 px-3 py-1 text-[11px] font-bold text-brand-forest"

@@ -22,7 +22,7 @@ export function ThankYouOrderSummary({
   customerName,
   customerPhone,
 }: ThankYouOrderSummaryProps) {
-  const { formatMoney } = useStorefront();
+  const { formatMoney, t } = useStorefront();
   const showCustomer = customerName?.trim() || customerPhone?.trim();
 
   return (
@@ -30,7 +30,7 @@ export function ThankYouOrderSummary({
       <div className="flex items-center justify-between gap-3 pb-3 border-b border-brand-border/60">
         <div className="flex items-center gap-2 text-brand-muted">
           <Package className="w-4 h-4" />
-          <span className="text-sm font-medium">ملخص الطلب</span>
+          <span className="text-sm font-medium">{t("thankYouOrderSummary")}</span>
         </div>
         {orderNumber ? (
           <span className="text-xs font-mono font-bold text-brand-espresso bg-brand-beige px-2.5 py-1 rounded-lg">
@@ -97,20 +97,20 @@ export function ThankYouOrderSummary({
         </ul>
       ) : (
         <p className="text-sm text-brand-muted">
-          تم تسجيل طلبك. التفاصيل ستُراجع معك في مكالمة التأكيد.
+          {t("thankYouPendingDetails")}
         </p>
       )}
 
       <div className="pt-3 border-t border-brand-border/60 space-y-2">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="text-sm font-medium text-brand-muted">الإجمالي</span>
+          <span className="text-sm font-medium text-brand-muted">{t("checkoutTotal")}</span>
           <span className="text-2xl md:text-3xl font-black text-brand-espresso tabular-nums">
             {formatMoney(totalSar)}
           </span>
         </div>
         <div className="flex items-center gap-2 text-xs font-semibold text-brand-trust">
           <CreditCard className="w-3.5 h-3.5" />
-          الدفع عند الاستلام — لا تدفع شيئًا الآن
+          {t("thankYouNoPaymentNow")}
         </div>
       </div>
     </div>

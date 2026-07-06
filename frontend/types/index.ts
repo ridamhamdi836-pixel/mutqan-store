@@ -1,6 +1,7 @@
 export interface ProductBundle {
   id: string;
   label_ar: string;
+  label_en?: string;
   quantity: number;
   price_sar: number;
   compare_at_price_sar?: number;

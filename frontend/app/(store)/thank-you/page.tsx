@@ -21,9 +21,11 @@ import { useRouter } from "next/navigation";
 import { formatDisplayPhone } from "@/lib/format-display-phone";
 import { firePurchasePixelOnce, generateEventId } from "@/lib/analytics";
 import { WHATSAPP_URL } from "@/config/brand";
+import { useStorefront } from "@/providers/storefront-provider";
 
 function ThankYouContent() {
   const router = useRouter();
+  const { t, locale } = useStorefront();
   const params = useSearchParams();
   const [ready, setReady] = useState(false);
   const [sessionItems, setSessionItems] = useState<LastOrderLineItem[]>([]);
@@ -135,16 +137,20 @@ function ThankYouContent() {
             href="/track-order"
             className="text-sm font-semibold text-brand-bronze hover:text-brand-espresso min-h-[44px] flex items-center"
           >
-            تتبع الطلب لاحقًا
+            {t("thankYouTrackLater")}
           </Link>
           <span className="hidden sm:inline text-brand-border">·</span>
           <a
-            href={WHATSAPP_URL("مرحبًا، أتممت طلبًا وأحتاج مساعدة")}
+            href={WHATSAPP_URL(
+              locale === "en"
+                ? "Hello, I placed an order and need help"
+                : "مرحبًا، أتممت طلبًا وأحتاج مساعدة",
+            )}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-brand-muted hover:text-brand-espresso min-h-[44px] flex items-center"
           >
-            مساعدة عبر واتساب
+            {t("thankYouWhatsappHelp")}
           </a>
         </div>
       </div>

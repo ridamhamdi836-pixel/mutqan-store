@@ -30,7 +30,10 @@ import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { STORE_IMAGE_SIZES } from "@/lib/image-display";
 import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
 import { getFirstOfferBundleFromBundles } from "@/config/catalog";
-import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
+import { getSkincareNamaPage } from "@/config/cro-product-pages/skincare-nama-pages";
+import { getSkincareProductFaqs } from "@/config/products-faqs-en";
+import { getBundleLabel, getStorefrontProductName } from "@/lib/storefront-labels";
+import { formatWesternNumber } from "@/lib/format-number";
 import { getProductMainImageSrc } from "@/lib/product-image";
 import { getHomepageProductImageAlt } from "@/lib/storefront-product-image";
 import { cn } from "@/lib/utils";
@@ -64,12 +67,16 @@ function NamaBundleCards({
   onSelect,
   formatMoney,
   formatSaving,
+  locale,
+  t,
 }: {
   bundles: ProductBundle[];
   selectedId: string;
   onSelect: (b: ProductBundle) => void;
   formatMoney: (amount: number) => string;
   formatSaving: (amount: number) => string;
+  locale: "ar" | "en";
+  t: (key: import("@/lib/storefront-i18n").UiKey) => string;
 }) {
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
   const unitPrice = sorted.find((b) => b.quantity === 1)?.price_sar ?? sorted[0].price_sar;
@@ -92,12 +99,12 @@ function NamaBundleCards({
   }
 
   return (
-    <div className="space-y-4" role="group" aria-label="اختر العرض">
+    <div className="space-y-4" role="group" aria-label={t("bundleChooseOffer")}>
       <div className="flex items-center justify-between gap-3">
-        <p className="font-extrabold text-base md:text-lg text-brand-forest">اختاري العرض:</p>
+        <p className="font-extrabold text-base md:text-lg text-brand-forest">{t("bundleChooseOfferHeading")}</p>
         <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-forest/10 text-brand-forest text-[10px] md:text-xs font-bold px-3 py-1.5 shrink-0">
           <Sparkles className="w-3.5 h-3.5 shrink-0" />
-          نتيجة من العبوة الأولى
+          {t("bundleFirstBottleNote")}
         </span>
       </div>
 
@@ -105,8 +112,9 @@ function NamaBundleCards({
         const isSelected = bundle.id === selectedId;
         const isDefault = bundle.is_default;
         const isBestValue = bestValueBundle?.id === bundle.id;
-        const parts = bundle.label_ar.split(" — ");
-        const mainTitle = parts[0]?.trim() ?? bundle.label_ar;
+        const label = getBundleLabel(bundle, locale);
+        const parts = label.split(" — ");
+        const mainTitle = parts[0]?.trim() ?? label;
         const benefitPart = parts.slice(1).join(" — ").trim();
         const displayTitle =
           benefitPart && bundle.quantity > 1 ? `${mainTitle} • ${benefitPart}` : mainTitle;
@@ -122,10 +130,10 @@ function NamaBundleCards({
 
         const detailLine =
           bundle.quantity === 1
-            ? "30 يوم · عبوة كاملة"
+            ? t("bundleDetail1")
             : bundle.quantity === 2
-              ? "60 يوم · شهر النتيجة + شهر التثبيت"
-              : "90 يوم · نتيجة + تثبيت + هدية";
+              ? t("bundleDetail2")
+              : t("bundleDetail3");
 
         const hasTopBadge = isDefault || (isBestValue && !isDefault);
 
@@ -145,12 +153,12 @@ function NamaBundleCards({
           >
             {isDefault ? (
               <span className="absolute -top-3 end-4 bg-brand-gold text-white text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold shadow-sm whitespace-nowrap z-10">
-                الأكثر اختياراً
+                {t("bundleMostPopular")}
               </span>
             ) : null}
             {isBestValue && !isDefault ? (
               <span className="absolute -top-3 end-4 bg-[#E8D5B5] text-brand-forest text-[10px] md:text-[11px] px-4 py-1 rounded-full font-bold whitespace-nowrap z-10">
-                الأكثر توفيراً
+                {t("bundleBestValue")}
               </span>
             ) : null}
 
@@ -197,8 +205,6 @@ export function SkincareNamaProductPage({
   embedMode = "store",
 }: SkincareNamaProductPageProps) {
   const isUpsellPreview = embedMode === "upsell-preview";
-  const PAGE = namaConfig;
-  const { addItem, openCheckout } = useCart();
   const {
     formatMoney,
     locale,
@@ -210,6 +216,11 @@ export function SkincareNamaProductPage({
     shippingAllRegions,
     deliveryPartners: marketDeliveryPartners,
   } = useStorefront();
+  const PAGE = useMemo(
+    () => getSkincareNamaPage(product.slug, locale) ?? namaConfig,
+    [product.slug, locale, namaConfig],
+  );
+  const { addItem, openCheckout } = useCart();
   const fmtSaving = (amount: number) => formatSavings(amount, locale, market);
   const defaultBundle = product.bundles.find((b) => b.is_default) || product.bundles[0];
   const [selectedBundle, setSelectedBundle] = useState<ProductBundle>(defaultBundle);
@@ -247,10 +258,11 @@ export function SkincareNamaProductPage({
     };
   }, [productConfig.reviews, product.slug]);
 
-  const allFaqs = useMemo(
-    () => [...getProductCodFaqs(locale, market), ...productConfig.faqs],
-    [locale, market, productConfig.faqs],
-  );
+  const allFaqs = useMemo(() => {
+    const productFaqs =
+      getSkincareProductFaqs(product.slug, locale) ?? productConfig.faqs;
+    return [...getProductCodFaqs(locale, market), ...productFaqs];
+  }, [locale, market, product.slug, productConfig.faqs]);
 
   const crossSellProducts = useMemo(() => {
     const slugs = productConfig.crossSellSlugs ?? [];
@@ -263,8 +275,8 @@ export function SkincareNamaProductPage({
   );
 
   const stickyProductName = useMemo(
-    () => getStorefrontProductNameAr(product.slug),
-    [product.slug],
+    () => getStorefrontProductName(product.slug, locale),
+    [product.slug, locale],
   );
 
   const scrollToOffers = useCallback(() => {
@@ -327,8 +339,8 @@ export function SkincareNamaProductPage({
             </button>
             <p className="text-center text-[10px] text-brand-muted tabular-nums mt-1.5">
               {firstOfferBundle.compare_at_price_sar
-                ? `${locale === "en" ? "Was" : "بدل"} ${formatMoney(firstOfferBundle.compare_at_price_sar)} — ${formatMoney(firstOfferBundle.price_sar)} · ${locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}`
-                : `${locale === "en" ? "From" : "من"} ${formatMoney(firstOfferBundle.price_sar)} · ${locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}`}
+                ? `${t("priceWas")} ${formatMoney(firstOfferBundle.compare_at_price_sar)} — ${formatMoney(firstOfferBundle.price_sar)} · ${t("codShort")}`
+                : `${t("priceFrom")} ${formatMoney(firstOfferBundle.price_sar)} · ${t("codShort")}`}
             </p>
           </div>
 
@@ -356,11 +368,11 @@ export function SkincareNamaProductPage({
                 </p>
                 {firstOfferBundle.compare_at_price_sar ? (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    {locale === "en" ? "Was" : "بدل"} {formatMoney(firstOfferBundle.compare_at_price_sar)} — {formatMoney(firstOfferBundle.price_sar)}
+                    {t("priceWas")} {formatMoney(firstOfferBundle.compare_at_price_sar)} — {formatMoney(firstOfferBundle.price_sar)}
                   </p>
                 ) : (
                   <p className="text-[11px] text-brand-muted tabular-nums mt-0.5">
-                    {locale === "en" ? "From" : "من"} {formatMoney(firstOfferBundle.price_sar)} · {locale === "en" ? "cash on delivery" : "دفع عند الاستلام"}
+                    {t("priceFrom")} {formatMoney(firstOfferBundle.price_sar)} · {t("codShort")}
                   </p>
                 )}
               </div>
@@ -437,11 +449,11 @@ export function SkincareNamaProductPage({
                   ))}
                 </div>
                 <span className="text-xs font-bold text-brand-muted">
-                  {reviewStats.avg} ({reviewStats.count.toLocaleString("ar-SA")} تقييم · موثّق)
+                  {reviewStats.avg} ({formatWesternNumber(reviewStats.count)} {t("reviewsLabel")} · {t("reviewsVerified")})
                 </span>
                 <span className="text-xs text-brand-muted hidden sm:inline">·</span>
                 <span className="text-xs font-bold text-brand-forest">
-                  {locale === "en" ? "From" : "من"} {formatMoney(minPrice)} / {locale === "en" ? "bottle" : "عبوة"}
+                  {t("priceFrom")} {formatMoney(minPrice)} / {t("perBottle")}
                 </span>
               </div>
 
@@ -459,6 +471,8 @@ export function SkincareNamaProductPage({
                   onSelect={setSelectedBundle}
                   formatMoney={formatMoney}
                   formatSaving={fmtSaving}
+                  locale={locale}
+                  t={t}
                 />
               </div>
 

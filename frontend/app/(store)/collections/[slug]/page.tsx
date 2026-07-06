@@ -11,6 +11,7 @@ import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { getStorefrontProductNameAr } from "@/lib/storefront-product-names";
 import { useCart } from "@/providers/cart-provider";
 import { useStorefront } from "@/providers/storefront-provider";
+import { formatWesternNumber } from "@/lib/format-number";
 import { formatSavings } from "@/lib/storefront-i18n";
 
 type SkincareProductSlug =
@@ -327,7 +328,7 @@ function CardRating({ reviewCount }: { reviewCount: number }) {
         ))}
       </div>
       <span className="text-xs font-medium text-brand-muted">
-        (+{reviewCount.toLocaleString("ar-SA")})
+        (+{formatWesternNumber(reviewCount)})
       </span>
     </div>
   );

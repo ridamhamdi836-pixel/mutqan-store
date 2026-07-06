@@ -21,9 +21,10 @@ import { FAQAccordion } from "@/components/product/FAQAccordion";
 import { BeautyProductCard } from "@/components/home/beauty/BeautyProductCard";
 import { HeroProductShowcase } from "@/components/home/beauty/HeroProductShowcase";
 import { TrustFeaturesStrip } from "@/components/trust/TrustFeaturesStrip";
-import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { getHomepageBeauty } from "@/config/homepage-beauty-i18n";
 import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { useStorefront } from "@/providers/storefront-provider";
+import { formatWesternNumber } from "@/lib/format-number";
 import { cn } from "@/lib/utils";
 
 const WHY_ICONS: Record<string, LucideIcon> = {
@@ -54,7 +55,8 @@ function SectionLabel({ children, className }: { children: ReactNode; className?
 }
 
 export function HomeBeautyHero() {
-  const { hero } = HOMEPAGE_BEAUTY;
+  const { locale } = useStorefront();
+  const { hero } = getHomepageBeauty(locale);
 
   return (
     <section className="relative pt-8 pb-12 md:pt-12 md:pb-16 page-x bg-brand-background overflow-hidden">
@@ -143,11 +145,12 @@ export function HomeBeautyHero() {
 }
 
 export function HomeBeautyFormulations({
-  products = HOMEPAGE_BEAUTY.bestSellers.products,
+  products = getHomepageBeauty("ar").bestSellers.products,
 }: {
   products?: HomepageBeautyProduct[];
 }) {
-  const { formulations } = HOMEPAGE_BEAUTY;
+  const { locale } = useStorefront();
+  const { formulations } = getHomepageBeauty(locale);
 
   return (
     <section id="products" className="section-pad page-x bg-white scroll-mt-24">
@@ -178,7 +181,8 @@ export function HomeBeautyBestSellers(props: { products?: HomepageBeautyProduct[
 }
 
 export function HomeBeautyWhyMutqan() {
-  const { whyMutqan } = HOMEPAGE_BEAUTY;
+  const { locale } = useStorefront();
+  const { whyMutqan } = getHomepageBeauty(locale);
 
   return (
     <section
@@ -221,7 +225,8 @@ export function HomeBeautyWhyMutqan() {
 }
 
 export function HomeBeautyTestimonials() {
-  const { testimonials } = HOMEPAGE_BEAUTY;
+  const { locale, t } = useStorefront();
+  const { testimonials } = getHomepageBeauty(locale);
 
   return (
     <section className="section-pad page-x bg-white">
@@ -268,11 +273,11 @@ export function HomeBeautyTestimonials() {
                     {review.name}
                   </p>
                   <p className="text-xs text-brand-muted mt-1 leading-relaxed">
-                    {review.age} سنة · {review.city}
+                    {review.age} {t("yearsOld")} · {review.city}
                     {review.verified && (
                       <>
                         {" · "}
-                        <span className="text-brand-gold font-semibold">مشتري مؤكد</span>
+                        <span className="text-brand-gold font-semibold">{t("verifiedBuyer")}</span>
                       </>
                     )}
                   </p>
@@ -287,9 +292,9 @@ export function HomeBeautyTestimonials() {
 }
 
 export function HomeBeautyOrderSteps() {
-  const { orderSteps } = HOMEPAGE_BEAUTY;
-  const { t } = useStorefront();
-  const stepNumbers = ["١", "٢", "٣"];
+  const { locale, t } = useStorefront();
+  const { orderSteps } = getHomepageBeauty(locale);
+  const stepNumbers = locale === "en" ? ["1", "2", "3"] : ["١", "٢", "٣"];
 
   return (
     <section className="section-pad page-x bg-[#F5F0E8]">
@@ -332,8 +337,8 @@ export function HomeBeautyOrderSteps() {
 }
 
 export function HomeBeautyFinalCta() {
-  const { finalCta } = HOMEPAGE_BEAUTY;
-  const { t } = useStorefront();
+  const { locale, t } = useStorefront();
+  const { finalCta } = getHomepageBeauty(locale);
 
   return (
     <section className="section-pad page-x bg-brand-forest text-white relative overflow-hidden">
@@ -388,8 +393,8 @@ export function HomeBeautyFinalCta() {
 }
 
 export function HomeBeautyFaq() {
-  const { faq } = HOMEPAGE_BEAUTY;
-  const { t } = useStorefront();
+  const { locale, t } = useStorefront();
+  const { faq } = getHomepageBeauty(locale);
 
   const items = faq.items.map((item, index) => {
     if (index === 1) {

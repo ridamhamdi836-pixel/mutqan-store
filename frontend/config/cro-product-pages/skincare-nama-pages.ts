@@ -1,4 +1,6 @@
 import type { SkincareNamaPageConfig } from "@/types/skincare-nama-page";
+import type { StoreLocale } from "@/lib/storefront-i18n";
+import { SKINCARE_NAMA_PAGES_EN } from "./skincare-nama-en";
 
 export const SKINCARE_PRODUCT_SLUGS = [
   "vitamin-c-booster",
@@ -769,7 +771,11 @@ const SKINCARE_NAMA_PAGES: Record<SkincareProductSlug, SkincareNamaPageConfig> =
   "pdrn-booster": pdrnNamaPage,
 };
 
-export function getSkincareNamaPage(slug: string): SkincareNamaPageConfig | null {
+export function getSkincareNamaPage(
+  slug: string,
+  locale: StoreLocale = "ar",
+): SkincareNamaPageConfig | null {
   if (!isSkincareProductSlug(slug)) return null;
+  if (locale === "en") return SKINCARE_NAMA_PAGES_EN[slug];
   return SKINCARE_NAMA_PAGES[slug];
 }

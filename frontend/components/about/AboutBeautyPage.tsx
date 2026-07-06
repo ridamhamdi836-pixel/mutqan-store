@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -12,7 +14,8 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from "lucide-react";
-import { ABOUT_BEAUTY } from "@/config/about-beauty";
+import { getAboutBeauty } from "@/config/about-beauty-i18n";
+import { useStorefront } from "@/providers/storefront-provider";
 
 const PILLAR_ICONS: Record<string, LucideIcon> = {
   korean: FlaskConical,
@@ -46,7 +49,8 @@ function PillarIcon({ id }: { id: string }) {
 }
 
 export function AboutBeautyPage() {
-  const { hero, story, pillars, promise, finalCta, trust } = ABOUT_BEAUTY;
+  const { locale, t } = useStorefront();
+  const { hero, story, pillars, promise, finalCta, trust } = getAboutBeauty(locale);
 
   return (
     <div className="bg-white">

@@ -1,6 +1,11 @@
+"use client";
+
 import { CheckCircle2, Phone } from "lucide-react";
+import { useStorefront } from "@/providers/storefront-provider";
 
 export function ThankYouHero() {
+  const { t } = useStorefront();
+
   return (
     <section className="text-center space-y-4">
       <div className="flex justify-center">
@@ -11,24 +16,21 @@ export function ThankYouHero() {
 
       <div className="space-y-2">
         <h1 className="text-2xl md:text-[1.75rem] font-black text-brand-espresso leading-snug">
-          تم حجز طلبك بنجاح ✅
+          {t("thankYouHeroTitle")}
         </h1>
         <p className="text-sm md:text-base text-brand-muted leading-relaxed max-w-md mx-auto font-medium">
-          تبقى خطوة واحدة مهمة: الرد على مكالمة فريق متقن لتأكيد طلبك.{" "}
-          <span className="text-brand-espresso font-bold">
-            بدون الرد لا يُشحن الطلب.
-          </span>
+          {t("thankYouHeroDesc")}{" "}
+          <span className="text-brand-espresso font-bold">{t("thankYouHeroNoShip")}</span>
         </p>
       </div>
 
       <div className="max-w-md mx-auto space-y-2">
         <span className="inline-flex items-center gap-2 text-xs md:text-sm font-bold text-brand-espresso bg-amber-50 border border-amber-200/80 px-4 py-2 rounded-pill">
           <Phone className="w-4 h-4 text-amber-600 shrink-0" />
-          سنتصل بك لتأكيد الطلب — الرد ضروري للشحن
+          {t("thankYouCallBadge")}
         </span>
         <p className="text-xs md:text-sm text-brand-muted leading-relaxed px-1">
-          قد يظهر الرقم «غير معروف» — هذا فريق متقن. أبقِ جوالك متاحاً وأجب
-          المكالمة لنثبت العنوان والكمية ونبدأ التجهيز. لا نطلب أي دفع الآن.
+          {t("thankYouCallNote")}
         </p>
       </div>
     </section>

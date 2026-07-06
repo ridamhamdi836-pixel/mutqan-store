@@ -20,73 +20,107 @@ export function FaqPageContent() {
 
   const sections = [
     {
-      title: "الطلب والشراء",
+      title: t("orderSectionTitle"),
       items: [
         {
-          question: "كيف أطلب من متقن؟",
-          answer: `اختر المنتج والباقة المناسبة، أضفه للسلة، ثم أدخل اسمك و${phoneLabel}. سيتواصل معك فريقنا خلال فترة قصيرة لتأكيد الطلب.`,
+          question:
+            locale === "en" ? "How do I order from Mutqan?" : "كيف أطلب من متقن؟",
+          answer:
+            locale === "en"
+              ? `Choose a product and bundle, add to cart, then enter your name and ${phoneLabel}. Our team will contact you shortly to confirm.`
+              : `اختر المنتج والباقة المناسبة، أضفه للسلة، ثم أدخل اسمك و${phoneLabel}. سيتواصل معك فريقنا خلال فترة قصيرة لتأكيد الطلب.`,
         },
         {
-          question: "هل يمكنني إلغاء الطلب؟",
+          question: locale === "en" ? "Can I cancel my order?" : "هل يمكنني إلغاء الطلب؟",
           answer:
-            "نعم، يمكنك إلغاء الطلب قبل الشحن عبر التواصل معنا على واتساب. بعد الشحن، يمكن الرفض عند الاستلام.",
+            locale === "en"
+              ? "Yes — cancel before shipping via WhatsApp. After shipping, you can refuse on delivery."
+              : "نعم، يمكنك إلغاء الطلب قبل الشحن عبر التواصل معنا على واتساب. بعد الشحن، يمكن الرفض عند الاستلام.",
         },
         {
           question:
             market === "AE"
-              ? "هل يمكنني الطلب من أي إمارة؟"
-              : "هل يمكنني الطلب من أي منطقة في السعودية؟",
-          answer: `نعم، نوصل لجميع مناطق ومدن ${countryName}.`,
+              ? locale === "en"
+                ? "Can I order from any emirate?"
+                : "هل يمكنني الطلب من أي إمارة؟"
+              : locale === "en"
+                ? "Can I order from anywhere in Saudi Arabia?"
+                : "هل يمكنني الطلب من أي منطقة في السعودية؟",
+          answer:
+            locale === "en"
+              ? `Yes — we deliver across ${countryName}.`
+              : `نعم، نوصل لجميع مناطق ومدن ${countryName}.`,
         },
       ],
     },
     {
-      title: "الدفع",
+      title: t("paymentSectionTitle"),
       items: [
         {
-          question: "ما طرق الدفع المتاحة؟",
-          answer: "الدفع عند الاستلام فقط حاليًا. ادفع نقدًا عند وصول الطلب إليك.",
+          question: locale === "en" ? "What payment methods are available?" : "ما طرق الدفع المتاحة؟",
+          answer:
+            locale === "en"
+              ? "Cash on delivery only. Pay in cash when your order arrives."
+              : "الدفع عند الاستلام فقط حاليًا. ادفع نقدًا عند وصول الطلب إليك.",
         },
         {
-          question: "هل هناك رسوم توصيل؟",
+          question: locale === "en" ? "Are there delivery fees?" : "هل هناك رسوم توصيل؟",
           answer: t("faqFreeShippingAnswer"),
         },
         {
-          question: "هل المبلغ يُدفع بالكامل عند الاستلام؟",
-          answer: "نعم، يُدفع المبلغ كاملًا عند استلام الطلب من مندوب الشحن.",
+          question:
+            locale === "en"
+              ? "Do I pay the full amount on delivery?"
+              : "هل المبلغ يُدفع بالكامل عند الاستلام؟",
+          answer:
+            locale === "en"
+              ? "Yes — the full amount is paid to the courier on delivery."
+              : "نعم، يُدفع المبلغ كاملًا عند استلام الطلب من مندوب الشحن.",
         },
       ],
     },
     {
-      title: "التوصيل",
+      title: t("deliverySectionTitle"),
       items: [
         {
-          question: "كم مدة التوصيل؟",
+          question: locale === "en" ? "How long is delivery?" : "كم مدة التوصيل؟",
           answer: t("thankYouDeliveryFaqAnswer"),
         },
         {
-          question: "كيف أتتبع طلبي؟",
+          question: locale === "en" ? "How do I track my order?" : "كيف أتتبع طلبي؟",
           answer:
-            "توجه لصفحة تتبع الطلب وأدخل رقم الطلب ورقم جوالك. يمكنك أيضًا التواصل معنا عبر واتساب.",
+            locale === "en"
+              ? "Go to Track Order and enter your order number and mobile. You can also contact us on WhatsApp."
+              : "توجه لصفحة تتبع الطلب وأدخل رقم الطلب ورقم جوالك. يمكنك أيضًا التواصل معنا عبر واتساب.",
         },
         {
-          question: "ماذا لو لم أجد في المنزل عند التوصيل؟",
-          answer: "سيحاول المندوب التواصل معك. يمكنك التنسيق معه لإعادة جدولة التوصيل.",
+          question:
+            locale === "en"
+              ? "What if I'm not home for delivery?"
+              : "ماذا لو لم أجد في المنزل عند التوصيل؟",
+          answer:
+            locale === "en"
+              ? "The courier will try to reach you. You can reschedule delivery with them."
+              : "سيحاول المندوب التواصل معك. يمكنك التنسيق معه لإعادة جدولة التوصيل.",
         },
       ],
     },
     {
-      title: "الإرجاع والاستبدال",
+      title: t("returnsSectionTitle"),
       items: [
         {
-          question: "ما سياسة الإرجاع؟",
+          question: locale === "en" ? "What is the return policy?" : "ما سياسة الإرجاع؟",
           answer:
-            "يمكن إرجاع المنتج خلال 7 أيام من الاستلام في حالة وجود عيب مصنعي أو اختلاف عن الوصف. تواصل معنا عبر واتساب.",
+            locale === "en"
+              ? "Return within 7 days for manufacturing defects or if the product differs from the description. Contact us on WhatsApp."
+              : "يمكن إرجاع المنتج خلال 7 أيام من الاستلام في حالة وجود عيب مصنعي أو اختلاف عن الوصف. تواصل معنا عبر واتساب.",
         },
         {
-          question: "كيف أُرجع منتجًا؟",
+          question: locale === "en" ? "How do I return a product?" : "كيف أُرجع منتجًا؟",
           answer:
-            "تواصل معنا عبر واتساب مع رقم الطلب وصورة للمنتج، وسنرتب معك عملية الإرجاع.",
+            locale === "en"
+              ? "Contact us on WhatsApp with your order number and a product photo — we'll arrange the return."
+              : "تواصل معنا عبر واتساب مع رقم الطلب وصورة للمنتج، وسنرتب معك عملية الإرجاع.",
         },
       ],
     },
@@ -96,10 +130,10 @@ export function FaqPageContent() {
     <div className="section-pad page-x">
       <div className="max-w-content mx-auto max-w-3xl">
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-espresso mb-3">الأسئلة الشائعة</h1>
-          <p className="text-brand-muted">
-            إجابات على أكثر الأسئلة شيوعًا. لم تجد ما تبحث عنه؟ تواصل معنا.
-          </p>
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-espresso mb-3">
+            {t("faqPageTitle")}
+          </h1>
+          <p className="text-brand-muted">{t("faqPageSubtitle")}</p>
         </div>
 
         <div className="space-y-8">
@@ -112,8 +146,8 @@ export function FaqPageContent() {
         </div>
 
         <div className="mt-10 card p-6 text-center">
-          <p className="text-brand-muted mb-4">لم تجد إجابة على سؤالك؟</p>
-          <WhatsAppButton label="تواصل معنا عبر واتساب" className="mx-auto" />
+          <p className="text-brand-muted mb-4">{t("faqContactCta")}</p>
+          <WhatsAppButton label={t("faqWhatsapp")} className="mx-auto" />
         </div>
       </div>
     </div>

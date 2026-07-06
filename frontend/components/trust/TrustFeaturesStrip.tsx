@@ -7,7 +7,7 @@ import {
   Truck,
   type LucideIcon,
 } from "lucide-react";
-import { HOMEPAGE_BEAUTY } from "@/config/homepage-beauty";
+import { getHomepageBeauty } from "@/config/homepage-beauty-i18n";
 import { useStorefront } from "@/providers/storefront-provider";
 import { cn } from "@/lib/utils";
 
@@ -23,8 +23,8 @@ type TrustFeaturesStripProps = {
 };
 
 export function TrustFeaturesStrip({ className }: TrustFeaturesStripProps) {
-  const { trustFooter } = HOMEPAGE_BEAUTY;
-  const { t } = useStorefront();
+  const { locale, t } = useStorefront();
+  const { trustFooter } = getHomepageBeauty(locale);
 
   return (
     <section

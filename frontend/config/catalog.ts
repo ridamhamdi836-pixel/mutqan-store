@@ -372,15 +372,18 @@ export const CATALOG: CatalogProduct[] = [
     storeCardImageFile: "vitamin-c-booster.png",
     bundles: [
       bundle("vitamin-c-1", "عبوة واحدة — شهر كامل", 1, 169, {
+        label_en: "1 bottle — full month",
         compare_at_price_sar: 219,
         sort_order: 1,
       }),
       bundle("vitamin-c-2", "عبوتان — ثبّتي الإشراق", 2, 229, {
+        label_en: "2 bottles — lock in your glow",
         compare_at_price_sar: 338,
         is_default: true,
         sort_order: 2,
       }),
       bundle("vitamin-c-3", "ثلاث عبوات — إشراق كامل", 3, 299, {
+        label_en: "3 bottles — complete brightening",
         compare_at_price_sar: 507,
         sort_order: 3,
       }),
@@ -406,15 +409,18 @@ export const CATALOG: CatalogProduct[] = [
     storeCardImageFile: "ceramide-booster.png",
     bundles: [
       bundle("ceramide-1", "عبوة واحدة — شهر كامل", 1, 169, {
+        label_en: "1 bottle — full month",
         compare_at_price_sar: 219,
         sort_order: 1,
       }),
       bundle("ceramide-2", "عبوتان — ثبّتي الراحة", 2, 229, {
+        label_en: "2 bottles — lock in relief",
         compare_at_price_sar: 338,
         is_default: true,
         sort_order: 2,
       }),
       bundle("ceramide-3", "ثلاث عبوات — إصلاح كامل", 3, 299, {
+        label_en: "3 bottles — complete repair",
         compare_at_price_sar: 507,
         sort_order: 3,
       }),
@@ -440,15 +446,18 @@ export const CATALOG: CatalogProduct[] = [
     storeCardImageFile: "pdrn-booster.png",
     bundles: [
       bundle("pdrn-1", "عبوة واحدة — شهر كامل", 1, 169, {
+        label_en: "1 bottle — full month",
         compare_at_price_sar: 219,
         sort_order: 1,
       }),
       bundle("pdrn-2", "عبوتان — ثبّتي الشباب", 2, 229, {
+        label_en: "2 bottles — lock in youth",
         compare_at_price_sar: 338,
         is_default: true,
         sort_order: 2,
       }),
       bundle("pdrn-3", "ثلاث عبوات — شباب كامل", 3, 299, {
+        label_en: "3 bottles — complete youth routine",
         compare_at_price_sar: 507,
         sort_order: 3,
       }),

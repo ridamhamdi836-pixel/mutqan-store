@@ -18,7 +18,7 @@ interface TrackResult {
 }
 
 export default function TrackOrderPage() {
-  const { formatMoney } = useStorefront();
+  const { formatMoney, t, phonePlaceholder, locale } = useStorefront();
   const [orderNumber, setOrderNumber] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,11 +33,11 @@ export default function TrackOrderPage() {
     setResult(null);
 
     if (!orderNumber.trim()) {
-      setError("فضلاً أدخل رقم الطلب.");
+      setError(t("trackOrderErrorEmpty"));
       return;
     }
     if (!validatePhone(phone)) {
-      setPhoneError("فضلاً أدخل رقم جوال صحيح.");
+      setPhoneError(t("trackOrderErrorPhone"));
       return;
     }
 
@@ -47,7 +47,7 @@ export default function TrackOrderPage() {
       setResult(data);
     } catch (err: unknown) {
       const e = err as Error;
-      setError(e.message || "لم نتمكن من العثور على الطلب. تأكد من رقم الطلب ورقم الجوال.");
+      setError(e.message || t("trackOrderNotFound"));
     } finally {
       setLoading(false);
     }
@@ -57,13 +57,13 @@ export default function TrackOrderPage() {
     <div className="section-pad page-x">
       <div className="max-w-content mx-auto max-w-lg">
         <div className="text-center mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-espresso mb-3">تتبع طلبك</h1>
-          <p className="text-brand-muted">أدخل رقم الطلب ورقم الجوال للتحقق من حالة طلبك.</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-espresso mb-3">{t("trackOrderPageTitle")}</h1>
+          <p className="text-brand-muted">{t("trackOrderFormDesc")}</p>
         </div>
 
         <form onSubmit={handleTrack} className="card p-6 space-y-5 mb-6">
           <div>
-            <label htmlFor="order-number" className="block text-sm font-semibold text-brand-espresso mb-1.5">رقم الطلب</label>
+            <label htmlFor="order-number" className="block text-sm font-semibold text-brand-espresso mb-1.5">{t("trackOrderNumber")}</label>
             <input
               id="order-number"
               type="text"
@@ -76,14 +76,14 @@ export default function TrackOrderPage() {
           </div>
 
           <div>
-            <label htmlFor="track-phone" className="block text-sm font-semibold text-brand-espresso mb-1.5">رقم الجوال</label>
+            <label htmlFor="track-phone" className="block text-sm font-semibold text-brand-espresso mb-1.5">{t("trackOrderPhone")}</label>
             <input
               id="track-phone"
               type="tel"
               inputMode="tel"
               value={phone}
               onChange={(e) => { setPhone(e.target.value); setPhoneError(""); }}
-              placeholder="05XXXXXXXX"
+              placeholder={phonePlaceholder}
               className={cn("input-base", phoneError && "border-brand-error")}
               dir="ltr"
             />
@@ -94,7 +94,7 @@ export default function TrackOrderPage() {
 
           <button type="submit" disabled={loading} className="btn-primary w-full h-12 flex items-center justify-center gap-2">
             {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
-            {loading ? "جارٍ البحث..." : "تتبع الطلب"}
+            {loading ? t("trackOrderLoading") : t("trackOrderSubmit")}
           </button>
         </form>
 
@@ -102,26 +102,26 @@ export default function TrackOrderPage() {
           <div className="card p-6 space-y-4">
             <div className="flex items-center gap-2 mb-2">
               <CheckCircle2 className="w-5 h-5 text-brand-trust" />
-              <h2 className="font-bold text-brand-espresso">حالة الطلب</h2>
+              <h2 className="font-bold text-brand-espresso">{t("trackOrderStatus")}</h2>
             </div>
 
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-brand-muted">رقم الطلب</span>
+                <span className="text-brand-muted">{t("trackOrderNumber")}</span>
                 <span className="font-bold">{result.public_order_number}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-brand-muted">الحالة</span>
+                <span className="text-brand-muted">{locale === "en" ? "Status" : "الحالة"}</span>
                 <span className="font-semibold text-brand-trust">{result.status_label_ar}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-brand-muted">الإجمالي</span>
+                <span className="text-brand-muted">{t("trackOrderTotal")}</span>
                 <span className="font-bold">{formatMoney(result.total_sar)}</span>
               </div>
             </div>
 
             <div className="border-t border-brand-border pt-3">
-              <p className="text-xs text-brand-muted font-medium mb-2">المنتجات</p>
+              <p className="text-xs text-brand-muted font-medium mb-2">{t("trackOrderProducts")}</p>
               {result.items.map((item, i) => (
                 <p key={i} className="text-sm text-brand-espresso">{item.name_ar} × {item.quantity}</p>
               ))}
@@ -134,7 +134,7 @@ export default function TrackOrderPage() {
 
             <WhatsAppButton
               message={`مرحبًا، لدي استفسار عن طلبي من متقن رقم ${result.public_order_number}`}
-              label="تواصل مع الدعم"
+              label={t("trackOrderSupport")}
               className="w-full justify-center"
             />
           </div>

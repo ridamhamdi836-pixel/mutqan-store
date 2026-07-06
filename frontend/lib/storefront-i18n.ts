@@ -1,5 +1,6 @@
 import type { MarketId } from "@/config/markets";
 import { getMarketConfig } from "@/config/markets";
+import { formatWesternNumber } from "@/lib/format-number";
 
 export type StoreLocale = "ar" | "en";
 
@@ -181,6 +182,121 @@ const UI = {
     "الشحن مجاني لجميع الطلبات داخل الإمارات.",
     "Free shipping on all orders within the UAE.",
   ),
+  reviewsLabel: { ar: "تقييم", en: "reviews" },
+  reviewsVerified: { ar: "موثّق", en: "verified" },
+  verifiedBuyer: { ar: "مشتري مؤكد", en: "verified buyer" },
+  yearsOld: { ar: "سنة", en: "y/o" },
+  viewProduct: { ar: "عرض المنتج", en: "View product" },
+  bundleChooseOffer: { ar: "اختر العرض", en: "Choose offer" },
+  bundleChooseOfferHeading: { ar: "اختاري العرض:", en: "Choose your offer:" },
+  bundleMostPopular: { ar: "الأكثر اختياراً", en: "Most popular" },
+  bundleBestValue: { ar: "الأكثر توفيراً", en: "Best value" },
+  bundleFirstBottleNote: { ar: "نتيجة من العبوة الأولى", en: "Results from the first bottle" },
+  bundleDetail1: { ar: "30 يوم · عبوة كاملة", en: "30 days · full bottle" },
+  bundleDetail2: { ar: "60 يوم · شهر النتيجة + شهر التثبيت", en: "60 days · results + maintenance" },
+  bundleDetail3: { ar: "90 يوم · نتيجة + تثبيت + هدية", en: "90 days · results + maintenance + gift" },
+  priceFrom: { ar: "من", en: "From" },
+  priceWas: { ar: "بدل", en: "Was" },
+  codShort: { ar: "دفع عند الاستلام", en: "cash on delivery" },
+  perBottle: { ar: "عبوة", en: "bottle" },
+  collectionsBadge: { ar: "مجموعة متقن للعناية", en: "Mutqan skincare collection" },
+  collectionsTitle: { ar: "اختاري هدف بشرتكِ", en: "Choose your skin goal" },
+  collectionsSubtitle: {
+    ar: "ثلاثة سيرومات كورية — لإشراقة تلمع، حاجز يُصلَح، وبشرة تشعرين أنها أكثر شباباً.",
+    en: "Three Korean boosters — for glow, barrier repair, and skin that feels younger.",
+  },
+  thankYouHeroTitle: { ar: "تم حجز طلبك بنجاح ✅", en: "Your order is reserved ✅" },
+  thankYouHeroDesc: {
+    ar: "تبقى خطوة واحدة مهمة: الرد على مكالمة فريق متقن لتأكيد طلبك.",
+    en: "One important step left: answer Mutqan's confirmation call.",
+  },
+  thankYouHeroNoShip: {
+    ar: "بدون الرد لا يُشحن الطلب.",
+    en: "Without answering, your order won't ship.",
+  },
+  thankYouCallBadge: {
+    ar: "سنتصل بك لتأكيد الطلب — الرد ضروري للشحن",
+    en: "We'll call to confirm — answering is required to ship",
+  },
+  thankYouCallNote: {
+    ar: "قد يظهر الرقم «غير معروف» — هذا فريق متقن. أبقِ جوالك متاحاً وأجب المكالمة لنثبت العنوان والكمية ونبدأ التجهيز. لا نطلب أي دفع الآن.",
+    en: "The number may show as «unknown» — that's our team. Keep your phone available to confirm address and quantity. No payment is required now.",
+  },
+  thankYouOrderSummary: { ar: "ملخص الطلب", en: "Order summary" },
+  thankYouNoPaymentNow: {
+    ar: "الدفع عند الاستلام — لا تدفع شيئًا الآن",
+    en: "Cash on delivery — no payment now",
+  },
+  thankYouPendingDetails: {
+    ar: "تم تسجيل طلبك. التفاصيل ستُراجع معك في مكالمة التأكيد.",
+    en: "Your order is registered. Details will be confirmed on our call.",
+  },
+  thankYouTrackLater: { ar: "تتبع الطلب لاحقًا", en: "Track order later" },
+  thankYouWhatsappHelp: { ar: "مساعدة عبر واتساب", en: "Help on WhatsApp" },
+  thankYouFaqTitle: {
+    ar: "أسئلة سريعة قبل الاتصال",
+    en: "Quick questions before we call",
+  },
+  thankYouLiveTitle: {
+    ar: "آخر الطلبات المؤكدة اليوم",
+    en: "Latest confirmed orders today",
+  },
+  trackOrderTitle: { ar: "تتبع الطلب", en: "Track order" },
+  trackOrderSubtitle: {
+    ar: "أدخل رقم الطلب ورقم جوالك لمعرفة حالة طلبك.",
+    en: "Enter your order number and mobile to see your order status.",
+  },
+  trackOrderNumber: { ar: "رقم الطلب", en: "Order number" },
+  trackOrderPhone: { ar: "رقم الجوال", en: "Mobile number" },
+  trackOrderSubmit: { ar: "تتبع الطلب", en: "Track order" },
+  trackOrderLoading: { ar: "جارٍ البحث...", en: "Searching..." },
+  trackOrderStatus: { ar: "حالة الطلب", en: "Order status" },
+  trackOrderTotal: { ar: "الإجمالي", en: "Total" },
+  trackOrderProducts: { ar: "المنتجات", en: "Products" },
+  trackOrderSupport: { ar: "تواصل مع الدعم", en: "Contact support" },
+  trackOrderPageTitle: { ar: "تتبع طلبك", en: "Track your order" },
+  trackOrderFormDesc: {
+    ar: "أدخل رقم الطلب ورقم الجوال للتحقق من حالة طلبك.",
+    en: "Enter your order number and mobile to check your order status.",
+  },
+  trackOrderErrorEmpty: { ar: "فضلاً أدخل رقم الطلب.", en: "Please enter your order number." },
+  trackOrderErrorPhone: { ar: "فضلاً أدخل رقم جوال صحيح.", en: "Please enter a valid mobile number." },
+  trackOrderNotFound: {
+    ar: "لم نتمكن من العثور على الطلب. تأكد من رقم الطلب ورقم الجوال.",
+    en: "We couldn't find your order. Check the order number and mobile.",
+  },
+  shippingPolicyTitle: { ar: "سياسة الشحن والتوصيل", en: "Shipping & delivery policy" },
+  shippingPolicySubtitle: {
+    ar: "نسابق الزمن لنوصل راحتك إلى باب بيتك بأسرع وقت ممكن.",
+    en: "We work fast to bring your order to your door.",
+  },
+  shippingMajorCities: { ar: "المدن الرئيسية", en: "Major cities" },
+  shippingDays12: { ar: "يوم إلى يومين عمل", en: "1 to 2 business days" },
+  shippingDays25: { ar: "2 إلى 5 أيام عمل", en: "2 to 5 business days" },
+  shippingConfirmTitle: { ar: "تأكيد الطلب", en: "Order confirmation" },
+  shippingConfirmDesc: {
+    ar: "لضمان تقديم أفضل خدمة لك، سيقوم فريق مُتقن بالتواصل معك هاتفياً أو عبر الواتساب لتأكيد طلبك وعنوانك قبل شحنه. لا يتم شحن أي طلب قبل تأكيده.",
+    en: "Our team will call or WhatsApp you to confirm your order and address before shipping. No order ships without confirmation.",
+  },
+  shippingCostTitle: { ar: "تكلفة الشحن", en: "Shipping cost" },
+  shippingCostDesc: {
+    ar: "نتكفل بكامل مصاريف الشحن لجميع طلباتك. يتم دفع قيمة المنتج فقط عند الاستلام.",
+    en: "We cover shipping on all orders. You only pay for the product on delivery.",
+  },
+  faqPageTitle: { ar: "الأسئلة الشائعة", en: "Frequently asked questions" },
+  faqPageSubtitle: {
+    ar: "إجابات على أكثر الأسئلة شيوعًا. لم تجد ما تبحث عنه؟ تواصل معنا.",
+    en: "Answers to common questions. Can't find what you need? Contact us.",
+  },
+  faqContactCta: { ar: "لم تجد إجابة على سؤالك؟", en: "Didn't find your answer?" },
+  faqWhatsapp: { ar: "تواصل معنا عبر واتساب", en: "Contact us on WhatsApp" },
+  termsPageTitle: { ar: "الشروط والأحكام", en: "Terms & conditions" },
+  orderSectionTitle: { ar: "الطلب والشراء", en: "Ordering" },
+  paymentSectionTitle: { ar: "الدفع", en: "Payment" },
+  deliverySectionTitle: { ar: "التوصيل", en: "Delivery" },
+  returnsSectionTitle: { ar: "الإرجاع والاستبدال", en: "Returns & exchanges" },
+  otherRegionsSa: { ar: "باقي مدن المملكة", en: "Other Saudi cities" },
+  otherRegionsAe: { ar: "باقي إمارات الدولة", en: "Other emirates" },
 } as const;
 
 export type UiKey = keyof typeof UI;
@@ -200,9 +316,9 @@ export function formatStoreMoney(
 ): string {
   const cfg = getMarketConfig(market);
   if (locale === "en") {
-    return `${cfg.currencySymbolEn} ${amount.toLocaleString("en")}`;
+    return `${cfg.currencySymbolEn} ${formatWesternNumber(amount)}`;
   }
-  return `${amount.toLocaleString("ar-SA")} ${cfg.currencySymbolAr}`;
+  return `${formatWesternNumber(amount)} ${cfg.currencySymbolAr}`;
 }
 
 export function shippingCities(locale: StoreLocale, market: MarketId): string[] {

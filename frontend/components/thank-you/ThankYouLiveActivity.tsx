@@ -36,7 +36,7 @@ export function ThankYouLiveActivity() {
           <Circle className="relative w-2.5 h-2.5 fill-brand-trust text-brand-trust" />
         </span>
         <h2 className="font-bold text-sm md:text-base text-brand-espresso">
-          آخر الطلبات المؤكدة اليوم
+          {t("thankYouLiveTitle")}
         </h2>
       </div>
       <ul className="space-y-3">

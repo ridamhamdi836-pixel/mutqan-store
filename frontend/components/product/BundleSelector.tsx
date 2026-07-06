@@ -2,8 +2,9 @@
 
 import { cn } from "@/lib/utils";
 import type { ProductBundle } from "@/types";
-import { useStorefront } from "@/providers/storefront-provider";
+import { getBundleLabel } from "@/lib/storefront-labels";
 import { formatSavings } from "@/lib/storefront-i18n";
+import { useStorefront } from "@/providers/storefront-provider";
 
 interface BundleSelectorProps {
   bundles: ProductBundle[];
@@ -55,7 +56,7 @@ export function BundleSelector({
   selectedId,
   onSelect,
 }: BundleSelectorProps) {
-  const { formatMoney, locale, market } = useStorefront();
+  const { formatMoney, locale, market, t } = useStorefront();
   const sorted = [...bundles].sort((a, b) => a.sort_order - b.sort_order);
   const unitBundle = sorted.find((b) => b.quantity === 1) ?? sorted[0];
   const unitPrice = unitBundle.price_sar;
@@ -72,8 +73,8 @@ export function BundleSelector({
   }
 
   return (
-    <div className="space-y-3" role="group" aria-label="اختر العرض">
-      <p className="font-bold text-sm md:text-base text-brand-espresso">اختر العرض:</p>
+    <div className="space-y-3" role="group" aria-label={t("bundleChooseOffer")}>
+      <p className="font-bold text-sm md:text-base text-brand-espresso">{t("bundleChooseOfferHeading")}</p>
 
       <div className="flex flex-col gap-3">
         {sorted.map((bundle) => {
@@ -83,7 +84,7 @@ export function BundleSelector({
           const savings = bundleSavings(bundle, unitPrice);
           const savingsLabel = formatSavingsLabel(bundle, savings, locale, market);
 
-          const parts = bundle.label_ar.split(" - ");
+          const parts = getBundleLabel(bundle, locale).split(" - ");
           const title = parts[0].trim();
           let subtitle = parts.length > 1 ? parts.slice(1).join(" - ").trim() : "";
           subtitle = subtitle
@@ -106,12 +107,12 @@ export function BundleSelector({
             >
               {isDefault ? (
                 <span className="absolute -top-3 end-4 md:end-5 bg-brand-bronze text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
-                  الأكثر اختياراً
+                  {t("bundleMostPopular")}
                 </span>
               ) : null}
               {isBestValue ? (
                 <span className="absolute -top-3 end-4 md:end-5 bg-amber-500 text-white text-[10px] md:text-[11px] px-3 md:px-4 py-1 rounded-full font-bold shadow-md whitespace-nowrap z-10">
-                  الأكثر توفيراً
+                  {t("bundleBestValue")}
                 </span>
               ) : null}
 

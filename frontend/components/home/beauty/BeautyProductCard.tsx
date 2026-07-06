@@ -9,6 +9,7 @@ import type { HomepageBeautyProduct } from "@/config/homepage-beauty";
 import { getProductReviewDisplayCount } from "@/lib/product-review-count";
 import { useStorefront } from "@/providers/storefront-provider";
 import { Star, ArrowLeft, Sparkles } from "lucide-react";
+import { formatWesternNumber } from "@/lib/format-number";
 import { cn } from "@/lib/utils";
 
 type BeautyProductCardProps = {
@@ -24,7 +25,7 @@ const SQUARE_FILL_IMAGE_SLUGS = new Set([
 
 export function BeautyProductCard({ product, className }: BeautyProductCardProps) {
   const [imgError, setImgError] = useState(false);
-  const { formatMoney } = useStorefront();
+  const { formatMoney, locale, t } = useStorefront();
   const catalogProduct = getProduct(product.slug);
   const usesSquareFillImage = SQUARE_FILL_IMAGE_SLUGS.has(product.slug);
   const minPrice =
@@ -102,13 +103,13 @@ export function BeautyProductCard({ product, className }: BeautyProductCardProps
             ))}
           </div>
           <span className="text-xs text-brand-muted">
-            ({reviewCount.toLocaleString("ar-SA")} تقييم)
+            ({formatWesternNumber(reviewCount)} {t("reviewsLabel")})
           </span>
         </div>
 
         <div className="flex items-center justify-between gap-3 pt-4 border-t border-brand-border/30 mt-auto">
           <div>
-            <p className="text-[10px] text-brand-muted font-medium mb-0.5">يبدأ من</p>
+            <p className="text-[10px] text-brand-muted font-medium mb-0.5">{t("priceFrom")}</p>
             {minPrice != null && (
               <p className="font-extrabold text-brand-forest text-xl tabular-nums">
                 {formatMoney(minPrice)}
