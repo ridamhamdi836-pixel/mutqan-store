@@ -26,3 +26,8 @@ export function formatMoney(
 export function marketCurrency(market: MarketId): "SAR" | "AED" {
   return getMarketConfig(market).currency;
 }
+
+/** Admin display symbol for an order's stored currency code. */
+export function adminCurrencySymbol(currency?: string | null): string {
+  return currency === "AED" ? "د.إ" : "ر.س";
+}

@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
     to: searchParams.get("to"),
     status: searchParams.get("status"),
     q: searchParams.get("q"),
+    currency: searchParams.get("currency"),
     limit: Number(searchParams.get("limit")) || 50,
     offset: Number(searchParams.get("offset")) || 0,
   });

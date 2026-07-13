@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { getProductPath } from "@/config/catalog";
+import { adminCurrencySymbol } from "@/lib/currency";
 import { Phone, ExternalLink, Calendar, Tag } from "lucide-react";
 
 export type AdminOrderRow = {
@@ -68,6 +69,7 @@ interface OrderPreviewProps {
 }
 
 export function OrderPreview({ order, items, compact }: OrderPreviewProps) {
+  const currencySymbol = adminCurrencySymbol(order.currency);
   const created = new Date(order.created_at).toLocaleString("ar-SA", {
     timeZone: "Asia/Riyadh",
     dateStyle: "medium",
@@ -89,11 +91,14 @@ export function OrderPreview({ order, items, compact }: OrderPreviewProps) {
             <Calendar className="w-3.5 h-3.5" />
             {created}
           </div>
+          <p className="text-xs text-brand-muted mt-1">
+            {order.currency === "AED" ? "الإمارات" : "السعودية"}
+          </p>
         </div>
         <div className="text-end">
           <p className="text-3xl font-black text-brand-espresso tabular-nums">
             {order.total_sar}{" "}
-            <span className="text-lg font-semibold text-brand-muted">{order.currency}</span>
+            <span className="text-lg font-semibold text-brand-muted">{currencySymbol}</span>
           </p>
           <p className="text-xs text-brand-muted mt-1">دفع عند الاستلام</p>
         </div>
@@ -165,7 +170,7 @@ export function OrderPreview({ order, items, compact }: OrderPreviewProps) {
                 </p>
               </div>
               <p className="font-bold text-brand-espresso tabular-nums shrink-0">
-                {item.total_price_sar} ر.س
+                {item.total_price_sar} {currencySymbol}
               </p>
             </li>
           ))}
@@ -179,7 +184,7 @@ export function OrderPreview({ order, items, compact }: OrderPreviewProps) {
                 <p className="text-xs text-brand-bronze font-semibold">إضافة upsell</p>
               </div>
               <p className="font-bold text-brand-bronze tabular-nums">
-                {item.total_price_sar} ر.س
+                {item.total_price_sar} {currencySymbol}
               </p>
             </li>
           ))}

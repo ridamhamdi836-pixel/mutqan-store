@@ -8,6 +8,7 @@ import {
   getRangeFromPreset,
   type PresetRange,
 } from "@/components/admin/DateRangeControls";
+import { adminCurrencySymbol } from "@/lib/currency";
 
 type OrderRow = {
   id: string;
@@ -17,6 +18,7 @@ type OrderRow = {
   confirmation_status: string;
   delivery_status: string;
   total_sar: number;
+  currency?: string;
   utm_source?: string;
   created_at: string;
   items_count: number;
@@ -28,6 +30,7 @@ export default function AdminOrdersPage() {
   const [toInput, setToInput] = useState("");
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
+  const [currency, setCurrency] = useState("");
   const [orders, setOrders] = useState<OrderRow[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,7 @@ export default function AdminOrdersPage() {
     });
     if (q) params.set("q", q);
     if (status) params.set("status", status);
+    if (currency) params.set("currency", currency);
     const res = await fetch(`/api/admin/orders?${params}`);
     if (res.ok) {
       const data = await res.json();
@@ -49,7 +53,7 @@ export default function AdminOrdersPage() {
       setTotal(data.total);
     }
     setLoading(false);
-  }, [preset, fromInput, toInput, q, status]);
+  }, [preset, fromInput, toInput, q, status, currency]);
 
   useEffect(() => {
     const r = getRangeFromPreset(preset, fromInput, toInput);
@@ -107,6 +111,15 @@ export default function AdminOrdersPage() {
           <option value="delivered">تم التسليم</option>
           <option value="cancelled">ملغى</option>
         </select>
+        <select
+          value={currency}
+          onChange={(e) => setCurrency(e.target.value)}
+          className="admin-input w-auto min-w-[10rem]"
+        >
+          <option value="">كل الدول</option>
+          <option value="SAR">السعودية</option>
+          <option value="AED">الإمارات</option>
+        </select>
         <button type="button" onClick={load} className="admin-btn-primary">
           تطبيق
         </button>
@@ -118,6 +131,7 @@ export default function AdminOrdersPage() {
             <tr>
               <th className="px-4 py-3 font-medium">الطلب</th>
               <th className="px-4 py-3 font-medium">العميل</th>
+              <th className="px-4 py-3 font-medium">الدولة</th>
               <th className="px-4 py-3 font-medium">المجموع</th>
               <th className="px-4 py-3 font-medium">الحالة</th>
               <th className="px-4 py-3 font-medium">المصدر</th>
@@ -127,13 +141,13 @@ export default function AdminOrdersPage() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-brand-muted text-center">
+                <td colSpan={7} className="px-4 py-8 text-brand-muted text-center">
                   جارٍ التحميل…
                 </td>
               </tr>
             ) : orders.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-brand-muted text-center">
+                <td colSpan={7} className="px-4 py-8 text-brand-muted text-center">
                   لا توجد طلبات
                 </td>
               </tr>
@@ -153,8 +167,11 @@ export default function AdminOrdersPage() {
                     <p className="text-brand-espresso font-medium">{o.customer_name}</p>
                     <p className="text-xs text-brand-muted">{o.customer_phone_e164}</p>
                   </td>
+                  <td className="px-4 py-3 text-brand-muted whitespace-nowrap">
+                    {o.currency === "AED" ? "الإمارات" : "السعودية"}
+                  </td>
                   <td className="px-4 py-3 font-bold text-brand-espresso tabular-nums">
-                    {o.total_sar} ر.س
+                    {o.total_sar} {adminCurrencySymbol(o.currency)}
                   </td>
                   <td className="px-4 py-3">
                     <p className="text-brand-espresso capitalize">{o.confirmation_status}</p>

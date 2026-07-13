@@ -157,6 +157,8 @@ export async function listAdminOrders(params: {
   to?: string | null;
   status?: string | null;
   q?: string | null;
+  /** Filter by order market currency: SAR (Saudi) or AED (UAE) */
+  currency?: string | null;
   limit?: number;
   offset?: number;
 }) {
@@ -173,6 +175,12 @@ export async function listAdminOrders(params: {
   if (params.status) {
     conditions.push(`(o.confirmation_status = $${idx} OR o.delivery_status = $${idx})`);
     values.push(params.status);
+    idx++;
+  }
+
+  if (params.currency === "SAR" || params.currency === "AED") {
+    conditions.push(`COALESCE(o.currency, 'SAR') = $${idx}`);
+    values.push(params.currency);
     idx++;
   }
 
